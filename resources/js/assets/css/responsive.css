@@ -1,0 +1,662 @@
+@media only screen and (min-width:768px) {
+	.hero-fluid .hero-title {
+		padding: 0 50px;
+	}
+}
+
+
+
+@media only screen and (max-width:1199px) {
+
+	.nav-link {
+	    padding: 0.5rem 0.5rem;
+	}
+
+	.nav:not(.nav-pills) .nav-item {
+	    margin-right: 14px;
+	}	
+
+	.btn-get-started {
+	    padding: 7px 11px;
+	    font-size: 13px;
+	}
+
+	header .form-switch {
+	    margin-right: 5px;
+	}
+	.btn-login {
+	    margin-right: 4px;
+	    padding: 7px 14px;
+	    font-size: 13px;
+	}
+}
+
+@media only screen and (max-width:991px) {
+	.navbar-collapse {
+		padding-top: 40px;
+	}
+	.navbar > .container {
+		padding-left: 16px;
+		padding-right: 16px;
+	}
+	.navbar-toggler {
+		padding-right: 0;
+	}
+	.navbar-nav .nav-item {
+		margin-right: 24px !important;
+	    margin-bottom: 15px;
+	}
+
+	.home-hero .hero-title {
+	    font-size: 36px;
+	}
+	.home-hero-wrapper {
+		padding: 0 15px;
+	}
+	.logo-wrapper img {
+		max-width: 133px;
+	}
+
+	header .form-switch .form-check-input {
+	    height: 32px !important;
+	}
+	.brand-item img {
+	    max-width: 100%;
+	}
+
+	section.pricing {
+	    padding-top: 120px;
+	    padding-left: 16px;
+	    padding-right: 16px;
+	}
+
+	.section-sub-title {
+	    font-size: 14px;
+	}
+	.section-title {
+	    font-size: 32px;
+	}
+	section.pricing-list .price {
+	    font-size: 30px !important;
+	}
+	.server-location {
+	    margin-bottom: 16px;
+	}
+
+	.pricing-order-btn {
+	    width: 100%;
+	    text-align: center;
+	    font-size: 14px;
+	}
+	
+	section.pricing-list .pricing-content .card-item {
+		margin-bottom: 16px;
+	}
+
+	.features-grid .grid-item-wrapper {
+		padding-top: 75%;
+		background-position: 30% 50%;
+	    background-size: cover;
+
+	}
+
+	.section-header {
+	    padding: 0 18px;
+	}
+
+	.distribution-card {
+		padding: 0 7px;
+	}
+
+	.distribution-name span {
+		font-size: 14px;
+	}
+
+	.top-card {
+	    padding: 13px;
+	}
+
+	.dist-version {
+	    font-size: 11px;
+	    padding: 3px 4px;
+	}
+	.dist-version img {
+	    width: 12px;
+	    margin-right: 0px;
+	}
+
+	.distribution-dots-top {
+	    top: -58px;
+	    left: 115px;
+	}
+
+	.features-grid {
+	    padding-bottom: 120px;
+	}
+
+	section.distributions {
+	    padding-bottom: 50px;
+	}
+	section.faq {
+	    padding-top: 120px;
+	    padding-bottom: 120px;
+	}
+
+	section.faq .section-header {
+		text-align: center;
+	}
+
+	section.faq .section-header p {
+		margin-top: 20px;
+	}
+
+	section.faq .accordion {
+		padding-left: 16px;
+		padding-right: 16px;
+	}
+
+	section.faq .accordion-header button {
+	    font-size: 16px;
+	}
+
+	section.faq .accordion-body {
+	    font-size: 15px;
+	    padding-left: 18px;
+	    padding-right: 18px;
+	}
+
+	section.faq .accordion-button::after {
+	    margin-left: 10px;
+	}
+
+	section.banner {
+		padding-left: 16px;
+		padding-right: 16px;
+	}
+
+	.footer-banner {
+		background: url(../img/footer-banner-mb.png) right no-repeat;
+	    padding-top: 87%;
+	    background-size: cover;
+	}	
+
+	.banner-action h2 {
+	    font-size: 32px;
+	}
+
+	.banner-action p {
+	    font-size: 15px;
+	}
+
+	.banner-action {
+	    top: 40px;
+	    left: 40px;
+	}
+
+	.btn-banner {
+	    padding: 11px 15px;
+	    font-size: 15px;
+	}
+
+	section.banner {
+	    padding-bottom: 120px;
+	}
+
+	.mobile-center {
+		text-align: center;
+	}
+
+	.payment-options {
+		flex-wrap: wrap;
+	    justify-content: center;
+	    padding: 0 50px;
+	    margin-bottom: 80px;
+	}
+
+	section.pricing .pricing-result .card-item {
+		flex-direction: column;
+	}
+
+	section.pricing {
+	    padding-bottom: 120px;
+	}
+
+	.server-features li {
+	    font-size: 14.5px;
+	}	
+
+	.contact-item a, .contact-item p {
+	    word-break: break-all;
+	    font-size: 16px;
+	}
+	.contact-item3 {
+		width: unset;
+		max-width: 100%;
+	}
+	.ct-items-align {
+		justify-content: center;
+	}
+
+	.home-hero.contact > div {
+	    padding-top: 7px !important;
+	}
+	section.contact .hero-title {
+	    margin-bottom: 40px;
+	}
+
+	.multi-column-dropdown li a {
+	    white-space: break-spaces;
+	}
+
+	section.dashboard .server-item {
+	    min-width: unset;
+	    width: 30%;
+	    margin-bottom: 7px;
+	}
+
+	section.dashboard .server-item:not(:last-child) {
+	    margin-right: 7px;
+	}
+
+	.server-item-wrapper {
+		justify-content: center;
+	}
+
+	section.dashboard .data-region-card {
+	    margin-bottom: 16px;
+	}
+	.server-list-tab ul.nav-pills button {
+	    padding: 7.5px 6px;
+	}
+
+	.server-list-tab .tab-content .col-md-4 {
+		margin-bottom: 15px;
+	}
+
+
+
+
+	.home-hero .login-wrapper {
+	    max-width: 408px;
+	    padding-top: 150px;
+	}	
+	.login-card-wrapper {
+		padding: 16px;
+	}
+
+	.login-card {
+	    padding: 35px 25px;
+	}
+	.login-title {
+		font-size: 20px;
+	}
+	.login-card button, .login-card a, .login-card input {
+		font-size:14px !important;
+	}
+	.support-table th, .support-table td {
+		font-size: 13px !important;
+	}
+	.list-flex-nav {
+		flex-direction: column-reverse;
+    	align-items: flex-end;	
+    	margin-top: -42px;	
+	}
+	.list-flex-nav > .nav.nav-pills{
+		margin-top: 20px;
+		width: 100%;
+	}
+	.list-flex-nav > .nav.nav-pills.four-pills .nav-item{
+		flex: 0 1 25%;
+	}
+	.list-flex-nav > .nav.nav-pills.three-pills .nav-item{
+		flex: 0 1 33%;
+	}	
+	.list-flex-nav > .nav.nav-pills .nav-item .nav-link{
+		width: 100%;
+	}	
+	.server-list-pagination, .server-list-pagination > nav {
+		padding: 0;
+	}
+
+	section.dashboard {
+	    padding-top: 50px;
+	}
+
+	section.dashboard .title {
+	    font-size: 24px;
+	}	
+
+	.title-button-wrapper {
+	    margin-bottom: 50px;
+	}
+	.pagination .page-item.first .page-link::before {
+	    left: 2px;
+	    top: 9px;
+	}
+	.pagination .page-item.last .page-link::after {
+	    right: 2px;
+	    top: 10px;
+	}
+	.pagination .page-item.first .page-link {
+	    padding-left: 15px !important;
+	}
+	.pagination .page-item.last .page-link {
+	    padding-right: 15px !important;
+	}
+
+	.sort-item-active {
+	    padding: 9px 25px 9px 31px;
+	}
+	button.add-funds {
+		width: 100%;
+	}
+
+	.balance-icon {
+	    padding: 6px 8px;
+	}
+
+	.modal {
+		padding-left: 6px;
+		padding-right: 6px;
+		padding-top: 100px;
+		padding-bottom: 100px;
+	}
+
+	.modal-inner {
+	    padding: 25px 20px;
+	}
+	.modal-header {
+	    margin: -25px -20px 0 -20px;
+	    padding: 25px 20px 0 20px;
+	}
+
+	.modal-header .modal-title h3 {
+	    margin-bottom: 20px;
+	}
+	.modal-header .modal-title h2 {
+	    font-size: 20px;
+	}
+	.modal-main {
+	    padding-top: 25px;
+	}
+	.modal-payment {
+	    padding: 10px 12px;
+	}	
+	.modal-payment img {
+	    margin-right: 10px;
+	}
+
+	.amounts h4 {
+	    margin-top: 25px;
+	}
+	.amount-footer {
+	    margin-bottom: 30px;
+	}
+	section.overview .title {
+	    font-size: 20px;
+	}
+
+	section.overview .overview-header img {
+	    width: 22px;
+	    height: 22px;
+	}
+
+	.card-item.info-table .privatev4 span {
+	    max-width: 157px;
+	}
+
+	.overview-cols > div .card-item {
+	    padding: 14px 14px !important;
+	}
+
+	.card-item.info-table table tr td {
+	    max-width: 150px;
+	    white-space: nowrap;
+	}	
+
+	.overview-cols > div:nth-child(2) table tbody tr td:last-child {
+		text-align: right;
+	}
+
+	.general-info  {
+		display: flex;
+		flex-direction: column;
+		padding: 0 20px !important;
+	}
+
+	.general-info > div {
+
+	}
+
+	.server-list-options {
+	    right: -15px;
+	    top: 20px;
+	}
+	.overview-tab .tab-content .col-content-wrapper {
+	    padding: 15px 0px;
+	}
+
+	.sm-border-bottom {
+	    border-bottom: 1px solid rgba(23, 30, 38, 0.08);
+	}
+
+
+	.server-btn-options {
+		flex-wrap: wrap;
+	    justify-content: space-between !important;
+	}
+
+	.server-btn-options button:first-child{
+		width: 49%;
+	}
+
+	.server-btn-options button:nth-child(2){
+		width: 49%;
+	}
+	.server-btn-options button:last-child{
+		width: 100%;
+	}
+	.overview-tab .tab-content .title2 {
+	    font-size: 14px;
+	}			
+	.server-list-options .active-badge {
+	    padding: 8px 9px !important;
+	}
+	.general-info.overview-col5 > div {
+	    width: 100% !important;
+	}
+
+	.overview-select select {
+	    font-size: 12px;
+	    border: none;
+	    padding: 0px 10px 0px 0px;
+	}
+
+	.inner-tab-pills {
+		width: 100%;
+	    overflow: hidden !important;
+	    border-right: none !important;
+	    border-bottom: 1px solid rgba(23, 30, 38, 0.08) !important;	
+		padding-right: 0 !important;
+    	padding-bottom: 20px !important;
+
+		display: flex !important;
+	    flex-wrap: nowrap !important;
+	    flex-direction: row !important;
+
+	}
+
+	.table-flex-col tr {
+		display: flex;
+	    flex-direction: column;
+	}
+	.table-flex-col td {
+		width: 100% !important;
+	}
+	.sc-mobile {
+		overflow-x: scroll !important;
+	}
+	.p-mb-0 {
+		padding-left: 0 !important;
+		padding-right: 0 !important;
+	}
+	.no-border-mobile {
+		border-bottom: none !important;
+	}
+	.divider.divider-inner {
+	    width: 100% !important;
+	}
+
+	.message-item {
+		max-width: 100% !important;
+		width: 100%;
+		margin-left: unset !important;
+	}
+
+	.ticket-detail h2 {
+		font-size: 18px !important;
+	}
+	.ticket-detail h3 {
+		font-size: 16px !important;
+	}
+	.upload-attachment {
+	    width: 10%;
+	}
+	.message-box {
+	    width: 90%;
+	}
+
+	header .profile-img {
+	    width: 30px;
+	    height: 30px;
+	}
+	.add-balance {
+	    margin-left: 2px;
+	}
+}
+
+
+@media only screen and (max-width:374px) {
+	.navbar-toggler {
+	    padding-left: 0 !important;
+	}
+	.dropdown.language {
+	    margin-right: 20px;
+	}	
+
+	.nav-link {
+	    font-size: 14px;
+	}
+
+}
+
+@media only screen and (max-width:420px) {
+
+	.navbar-toggler-icon {
+	    width: 1.3em;
+	    height: 1.3em;
+	}
+
+	header .btn-login {
+	    padding: 4px 6px !important;
+	}
+
+	.logo-wrapper img {
+	    max-width: 110px;
+	}
+
+	header .form-switch .form-check-input {
+	    width: 50px !important;
+	    height: 29px !important;
+	    background-size: 45px 45px;
+	}
+
+	.page-item.inner-page-item {
+	    margin-right: 10px;
+	}
+
+}
+
+@media only screen and (max-width:650px) {
+
+	.support-table{
+		overflow-x: scroll;
+	}	
+	.support-table table{
+    	width: 720px;
+
+	}
+
+
+
+	.support-table, .overview-tab ul.nav-pills {
+		padding-bottom: 20px;
+	}
+
+
+
+	/*
+	.support-table::-webkit-scrollbar {
+	  display: none;
+	}
+
+	.support-table {
+	  -ms-overflow-style: none;
+	  scrollbar-width: none;  
+	}*/
+
+
+}
+
+@media only screen and (max-width:1200px) {
+
+	.overview-tab ul.nav-pills {
+		overflow-x: scroll;
+	}
+
+}
+
+@media only screen and (min-width:992px) {
+	.pricing-result .card-item .col-md-4 {
+	    padding-right: 50px;
+	}
+
+	.overview-tab .tab-content .general-info > div:not(:first-child) .col-content-wrapper {
+	    padding-left: 30px;
+	}
+	.server-features {
+		padding-left: 50px;
+		padding-right: 76px;
+	}
+	.sort-servers {
+	    margin-right: 12px;
+	}
+	.overview-tab .tab-content .general-info > div:not(:last-child) .col-content-wrapper{
+		border-right: 1px solid rgba(23, 30, 38, 0.08);
+	}
+
+}
+.modal {
+	overflow-y: scroll;
+}
+
+
+	.support-table::-webkit-scrollbar, .overview-tab ul.nav-pills::-webkit-scrollbar {
+	  width: 3px;
+	  border-radius: 15px;
+	  height: 12px;
+
+	}
+	 
+	.support-table::-webkit-scrollbar-track, .overview-tab ul.nav-pills::-webkit-scrollbar-track {
+	  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
+	  border-radius: 15px;
+	  height: 12px
+	}
+	 
+	.support-table::-webkit-scrollbar-thumb, .overview-tab ul.nav-pills::-webkit-scrollbar-thumb {
+	  background-color: rgba(23, 30, 38, 0.06);
+	  border-radius: 15px;
+	  height: 12px
+
+	}

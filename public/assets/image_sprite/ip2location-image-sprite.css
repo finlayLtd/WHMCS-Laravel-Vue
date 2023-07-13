@@ -1,0 +1,3083 @@
+/* CSS for showing flags in image sprite. Author: IP2Location */
+/* Set 1 Flags Design*/
+
+/* 16x16px */
+.ip2location-flag-16 {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+}
+
+/* 32x32px */
+.ip2location-flag-32 {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+}
+
+ /* 64x64px */
+ .ip2location-flag-64 {
+    display: inline-block;
+    width: 64px;
+    height: 64px;
+}
+
+.ip2location-flag-16.flag-square {
+    background : no-repeat url(all_countries_16.png);
+}
+
+.ip2location-flag-32.flag-square {
+    background : no-repeat url(all_countries_32.png);
+}
+
+.ip2location-flag-64.flag-square {
+    background : no-repeat url(all_countries_64.png);
+}
+
+.ip2location-flag-16.flag-square-rounded {
+    background : no-repeat url(all_countries_16_2.png);
+}
+
+.ip2location-flag-32.flag-square-rounded {
+    background : no-repeat url(all_countries_32_2.png);
+}
+
+.ip2location-flag-64.flag-square-rounded {
+    background : no-repeat url(all_countries_64_2.png);
+}
+
+.ip2location-flag-16.flag-square-bended {
+    background : no-repeat url(all_countries_16_3.png);
+}
+
+.ip2location-flag-32.flag-square-bended {
+    background : no-repeat url(all_countries_32_3.png);
+}
+
+.ip2location-flag-64.flag-square-bended {
+    background : no-repeat url(all_countries_64_3.png);
+}
+
+.ip2location-flag-16.flag-square-shadow {
+    background : no-repeat url(all_countries_16_4.png);
+}
+
+.ip2location-flag-32.flag-square-shadow {
+    background : no-repeat url(all_countries_32_4.png);
+}
+
+.ip2location-flag-64.flag-square-shadow {
+    background : no-repeat url(all_countries_64_4.png);
+}
+
+.ip2location-flag-16.flag-round {
+    background : no-repeat url(all_countries_16_5.png);
+}
+
+.ip2location-flag-32.flag-round {
+    background : no-repeat url(all_countries_32_5.png);
+}
+
+.ip2location-flag-64.flag-round {
+    background : no-repeat url(all_countries_64_5.png);
+}
+
+.ip2location-flag-16.flag-pole{
+    background : no-repeat url(all_countries_16_6.png);
+}
+
+.ip2location-flag-32.flag-pole{
+    background : no-repeat url(all_countries_32_6.png);
+}
+
+.ip2location-flag-64.flag-pole{
+    background : no-repeat url(all_countries_64_6.png);
+}
+
+.ip2location-flag-16.flag-ad {
+    background-position: -1px -1px;
+}
+
+.ip2location-flag-16.flag-ae {
+    background-position: -19px -1px;
+}
+
+.ip2location-flag-16.flag-af {
+    background-position: -37px -1px;
+}
+
+.ip2location-flag-16.flag-ag {
+    background-position: -55px -1px;
+}
+
+.ip2location-flag-16.flag-ai {
+    background-position: -73px -1px;
+}
+
+.ip2location-flag-16.flag-al {
+    background-position: -91px -1px;
+}
+
+.ip2location-flag-16.flag-am {
+    background-position: -109px -1px;
+}
+
+.ip2location-flag-16.flag-ao {
+    background-position: -127px -1px;
+}
+
+.ip2location-flag-16.flag-aq {
+    background-position: -145px -1px;
+}
+
+.ip2location-flag-16.flag-ar {
+    background-position: -163px -1px;
+}
+
+.ip2location-flag-16.flag-as {
+    background-position: -181px -1px;
+}
+
+.ip2location-flag-16.flag-at {
+    background-position: -199px -1px;
+}
+
+.ip2location-flag-16.flag-au {
+    background-position: -217px -1px;
+}
+
+.ip2location-flag-16.flag-aw {
+    background-position: -235px -1px;
+}
+
+.ip2location-flag-16.flag-ax {
+    background-position: -253px -1px;
+}
+
+.ip2location-flag-16.flag-az {
+    background-position: -1px -19px;
+}
+
+.ip2location-flag-16.flag-ba {
+    background-position: -19px -19px;
+}
+
+.ip2location-flag-16.flag-bb {
+    background-position: -37px -19px;
+}
+
+.ip2location-flag-16.flag-bd {
+    background-position: -55px -19px;
+}
+
+.ip2location-flag-16.flag-be {
+    background-position: -73px -19px;
+}
+
+.ip2location-flag-16.flag-bf {
+    background-position: -91px -19px;
+}
+
+.ip2location-flag-16.flag-bg {
+    background-position: -109px -19px;
+}
+
+.ip2location-flag-16.flag-bh {
+    background-position: -127px -19px;
+}
+
+.ip2location-flag-16.flag-bi {
+    background-position: -145px -19px;
+}
+
+.ip2location-flag-16.flag-bj {
+    background-position: -163px -19px;
+}
+
+.ip2location-flag-16.flag-bl {
+    background-position: -181px -19px;
+}
+
+.ip2location-flag-16.flag-bm {
+    background-position: -199px -19px;
+}
+
+.ip2location-flag-16.flag-bn {
+    background-position: -217px -19px;
+}
+
+.ip2location-flag-16.flag-bo {
+    background-position: -235px -19px;
+}
+
+.ip2location-flag-16.flag-bq {
+    background-position: -253px -19px;
+}
+
+.ip2location-flag-16.flag-br {
+    background-position: -1px -37px;
+}
+
+.ip2location-flag-16.flag-bs {
+    background-position: -19px -37px;
+}
+
+.ip2location-flag-16.flag-bt {
+    background-position: -37px -37px;
+}
+
+.ip2location-flag-16.flag-bv {
+    background-position: -55px -37px;
+}
+
+.ip2location-flag-16.flag-bw {
+    background-position: -73px -37px;
+}
+
+.ip2location-flag-16.flag-by {
+    background-position: -91px -37px;
+}
+
+.ip2location-flag-16.flag-bz {
+    background-position: -109px -37px;
+}
+
+.ip2location-flag-16.flag-ca {
+    background-position: -127px -37px;
+}
+
+.ip2location-flag-16.flag-cc {
+    background-position: -145px -37px;
+}
+
+.ip2location-flag-16.flag-cd {
+    background-position: -163px -37px;
+}
+
+.ip2location-flag-16.flag-cf {
+    background-position: -181px -37px;
+}
+
+.ip2location-flag-16.flag-cg {
+    background-position: -199px -37px;
+}
+
+.ip2location-flag-16.flag-ch {
+    background-position: -217px -37px;
+}
+
+.ip2location-flag-16.flag-ci {
+    background-position: -235px -37px;
+}
+
+.ip2location-flag-16.flag-ck {
+    background-position: -253px -37px;
+}
+
+.ip2location-flag-16.flag-cl {
+    background-position: -1px -55px;
+}
+
+.ip2location-flag-16.flag-cm {
+    background-position: -19px -55px;
+}
+
+.ip2location-flag-16.flag-cn {
+    background-position: -37px -55px;
+}
+
+.ip2location-flag-16.flag-co {
+    background-position: -55px -55px;
+}
+
+.ip2location-flag-16.flag-cr {
+    background-position: -73px -55px;
+}
+
+.ip2location-flag-16.flag-cu {
+    background-position: -91px -55px;
+}
+
+.ip2location-flag-16.flag-cv {
+    background-position: -109px -55px;
+}
+
+.ip2location-flag-16.flag-cw {
+    background-position: -127px -55px;
+}
+
+.ip2location-flag-16.flag-cx {
+    background-position: -145px -55px;
+}
+
+.ip2location-flag-16.flag-cy {
+    background-position: -163px -55px;
+}
+
+.ip2location-flag-16.flag-cz {
+    background-position: -181px -55px;
+}
+
+.ip2location-flag-16.flag-de {
+    background-position: -199px -55px;
+}
+
+.ip2location-flag-16.flag-dj {
+    background-position: -217px -55px;
+}
+
+.ip2location-flag-16.flag-dk {
+    background-position: -235px -55px;
+}
+
+.ip2location-flag-16.flag-dm {
+    background-position: -253px -55px;
+}
+
+.ip2location-flag-16.flag-do {
+    background-position: -1px -73px;
+}
+
+.ip2location-flag-16.flag-dz {
+    background-position: -19px -73px;
+}
+
+.ip2location-flag-16.flag-ec {
+    background-position: -37px -73px;
+}
+
+.ip2location-flag-16.flag-ee {
+    background-position: -55px -73px;
+}
+
+.ip2location-flag-16.flag-eg {
+    background-position: -73px -73px;
+}
+
+.ip2location-flag-16.flag-eh {
+    background-position: -91px -73px;
+}
+
+.ip2location-flag-16.flag-er {
+    background-position: -109px -73px;
+}
+
+.ip2location-flag-16.flag-es {
+    background-position: -127px -73px;
+}
+
+.ip2location-flag-16.flag-et {
+    background-position: -145px -73px;
+}
+
+.ip2location-flag-16.flag-fi {
+    background-position: -163px -73px;
+}
+
+.ip2location-flag-16.flag-fj {
+    background-position: -181px -73px;
+}
+
+.ip2location-flag-16.flag-fk {
+    background-position: -199px -73px;
+}
+
+.ip2location-flag-16.flag-fm {
+    background-position: -217px -73px;
+}
+
+.ip2location-flag-16.flag-fo {
+    background-position: -235px -73px;
+}
+
+.ip2location-flag-16.flag-fr {
+    background-position: -253px -73px;
+}
+
+.ip2location-flag-16.flag-ga {
+    background-position: -1px -91px;
+}
+
+.ip2location-flag-16.flag-gb {
+    background-position: -19px -91px;
+}
+
+.ip2location-flag-16.flag-gd {
+    background-position: -37px -91px;
+}
+
+.ip2location-flag-16.flag-ge {
+    background-position: -55px -91px;
+}
+
+.ip2location-flag-16.flag-gf {
+    background-position: -73px -91px;
+}
+
+.ip2location-flag-16.flag-gg {
+    background-position: -91px -91px;
+}
+
+.ip2location-flag-16.flag-gh {
+    background-position: -109px -91px;
+}
+
+.ip2location-flag-16.flag-gi {
+    background-position: -127px -91px;
+}
+
+.ip2location-flag-16.flag-gl {
+    background-position: -145px -91px;
+}
+
+.ip2location-flag-16.flag-gm {
+    background-position: -163px -91px;
+}
+
+.ip2location-flag-16.flag-gn {
+    background-position: -181px -91px;
+}
+
+.ip2location-flag-16.flag-gp {
+    background-position: -199px -91px;
+}
+
+.ip2location-flag-16.flag-gq {
+    background-position: -217px -91px;
+}
+
+.ip2location-flag-16.flag-gr {
+    background-position: -235px -91px;
+}
+
+.ip2location-flag-16.flag-gs {
+    background-position: -253px -91px;
+}
+
+.ip2location-flag-16.flag-gt {
+    background-position: -1px -109px;
+}
+
+.ip2location-flag-16.flag-gu {
+    background-position: -19px -109px;
+}
+
+.ip2location-flag-16.flag-gw {
+    background-position: -37px -109px;
+}
+
+.ip2location-flag-16.flag-gy {
+    background-position: -55px -109px;
+}
+
+.ip2location-flag-16.flag-hk {
+    background-position: -73px -109px;
+}
+
+.ip2location-flag-16.flag-hm {
+    background-position: -91px -109px;
+}
+
+.ip2location-flag-16.flag-hn {
+    background-position: -109px -109px;
+}
+
+.ip2location-flag-16.flag-hr {
+    background-position: -127px -109px;
+}
+
+.ip2location-flag-16.flag-ht {
+    background-position: -145px -109px;
+}
+
+.ip2location-flag-16.flag-hu {
+    background-position: -163px -109px;
+}
+
+.ip2location-flag-16.flag-id {
+    background-position: -181px -109px;
+}
+
+.ip2location-flag-16.flag-ie {
+    background-position: -199px -109px;
+}
+
+.ip2location-flag-16.flag-il {
+    background-position: -217px -109px;
+}
+
+.ip2location-flag-16.flag-im {
+    background-position: -235px -109px;
+}
+
+.ip2location-flag-16.flag-in {
+    background-position: -253px -109px;
+}
+
+.ip2location-flag-16.flag-io {
+    background-position: -1px -127px;
+}
+
+.ip2location-flag-16.flag-iq {
+    background-position: -19px -127px;
+}
+
+.ip2location-flag-16.flag-ir {
+    background-position: -37px -127px;
+}
+
+.ip2location-flag-16.flag-is {
+    background-position: -55px -127px;
+}
+
+.ip2location-flag-16.flag-it {
+    background-position: -73px -127px;
+}
+
+.ip2location-flag-16.flag-je {
+    background-position: -91px -127px;
+}
+
+.ip2location-flag-16.flag-jm {
+    background-position: -109px -127px;
+}
+
+.ip2location-flag-16.flag-jo {
+    background-position: -127px -127px;
+}
+
+.ip2location-flag-16.flag-jp {
+    background-position: -145px -127px;
+}
+
+.ip2location-flag-16.flag-ke {
+    background-position: -163px -127px;
+}
+
+.ip2location-flag-16.flag-kg {
+    background-position: -181px -127px;
+}
+
+.ip2location-flag-16.flag-kh {
+    background-position: -199px -127px;
+}
+
+.ip2location-flag-16.flag-ki {
+    background-position: -217px -127px;
+}
+
+.ip2location-flag-16.flag-km {
+    background-position: -235px -127px;
+}
+
+.ip2location-flag-16.flag-kn {
+    background-position: -253px -127px;
+}
+
+.ip2location-flag-16.flag-kp {
+    background-position: -1px -145px;
+}
+
+.ip2location-flag-16.flag-kr {
+    background-position: -19px -145px;
+}
+
+.ip2location-flag-16.flag-kw {
+    background-position: -37px -145px;
+}
+
+.ip2location-flag-16.flag-ky {
+    background-position: -55px -145px;
+}
+
+.ip2location-flag-16.flag-kz {
+    background-position: -73px -145px;
+}
+
+.ip2location-flag-16.flag-la {
+    background-position: -91px -145px;
+}
+
+.ip2location-flag-16.flag-lb {
+    background-position: -109px -145px;
+}
+
+.ip2location-flag-16.flag-lc {
+    background-position: -127px -145px;
+}
+
+.ip2location-flag-16.flag-li {
+    background-position: -145px -145px;
+}
+
+.ip2location-flag-16.flag-lk {
+    background-position: -163px -145px;
+}
+
+.ip2location-flag-16.flag-lr {
+    background-position: -181px -145px;
+}
+
+.ip2location-flag-16.flag-ls {
+    background-position: -199px -145px;
+}
+
+.ip2location-flag-16.flag-lt {
+    background-position: -217px -145px;
+}
+
+.ip2location-flag-16.flag-lu {
+    background-position: -235px -145px;
+}
+
+.ip2location-flag-16.flag-lv {
+    background-position: -253px -145px;
+}
+
+.ip2location-flag-16.flag-ly {
+    background-position: -1px -163px;
+}
+
+.ip2location-flag-16.flag-ma {
+    background-position: -19px -163px;
+}
+
+.ip2location-flag-16.flag-mc {
+    background-position: -37px -163px;
+}
+
+.ip2location-flag-16.flag-md {
+    background-position: -55px -163px;
+}
+
+.ip2location-flag-16.flag-me {
+    background-position: -73px -163px;
+}
+
+.ip2location-flag-16.flag-mf {
+    background-position: -91px -163px;
+}
+
+.ip2location-flag-16.flag-mg {
+    background-position: -109px -163px;
+}
+
+.ip2location-flag-16.flag-mh {
+    background-position: -127px -163px;
+}
+
+.ip2location-flag-16.flag-mk {
+    background-position: -145px -163px;
+}
+
+.ip2location-flag-16.flag-ml {
+    background-position: -163px -163px;
+}
+
+.ip2location-flag-16.flag-mm {
+    background-position: -181px -163px;
+}
+
+.ip2location-flag-16.flag-mn {
+    background-position: -199px -163px;
+}
+
+.ip2location-flag-16.flag-mo {
+    background-position: -217px -163px;
+}
+
+.ip2location-flag-16.flag-mp {
+    background-position: -235px -163px;
+}
+
+.ip2location-flag-16.flag-mq {
+    background-position: -253px -163px;
+}
+
+.ip2location-flag-16.flag-mr {
+    background-position: -1px -181px;
+}
+
+.ip2location-flag-16.flag-ms {
+    background-position: -19px -181px;
+}
+
+.ip2location-flag-16.flag-mt {
+    background-position: -37px -181px;
+}
+
+.ip2location-flag-16.flag-mu {
+    background-position: -55px -181px;
+}
+
+.ip2location-flag-16.flag-mv {
+    background-position: -73px -181px;
+}
+
+.ip2location-flag-16.flag-mw {
+    background-position: -91px -181px;
+}
+
+.ip2location-flag-16.flag-mx {
+    background-position: -109px -181px;
+}
+
+.ip2location-flag-16.flag-my {
+    background-position: -127px -181px;
+}
+
+.ip2location-flag-16.flag-mz {
+    background-position: -145px -181px;
+}
+
+.ip2location-flag-16.flag-na {
+    background-position: -163px -181px;
+}
+
+.ip2location-flag-16.flag-nc {
+    background-position: -181px -181px;
+}
+
+.ip2location-flag-16.flag-ne {
+    background-position: -199px -181px;
+}
+
+.ip2location-flag-16.flag-nf {
+    background-position: -217px -181px;
+}
+
+.ip2location-flag-16.flag-ng {
+    background-position: -235px -181px;
+}
+
+.ip2location-flag-16.flag-ni {
+    background-position: -253px -181px;
+}
+
+.ip2location-flag-16.flag-nl {
+    background-position: -1px -199px;
+}
+
+.ip2location-flag-16.flag-no {
+    background-position: -19px -199px;
+}
+
+.ip2location-flag-16.flag-np {
+    background-position: -37px -199px;
+}
+
+.ip2location-flag-16.flag-nr {
+    background-position: -55px -199px;
+}
+
+.ip2location-flag-16.flag-nu {
+    background-position: -73px -199px;
+}
+
+.ip2location-flag-16.flag-nz {
+    background-position: -91px -199px;
+}
+
+.ip2location-flag-16.flag-om {
+    background-position: -109px -199px;
+}
+
+.ip2location-flag-16.flag-pa {
+    background-position: -127px -199px;
+}
+
+.ip2location-flag-16.flag-pe {
+    background-position: -145px -199px;
+}
+
+.ip2location-flag-16.flag-pf {
+    background-position: -163px -199px;
+}
+
+.ip2location-flag-16.flag-pg {
+    background-position: -181px -199px;
+}
+
+.ip2location-flag-16.flag-ph {
+    background-position: -199px -199px;
+}
+
+.ip2location-flag-16.flag-pk {
+    background-position: -217px -199px;
+}
+
+.ip2location-flag-16.flag-pl {
+    background-position: -235px -199px;
+}
+
+.ip2location-flag-16.flag-pm {
+    background-position: -253px -199px;
+}
+
+.ip2location-flag-16.flag-pn {
+    background-position: -1px -217px;
+}
+
+.ip2location-flag-16.flag-pr {
+    background-position: -19px -217px;
+}
+
+.ip2location-flag-16.flag-ps {
+    background-position: -37px -217px;
+}
+
+.ip2location-flag-16.flag-pt {
+    background-position: -55px -217px;
+}
+
+.ip2location-flag-16.flag-pw {
+    background-position: -73px -217px;
+}
+
+.ip2location-flag-16.flag-py {
+    background-position: -91px -217px;
+}
+
+.ip2location-flag-16.flag-qa {
+    background-position: -109px -217px;
+}
+
+.ip2location-flag-16.flag-re {
+    background-position: -127px -217px;
+}
+
+.ip2location-flag-16.flag-ro {
+    background-position: -145px -217px;
+}
+
+.ip2location-flag-16.flag-rs {
+    background-position: -163px -217px;
+}
+
+.ip2location-flag-16.flag-ru {
+    background-position: -181px -217px;
+}
+
+.ip2location-flag-16.flag-rw {
+    background-position: -199px -217px;
+}
+
+.ip2location-flag-16.flag-sa {
+    background-position: -217px -217px;
+}
+
+.ip2location-flag-16.flag-sb {
+    background-position: -235px -217px;
+}
+
+.ip2location-flag-16.flag-sc {
+    background-position: -253px -217px;
+}
+
+.ip2location-flag-16.flag-sd {
+    background-position: -1px -235px;
+}
+
+.ip2location-flag-16.flag-se {
+    background-position: -19px -235px;
+}
+
+.ip2location-flag-16.flag-sg {
+    background-position: -37px -235px;
+}
+
+.ip2location-flag-16.flag-sh {
+    background-position: -55px -235px;
+}
+
+.ip2location-flag-16.flag-si {
+    background-position: -73px -235px;
+}
+
+.ip2location-flag-16.flag-sj {
+    background-position: -91px -235px;
+}
+
+.ip2location-flag-16.flag-sk {
+    background-position: -109px -235px;
+}
+
+.ip2location-flag-16.flag-sl {
+    background-position: -127px -235px;
+}
+
+.ip2location-flag-16.flag-sm {
+    background-position: -145px -235px;
+}
+
+.ip2location-flag-16.flag-sn {
+    background-position: -163px -235px;
+}
+
+.ip2location-flag-16.flag-so {
+    background-position: -181px -235px;
+}
+
+.ip2location-flag-16.flag-sr {
+    background-position: -199px -235px;
+}
+
+.ip2location-flag-16.flag-ss {
+    background-position: -217px -235px;
+}
+
+.ip2location-flag-16.flag-st {
+    background-position: -235px -235px;
+}
+
+.ip2location-flag-16.flag-sv {
+    background-position: -253px -235px;
+}
+
+.ip2location-flag-16.flag-sx {
+    background-position: -1px -253px;
+}
+
+.ip2location-flag-16.flag-sy {
+    background-position: -19px -253px;
+}
+
+.ip2location-flag-16.flag-sz {
+    background-position: -37px -253px;
+}
+
+.ip2location-flag-16.flag-tc {
+    background-position: -55px -253px;
+}
+
+.ip2location-flag-16.flag-td {
+    background-position: -73px -253px;
+}
+
+.ip2location-flag-16.flag-tf {
+    background-position: -91px -253px;
+}
+
+.ip2location-flag-16.flag-tg {
+    background-position: -109px -253px;
+}
+
+.ip2location-flag-16.flag-th {
+    background-position: -127px -253px;
+}
+
+.ip2location-flag-16.flag-tj {
+    background-position: -145px -253px;
+}
+
+.ip2location-flag-16.flag-tk {
+    background-position: -163px -253px;
+}
+
+.ip2location-flag-16.flag-tl {
+    background-position: -181px -253px;
+}
+
+.ip2location-flag-16.flag-tm {
+    background-position: -199px -253px;
+}
+
+.ip2location-flag-16.flag-tn {
+    background-position: -217px -253px;
+}
+
+.ip2location-flag-16.flag-to {
+    background-position: -235px -253px;
+}
+
+.ip2location-flag-16.flag-tr {
+    background-position: -253px -253px;
+}
+
+.ip2location-flag-16.flag-tt {
+    background-position: -271px -1px;
+}
+
+.ip2location-flag-16.flag-tv {
+    background-position: -271px -19px;
+}
+
+.ip2location-flag-16.flag-tw {
+    background-position: -271px -37px;
+}
+
+.ip2location-flag-16.flag-tz {
+    background-position: -271px -55px;
+}
+
+.ip2location-flag-16.flag-ua {
+    background-position: -271px -73px;
+}
+
+.ip2location-flag-16.flag-ug {
+    background-position: -271px -91px;
+}
+
+.ip2location-flag-16.flag-um {
+    background-position: -271px -109px;
+}
+
+.ip2location-flag-16.flag-us {
+    background-position: -271px -127px;
+}
+
+.ip2location-flag-16.flag-uy {
+    background-position: -271px -145px;
+}
+
+.ip2location-flag-16.flag-uz {
+    background-position: -271px -163px;
+}
+
+.ip2location-flag-16.flag-va {
+    background-position: -271px -181px;
+}
+
+.ip2location-flag-16.flag-vc {
+    background-position: -271px -199px;
+}
+
+.ip2location-flag-16.flag-ve {
+    background-position: -271px -217px;
+}
+
+.ip2location-flag-16.flag-vg {
+    background-position: -271px -235px;
+}
+
+.ip2location-flag-16.flag-vi {
+    background-position: -271px -253px;
+}
+
+.ip2location-flag-16.flag-vn {
+    background-position: -1px -271px;
+}
+
+.ip2location-flag-16.flag-vu {
+    background-position: -19px -271px;
+}
+
+.ip2location-flag-16.flag-wf {
+    background-position: -37px -271px;
+}
+
+.ip2location-flag-16.flag-ws {
+    background-position: -55px -271px;
+}
+
+.ip2location-flag-16.flag-ye {
+    background-position: -73px -271px;
+}
+
+.ip2location-flag-16.flag-yt {
+    background-position: -91px -271px;
+}
+
+.ip2location-flag-16.flag-za {
+    background-position: -109px -271px;
+}
+
+.ip2location-flag-16.flag-zm {
+    background-position: -127px -271px;
+}
+
+.ip2location-flag-16.flag-zw {
+    background-position: -145px -271px;
+}
+
+.ip2location-flag-32.flag-ad {
+    background-position: -1px -1px;
+}
+
+.ip2location-flag-32.flag-ae {
+    background-position: -35px -1px;
+}
+
+.ip2location-flag-32.flag-af {
+    background-position: -69px -1px;
+}
+
+.ip2location-flag-32.flag-ag {
+    background-position: -103px -1px;
+}
+
+.ip2location-flag-32.flag-ai {
+    background-position: -137px -1px;
+}
+
+.ip2location-flag-32.flag-al {
+    background-position: -171px -1px;
+}
+
+.ip2location-flag-32.flag-am {
+    background-position: -205px -1px;
+}
+
+.ip2location-flag-32.flag-ao {
+    background-position: -239px -1px;
+}
+
+.ip2location-flag-32.flag-aq {
+    background-position: -273px -1px;
+}
+
+.ip2location-flag-32.flag-ar {
+    background-position: -307px -1px;
+}
+
+.ip2location-flag-32.flag-as {
+    background-position: -341px -1px;
+}
+
+.ip2location-flag-32.flag-at {
+    background-position: -375px -1px;
+}
+
+.ip2location-flag-32.flag-au {
+    background-position: -409px -1px;
+}
+
+.ip2location-flag-32.flag-aw {
+    background-position: -443px -1px;
+}
+
+.ip2location-flag-32.flag-ax {
+    background-position: -477px -1px;
+}
+
+.ip2location-flag-32.flag-az {
+    background-position: -1px -35px;
+}
+
+.ip2location-flag-32.flag-ba {
+    background-position: -35px -35px;
+}
+
+.ip2location-flag-32.flag-bb {
+    background-position: -69px -35px;
+}
+
+.ip2location-flag-32.flag-bd {
+    background-position: -103px -35px;
+}
+
+.ip2location-flag-32.flag-be {
+    background-position: -137px -35px;
+}
+
+.ip2location-flag-32.flag-bf {
+    background-position: -171px -35px;
+}
+
+.ip2location-flag-32.flag-bg {
+    background-position: -205px -35px;
+}
+
+.ip2location-flag-32.flag-bh {
+    background-position: -239px -35px;
+}
+
+.ip2location-flag-32.flag-bi {
+    background-position: -273px -35px;
+}
+
+.ip2location-flag-32.flag-bj {
+    background-position: -307px -35px;
+}
+
+.ip2location-flag-32.flag-bl {
+    background-position: -341px -35px;
+}
+
+.ip2location-flag-32.flag-bm {
+    background-position: -375px -35px;
+}
+
+.ip2location-flag-32.flag-bn {
+    background-position: -409px -35px;
+}
+
+.ip2location-flag-32.flag-bo {
+    background-position: -443px -35px;
+}
+
+.ip2location-flag-32.flag-bq {
+    background-position: -477px -35px;
+}
+
+.ip2location-flag-32.flag-br {
+    background-position: -1px -69px;
+}
+
+.ip2location-flag-32.flag-bs {
+    background-position: -35px -69px;
+}
+
+.ip2location-flag-32.flag-bt {
+    background-position: -69px -69px;
+}
+
+.ip2location-flag-32.flag-bv {
+    background-position: -103px -69px;
+}
+
+.ip2location-flag-32.flag-bw {
+    background-position: -137px -69px;
+}
+
+.ip2location-flag-32.flag-by {
+    background-position: -171px -69px;
+}
+
+.ip2location-flag-32.flag-bz {
+    background-position: -205px -69px;
+}
+
+.ip2location-flag-32.flag-ca {
+    background-position: -239px -69px;
+}
+
+.ip2location-flag-32.flag-cc {
+    background-position: -273px -69px;
+}
+
+.ip2location-flag-32.flag-cd {
+    background-position: -307px -69px;
+}
+
+.ip2location-flag-32.flag-cf {
+    background-position: -341px -69px;
+}
+
+.ip2location-flag-32.flag-cg {
+    background-position: -375px -69px;
+}
+
+.ip2location-flag-32.flag-ch {
+    background-position: -409px -69px;
+}
+
+.ip2location-flag-32.flag-ci {
+    background-position: -443px -69px;
+}
+
+.ip2location-flag-32.flag-ck {
+    background-position: -477px -69px;
+}
+
+.ip2location-flag-32.flag-cl {
+    background-position: -1px -103px;
+}
+
+.ip2location-flag-32.flag-cm {
+    background-position: -35px -103px;
+}
+
+.ip2location-flag-32.flag-cn {
+    background-position: -69px -103px;
+}
+
+.ip2location-flag-32.flag-co {
+    background-position: -103px -103px;
+}
+
+.ip2location-flag-32.flag-cr {
+    background-position: -137px -103px;
+}
+
+.ip2location-flag-32.flag-cu {
+    background-position: -171px -103px;
+}
+
+.ip2location-flag-32.flag-cv {
+    background-position: -205px -103px;
+}
+
+.ip2location-flag-32.flag-cw {
+    background-position: -239px -103px;
+}
+
+.ip2location-flag-32.flag-cx {
+    background-position: -273px -103px;
+}
+
+.ip2location-flag-32.flag-cy {
+    background-position: -307px -103px;
+}
+
+.ip2location-flag-32.flag-cz {
+    background-position: -341px -103px;
+}
+
+.ip2location-flag-32.flag-de {
+    background-position: -375px -103px;
+}
+
+.ip2location-flag-32.flag-dj {
+    background-position: -409px -103px;
+}
+
+.ip2location-flag-32.flag-dk {
+    background-position: -443px -103px;
+}
+
+.ip2location-flag-32.flag-dm {
+    background-position: -477px -103px;
+}
+
+.ip2location-flag-32.flag-do {
+    background-position: -1px -137px;
+}
+
+.ip2location-flag-32.flag-dz {
+    background-position: -35px -137px;
+}
+
+.ip2location-flag-32.flag-ec {
+    background-position: -69px -137px;
+}
+
+.ip2location-flag-32.flag-ee {
+    background-position: -103px -137px;
+}
+
+.ip2location-flag-32.flag-eg {
+    background-position: -137px -137px;
+}
+
+.ip2location-flag-32.flag-eh {
+    background-position: -171px -137px;
+}
+
+.ip2location-flag-32.flag-er {
+    background-position: -205px -137px;
+}
+
+.ip2location-flag-32.flag-es {
+    background-position: -239px -137px;
+}
+
+.ip2location-flag-32.flag-et {
+    background-position: -273px -137px;
+}
+
+.ip2location-flag-32.flag-fi {
+    background-position: -307px -137px;
+}
+
+.ip2location-flag-32.flag-fj {
+    background-position: -341px -137px;
+}
+
+.ip2location-flag-32.flag-fk {
+    background-position: -375px -137px;
+}
+
+.ip2location-flag-32.flag-fm {
+    background-position: -409px -137px;
+}
+
+.ip2location-flag-32.flag-fo {
+    background-position: -443px -137px;
+}
+
+.ip2location-flag-32.flag-fr {
+    background-position: -477px -137px;
+}
+
+.ip2location-flag-32.flag-ga {
+    background-position: -1px -171px;
+}
+
+.ip2location-flag-32.flag-gb {
+    background-position: -35px -171px;
+}
+
+.ip2location-flag-32.flag-gd {
+    background-position: -69px -171px;
+}
+
+.ip2location-flag-32.flag-ge {
+    background-position: -103px -171px;
+}
+
+.ip2location-flag-32.flag-gf {
+    background-position: -137px -171px;
+}
+
+.ip2location-flag-32.flag-gg {
+    background-position: -171px -171px;
+}
+
+.ip2location-flag-32.flag-gh {
+    background-position: -205px -171px;
+}
+
+.ip2location-flag-32.flag-gi {
+    background-position: -239px -171px;
+}
+
+.ip2location-flag-32.flag-gl {
+    background-position: -273px -171px;
+}
+
+.ip2location-flag-32.flag-gm {
+    background-position: -307px -171px;
+}
+
+.ip2location-flag-32.flag-gn {
+    background-position: -341px -171px;
+}
+
+.ip2location-flag-32.flag-gp {
+    background-position: -375px -171px;
+}
+
+.ip2location-flag-32.flag-gq {
+    background-position: -409px -171px;
+}
+
+.ip2location-flag-32.flag-gr {
+    background-position: -443px -171px;
+}
+
+.ip2location-flag-32.flag-gs {
+    background-position: -477px -171px;
+}
+
+.ip2location-flag-32.flag-gt {
+    background-position: -1px -205px;
+}
+
+.ip2location-flag-32.flag-gu {
+    background-position: -35px -205px;
+}
+
+.ip2location-flag-32.flag-gw {
+    background-position: -69px -205px;
+}
+
+.ip2location-flag-32.flag-gy {
+    background-position: -103px -205px;
+}
+
+.ip2location-flag-32.flag-hk {
+    background-position: -137px -205px;
+}
+
+.ip2location-flag-32.flag-hm {
+    background-position: -171px -205px;
+}
+
+.ip2location-flag-32.flag-hn {
+    background-position: -205px -205px;
+}
+
+.ip2location-flag-32.flag-hr {
+    background-position: -239px -205px;
+}
+
+.ip2location-flag-32.flag-ht {
+    background-position: -273px -205px;
+}
+
+.ip2location-flag-32.flag-hu {
+    background-position: -307px -205px;
+}
+
+.ip2location-flag-32.flag-id {
+    background-position: -341px -205px;
+}
+
+.ip2location-flag-32.flag-ie {
+    background-position: -375px -205px;
+}
+
+.ip2location-flag-32.flag-il {
+    background-position: -409px -205px;
+}
+
+.ip2location-flag-32.flag-im {
+    background-position: -443px -205px;
+}
+
+.ip2location-flag-32.flag-in {
+    background-position: -477px -205px;
+}
+
+.ip2location-flag-32.flag-io {
+    background-position: -1px -239px;
+}
+
+.ip2location-flag-32.flag-iq {
+    background-position: -35px -239px;
+}
+
+.ip2location-flag-32.flag-ir {
+    background-position: -69px -239px;
+}
+
+.ip2location-flag-32.flag-is {
+    background-position: -103px -239px;
+}
+
+.ip2location-flag-32.flag-it {
+    background-position: -137px -239px;
+}
+
+.ip2location-flag-32.flag-je {
+    background-position: -171px -239px;
+}
+
+.ip2location-flag-32.flag-jm {
+    background-position: -205px -239px;
+}
+
+.ip2location-flag-32.flag-jo {
+    background-position: -239px -239px;
+}
+
+.ip2location-flag-32.flag-jp {
+    background-position: -273px -239px;
+}
+
+.ip2location-flag-32.flag-ke {
+    background-position: -307px -239px;
+}
+
+.ip2location-flag-32.flag-kg {
+    background-position: -341px -239px;
+}
+
+.ip2location-flag-32.flag-kh {
+    background-position: -375px -239px;
+}
+
+.ip2location-flag-32.flag-ki {
+    background-position: -409px -239px;
+}
+
+.ip2location-flag-32.flag-km {
+    background-position: -443px -239px;
+}
+
+.ip2location-flag-32.flag-kn {
+    background-position: -477px -239px;
+}
+
+.ip2location-flag-32.flag-kp {
+    background-position: -1px -273px;
+}
+
+.ip2location-flag-32.flag-kr {
+    background-position: -35px -273px;
+}
+
+.ip2location-flag-32.flag-kw {
+    background-position: -69px -273px;
+}
+
+.ip2location-flag-32.flag-ky {
+    background-position: -103px -273px;
+}
+
+.ip2location-flag-32.flag-kz {
+    background-position: -137px -273px;
+}
+
+.ip2location-flag-32.flag-la {
+    background-position: -171px -273px;
+}
+
+.ip2location-flag-32.flag-lb {
+    background-position: -205px -273px;
+}
+
+.ip2location-flag-32.flag-lc {
+    background-position: -239px -273px;
+}
+
+.ip2location-flag-32.flag-li {
+    background-position: -273px -273px;
+}
+
+.ip2location-flag-32.flag-lk {
+    background-position: -307px -273px;
+}
+
+.ip2location-flag-32.flag-lr {
+    background-position: -341px -273px;
+}
+
+.ip2location-flag-32.flag-ls {
+    background-position: -375px -273px;
+}
+
+.ip2location-flag-32.flag-lt {
+    background-position: -409px -273px;
+}
+
+.ip2location-flag-32.flag-lu {
+    background-position: -443px -273px;
+}
+
+.ip2location-flag-32.flag-lv {
+    background-position: -477px -273px;
+}
+
+.ip2location-flag-32.flag-ly {
+    background-position: -1px -307px;
+}
+
+.ip2location-flag-32.flag-ma {
+    background-position: -35px -307px;
+}
+
+.ip2location-flag-32.flag-mc {
+    background-position: -69px -307px;
+}
+
+.ip2location-flag-32.flag-md {
+    background-position: -103px -307px;
+}
+
+.ip2location-flag-32.flag-me {
+    background-position: -137px -307px;
+}
+
+.ip2location-flag-32.flag-mf {
+    background-position: -171px -307px;
+}
+
+.ip2location-flag-32.flag-mg {
+    background-position: -205px -307px;
+}
+
+.ip2location-flag-32.flag-mh {
+    background-position: -239px -307px;
+}
+
+.ip2location-flag-32.flag-mk {
+    background-position: -273px -307px;
+}
+
+.ip2location-flag-32.flag-ml {
+    background-position: -307px -307px;
+}
+
+.ip2location-flag-32.flag-mm {
+    background-position: -341px -307px;
+}
+
+.ip2location-flag-32.flag-mn {
+    background-position: -375px -307px;
+}
+
+.ip2location-flag-32.flag-mo {
+    background-position: -409px -307px;
+}
+
+.ip2location-flag-32.flag-mp {
+    background-position: -443px -307px;
+}
+
+.ip2location-flag-32.flag-mq {
+    background-position: -477px -307px;
+}
+
+.ip2location-flag-32.flag-mr {
+    background-position: -1px -341px;
+}
+
+.ip2location-flag-32.flag-ms {
+    background-position: -35px -341px;
+}
+
+.ip2location-flag-32.flag-mt {
+    background-position: -69px -341px;
+}
+
+.ip2location-flag-32.flag-mu {
+    background-position: -103px -341px;
+}
+
+.ip2location-flag-32.flag-mv {
+    background-position: -137px -341px;
+}
+
+.ip2location-flag-32.flag-mw {
+    background-position: -171px -341px;
+}
+
+.ip2location-flag-32.flag-mx {
+    background-position: -205px -341px;
+}
+
+.ip2location-flag-32.flag-my {
+    background-position: -239px -341px;
+}
+
+.ip2location-flag-32.flag-mz {
+    background-position: -273px -341px;
+}
+
+.ip2location-flag-32.flag-na {
+    background-position: -307px -341px;
+}
+
+.ip2location-flag-32.flag-nc {
+    background-position: -341px -341px;
+}
+
+.ip2location-flag-32.flag-ne {
+    background-position: -375px -341px;
+}
+
+.ip2location-flag-32.flag-nf {
+    background-position: -409px -341px;
+}
+
+.ip2location-flag-32.flag-ng {
+    background-position: -443px -341px;
+}
+
+.ip2location-flag-32.flag-ni {
+    background-position: -477px -341px;
+}
+
+.ip2location-flag-32.flag-nl {
+    background-position: -1px -375px;
+}
+
+.ip2location-flag-32.flag-no {
+    background-position: -35px -375px;
+}
+
+.ip2location-flag-32.flag-np {
+    background-position: -69px -375px;
+}
+
+.ip2location-flag-32.flag-nr {
+    background-position: -103px -375px;
+}
+
+.ip2location-flag-32.flag-nu {
+    background-position: -137px -375px;
+}
+
+.ip2location-flag-32.flag-nz {
+    background-position: -171px -375px;
+}
+
+.ip2location-flag-32.flag-om {
+    background-position: -205px -375px;
+}
+
+.ip2location-flag-32.flag-pa {
+    background-position: -239px -375px;
+}
+
+.ip2location-flag-32.flag-pe {
+    background-position: -273px -375px;
+}
+
+.ip2location-flag-32.flag-pf {
+    background-position: -307px -375px;
+}
+
+.ip2location-flag-32.flag-pg {
+    background-position: -341px -375px;
+}
+
+.ip2location-flag-32.flag-ph {
+    background-position: -375px -375px;
+}
+
+.ip2location-flag-32.flag-pk {
+    background-position: -409px -375px;
+}
+
+.ip2location-flag-32.flag-pl {
+    background-position: -443px -375px;
+}
+
+.ip2location-flag-32.flag-pm {
+    background-position: -477px -375px;
+}
+
+.ip2location-flag-32.flag-pn {
+    background-position: -1px -409px;
+}
+
+.ip2location-flag-32.flag-pr {
+    background-position: -35px -409px;
+}
+
+.ip2location-flag-32.flag-ps {
+    background-position: -69px -409px;
+}
+
+.ip2location-flag-32.flag-pt {
+    background-position: -103px -409px;
+}
+
+.ip2location-flag-32.flag-pw {
+    background-position: -137px -409px;
+}
+
+.ip2location-flag-32.flag-py {
+    background-position: -171px -409px;
+}
+
+.ip2location-flag-32.flag-qa {
+    background-position: -205px -409px;
+}
+
+.ip2location-flag-32.flag-re {
+    background-position: -239px -409px;
+}
+
+.ip2location-flag-32.flag-ro {
+    background-position: -273px -409px;
+}
+
+.ip2location-flag-32.flag-rs {
+    background-position: -307px -409px;
+}
+
+.ip2location-flag-32.flag-ru {
+    background-position: -341px -409px;
+}
+
+.ip2location-flag-32.flag-rw {
+    background-position: -375px -409px;
+}
+
+.ip2location-flag-32.flag-sa {
+    background-position: -409px -409px;
+}
+
+.ip2location-flag-32.flag-sb {
+    background-position: -443px -409px;
+}
+
+.ip2location-flag-32.flag-sc {
+    background-position: -477px -409px;
+}
+
+.ip2location-flag-32.flag-sd {
+    background-position: -1px -443px;
+}
+
+.ip2location-flag-32.flag-se {
+    background-position: -35px -443px;
+}
+
+.ip2location-flag-32.flag-sg {
+    background-position: -69px -443px;
+}
+
+.ip2location-flag-32.flag-sh {
+    background-position: -103px -443px;
+}
+
+.ip2location-flag-32.flag-si {
+    background-position: -137px -443px;
+}
+
+.ip2location-flag-32.flag-sj {
+    background-position: -171px -443px;
+}
+
+.ip2location-flag-32.flag-sk {
+    background-position: -205px -443px;
+}
+
+.ip2location-flag-32.flag-sl {
+    background-position: -239px -443px;
+}
+
+.ip2location-flag-32.flag-sm {
+    background-position: -273px -443px;
+}
+
+.ip2location-flag-32.flag-sn {
+    background-position: -307px -443px;
+}
+
+.ip2location-flag-32.flag-so {
+    background-position: -341px -443px;
+}
+
+.ip2location-flag-32.flag-sr {
+    background-position: -375px -443px;
+}
+
+.ip2location-flag-32.flag-ss {
+    background-position: -409px -443px;
+}
+
+.ip2location-flag-32.flag-st {
+    background-position: -443px -443px;
+}
+
+.ip2location-flag-32.flag-sv {
+    background-position: -477px -443px;
+}
+
+.ip2location-flag-32.flag-sx {
+    background-position: -1px -477px;
+}
+
+.ip2location-flag-32.flag-sy {
+    background-position: -35px -477px;
+}
+
+.ip2location-flag-32.flag-sz {
+    background-position: -69px -477px;
+}
+
+.ip2location-flag-32.flag-tc {
+    background-position: -103px -477px;
+}
+
+.ip2location-flag-32.flag-td {
+    background-position: -137px -477px;
+}
+
+.ip2location-flag-32.flag-tf {
+    background-position: -171px -477px;
+}
+
+.ip2location-flag-32.flag-tg {
+    background-position: -205px -477px;
+}
+
+.ip2location-flag-32.flag-th {
+    background-position: -239px -477px;
+}
+
+.ip2location-flag-32.flag-tj {
+    background-position: -273px -477px;
+}
+
+.ip2location-flag-32.flag-tk {
+    background-position: -307px -477px;
+}
+
+.ip2location-flag-32.flag-tl {
+    background-position: -341px -477px;
+}
+
+.ip2location-flag-32.flag-tm {
+    background-position: -375px -477px;
+}
+
+.ip2location-flag-32.flag-tn {
+    background-position: -409px -477px;
+}
+
+.ip2location-flag-32.flag-to {
+    background-position: -443px -477px;
+}
+
+.ip2location-flag-32.flag-tr {
+    background-position: -477px -477px;
+}
+
+.ip2location-flag-32.flag-tt {
+    background-position: -511px -1px;
+}
+
+.ip2location-flag-32.flag-tv {
+    background-position: -511px -35px;
+}
+
+.ip2location-flag-32.flag-tw {
+    background-position: -511px -69px;
+}
+
+.ip2location-flag-32.flag-tz {
+    background-position: -511px -103px;
+}
+
+.ip2location-flag-32.flag-ua {
+    background-position: -511px -137px;
+}
+
+.ip2location-flag-32.flag-ug {
+    background-position: -511px -171px;
+}
+
+.ip2location-flag-32.flag-um {
+    background-position: -511px -205px;
+}
+
+.ip2location-flag-32.flag-us {
+    background-position: -511px -239px;
+}
+
+.ip2location-flag-32.flag-uy {
+    background-position: -511px -273px;
+}
+
+.ip2location-flag-32.flag-uz {
+    background-position: -511px -307px;
+}
+
+.ip2location-flag-32.flag-va {
+    background-position: -511px -341px;
+}
+
+.ip2location-flag-32.flag-vc {
+    background-position: -511px -375px;
+}
+
+.ip2location-flag-32.flag-ve {
+    background-position: -511px -409px;
+}
+
+.ip2location-flag-32.flag-vg {
+    background-position: -511px -443px;
+}
+
+.ip2location-flag-32.flag-vi {
+    background-position: -511px -477px;
+}
+
+.ip2location-flag-32.flag-vn {
+    background-position: -1px -511px;
+}
+
+.ip2location-flag-32.flag-vu {
+    background-position: -35px -511px;
+}
+
+.ip2location-flag-32.flag-wf {
+    background-position: -69px -511px;
+}
+
+.ip2location-flag-32.flag-ws {
+    background-position: -103px -511px;
+}
+
+.ip2location-flag-32.flag-ye {
+    background-position: -137px -511px;
+}
+
+.ip2location-flag-32.flag-yt {
+    background-position: -171px -511px;
+}
+
+.ip2location-flag-32.flag-za {
+    background-position: -205px -511px;
+}
+
+.ip2location-flag-32.flag-zm {
+    background-position: -239px -511px;
+}
+
+.ip2location-flag-32.flag-zw {
+    background-position: -273px -511px;
+}
+
+.ip2location-flag-64.flag-ad {
+    background-position: -1px -1px;
+}
+
+.ip2location-flag-64.flag-ae {
+    background-position: -67px -1px;
+}
+
+.ip2location-flag-64.flag-af {
+    background-position: -133px -1px;
+}
+
+.ip2location-flag-64.flag-ag {
+    background-position: -199px -1px;
+}
+
+.ip2location-flag-64.flag-ai {
+    background-position: -265px -1px;
+}
+
+.ip2location-flag-64.flag-al {
+    background-position: -331px -1px;
+}
+
+.ip2location-flag-64.flag-am {
+    background-position: -397px -1px;
+}
+
+.ip2location-flag-64.flag-ao {
+    background-position: -463px -1px;
+}
+
+.ip2location-flag-64.flag-aq {
+    background-position: -529px -1px;
+}
+
+.ip2location-flag-64.flag-ar {
+    background-position: -595px -1px;
+}
+
+.ip2location-flag-64.flag-as {
+    background-position: -661px -1px;
+}
+
+.ip2location-flag-64.flag-at {
+    background-position: -727px -1px;
+}
+
+.ip2location-flag-64.flag-au {
+    background-position: -793px -1px;
+}
+
+.ip2location-flag-64.flag-aw {
+    background-position: -859px -1px;
+}
+
+.ip2location-flag-64.flag-ax {
+    background-position: -925px -1px;
+}
+
+.ip2location-flag-64.flag-az {
+    background-position: -1px -67px;
+}
+
+.ip2location-flag-64.flag-ba {
+    background-position: -67px -67px;
+}
+
+.ip2location-flag-64.flag-bb {
+    background-position: -133px -67px;
+}
+
+.ip2location-flag-64.flag-bd {
+    background-position: -199px -67px;
+}
+
+.ip2location-flag-64.flag-be {
+    background-position: -265px -67px;
+}
+
+.ip2location-flag-64.flag-bf {
+    background-position: -331px -67px;
+}
+
+.ip2location-flag-64.flag-bg {
+    background-position: -397px -67px;
+}
+
+.ip2location-flag-64.flag-bh {
+    background-position: -463px -67px;
+}
+
+.ip2location-flag-64.flag-bi {
+    background-position: -529px -67px;
+}
+
+.ip2location-flag-64.flag-bj {
+    background-position: -595px -67px;
+}
+
+.ip2location-flag-64.flag-bl {
+    background-position: -661px -67px;
+}
+
+.ip2location-flag-64.flag-bm {
+    background-position: -727px -67px;
+}
+
+.ip2location-flag-64.flag-bn {
+    background-position: -793px -67px;
+}
+
+.ip2location-flag-64.flag-bo {
+    background-position: -859px -67px;
+}
+
+.ip2location-flag-64.flag-bq {
+    background-position: -925px -67px;
+}
+
+.ip2location-flag-64.flag-br {
+    background-position: -1px -133px;
+}
+
+.ip2location-flag-64.flag-bs {
+    background-position: -67px -133px;
+}
+
+.ip2location-flag-64.flag-bt {
+    background-position: -133px -133px;
+}
+
+.ip2location-flag-64.flag-bv {
+    background-position: -199px -133px;
+}
+
+.ip2location-flag-64.flag-bw {
+    background-position: -265px -133px;
+}
+
+.ip2location-flag-64.flag-by {
+    background-position: -331px -133px;
+}
+
+.ip2location-flag-64.flag-bz {
+    background-position: -397px -133px;
+}
+
+.ip2location-flag-64.flag-ca {
+    background-position: -463px -133px;
+}
+
+.ip2location-flag-64.flag-cc {
+    background-position: -529px -133px;
+}
+
+.ip2location-flag-64.flag-cd {
+    background-position: -595px -133px;
+}
+
+.ip2location-flag-64.flag-cf {
+    background-position: -661px -133px;
+}
+
+.ip2location-flag-64.flag-cg {
+    background-position: -727px -133px;
+}
+
+.ip2location-flag-64.flag-ch {
+    background-position: -793px -133px;
+}
+
+.ip2location-flag-64.flag-ci {
+    background-position: -859px -133px;
+}
+
+.ip2location-flag-64.flag-ck {
+    background-position: -925px -133px;
+}
+
+.ip2location-flag-64.flag-cl {
+    background-position: -1px -199px;
+}
+
+.ip2location-flag-64.flag-cm {
+    background-position: -67px -199px;
+}
+
+.ip2location-flag-64.flag-cn {
+    background-position: -133px -199px;
+}
+
+.ip2location-flag-64.flag-co {
+    background-position: -199px -199px;
+}
+
+.ip2location-flag-64.flag-cr {
+    background-position: -265px -199px;
+}
+
+.ip2location-flag-64.flag-cu {
+    background-position: -331px -199px;
+}
+
+.ip2location-flag-64.flag-cv {
+    background-position: -397px -199px;
+}
+
+.ip2location-flag-64.flag-cw {
+    background-position: -463px -199px;
+}
+
+.ip2location-flag-64.flag-cx {
+    background-position: -529px -199px;
+}
+
+.ip2location-flag-64.flag-cy {
+    background-position: -595px -199px;
+}
+
+.ip2location-flag-64.flag-cz {
+    background-position: -661px -199px;
+}
+
+.ip2location-flag-64.flag-de {
+    background-position: -727px -199px;
+}
+
+.ip2location-flag-64.flag-dj {
+    background-position: -793px -199px;
+}
+
+.ip2location-flag-64.flag-dk {
+    background-position: -859px -199px;
+}
+
+.ip2location-flag-64.flag-dm {
+    background-position: -925px -199px;
+}
+
+.ip2location-flag-64.flag-do {
+    background-position: -1px -265px;
+}
+
+.ip2location-flag-64.flag-dz {
+    background-position: -67px -265px;
+}
+
+.ip2location-flag-64.flag-ec {
+    background-position: -133px -265px;
+}
+
+.ip2location-flag-64.flag-ee {
+    background-position: -199px -265px;
+}
+
+.ip2location-flag-64.flag-eg {
+    background-position: -265px -265px;
+}
+
+.ip2location-flag-64.flag-eh {
+    background-position: -331px -265px;
+}
+
+.ip2location-flag-64.flag-er {
+    background-position: -397px -265px;
+}
+
+.ip2location-flag-64.flag-es {
+    background-position: -463px -265px;
+}
+
+.ip2location-flag-64.flag-et {
+    background-position: -529px -265px;
+}
+
+.ip2location-flag-64.flag-fi {
+    background-position: -595px -265px;
+}
+
+.ip2location-flag-64.flag-fj {
+    background-position: -661px -265px;
+}
+
+.ip2location-flag-64.flag-fk {
+    background-position: -727px -265px;
+}
+
+.ip2location-flag-64.flag-fm {
+    background-position: -793px -265px;
+}
+
+.ip2location-flag-64.flag-fo {
+    background-position: -859px -265px;
+}
+
+.ip2location-flag-64.flag-fr {
+    background-position: -925px -265px;
+}
+
+.ip2location-flag-64.flag-ga {
+    background-position: -1px -331px;
+}
+
+.ip2location-flag-64.flag-gb {
+    background-position: -67px -331px;
+}
+
+.ip2location-flag-64.flag-gd {
+    background-position: -133px -331px;
+}
+
+.ip2location-flag-64.flag-ge {
+    background-position: -199px -331px;
+}
+
+.ip2location-flag-64.flag-gf {
+    background-position: -265px -331px;
+}
+
+.ip2location-flag-64.flag-gg {
+    background-position: -331px -331px;
+}
+
+.ip2location-flag-64.flag-gh {
+    background-position: -397px -331px;
+}
+
+.ip2location-flag-64.flag-gi {
+    background-position: -463px -331px;
+}
+
+.ip2location-flag-64.flag-gl {
+    background-position: -529px -331px;
+}
+
+.ip2location-flag-64.flag-gm {
+    background-position: -595px -331px;
+}
+
+.ip2location-flag-64.flag-gn {
+    background-position: -661px -331px;
+}
+
+.ip2location-flag-64.flag-gp {
+    background-position: -727px -331px;
+}
+
+.ip2location-flag-64.flag-gq {
+    background-position: -793px -331px;
+}
+
+.ip2location-flag-64.flag-gr {
+    background-position: -859px -331px;
+}
+
+.ip2location-flag-64.flag-gs {
+    background-position: -925px -331px;
+}
+
+.ip2location-flag-64.flag-gt {
+    background-position: -1px -397px;
+}
+
+.ip2location-flag-64.flag-gu {
+    background-position: -67px -397px;
+}
+
+.ip2location-flag-64.flag-gw {
+    background-position: -133px -397px;
+}
+
+.ip2location-flag-64.flag-gy {
+    background-position: -199px -397px;
+}
+
+.ip2location-flag-64.flag-hk {
+    background-position: -265px -397px;
+}
+
+.ip2location-flag-64.flag-hm {
+    background-position: -331px -397px;
+}
+
+.ip2location-flag-64.flag-hn {
+    background-position: -397px -397px;
+}
+
+.ip2location-flag-64.flag-hr {
+    background-position: -463px -397px;
+}
+
+.ip2location-flag-64.flag-ht {
+    background-position: -529px -397px;
+}
+
+.ip2location-flag-64.flag-hu {
+    background-position: -595px -397px;
+}
+
+.ip2location-flag-64.flag-id {
+    background-position: -661px -397px;
+}
+
+.ip2location-flag-64.flag-ie {
+    background-position: -727px -397px;
+}
+
+.ip2location-flag-64.flag-il {
+    background-position: -793px -397px;
+}
+
+.ip2location-flag-64.flag-im {
+    background-position: -859px -397px;
+}
+
+.ip2location-flag-64.flag-in {
+    background-position: -925px -397px;
+}
+
+.ip2location-flag-64.flag-io {
+    background-position: -1px -463px;
+}
+
+.ip2location-flag-64.flag-iq {
+    background-position: -67px -463px;
+}
+
+.ip2location-flag-64.flag-ir {
+    background-position: -133px -463px;
+}
+
+.ip2location-flag-64.flag-is {
+    background-position: -199px -463px;
+}
+
+.ip2location-flag-64.flag-it {
+    background-position: -265px -463px;
+}
+
+.ip2location-flag-64.flag-je {
+    background-position: -331px -463px;
+}
+
+.ip2location-flag-64.flag-jm {
+    background-position: -397px -463px;
+}
+
+.ip2location-flag-64.flag-jo {
+    background-position: -463px -463px;
+}
+
+.ip2location-flag-64.flag-jp {
+    background-position: -529px -463px;
+}
+
+.ip2location-flag-64.flag-ke {
+    background-position: -595px -463px;
+}
+
+.ip2location-flag-64.flag-kg {
+    background-position: -661px -463px;
+}
+
+.ip2location-flag-64.flag-kh {
+    background-position: -727px -463px;
+}
+
+.ip2location-flag-64.flag-ki {
+    background-position: -793px -463px;
+}
+
+.ip2location-flag-64.flag-km {
+    background-position: -859px -463px;
+}
+
+.ip2location-flag-64.flag-kn {
+    background-position: -925px -463px;
+}
+
+.ip2location-flag-64.flag-kp {
+    background-position: -1px -529px;
+}
+
+.ip2location-flag-64.flag-kr {
+    background-position: -67px -529px;
+}
+
+.ip2location-flag-64.flag-kw {
+    background-position: -133px -529px;
+}
+
+.ip2location-flag-64.flag-ky {
+    background-position: -199px -529px;
+}
+
+.ip2location-flag-64.flag-kz {
+    background-position: -265px -529px;
+}
+
+.ip2location-flag-64.flag-la {
+    background-position: -331px -529px;
+}
+
+.ip2location-flag-64.flag-lb {
+    background-position: -397px -529px;
+}
+
+.ip2location-flag-64.flag-lc {
+    background-position: -463px -529px;
+}
+
+.ip2location-flag-64.flag-li {
+    background-position: -529px -529px;
+}
+
+.ip2location-flag-64.flag-lk {
+    background-position: -595px -529px;
+}
+
+.ip2location-flag-64.flag-lr {
+    background-position: -661px -529px;
+}
+
+.ip2location-flag-64.flag-ls {
+    background-position: -727px -529px;
+}
+
+.ip2location-flag-64.flag-lt {
+    background-position: -793px -529px;
+}
+
+.ip2location-flag-64.flag-lu {
+    background-position: -859px -529px;
+}
+
+.ip2location-flag-64.flag-lv {
+    background-position: -925px -529px;
+}
+
+.ip2location-flag-64.flag-ly {
+    background-position: -1px -595px;
+}
+
+.ip2location-flag-64.flag-ma {
+    background-position: -67px -595px;
+}
+
+.ip2location-flag-64.flag-mc {
+    background-position: -133px -595px;
+}
+
+.ip2location-flag-64.flag-md {
+    background-position: -199px -595px;
+}
+
+.ip2location-flag-64.flag-me {
+    background-position: -265px -595px;
+}
+
+.ip2location-flag-64.flag-mf {
+    background-position: -331px -595px;
+}
+
+.ip2location-flag-64.flag-mg {
+    background-position: -397px -595px;
+}
+
+.ip2location-flag-64.flag-mh {
+    background-position: -463px -595px;
+}
+
+.ip2location-flag-64.flag-mk {
+    background-position: -529px -595px;
+}
+
+.ip2location-flag-64.flag-ml {
+    background-position: -595px -595px;
+}
+
+.ip2location-flag-64.flag-mm {
+    background-position: -661px -595px;
+}
+
+.ip2location-flag-64.flag-mn {
+    background-position: -727px -595px;
+}
+
+.ip2location-flag-64.flag-mo {
+    background-position: -793px -595px;
+}
+
+.ip2location-flag-64.flag-mp {
+    background-position: -859px -595px;
+}
+
+.ip2location-flag-64.flag-mq {
+    background-position: -925px -595px;
+}
+
+.ip2location-flag-64.flag-mr {
+    background-position: -1px -661px;
+}
+
+.ip2location-flag-64.flag-ms {
+    background-position: -67px -661px;
+}
+
+.ip2location-flag-64.flag-mt {
+    background-position: -133px -661px;
+}
+
+.ip2location-flag-64.flag-mu {
+    background-position: -199px -661px;
+}
+
+.ip2location-flag-64.flag-mv {
+    background-position: -265px -661px;
+}
+
+.ip2location-flag-64.flag-mw {
+    background-position: -331px -661px;
+}
+
+.ip2location-flag-64.flag-mx {
+    background-position: -397px -661px;
+}
+
+.ip2location-flag-64.flag-my {
+    background-position: -463px -661px;
+}
+
+.ip2location-flag-64.flag-mz {
+    background-position: -529px -661px;
+}
+
+.ip2location-flag-64.flag-na {
+    background-position: -595px -661px;
+}
+
+.ip2location-flag-64.flag-nc {
+    background-position: -661px -661px;
+}
+
+.ip2location-flag-64.flag-ne {
+    background-position: -727px -661px;
+}
+
+.ip2location-flag-64.flag-nf {
+    background-position: -793px -661px;
+}
+
+.ip2location-flag-64.flag-ng {
+    background-position: -859px -661px;
+}
+
+.ip2location-flag-64.flag-ni {
+    background-position: -925px -661px;
+}
+
+.ip2location-flag-64.flag-nl {
+    background-position: -1px -727px;
+}
+
+.ip2location-flag-64.flag-no {
+    background-position: -67px -727px;
+}
+
+.ip2location-flag-64.flag-np {
+    background-position: -133px -727px;
+}
+
+.ip2location-flag-64.flag-nr {
+    background-position: -199px -727px;
+}
+
+.ip2location-flag-64.flag-nu {
+    background-position: -265px -727px;
+}
+
+.ip2location-flag-64.flag-nz {
+    background-position: -331px -727px;
+}
+
+.ip2location-flag-64.flag-om {
+    background-position: -397px -727px;
+}
+
+.ip2location-flag-64.flag-pa {
+    background-position: -463px -727px;
+}
+
+.ip2location-flag-64.flag-pe {
+    background-position: -529px -727px;
+}
+
+.ip2location-flag-64.flag-pf {
+    background-position: -595px -727px;
+}
+
+.ip2location-flag-64.flag-pg {
+    background-position: -661px -727px;
+}
+
+.ip2location-flag-64.flag-ph {
+    background-position: -727px -727px;
+}
+
+.ip2location-flag-64.flag-pk {
+    background-position: -793px -727px;
+}
+
+.ip2location-flag-64.flag-pl {
+    background-position: -859px -727px;
+}
+
+.ip2location-flag-64.flag-pm {
+    background-position: -925px -727px;
+}
+
+.ip2location-flag-64.flag-pn {
+    background-position: -1px -793px;
+}
+
+.ip2location-flag-64.flag-pr {
+    background-position: -67px -793px;
+}
+
+.ip2location-flag-64.flag-ps {
+    background-position: -133px -793px;
+}
+
+.ip2location-flag-64.flag-pt {
+    background-position: -199px -793px;
+}
+
+.ip2location-flag-64.flag-pw {
+    background-position: -265px -793px;
+}
+
+.ip2location-flag-64.flag-py {
+    background-position: -331px -793px;
+}
+
+.ip2location-flag-64.flag-qa {
+    background-position: -397px -793px;
+}
+
+.ip2location-flag-64.flag-re {
+    background-position: -463px -793px;
+}
+
+.ip2location-flag-64.flag-ro {
+    background-position: -529px -793px;
+}
+
+.ip2location-flag-64.flag-rs {
+    background-position: -595px -793px;
+}
+
+.ip2location-flag-64.flag-ru {
+    background-position: -661px -793px;
+}
+
+.ip2location-flag-64.flag-rw {
+    background-position: -727px -793px;
+}
+
+.ip2location-flag-64.flag-sa {
+    background-position: -793px -793px;
+}
+
+.ip2location-flag-64.flag-sb {
+    background-position: -859px -793px;
+}
+
+.ip2location-flag-64.flag-sc {
+    background-position: -925px -793px;
+}
+
+.ip2location-flag-64.flag-sd {
+    background-position: -1px -859px;
+}
+
+.ip2location-flag-64.flag-se {
+    background-position: -67px -859px;
+}
+
+.ip2location-flag-64.flag-sg {
+    background-position: -133px -859px;
+}
+
+.ip2location-flag-64.flag-sh {
+    background-position: -199px -859px;
+}
+
+.ip2location-flag-64.flag-si {
+    background-position: -265px -859px;
+}
+
+.ip2location-flag-64.flag-sj {
+    background-position: -331px -859px;
+}
+
+.ip2location-flag-64.flag-sk {
+    background-position: -397px -859px;
+}
+
+.ip2location-flag-64.flag-sl {
+    background-position: -463px -859px;
+}
+
+.ip2location-flag-64.flag-sm {
+    background-position: -529px -859px;
+}
+
+.ip2location-flag-64.flag-sn {
+    background-position: -595px -859px;
+}
+
+.ip2location-flag-64.flag-so {
+    background-position: -661px -859px;
+}
+
+.ip2location-flag-64.flag-sr {
+    background-position: -727px -859px;
+}
+
+.ip2location-flag-64.flag-ss {
+    background-position: -793px -859px;
+}
+
+.ip2location-flag-64.flag-st {
+    background-position: -859px -859px;
+}
+
+.ip2location-flag-64.flag-sv {
+    background-position: -925px -859px;
+}
+
+.ip2location-flag-64.flag-sx {
+    background-position: -1px -925px;
+}
+
+.ip2location-flag-64.flag-sy {
+    background-position: -67px -925px;
+}
+
+.ip2location-flag-64.flag-sz {
+    background-position: -133px -925px;
+}
+
+.ip2location-flag-64.flag-tc {
+    background-position: -199px -925px;
+}
+
+.ip2location-flag-64.flag-td {
+    background-position: -265px -925px;
+}
+
+.ip2location-flag-64.flag-tf {
+    background-position: -331px -925px;
+}
+
+.ip2location-flag-64.flag-tg {
+    background-position: -397px -925px;
+}
+
+.ip2location-flag-64.flag-th {
+    background-position: -463px -925px;
+}
+
+.ip2location-flag-64.flag-tj {
+    background-position: -529px -925px;
+}
+
+.ip2location-flag-64.flag-tk {
+    background-position: -595px -925px;
+}
+
+.ip2location-flag-64.flag-tl {
+    background-position: -661px -925px;
+}
+
+.ip2location-flag-64.flag-tm {
+    background-position: -727px -925px;
+}
+
+.ip2location-flag-64.flag-tn {
+    background-position: -793px -925px;
+}
+
+.ip2location-flag-64.flag-to {
+    background-position: -859px -925px;
+}
+
+.ip2location-flag-64.flag-tr {
+    background-position: -925px -925px;
+}
+
+.ip2location-flag-64.flag-tt {
+    background-position: -991px -1px;
+}
+
+.ip2location-flag-64.flag-tv {
+    background-position: -991px -67px;
+}
+
+.ip2location-flag-64.flag-tw {
+    background-position: -991px -133px;
+}
+
+.ip2location-flag-64.flag-tz {
+    background-position: -991px -199px;
+}
+
+.ip2location-flag-64.flag-ua {
+    background-position: -991px -265px;
+}
+
+.ip2location-flag-64.flag-ug {
+    background-position: -991px -331px;
+}
+
+.ip2location-flag-64.flag-um {
+    background-position: -991px -397px;
+}
+
+.ip2location-flag-64.flag-us {
+    background-position: -991px -463px;
+}
+
+.ip2location-flag-64.flag-uy {
+    background-position: -991px -529px;
+}
+
+.ip2location-flag-64.flag-uz {
+    background-position: -991px -595px;
+}
+
+.ip2location-flag-64.flag-va {
+    background-position: -991px -661px;
+}
+
+.ip2location-flag-64.flag-vc {
+    background-position: -991px -727px;
+}
+
+.ip2location-flag-64.flag-ve {
+    background-position: -991px -793px;
+}
+
+.ip2location-flag-64.flag-vg {
+    background-position: -991px -859px;
+}
+
+.ip2location-flag-64.flag-vi {
+    background-position: -991px -925px;
+}
+
+.ip2location-flag-64.flag-vn {
+    background-position: -1px -991px;
+}
+
+.ip2location-flag-64.flag-vu {
+    background-position: -67px -991px;
+}
+
+.ip2location-flag-64.flag-wf {
+    background-position: -133px -991px;
+}
+
+.ip2location-flag-64.flag-ws {
+    background-position: -199px -991px;
+}
+
+.ip2location-flag-64.flag-ye {
+    background-position: -265px -991px;
+}
+
+.ip2location-flag-64.flag-yt {
+    background-position: -331px -991px;
+}
+
+.ip2location-flag-64.flag-za {
+    background-position: -397px -991px;
+}
+
+.ip2location-flag-64.flag-zm {
+    background-position: -463px -991px;
+}
+
+.ip2location-flag-64.flag-zw {
+    background-position: -529px -991px;
+}

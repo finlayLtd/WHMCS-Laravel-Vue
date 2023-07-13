@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,9 +30,14 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
             ->values()
             ->toArray();
     });
+
+    
+    
 });
 
 Route::get('category-list', [CategoryController::class, 'getList']);
 Route::get('get-posts', [PostController::class, 'getPosts']);
 Route::get('get-category-posts/{id}', [PostController::class, 'getCategoryByPosts']);
 Route::get('get-post/{id}', [PostController::class, 'getPost']);
+
+Route::post('/whmcs/forgot-password', [AuthenticatedSessionController::class, 'forgotPassword']);

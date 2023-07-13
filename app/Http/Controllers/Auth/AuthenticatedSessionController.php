@@ -53,17 +53,27 @@ class AuthenticatedSessionController extends Controller
                 'action' => 'manage',
                 'subject' => 'all'
             ]
-
         ];
+        
         $user = User::where('whmcs_id' ,  $data['userid'])->first();
+        
+        $client_data = (new \Sburina\Whmcs\Client)->post([
+            'action' => 'GetClientsDetails',
+            'email' => $request->email,
+        ]);
+
         if(!$user)
         {
             $user = new User();
         }
        
-        preg_match('/([^@]+)/', $request->email , $matches);
-        $name = $matches[1];
+        $name = $client_data['firstname'];
+
+        //client_id concept and user_id concept is different
     
+        $user->client_id = $client_data['client_id'];
+        $user->credit = $client_data['credit'];
+        
         $user->whmcs_id = $data['userid'];
         $user->name = $name;
         $user->email = $request->email;
@@ -111,19 +121,44 @@ class AuthenticatedSessionController extends Controller
      * @param RegisterRequest $request
      * @return JsonResponse
      */
-    public function register(RegisterRequest $request)
-    {
-        $user = User::where('email', $request['email'])->first();
-        if ($user) {
-            return response(['error' => 1, 'message' => 'user already exists'], 409);
-        }
-
-        $user = User::create([
+    public function register(Request $request)
+    {   
+        $register_result = (new \Sburina\Whmcs\Client)->post([
+            'action' => 'AddClient',
+            'firstname' => $request['firstname'],
+            'lastname' => $request['lastname'],
             'email' => $request['email'],
-            'password' => Hash::make($request['password']),
-            'name' => $request['name'],
+            'password2' => $request['password'],
+            'address1' => ' ',
+            'city' => ' ',
+            'state' => ' ',
+            'postcode' => ' ',
+            'country' => ' ',
+            'phonenumber' => ' ',
         ]);
 
-        return $this->successResponse($user, 'Registration Successfully');
+        if($register_result['result']=='success'){
+            return response()->json(['message' => 'Registration Successfully', 'data' => 'success'], 200);
+        } else{
+            // return response()->json(['error' => 'Failed to register user'], 400);
+            return response()->json(['message' => $register_result['result'], 'data' => 'failed'], 200);
+        }
     }
+
+    public function forgotPassword(Request $request)
+    {   
+        $reset_response = (new \Sburina\Whmcs\Client)->post([
+            'action' => 'ResetPassword',
+            'email' => $request->email,
+        ]);
+
+        if($reset_response['result']=='success'){
+            return response()->json(['message' => 'Successfully sent forgot password', 'data' => 'success'], 200);
+        } else{
+            // return response()->json(['error' => 'Failed to register user'], 400);
+            return response()->json(['message' => $reset_response['result'], 'data' => 'failed'], 200);
+        }
+    }
+
+    
 }

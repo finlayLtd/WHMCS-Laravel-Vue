@@ -555,7 +555,12 @@ vue-sweetalert2@^5.0.5:
   dependencies:
     sweetalert2 "11.x"
 
-vue@*, vue@^3.0.0, vue@^3.2.0, vue@^3.2.25, vue@^3.2.37, vue@^3.3.4, vue@3.3.4, vue@3.x:
+vue-toast-notification@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.npmjs.org/vue-toast-notification/-/vue-toast-notification-3.1.1.tgz"
+  integrity sha512-DXEE38NxXFCNinKI+MyZBMWsaqE9Lwxg9GkMVkzKXY1ACCeNztBXuUiSvKMe36dnnYd1qnlP+cWNSvHlkt5xNA==
+
+vue@*, vue@^3.0, vue@^3.0.0, vue@^3.2.0, vue@^3.2.25, vue@^3.2.37, vue@^3.3.4, vue@3.3.4, vue@3.x:
   version "3.3.4"
   resolved "https://registry.npmjs.org/vue/-/vue-3.3.4.tgz"
   integrity sha512-VTyEYn3yvIeY1Py0WaYGZsXnz3y5UnGi62GjVEqvEGPl6nxbOrCXbVOTQWBEJUqAyTUk2uJ5JLVnYJ6ZzGbrSw==

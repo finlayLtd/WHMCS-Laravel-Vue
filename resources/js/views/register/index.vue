@@ -1,5 +1,5 @@
 <template>
-    <!-- <div class="container">
+  <!-- <div class="container">
           <div class="row justify-content-center my-5">
               <div class="col-md-6">
                   <div class="card border-0 shadow-sm">
@@ -60,142 +60,186 @@
               </div>
           </div>
       </div> -->
-    <section class="home-hero login">
-      <!-- alert messges -->
-      <div class="badge reset-success" style="background: crimson" v-show="false">
-        <img src="assets/img/reset-success.svg" alt="" /> Error message
-      </div>
-  
-      <div class="register-wrapper pb-0 w-100">
-        <div class="bg-dots bg-dots-left"></div>
-        <div class="bg-dots bg-dots-right"></div>
-  
-        <div class="mt-5 text-center login-card-wrapper">
-          <div class="card-item login-card" style="max-width: 450px">
-            <div
-              style="margin-top: -20px"
-              class="d-flex justify-content-center mb-3"
-            >
-              <img class="logo-dark" src="assets/img/crazy-rdp-logo.svg" alt="" />
-              <img class="logo-light" src="assets/img/logo-light.svg" alt="" />
-            </div>
-            <h2 class="login-title">Register Account</h2>
-  
-            <form @submit.prevent="submitRegister">
-              <div class="login-input-wrapper mb-3">
-                <label for="#firstname">First Name</label>
-  
-                <div class="col-md-6">
-                  <input
-                    id="firstname"
-                    type="text"
-                    name="firstname"
-                    v-model="registerForm.name"
-                    required
-                    autocomplete="firstname"
-                    autofocus
-                  />
-                </div>
-              </div>
-  
-              <div class="login-input-wrapper mb-3">
-                <label for="#lastname">Last Name</label>
-  
+  <section class="home-hero login">
+    <!-- alert messges -->
+    <div class="badge reset-success" style="background: crimson" v-show="false">
+      <img src="assets/img/reset-success.svg" alt="" /> Error message
+    </div>
+
+    <div class="register-wrapper pb-0 w-100">
+      <div class="bg-dots bg-dots-left"></div>
+      <div class="bg-dots bg-dots-right"></div>
+
+      <div class="mt-5 text-center login-card-wrapper">
+        <div class="card-item login-card" style="max-width: 450px">
+          <div
+            style="margin-top: -20px"
+            class="d-flex justify-content-center mb-3"
+          >
+            <img class="logo-dark" src="assets/img/crazy-rdp-logo.svg" alt="" />
+            <img class="logo-light" src="assets/img/logo-light.svg" alt="" />
+          </div>
+          <h2 class="login-title">Register Account</h2>
+
+          <form @submit.prevent="submitRegister">
+            <div class="login-input-wrapper mb-3">
+              <label for="#firstname">First Name</label>
+
+              <div class="col-md-6">
                 <input
-                  id="lastname"
+                  id="firstname"
                   type="text"
-                  name="lastname"
+                  name="firstname"
+                  v-model="firstname"
                   required
-                  autocomplete="lastname"
+                  autocomplete="firstname"
                   autofocus
                 />
               </div>
-  
-              <div class="login-input-wrapper mb-3">
-                <label for="#email">Email Address</label>
+            </div>
+
+            <div class="login-input-wrapper mb-3">
+              <label for="#lastname">Last Name</label>
+
+              <input
+                id="lastname"
+                type="text"
+                v-model="lastname"
+                name="lastname"
+                required
+                autocomplete="lastname"
+                autofocus
+              />
+            </div>
+
+            <div class="login-input-wrapper mb-3">
+              <label for="#email">Email Address</label>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                v-model="email"
+                required
+                autocomplete="email"
+                placeholder="email@address.com"
+              />
+            </div>
+
+            <div class="login-input-wrapper mb-3">
+              <label for="#password">Password</label>
+              <div class="col-md-6">
                 <input
-                  id="email"
-                  type="email"
-                  name="email"
-                  v-model="registerForm.email"
+                  id="password"
+                  type="password"
+                  name="password"
+                  v-model="password"
                   required
-                  autocomplete="email"
-                  placeholder="email@address.com"
+                  autocomplete="new-password"
                 />
               </div>
-  
-              <div class="login-input-wrapper mb-3">
-                <label for="#password">Password</label>
-                <div class="col-md-6">
-                  <input
-                    id="password"
-                    type="password"
-                    name="password"
-                    v-model="registerForm.password"
-                    required
-                    autocomplete="new-password"
-                  />
-                </div>
-              </div>
-  
-              <div class="progress" id="passwordStrengthBar">
-                <div
-                  class="progress-bar progress-bar-success"
-                  role="progressbar"
-                  aria-valuenow="0"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                  style="width: 0%"
-                >
-                  <span class="sr-only">Password Rating: 0%</span>
-                </div>
-              </div>
-  
-              <div class="alert alert-info" style="text-align: left">
-                <strong>Tips for a good password</strong><br />Use both upper and
-                lowercase characters<br />Include at least one symbol (# $ ! %
-                &amp; etc...)<br />Don't use dictionary words
-              </div>
-  
-              <div class="checkbox-item-wrapper mb-4">
-                <input
-                  class="form-check-input"
-                  checked=""
-                  type="checkbox"
-                  id="inStockCheckbox"
-                />
-                <label class="form-check-label checked" for="inStockCheckbox"
-                  >I agree to the User Agreement, and I have read the Privacy
-                  Policy.</label
-                >
-              </div>
-  
-              <button
-                id="register-btn"
-                type="submit"
-                class="btn-dark w-100 mb-2"
-                :class="{ 'opacity-25': processing }" :disabled="processing"
+            </div>
+
+            <div class="progress" id="passwordStrengthBar">
+              <div
+                class="progress-bar progress-bar-success"
+                role="progressbar"
+                aria-valuenow="0"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                style="width: 0%"
               >
-                Register account
-              </button>
-  
-              <div class="text-center">
-                <p class="mb-0 mt-3 fs-14">
-                  Already have an account?
-                  <router-link to="/login">Log in</router-link>
-                </p>
+                <span class="sr-only">Password Rating: 0%</span>
               </div>
-            </form>
-          </div>
+            </div>
+
+            <div class="alert alert-info" style="text-align: left">
+              <strong>Tips for a good password</strong><br />Use both upper and
+              lowercase characters<br />Include at least one symbol (# $ ! %
+              &amp; etc...)<br />Don't use dictionary words
+            </div>
+
+            <div class="checkbox-item-wrapper mb-4">
+              <input
+                class="form-check-input"
+                checked=""
+                type="checkbox"
+                id="inStockCheckbox"
+              />
+              <label class="form-check-label checked" for="inStockCheckbox"
+                >I agree to the User Agreement, and I have read the Privacy
+                Policy.</label
+              >
+            </div>
+
+            <button
+              id="register-btn"
+              type="submit"
+              class="btn-dark w-100 mb-2"
+              :class="{ 'opacity-25': processing }"
+              :disabled="processing"
+            >
+              Register account
+            </button>
+
+            <div class="text-center">
+              <p class="mb-0 mt-3 fs-14">
+                Already have an account?
+                <router-link to="/login">Log in</router-link>
+              </p>
+            </div>
+          </form>
         </div>
       </div>
-    </section>
-  </template>
+    </div>
+  </section>
+</template>
   
-  <script setup>
-  import useAuth from "@/composables/auth";
-  
-  const { registerForm, validationErrors, processing, submitRegister } =
-    useAuth();
-  </script>
+<script setup>
+
+import { computed, onMounted, ref, onBeforeUnmount } from "vue";
+import { useRouter } from "vue-router";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
+const $toast = useToast();
+
+const router = useRouter();
+const firstname = ref("");
+const lastname = ref("");
+const email = ref("");
+const password = ref("");
+const processing = ref(false);
+
+const submitRegister = async () => {
+  if (processing.value) return;
+  processing.value = true;
+  await axios
+    .post("/register", {
+      firstname: firstname.value,
+      lastname: lastname.value,
+      email: email.value,
+      password: password.value,
+    })
+    .then((res) => {
+      if (res) {
+        if (res.status == 200) {
+          if (res.data.data == "success") {
+            //
+            $toast.success("Successfully registered!");
+            router.push({ name: "auth.login" });
+          } else {
+            console.log(res.data.message);
+            console.log(res.data.data);
+            $toast.warning("Email already exist!");
+          }
+        } else {
+          console.log(res.data);
+        }
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+    .finally(() => (processing.value = false));
+};
+</script>
   

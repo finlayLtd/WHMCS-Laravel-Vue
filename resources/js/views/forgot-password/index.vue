@@ -20,19 +20,20 @@
           </div>
           <h2 class="login-title">Forgot password</h2>
 
-          <form>
+          <form @submit.prevent="submitForgot">
             <div class="login-input-wrapper mb-3">
               <label for="#email">Email Address</label>
               <input
                 type="email"
                 id="email"
                 name="email"
+                v-model="email"
                 required
                 placeholder="email@address.com"
               />
             </div>
 
-            <button type="submit" class="btn-dark w-100 mb-2">
+            <button type="submit" class="btn-dark w-100 mb-2" :class="{ 'opacity-25': processing }" :disabled="processing">
               Send Reset Email
             </button>
 
@@ -51,4 +52,41 @@
 </template>
 
 <script setup>
+import { computed, onMounted, ref, onBeforeUnmount } from "vue";
+import { useRouter } from "vue-router";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
+const $toast = useToast();
+
+const processing = ref(false);
+const router = useRouter();
+const email = ref("");
+
+const submitForgot = async () => {
+  if (processing.value) return;
+  processing.value = true;
+  await axios
+    .post("api/whmcs/forgot-password", {
+      email: email.value,
+    })
+    .then((res) => {
+      if (res) {
+        if (res.status == 200) {
+          if (res.data.data == "success") {
+            //
+            $toast.success("Successfully sent forgot password request!");
+            router.push({ name: "auth.login" });
+          } else {
+            $toast.warning("Email is not valid!");
+          }
+        } else {
+          console.log(res.data);
+        }
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+    .finally(() => (processing.value = false));
+};
 </script>

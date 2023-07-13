@@ -40,7 +40,7 @@ class AuthenticatedSessionController extends Controller
             $request->email,
             $request->password
         );
-        //dd($data);
+
         if($data['result'] == 'error')
         {
             return response()->json([
@@ -72,7 +72,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->authenticate();
        
-        print_r(Auth::user()); die;
+        //print_r(Auth::user()); die;
         $token = $user->createToken('auth_token')->plainTextToken;
         return response()->json([
             'userAbilities' => $userAbilities,

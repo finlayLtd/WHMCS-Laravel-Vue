@@ -3500,7 +3500,7 @@ fieldset:disabled .btn {
 .btn-dark.disabled,
 .btn-dark:disabled {
     color: #fff;
-    background-color: #212529;
+    background-color: #6a6d6d;;
     border-color: #212529
 }
 

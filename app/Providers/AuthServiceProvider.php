@@ -25,11 +25,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerPolicies();
-        //
-        Auth::provider('whmcs', function () {
-            return new \Sburina\Whmcs\UserProvider();
-        });
+       
 
         //
     }

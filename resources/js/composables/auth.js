@@ -45,7 +45,7 @@ export default function useAuth() {
                     showConfirmButton: false,
                     timer: 1500
                 })
-                await router.push({ name: 'admin.index' })
+                await router.push({ name: 'dashboard' })
             })
             .catch(error => {
                 if (error.response?.data) {

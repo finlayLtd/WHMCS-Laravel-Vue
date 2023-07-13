@@ -61,7 +61,7 @@ return [
 
     'providers' => [
         'users' => [
-            'driver' => 'whmcs',
+            'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
 

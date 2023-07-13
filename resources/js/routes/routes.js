@@ -33,14 +33,43 @@ function guest(to, from, next) {
 export default [
     {
         path: '/',
-        // redirect: { name: 'login' },
+        // redirect: { name: 'auth.login' },
         component: GuestLayout,
         children: [
             {
                 path: '/',
                 name: 'home',
-                component: () => import('../views/home/index.vue'),
+                component: () => import('../views/pages/dashboard.vue'),
+                beforeEnter: requireLogin,
             },
+            // original pages
+            {
+                path: 'posts',
+                name: 'public-posts.index',
+                component: () => import('../views/posts/index.vue'),
+            },
+            {
+                path: 'posts/:id',
+                name: 'public-posts.details',
+                component: () => import('../views/posts/details.vue'),
+            },
+            {
+                path: 'category/:id',
+                name: 'category-posts.index',
+                component: () => import('../views/category/posts.vue'),
+            },
+            
+        ]
+    },
+    {
+        path: '/',
+        component: GuestLayout,
+        // redirect: {
+        //     name: 'admin.index'
+        // },
+        beforeEnter: requireLogin,
+        children: [
+           
             {
                 path: '/dashboard',
                 name: 'dashboard',
@@ -84,29 +113,6 @@ export default [
                 path: 'create-vps-server',
                 name: 'create-vps-server',
                 component: () => import('../views/pages/create-vps-server.vue'),
-            },
-            // original pages
-            {
-                path: 'posts',
-                name: 'public-posts.index',
-                component: () => import('../views/posts/index.vue'),
-            },
-            {
-                path: 'posts/:id',
-                name: 'public-posts.details',
-                component: () => import('../views/posts/details.vue'),
-            },
-            {
-                path: 'category/:id',
-                name: 'category-posts.index',
-                component: () => import('../views/category/posts.vue'),
-            },
-            
-            {
-                path: 'register',
-                name: 'auth.register',
-                component: () => import('../views/register/index.vue'),
-                beforeEnter: guest,
             },
         ]
     },

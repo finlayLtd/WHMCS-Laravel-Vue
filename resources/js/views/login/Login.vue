@@ -37,11 +37,18 @@
                     </div>
                 </div>
               <button class="btn-dark w-100 mb-2" :class="{ 'opacity-25': processing }" :disabled="processing">Login</button>
-              <button class="btn-light w-100 mb-3">Register account</button>
-              <div class="text-center">
-                <a class="fs-14" href="#">Forgot password?</a>
-              </div>
+              
             </form>
+            <router-link to="/register">
+              <button class="btn-light w-100 mb-3">
+                Register account
+              </button>
+            </router-link>
+            <router-link to="/forgot-password">
+              <div class="text-center">
+                Forgot password?
+              </div>
+            </router-link>
           </div>
         </div>
       </div>

@@ -40,7 +40,6 @@ class AuthenticatedSessionController extends Controller
             $request->email,
             $request->password
         );
-
         if($data['result'] == 'error')
         {
             return response()->json([

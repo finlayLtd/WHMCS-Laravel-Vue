@@ -50,15 +50,8 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased" id="app">
-    <div id="loading-bg" style="z-index: 9999 !important; display: none;">
-        <div class="loading_new" style="margin:auto;">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        </div>
-    </div>
-    <router-view></router-view>
+    
+        <router-view></router-view>
+
 </body>
 </html>

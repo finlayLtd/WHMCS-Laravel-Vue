@@ -39,6 +39,12 @@ export default function useAuth() {
             .then(async response => {
                 await store.dispatch('auth/getUser')
                 await loginUser()
+                const { accessToken, userData, userAbilities } = response.data
+                console.log('userAbilities' ,userAbilities)
+                localStorage.setItem('userAbilities', JSON.stringify(userAbilities))
+                ability.update(userAbilities)
+                localStorage.setItem('userData', JSON.stringify(userData))
+                localStorage.setItem('accessToken', JSON.stringify(accessToken))
                 swal({
                     icon: 'success',
                     title: 'Login successfully',

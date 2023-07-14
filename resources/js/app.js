@@ -28,10 +28,13 @@ const app = createApp({
 });
 
 import ExampleComponent from './components/ExampleComponent.vue';
-
+import { createPinia } from 'pinia';
 app.component('example-component', ExampleComponent);
 
 
+const pinia = createPinia();
+
+app.use(pinia)
 app.use(router)
 app.use(store)
 app.use(VueSweetalert2)

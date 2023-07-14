@@ -20,7 +20,6 @@ Route::post('logout', [AuthenticatedSessionController::class, 'logout']);
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-
-Route::view('/{any?}', 'main-view')
-    ->name('dashboard')
-    ->where('any', '.*');
+Route::get('{any?}', function () {
+    return view('main-view');
+})->where('any', '^(?!api).*$');

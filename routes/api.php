@@ -10,7 +10,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => 'auth:sanctum'], function() {
+Route::group(['middleware' => 'auth:sanctum' ,  'namespace' => 'App\\Http\\Controllers\\Api'], function() {
     Route::apiResource('users', UserController::class);
     Route::apiResource('posts', PostController::class);
     Route::apiResource('categories', CategoryController::class);
@@ -31,7 +31,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
             ->toArray();
     });
 
-    
+    Route::get('support-ticket', 'SupportTicketController@index');
     
 });
 

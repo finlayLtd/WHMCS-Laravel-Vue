@@ -86,9 +86,15 @@ export default [
                 component: () => import('../views/pages/support-ticket.vue'),
             },
             {
-                path: 'ticket-detail',
+                path: 'ticket-detail/:id',
                 name: 'ticket-detail',
                 component: () => import('../views/pages/ticket-detail.vue'),
+            },
+
+            {
+                path: 'manageUser-detail/:id/:email',
+                name: 'manageUser-detail',
+                component: () => import('../views/pages/permission-detail.vue'),
             },
 
             {
@@ -98,7 +104,7 @@ export default [
             },
 
             {
-                path: 'overview',
+                path: 'overview/:id',
                 name: 'overview',
                 component: () => import('../views/pages/overview.vue'),
             },
@@ -114,6 +120,7 @@ export default [
                 name: 'create-vps-server',
                 component: () => import('../views/pages/create-vps-server.vue'),
             },
+
         ]
     },
     // {

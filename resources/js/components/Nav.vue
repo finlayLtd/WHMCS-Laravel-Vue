@@ -12,8 +12,9 @@
           class="logo-wrapper d-flex align-items-center col-md-2 text-dark text-decoration-none order-lg-1"
           to="/dashboard"
         >
-          <img class="logo-dark" src="assets/img/crazy-rdp-logo.svg" alt="" />
-          <img class="logo-light" src="assets/img/logo-light.svg" alt="" />
+          <img class="logo-dark"  src="/assets/img/crazy-rdp-logo.svg" alt="" />
+          <img class="logo-light" src="/assets/img/logo-light.svg" alt="" />
+          <!-- <img class="status-arrow" :src="require('@//assets/img/status-arrow.svg')" alt="" /> -->
         </router-link>
 
         <!-- </a> -->
@@ -32,7 +33,7 @@
                 style="margin: 10px 0px -3px 5px"
                 id="language-flag"
               ></span>
-              <small id="language-code" style="user-select: none">EN</small>
+              <small id="language-code" style="user-select: none">&nbsp;EN</small>
             </div>
             <div
               class="options-toggle-dropdown dropdown-menu dropdown-menu-end"
@@ -88,14 +89,14 @@
             <span v-if="user.credit != null && user.credit != undefined">€{{ user.credit.toFixed(2) }}</span>
             
             <div class="add-balance">
-              <img src="assets/img/plus-d.svg" alt="" />
+              <img src="/assets/img/plus-d.svg" alt="" />
             </div>
           </router-link>
 
           <div class="profile-area position-relative">
             <img
               class="profile-img options-toggle dropdown-toggle"
-              src="assets/img/profile.png"
+              src="/assets/img/profile.png"
               alt=""
               data-bs-toggle="dropdown"
             />
@@ -106,7 +107,7 @@
                 <li class="dropdown-profile-item">
                   <img
                     style="width: 28px; height: 28px"
-                    src="assets/img/profile.png"
+                    src="/assets/img/profile.png"
                     alt=""
                   />{{ user.name }}
                 </li>
@@ -115,7 +116,7 @@
                   <router-link to="/settings">
                     <img
                       style="filter: brightness(2.5)"
-                      src="assets/img/settings.svg"
+                      src="/assets/img/settings.svg"
                       alt=""
                     />Settings
                   </router-link>
@@ -124,7 +125,7 @@
                   <router-link to="/support-ticket">
                     <img
                       style="filter: brightness(2.5)"
-                      src="assets/img/messages.svg"
+                      src="/assets/img/messages.svg"
                       alt=""
                     />Support Tickets</router-link
                   >
@@ -132,7 +133,7 @@
                 <li>
                   <a href="javascript:void(0)" @click="logout">
                     <img
-                      src="assets/img/signout.svg"
+                      src="/assets/img/signout.svg"
                       style="margin-right: 15px !important; margin-left: 3px"
                       alt=""
                     />Sign out</a
@@ -229,11 +230,19 @@
       </nav> -->
 </template>
   
-  <script setup>
+<script setup>
 import { useStore } from "vuex";
 import useAuth from "@/composables/auth";
 import { computed, onMounted, ref, onBeforeUnmount } from "vue";
-import LocaleSwitcher from "../components/LocaleSwitcher.vue";
+// import LocaleSwitcher from "../components/LocaleSwitcher.vue";
+import { useI18n } from 'vue-i18n'
+import { loadMessages } from '@/plugins/i18n'
+
+const i18n = useI18n({useScope: "global"});
+
+
+
+
 
 const props = defineProps({
   isAuthLayout: {
@@ -246,6 +255,16 @@ const store = useStore();
 const user = computed(() => store.getters["auth/user"]);
 const { processing, logout } = useAuth();
 const SET_IS_LOGIN_PAGE = ref(false);
+
+const locale = computed(() => store.getters["lang/locale"])
+const locales = computed(() => store.getters["lang/locales"])
+
+function setLocale(locale) {
+    if (i18n.locale !== locale) {
+        loadMessages(locale)
+        store.dispatch('lang/setLocale', { locale })
+    }
+}
 
 const switchTheme = (event) => {
   if (event.target.checked) {
@@ -260,6 +279,8 @@ const switchTheme = (event) => {
 onMounted(() => {
   const toggleSwitch = document.querySelector("#modeSwitch");
   toggleSwitch.addEventListener("change", switchTheme, false);
+  console.log(locale.value);
+  console.log(locales.value);
 });
 </script>
 

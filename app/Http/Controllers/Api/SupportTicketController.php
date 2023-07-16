@@ -8,7 +8,6 @@ use sburina\Whmcs;
 use App\Http\Controllers\Controller;
 class SupportTicketController extends Controller
 {
-   
     public function index(Request $request)
     {
         $orders = array();
@@ -116,20 +115,48 @@ class SupportTicketController extends Controller
 
     public function openticket(Request $request)
     {
-        if ($request->message) {
-            $message = $request->message;
+        $all_request = $request->input('params');
+        $tickets = [];
+
+        if ($all_request['message']) {
+            $message = $all_request['message'];
         } else $message = ' ';
 
         $action_command_array = array(
             'action' => 'OpenTicket',
-            'deptid' => $request->department,
-            'subject' => $request->subject,
+            'deptid' => $all_request['department'],
+            'subject' => $all_request['subject'],
             'message' => $message,
-            'clientid' => $request->client_id
+            'clientid' => Auth::user()->client_id
         );
-        if ($request->service != 0) $action_command_array['serviceid'] = $request->service;
+
+        if ($all_request['service'] != 0) $action_command_array['serviceid'] = $all_request['service'];
 
         $created_ticket_info =  (new \Sburina\Whmcs\Client)->post($action_command_array);
+
+        $tickets_response = (new \Sburina\Whmcs\Client)->post([
+            'action' => 'GetTickets',
+            'clientid' => Auth::user()->client_id, // Set number of tickets to retrieve per request
+        ]);
+
+        if ($tickets_response['totalresults'] > 0) {
+            $tickets = $tickets_response['tickets']['ticket'];
+            $tickets = collect($tickets)->sortByDesc($request->orderby)->values()->all();
+        }
+
+        if ($created_ticket_info['result'] == 'success') {
+            return response()->json([
+                'result' => 'success',
+                'data' => $created_ticket_info,
+                'tickets' => $tickets,
+            ]);
+        }
+        else {
+            return response()->json([
+                'result' => 'failed',
+                'data' => $created_ticket_info,
+            ]);
+        }
 
         return redirect()->route('support-ticket');
     }

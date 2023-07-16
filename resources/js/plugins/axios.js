@@ -12,9 +12,7 @@ headers: {'X-Custom-Header': 'foobar'}
 // ℹ️ Add request interceptor to send the authorization header on each subsequent request after login
 axiosIns.interceptors.request.use(config => {
   // Retrieve token from localStorage
-  console.log(config)
   const token = localStorage.getItem('accessToken')
-  console.log(token)
   // If token is found
   if (token) {
     // Get request headers and if headers is undefined assign blank object

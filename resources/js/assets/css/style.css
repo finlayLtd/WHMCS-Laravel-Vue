@@ -158,7 +158,7 @@ header .nav-item.dropdown .dropdown-toggle::after {
 	background-color: #F0F1F5;
 	border: 1px solid rgba(0, 0, 0, 0.05);
 	border-radius: 66px;	
-	background-image: url('assets/img/light-mode-switcher.svg') !important;
+	background-image: url('/assets/img/light-mode-switcher.svg') !important;
 }*/
 header .form-switch {
 	margin-right: 24px;	
@@ -167,7 +167,7 @@ header .form-switch {
 header .form-switch .form-check-input {
 	width: 56px !important;
     height: 34px !important;
-    background-image: url(assets/img/light-mode-switcher.svg) !important;
+    background-image: url(/assets/img/light-mode-switcher.svg) !important;
     background-size: 50px 50px;
     background-position: -200% 30%;
 	background-color: #F0F1F5;
@@ -180,7 +180,7 @@ header .form-switch .form-check-input:checked {
     background-position: 300% 30% !important;
 		background-color: #1C1C1E !important;
 		border: 1px solid rgba(255, 255, 255, 0.05);   
-		background-image: url(assets/img/dark-mode-switcher.svg) !important; 
+		background-image: url(/assets/img/dark-mode-switcher.svg) !important; 
 }
 
 .form-check-input:focus {
@@ -248,11 +248,11 @@ header .profile-img {
 
 .bg-dots-left {
 	left: 0;
-	background: url(assets/img/bg-dots.png) bottom no-repeat;
+	background: url(/assets/img/bg-dots.png) bottom no-repeat;
 }
 .bg-dots-right {
 	right: 0;
-	background: url(assets/img/bg-dots.png) bottom no-repeat;
+	background: url(/assets/img/bg-dots.png) bottom no-repeat;
 }
 
 .home-hero > div {
@@ -295,7 +295,7 @@ header .profile-img {
 
 .btn-arrow {
 	content: "";
-	background: url(assets/img/arrow-right.svg) center no-repeat;
+	background: url(/assets/img/arrow-right.svg) center no-repeat;
     width: 10px;
     height: 10px;
     display: inline-block;
@@ -712,12 +712,12 @@ background: linear-gradient(180deg, rgba(147, 34, 121, 0.1) -17.5%, rgba(251, 25
 .distribution-dots-top {
 	top: 0;
 	left: 0;
-	background: url(assets/img/dot-distributions-top.png) bottom no-repeat;
+	background: url(/assets/img/dot-distributions-top.png) bottom no-repeat;
 }
 .distribution-dots-bottom {
 	bottom: 0;
 	right: 0;
-	background: url(assets/img/dot-distributions-bottom.png) bottom no-repeat;
+	background: url(/assets/img/dot-distributions-bottom.png) bottom no-repeat;
 }
 
 .faq-content {
@@ -776,7 +776,7 @@ section.banner {
 }
 
 .footer-banner {
-	background: url(assets/img/footer-banner.png) right no-repeat;
+	background: url(/assets/img/footer-banner.png) right no-repeat;
     padding-top: 29%;
     width: 100%;
     position: relative;
@@ -824,7 +824,7 @@ section.banner {
 	margin-bottom:35px;
 }
 .btn-banner .btn-arrow {
-	background: url(assets/img/arrow-right-blue.svg) center no-repeat !important;
+	background: url(/assets/img/arrow-right-blue.svg) center no-repeat !important;
 }
 
 
@@ -954,27 +954,27 @@ section.pricing-list .price {
 
 .features-grid .grid-item1 {
 	padding-top: 29.7%;	
-	background-image:url('assets/img/grid-item1.png');
+	background-image:url('/assets/img/grid-item1.png');
 }
 
 .features-grid .grid-item2 {
 	padding-top: 65%;	
-	background-image:url('assets/img/grid-item2.png');
+	background-image:url('/assets/img/grid-item2.png');
 }
 
 .features-grid .grid-item3 {
 	padding-top: 65%;	
-	background-image:url('assets/img/grid-item3.png');
+	background-image:url('/assets/img/grid-item3.png');
 }
 
 .features-grid .grid-item4 {
 	padding-top: 65%;	
-	background-image:url('assets/img/grid-item4.png');
+	background-image:url('/assets/img/grid-item4.png');
 }
 
 .features-grid .grid-item5 {
 	padding-top: 65%;
-	background-image:url('assets/img/grid-item5.png');	
+	background-image:url('/assets/img/grid-item5.png');	
 }
 
 
@@ -1071,7 +1071,7 @@ section.pricing-list .price {
     width: 12px;
     height: 10px;
     background-size: contain;
-    background: url(assets/img/dropdown-light.svg) center no-repeat;
+    background: url(/assets/img/dropdown-light.svg) center no-repeat;
     filter: brightness(0);
 }
 
@@ -1415,7 +1415,7 @@ section.dashboard .data-region-card:hover .server-price {
 .chevron-dark::after {
 	right: 6px !important;
 	top: 14px !important;
-	background: url(assets/img/chevron-d.svg) center no-repeat !important;
+	background: url(/assets/img/chevron-d.svg) center no-repeat !important;
 	filter: unset !important;
 }
 
@@ -1537,7 +1537,7 @@ section.dashboard .data-region-card:hover .server-price {
 }
 
 .server-list-options .options-toggle {
-	background: url('assets/img/options.svg')  no-repeat center;
+	background: url('/assets/img/options.svg')  no-repeat center;
 	background-size: contain;
 	width: 4px;
   height: 18px;
@@ -1787,7 +1787,7 @@ td.refund-request::before {
     position: absolute;
     top: 19px;
     left: 5px;
-    background: url(assets/img/refund-request.svg) no-repeat center;
+    background: url(/assets/img/refund-request.svg) no-repeat center;
     width: 15px;
     height: 15px;
     filter: brightness(2.6);
@@ -1804,7 +1804,7 @@ td.date-cell::before {
     position: absolute;
     top: 19px;
     left: 5px;
-    background: url(assets/img/date-cell.svg) no-repeat center;
+    background: url(/assets/img/date-cell.svg) no-repeat center;
     width: 15px;
     height: 15px;
     filter: brightness(2.6);
@@ -1825,7 +1825,7 @@ td.successful-cell span::before {
     position: absolute;
     top: 10px;
     left: 10px;
-    background: url(assets/img/successful-cell.svg) no-repeat center;
+    background: url(/assets/img/successful-cell.svg) no-repeat center;
     width: 15px;
     height: 15px;
     filter: brightness(2.6);
@@ -1846,7 +1846,7 @@ td.cancelled-cell span::before {
     position: absolute;
     top: 10px;
     left: 10px;
-    background: url(assets/img/cancelled-cell.svg) no-repeat center;
+    background: url(/assets/img/cancelled-cell.svg) no-repeat center;
     width: 15px;
     height: 15px;
     filter: brightness(1.2);
@@ -1869,7 +1869,7 @@ td.in-progress-cell span::before {
     position: absolute;
     top: 10px;
     left: 10px;
-    background: url(assets/img/in-progress-cell.svg) no-repeat center;
+    background: url(/assets/img/in-progress-cell.svg) no-repeat center;
     width: 15px;
     height: 15px;
     filter: brightness(1.2);
@@ -1886,7 +1886,7 @@ td.remaining-cell::before {
     position: absolute;
     top: 19px;
     left: 5px;
-    background: url(assets/img/remaining-cell.svg) no-repeat center;
+    background: url(/assets/img/remaining-cell.svg) no-repeat center;
     width: 15px;
     height: 15px;
     filter: brightness(2.6);
@@ -2817,7 +2817,7 @@ border: none;
 }
 
 .file-label {
-	background: url('assets/img/file-upload.svg') center no-repeat;
+	background: url('/assets/img/file-upload.svg') center no-repeat;
 	width: 13px;
 	height: 13px;
 	background-size: contain;
@@ -2934,7 +2934,7 @@ border: none;
     position: absolute;
     right: 10px;
     top: 3px;
-    background: url(assets/img/shield-tick.svg) center no-repeat;
+    background: url(/assets/img/shield-tick.svg) center no-repeat;
     height: 17px;
     width: 14px;
 }

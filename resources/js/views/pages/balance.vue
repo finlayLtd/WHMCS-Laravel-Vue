@@ -10,7 +10,7 @@
       <div class="sub-section server-list-tab">
         <div class="row justify-content-between align-items-center">
           <div class="row pe-0">
-            <div class="col-md-8 mb-4 mb-md-0">
+            <div class="col-md-4 mb-4 mb-md-0">
               <div class="card-item">
                 <div class="balance-card-header main-balance-header">
                   <div class="main-balance-wrapper">
@@ -21,30 +21,18 @@
                       <h3>Main balance</h3>
                     </div>
                   </div>
-                  <div class="balance">€<span>10.30</span></div>
+                  <div class="balance">
+                    €<span class="creditTag">{{ user.credit.toFixed(2) }}</span>
+                  </div>
                 </div>
                 <div class="balance-card-footer d-flex justify-content-end">
                   <button
                     class="btn-dark add-funds hover-dark-light"
+                    id="addFunds"
                     @click="openModal = true"
                   >
                     Add Funds
                   </button>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="card-item">
-                <div class="balance-card-header credit-balance-header">
-                  <div class="main-balance-wrapper">
-                    <div class="balance-icon">
-                      <img src="assets/img/empty-wallet.svg" alt="" />
-                    </div>
-                    <div class="balance-title">
-                      <h3>Credit balance</h3>
-                    </div>
-                  </div>
-                  <div class="balance">€<span>150</span></div>
                 </div>
               </div>
             </div>
@@ -55,7 +43,7 @@
       <div class="sub-section server-list-tab">
         <div class="row justify-content-between align-items-center">
           <div class="row mb-3 mb-lg-5 pe-0">
-            <h3 class="col-md-3 sub-title pt-2">Transaction History</h3>
+            <h3 class="col-md-3 sub-title pt-2">My Invoices</h3>
 
             <div
               class="col-md-9 d-flex justify-content-end pe-0 flex-wrap list-flex-nav"
@@ -66,14 +54,14 @@
                   class="sort-item-active btn-chevron chevron-dark"
                   @click="sortBy = !sortBy"
                 >
-                  <span>Sort by name</span>
+                  <span>Sort by &nbsp;&nbsp;</span>
                 </div>
                 <div class="sorting-items" v-if="sortBy">
                   <ul>
-                    <li>Date-latest</li>
-                    <li>Date-oldest</li>
-                    <li>Price-highest</li>
-                    <li>Price-lowest</li>
+                    <li @click="setOrder('date', 'desc')">Date-latest</li>
+                    <li @click="setOrder('date', 'asc')">Date-oldest</li>
+                    <li @click="setOrder('total', 'desc')">Price-highest</li>
+                    <li @click="setOrder('total', 'asc')">Price-lowest</li>
                   </ul>
                 </div>
               </div>
@@ -93,6 +81,22 @@
                     role="tab"
                     aria-controls="pills-home"
                     aria-selected="true"
+                    @click="invoiceStatus = 'All'"
+                  >
+                    All
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="pills-profile-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#pills-profile"
+                    type="button"
+                    role="tab"
+                    aria-controls="pills-profile"
+                    aria-selected="false"
+                    @click="invoiceStatus = 'Paid'"
                   >
                     Paid
                   </button>
@@ -107,8 +111,9 @@
                     role="tab"
                     aria-controls="pills-profile"
                     aria-selected="false"
+                    @click="invoiceStatus = 'Unpaid'"
                   >
-                    Cancelled
+                    Unpaid
                   </button>
                 </li>
                 <li class="nav-item" role="presentation">
@@ -121,8 +126,9 @@
                     role="tab"
                     aria-controls="pills-profile"
                     aria-selected="false"
+                    @click="invoiceStatus = 'Cancelled'"
                   >
-                    In progress
+                    Cancelled
                   </button>
                 </li>
               </ul>
@@ -142,87 +148,48 @@
                     <tr>
                       <th scope="col">Invoice</th>
                       <th scope="col">Amount</th>
-                      <th scope="col">Remaining balance</th>
-                      <th scope="col">Date</th>
+                      <th scope="col">Invoice Date</th>
+                      <th scope="col">Due Date</th>
                       <th scope="col">Status</th>
                       <th scope="col" class="text-center">View Invoice</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>INV-3</td>
-                      <td>€10.30</td>
-                      <td class="remaining-cell"><span>€50.50</span></td>
-                      <td class="date-cell">2023-13-03</td>
-                      <td class="successful-cell"><span>Successful</span></td>
-                      <td class="text-center">
-                        <a href="#"
-                          ><img
-                            src="assets/img/eye-open.svg"
-                            class="icon-password view-invoice"
-                        /></a>
+                    <tr v-if="!invoices || invoices.length === 0">
+                      <td colspan="6" style="text-align: center">
+                        <h5 style="margin-top: 20px">No invoice</h5>
                       </td>
                     </tr>
-                    <tr>
-                      <td>INV-3</td>
-                      <td>€10.30.</td>
-                      <td class="remaining-cell"><span>€50.50</span></td>
-                      <td class="date-cell">2023-13-03</td>
-                      <td class="cancelled-cell"><span>Cancelled</span></td>
-                      <td class="text-center">
-                        <a href="#"
-                          ><img
-                            src="assets/img/eye-open.svg"
-                            class="icon-password view-invoice"
-                        /></a>
+                    <tr
+                      v-else
+                      v-for="invoice in filteredInvoices"
+                      :key="invoice.id"
+                    >
+                      <td>INV-{{ invoice.id }}</td>
+                      <td>{{ invoice.currencyprefix }}{{ invoice.total }}</td>
+                      <td class="date-cell">{{ formatDate(invoice.date) }}</td>
+                      <td class="date-cell">
+                        {{ formatDate(invoice.duedate) }}
                       </td>
-                    </tr>
-                    <tr>
-                      <td>INV-3</td>
-                      <td>€10.30</td>
-                      <td class="remaining-cell"><span>€50.50</span></td>
-                      <td class="date-cell">2023-13-03</td>
-                      <td class="in-progress-cell"><span>In progress</span></td>
-                      <td class="text-center">
-                        <a href="#"
-                          ><img
-                            src="assets/img/eye-open.svg"
-                            class="icon-password view-invoice"
-                        /></a>
+                      <td :class="getCellClass(invoice.status)">
+                        <span>
+                          {{ invoice.status }}
+                        </span>
                       </td>
-                    </tr>
-                    <tr>
-                      <td>INV-3</td>
-                      <td>€10.30</td>
-                      <td class="remaining-cell"><span>€50.50</span></td>
-                      <td class="date-cell">2023-13-03</td>
-                      <td class="in-progress-cell"><span>In progress</span></td>
                       <td class="text-center">
-                        <a href="#"
-                          ><img
+                        <a target="_blank" @click="openInvoiceWindow(invoice.id)">
+                          <img
                             src="assets/img/eye-open.svg"
                             class="icon-password view-invoice"
-                        /></a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>INV-3</td>
-                      <td>€10.30</td>
-                      <td class="remaining-cell"><span>€50.50</span></td>
-                      <td class="date-cell">2023-13-03</td>
-                      <td class="in-progress-cell"><span>In progress</span></td>
-                      <td class="text-center">
-                        <a href="#"
-                          ><img
-                            src="assets/img/eye-open.svg"
-                            class="icon-password view-invoice"
-                        /></a>
+                          />
+                        </a>
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
-              <div class="w-100 server-list-pagination">
+              <!-- pagination -->
+              <!-- <div class="w-100 server-list-pagination">
                 <nav aria-label="...">
                   <ul class="pagination">
                     <li class="page-item disabled first">
@@ -261,73 +228,7 @@
                     </li>
                   </ul>
                 </nav>
-              </div>
-            </div>
-
-            <div
-              class="tab-pane fade"
-              id="pills-profile"
-              role="tabpanel"
-              aria-labelledby="pills-profile-tab"
-            >
-              <div class="row mb-5 pe-0">
-                <div class="support-table">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">Number Ticket</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Request Type</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>#123</td>
-                        <td>Name about yes request..</td>
-                        <td class="refund-request">Refund Request</td>
-                        <td class="date-cell">2023-13-03</td>
-                        <td class="successful-cell"><span>Successful</span></td>
-                      </tr>
-                      <tr>
-                        <td>#123</td>
-                        <td>Name about yes request..</td>
-                        <td class="refund-request">Refund Request</td>
-                        <td class="date-cell">2023-13-03</td>
-                        <td class="cancelled-cell"><span>Cancelled</span></td>
-                      </tr>
-                      <tr>
-                        <td>#123</td>
-                        <td>Name about yes request..</td>
-                        <td class="refund-request">Refund Request</td>
-                        <td class="date-cell">2023-13-03</td>
-                        <td class="in-progress-cell">
-                          <span>In progress</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>#123</td>
-                        <td>Name about yes request..</td>
-                        <td class="refund-request">Refund Request</td>
-                        <td class="date-cell">2023-13-03</td>
-                        <td class="in-progress-cell">
-                          <span>In progress</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>#123</td>
-                        <td>Name about yes request..</td>
-                        <td class="refund-request">Refund Request</td>
-                        <td class="date-cell">2023-13-03</td>
-                        <td class="in-progress-cell">
-                          <span>In progress</span>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -337,7 +238,7 @@
 
   <div class="modal modal-balance" v-if="openModal">
     <div class="modal-inner">
-      <div class="modal-close" @click="openModal=false">
+      <div class="modal-close" @click="openModal = false">
         <img class="close-dark" src="assets/img/close.svg" alt="" />
         <img class="close-light" src="assets/img/close-light.svg" alt="" />
       </div>
@@ -382,14 +283,14 @@
             </button>
           </div>
           <div class="amounts">
-            <h4>Amounts</h4>
-            <input type="text" value="321" placeholder="" />
             <div class="amount-footer">
               <span>Amount of one deposit</span>
               <span>€10,00 - €1.000,00</span>
             </div>
           </div>
-          <button class="btn-dark d-block">Continue</button>
+          <button class="btn-dark d-block" @click="openAddFundsWindow()">
+            Continue
+          </button>
         </div>
       </div>
     </div>
@@ -397,9 +298,112 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, onBeforeUnmount } from "vue";
+import { computed, onMounted, ref, onBeforeUnmount, watch } from "vue";
+import { commonApis } from "@/apis/commonApis";
+import { useStore } from "vuex";
+import useAuth from "@/composables/auth";
+import { showLoader } from "@/plugins/loading.js";
+
+const commonApi = commonApis();
 const sortBy = ref(false);
 const openModal = ref(false);
+const store = useStore();
+const user = computed(() => store.state.auth.user);
+const invoices = ref([]);
+// const status = ref([]);
+const invoiceStatus = ref("All");
+const page = ref(1);
+const totalresults = ref(0);
+const startnumber = ref(0);
+const numreturned = ref(0);
+
+console.log(user.value.client_id);
+
+const params = ref({
+  client_id: user.value.client_id,
+  orderby: "",
+  order: "",
+  page: page.value,
+});
+
+const getInvoicesData = () => {
+  showLoader(true);
+  commonApi
+    .runGetApi("/get-invoices", params.value)
+    .then((res) => {
+      showLoader(false);
+      sortBy.value = false;
+      invoices.value = res.data.invoices;
+      totalresults.value = res.data.totalresults;
+      startnumber.value = res.data.startnumber;
+      numreturned.value = res.data.numreturned;
+    })
+    .catch((e) => {
+      showLoader(false);
+      console.log(e);
+    });
+};
+
+const openAddFundsWindow = () => {
+  showLoader(true);
+  commonApi
+    .runPostApi("/add_funds_sso")
+    .then((res) => {
+      showLoader(false);
+      if (res.data.result == "success") {
+        window.open(res.data.redirect_url, "_blank");
+      }
+    })
+    .catch((e) => {
+      showLoader(false);
+      console.log(e);
+    });
+};
+
+const openInvoiceWindow = (invoice_id) => {
+
+  showLoader(true);
+  commonApi
+    .runPostApi("/invoice_detail_sso",invoice_id)
+    .then((res) => {
+      showLoader(false);
+      if (res.data.result == "success") {
+        window.open(res.data.redirect_url, "_blank");
+      }
+    })
+    .catch((e) => {
+      showLoader(false);
+      console.log(e);
+    });
+};
+
+getInvoicesData();
+
+function formatDate(date) {
+  return new Date(date).toISOString().slice(0, 10);
+}
+
+function getCellClass(status) {
+  if (status == "Paid") return "successful-cell";
+  if (status == "Unpaid") return "cancelled-cell";
+  return "in-progress-cell";
+}
+
+const filteredInvoices = computed(() => {
+  if (invoiceStatus.value === "All") {
+    return invoices.value;
+  }
+
+  return invoices.value.filter(
+    (invoice) => invoice.status === invoiceStatus.value
+  );
+});
+
+function setOrder(orderBy, order) {
+  params.value.orderby = orderBy;
+  params.value.order = order;
+  getInvoicesData();
+}
 </script>
 
 <style scoped>

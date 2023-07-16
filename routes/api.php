@@ -31,7 +31,31 @@ Route::group(['middleware' => 'auth:sanctum' ,  'namespace' => 'App\\Http\\Contr
             ->toArray();
     });
 
+    // support-ticket page fetch apis
     Route::get('support-ticket', 'SupportTicketController@index');
+    Route::post('ticket-create', 'SupportTicketController@openticket');
+    Route::post('get-ticketDetails', 'TicketDetailController@index');
+    Route::post('download-file', 'TicketDetailController@downloadFile');
+    Route::post('sendReply', 'TicketDetailController@sendReply');
+    
+
+    // balance page fetch apis
+    Route::get('get-invoices', 'BalanceController@index');
+
+    // balance page redirect apis
+    Route::post('add_funds_sso', 'SSOController@add_funds_sso');
+    Route::post('invoice_detail_sso', 'SSOController@invoice_detail_sso');
+
+    // settings page fetch profile data
+    Route::get('get-profileData', 'SettingsController@index');
+    Route::post('change_name', 'HomeController@change_name');
+    Route::post('invite_user', 'HomeController@invite_user');
+    Route::post('remove_access', 'HomeController@remove_access');
+    Route::post('get_permission_detail_per_ser', 'HomeController@managePermissions');
+    Route::post('edit_user_permissions', 'HomeController@edit_user_permissions');
+    
+    
+    
     
 });
 

@@ -65,18 +65,23 @@
 					<div v-else v-for="ticket in tickets" :key="ticket.id" class="col-12 col-lg-6 col-md-6 col-sm-12">
 						<div class="card-item p-4 mb-4 support-item flex-column">
 						<div class="d-flex justify-content-between support-item-header">
-							<a :href="'/ticket-detail/' + ticket.id">
-							<div class="support-item-title">
-								<img class="me-2" src="assets/img/support.svg" alt="">
-								<span style="color:rgba(23, 30, 38, 0.5);"> Ticket#{{ ticket.tid }}</span>
-							</div>
-							<h3 class="detail" style="margin-top: 10px;">
-								Opened at : {{ formatDate(ticket.date) }}
-							</h3>
-							<h3 class="detail" style="margin-top: 5px;">
-								Last reply at : {{ formatDate(ticket.lastreply) }}
-							</h3>
-							</a>
+							<router-link
+								:to="{
+									name: 'ticket-detail',
+									params: { id: ticket.id},
+								}"
+								>
+								<div class="support-item-title">
+									<img class="me-2" src="assets/img/support.svg" alt="">
+									<span style="color:rgba(23, 30, 38, 0.5);"> Ticket#{{ ticket.tid }}</span>
+								</div>
+								<h3 class="detail" style="margin-top: 10px;">
+									Opened at : {{ formatDate(ticket.date) }}
+								</h3>
+								<h3 class="detail" style="margin-top: 5px;">
+									Last reply at : {{ formatDate(ticket.lastreply) }}
+								</h3>
+							</router-link>
 							<div class="support-item-status">
 							<div v-if="ticket.status === 'Answered'" class="successful-cell">
 								<span class="fs-15 color-in-work">{{ ticket.status }}</span>
@@ -150,13 +155,16 @@
 	</div>
 </section>		
 
+
+
+
 <div class="modal modal-ticket" v-if="openModal">
 	<div class="modal-inner">
-			<div class="modal-close" @click="openModal=false">
-				<img class="close-dark" src="assets/img/close.svg" alt="">
-				<img class="close-light" src="assets/img/close-light.svg" alt="">
+		<div class="modal-close" @click="openModal=false">
+			<img class="close-dark" src="assets/img/close.svg" alt="">
+			<img class="close-light" src="assets/img/close-light.svg" alt="">
 
-			</div>		
+		</div>
 		<div class="modal-content">
 
 			<div class="modal-header">
@@ -167,24 +175,43 @@
 			</div>
 			<div class="modal-main">
 				<div class="amounts">
-					<h4>Subject</h4>
-					<input class="mb-3" type="text" placeholder="Write subject">
+						<h4>Subject</h4>
+						<input class="mb-3" name="subject" type="text" placeholder="Write subject" v-model="subject">
 
-					<h4>Describe the problem</h4>
-					<textarea class="mb-3" name="" id="" cols="30" rows="8" ></textarea>
+						<h4>Describe the problem</h4>
+						<textarea class="mb-3" name="message" id="" cols="30" rows="8" v-model="message"></textarea>
 
-					<h4>Server related*</h4>
-					<select name="" id="">
-						<option value="Server">Server</option>
-						<option value="Server2">Server2</option>
-					</select>
+						<h4>Department*</h4>
+						<select name="department" id="department" v-model="selectedDepartment">
+							<option :value="department.id" v-for="department in departments" :key="department.id" >{{ department.name }}</option>
+						</select>
 
+						<div v-if="orders.length > 0">
+							<h4>Service related</h4>
+
+							<select name="service" id="service" v-model="selectedService">
+								<option value="0">- None -</option>
+								<!-- @foreach ($orders as $order_info)
+									@foreach($order_info['lineitems']['lineitem'] as $order_value)
+									<option value="{{$order_value['relid']}}">{{$order_value['product']}} - {{ $order_value['status'] }}</option>
+									@endforeach
+								@endforeach -->
+								<template v-for="orderInfo in orders">
+									<template v-for="orderValue in orderInfo.lineitems.lineitem" :key="orderValue.relid">
+										<option :value="orderValue.relid" >
+											{{ orderValue.product }} - {{ orderValue.status }}
+										</option>
+									</template>
+								</template>
+							</select>
+						</div>
+							
+						<button class="btn-dark d-block w-100 mt-5" id="open-ticket" :disabled="subject=='' || selectedDepartment==0" @click="createTicket()">Create Ticket</button>
 				</div>
-				<button class="btn-dark d-block w-100 mt-5" >Create Ticket</button>
 			</div>
 		</div>
 	</div>
-</div>	
+</div>
 </template>
 
 <script setup>
@@ -193,6 +220,10 @@ import { commonApis } from '@/apis/commonApis';
 import { useStore } from 'vuex';
 import useAuth from "@/composables/auth";
 import { showLoader } from '@/plugins/loading.js';
+// toast
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
+const $toast = useToast();
 
 const commonApi = commonApis()
 const sortBy = ref(false);
@@ -200,22 +231,30 @@ const openModal = ref(false);
 const store = useStore();
 const user = computed(() => store.state.auth.user)
 const tickets = ref([]);
+const departments = ref([]);
+const orders = ref([]);
 const status = ref([]);
-
-console.log(user.value.client_id)
-
+const selectedService = ref(0);
+const selectedDepartment = ref(0);
+const subject = ref('');
+const message = ref('');
 
 const params = ref(
 	{'client_id': user.value.client_id , orderby:'', order:''}
 )
+
 const getTicketsData = ()=>{
-	showLoader(true);
-	commonApi.runGetApi('/support-ticket' , params.value).then((res)=>{
-	showLoader(false);
-	sortBy.value = false;
-	console.log(res.data)
-	tickets.value = res.data.tickets
-	status.value = res.data.status
+		showLoader(true);
+		commonApi.runGetApi('/support-ticket' , params.value).then((res)=>{
+		showLoader(false);
+		sortBy.value = false;
+		console.log(res.data)
+		tickets.value = res.data.tickets;
+		status.value = res.data.status;
+
+		// for create ticket
+		departments.value = res.data.departments
+		orders.value = res.data.orders
    
 	}).catch((e)=>{
 	console.log(e)
@@ -243,11 +282,37 @@ function slugify(text) {
 function getTicketsByStatus(ticketStatus) {
   return tickets.value.filter((ticket) => ticket.status === ticketStatus);
 }
+
 function setOrder(orderBy , order) {
   params.value.orderby = orderBy
   params.value.order = order
   getTicketsData()
 }
+
+const createTicket = () => {
+  showLoader(true);
+
+  commonApi
+    .runPostApi("/ticket-create", {
+      subject: subject.value,
+      message: message.value,
+      department: selectedDepartment.value,
+      message: message.value,
+      service: selectedService.value,
+    })
+    .then((res) => {
+      showLoader(false);
+      if (res.data.result == "success") {
+        tickets.value = res.data.tickets;
+        $toast.success("Successfully opened ticket!");
+		openModal.value = false;
+      } else $toast.warning("Cannot connect to whmcs api.");
+    })
+    .catch((e) => {
+      showLoader(false);
+      console.log(e);
+    });
+};
 
 </script>
 

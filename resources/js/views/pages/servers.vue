@@ -30,6 +30,8 @@
 
 <script setup>
 import ServicesTable from "./tables/services.vue";
+
+
 </script>
 
 <style scoped>

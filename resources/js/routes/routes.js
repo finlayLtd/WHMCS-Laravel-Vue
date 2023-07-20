@@ -195,19 +195,19 @@ export default [
             {
                 name: 'categories.index',
                 path: 'categories',
-                component: () => import('../views/admin/categories/index.vue'),
+                component: () => import('../views/admin/categories/Index.vue'),
                 meta: { breadCrumb: 'Categories' }
             },
             {
                 name: 'categories.create',
                 path: 'categories/create',
-                component: () => import('../views/admin/categories/create.vue'),
+                component: () => import('../views/admin/categories/Create.vue'),
                 meta: { breadCrumb: 'Add new category' }
             },
             {
                 name: 'categories.edit',
                 path: 'categories/edit/:id',
-                component: () => import('../views/admin/categories/edit.vue'),
+                component: () => import('../views/admin/categories/Edit.vue'),
                 meta: { breadCrumb: 'Edit Category' }
             },
             {
@@ -219,13 +219,13 @@ export default [
             {
                 name: 'permissions.create',
                 path: 'permissions/create',
-                component: () => import('../views/admin/permissions/create.vue'),
+                component: () => import('../views/admin/permissions/Create.vue'),
                 meta: { breadCrumb: 'Create Permission' }
             },
             {
                 name: 'permissions.edit',
                 path: 'permissions/edit/:id',
-                component: () => import('../views/admin/permissions/edit.vue'),
+                component: () => import('../views/admin/permissions/Edit.vue'),
                 meta: { breadCrumb: 'Permission Edit' }
             },
             {
@@ -237,13 +237,13 @@ export default [
             {
                 name: 'roles.create',
                 path: 'roles/create',
-                component: () => import('../views/admin/roles/create.vue'),
+                component: () => import('../views/admin/roles/Create.vue'),
                 meta: { breadCrumb: 'Create Role' }
             },
             {
                 name: 'roles.edit',
                 path: 'roles/edit/:id',
-                component: () => import('../views/admin/roles/edit.vue'),
+                component: () => import('../views/admin/roles/Edit.vue'),
                 meta: { breadCrumb: 'Role Edit' }
             },
             {

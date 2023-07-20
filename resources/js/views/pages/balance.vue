@@ -116,7 +116,7 @@
                     Unpaid
                   </button>
                 </li>
-                <li class="nav-item" role="presentation">
+                <!-- <li class="nav-item" role="presentation">
                   <button
                     class="nav-link"
                     id="pills-profile-tab"
@@ -130,7 +130,7 @@
                   >
                     Cancelled
                   </button>
-                </li>
+                </li> -->
               </ul>
             </div>
           </div>

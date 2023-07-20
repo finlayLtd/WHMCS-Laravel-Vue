@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Auth;
 use sburina\Whmcs;
 use App\Http\Controllers\Controller;
+use App\Virtualizor\Admin;
 
 class BalanceController extends Controller
 {
@@ -16,8 +17,14 @@ class BalanceController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+    // public function __construct()
+    // {
+    //     $this->virtualizorAdmin = new Admin();
+    // }
+    
     public function index(Request $request)
     {
+        // $oslist = $this->getOSlist();
         $orderby = 'date';
         $order = 'desc';
         $perPage = 100;
@@ -56,6 +63,12 @@ class BalanceController extends Controller
             'numreturned' => $numreturned,
         ]);
     }
+
+    // private function getOSlist()
+    // {
+    //     $oslists = $this->virtualizorAdmin->ostemplates();
+    //     return $oslists['oslist']['proxk'];
+    // }
 
     public function invoiceDetail(Request $request)
     {

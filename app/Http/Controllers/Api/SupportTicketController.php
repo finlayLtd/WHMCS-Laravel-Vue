@@ -54,8 +54,21 @@ class SupportTicketController extends Controller
         if ($tickets_status['totalresults'] > 0) {
             $status = $tickets_status['statuses']['status'];
         }
+        
+        $perPage = 8; // Number of items per page
+        $page = $request->input('page', 1); // Get the current page number (default to 1 if not provided)
+
+        // Calculate the offset for pagination
+        $offset = ($page - 1) * $perPage;
+
+        // Extract a slice of the tickets array based on the current page and number of items per page
+        $totalTickets = count($tickets);
+        //$pagedTickets = array_slice($tickets, $offset, $perPage);
 
         return response()->json([
+            'totalTickets' => $totalTickets,
+            'perPage' => $perPage,
+            'page' => $page,
             'tickets' => $tickets,
             'status' => $status,
             'departments' => $departments,

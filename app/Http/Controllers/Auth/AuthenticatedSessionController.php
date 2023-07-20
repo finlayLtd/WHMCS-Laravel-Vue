@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Sburina\Whmcs\Facades\Whmcs;
 use Str;
+
 class AuthenticatedSessionController extends Controller
 {
     /**
@@ -40,8 +41,8 @@ class AuthenticatedSessionController extends Controller
             $request->email,
             $request->password
         );
-        if($data['result'] == 'error')
-        {
+        //dd($data);
+        if ($data['result'] == 'error') {
             return response()->json([
                 'errors' => ['email' => ['Email or Password is Invalid']]
             ], 400);
@@ -53,26 +54,25 @@ class AuthenticatedSessionController extends Controller
                 'subject' => 'all'
             ]
         ];
-        
-        $user = User::where('whmcs_id' ,  $data['userid'])->first();
-        
+
+        $user = User::where('whmcs_id', $data['userid'])->first();
+
         $client_data = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetClientsDetails',
             'email' => $request->email,
         ]);
 
-        if(!$user)
-        {
+        if (!$user) {
             $user = new User();
         }
-       
+
         $name = $client_data['firstname'];
 
         //client_id concept and user_id concept is different
-    
+
         $user->client_id = $client_data['client_id'];
         $user->credit = $client_data['credit'];
-        
+
         $user->whmcs_id = $data['userid'];
         $user->name = $name;
         $user->email = $request->email;
@@ -80,7 +80,7 @@ class AuthenticatedSessionController extends Controller
         $user->save();
 
         $request->authenticate();
-       
+
         //print_r(Auth::user()); die;
         $token = $user->createToken('auth_token')->plainTextToken;
         return response()->json([
@@ -88,10 +88,10 @@ class AuthenticatedSessionController extends Controller
             'accessToken' => $token,
             'userData' => [
                 'id' => $data['userid'],
-              
+
             ]
         ]);
-        
+
     }
 
     /**
@@ -121,7 +121,7 @@ class AuthenticatedSessionController extends Controller
      * @return JsonResponse
      */
     public function register(Request $request)
-    {   
+    {
         $register_result = (new \Sburina\Whmcs\Client)->post([
             'action' => 'AddClient',
             'firstname' => $request['firstname'],
@@ -136,28 +136,28 @@ class AuthenticatedSessionController extends Controller
             'phonenumber' => ' ',
         ]);
 
-        if($register_result['result']=='success'){
+        if ($register_result['result'] == 'success') {
             return response()->json(['message' => 'Registration Successfully', 'data' => 'success'], 200);
-        } else{
+        } else {
             // return response()->json(['error' => 'Failed to register user'], 400);
             return response()->json(['message' => $register_result['result'], 'data' => 'failed'], 200);
         }
     }
 
     public function forgotPassword(Request $request)
-    {   
+    {
         $reset_response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'ResetPassword',
             'email' => $request->email,
         ]);
 
-        if($reset_response['result']=='success'){
+        if ($reset_response['result'] == 'success') {
             return response()->json(['message' => 'Successfully sent forgot password', 'data' => 'success'], 200);
-        } else{
+        } else {
             // return response()->json(['error' => 'Failed to register user'], 400);
             return response()->json(['message' => $reset_response['result'], 'data' => 'failed'], 200);
         }
     }
 
-    
+
 }

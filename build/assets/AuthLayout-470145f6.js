@@ -1,0 +1,1 @@
+import{r as o,b as r,d as a,h as e,F as n}from"./app-c4a345d8.js";import{N as s}from"./Nav-732222a4.js";const l={__name:"AuthLayout",setup(u){return(c,_)=>{const t=o("router-view");return r(),a(n,null,[e(s,{isAuthLayout:!0}),e(t)],64)}}};export{l as default};

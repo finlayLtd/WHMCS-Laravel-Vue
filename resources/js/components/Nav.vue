@@ -118,7 +118,7 @@
                       style="filter: brightness(2.5)"
                       src="/assets/img/settings.svg"
                       alt=""
-                    />Settings
+                    />{{$t('settings_nav')}}
                   </router-link>
                 </li>
                 <li>
@@ -127,7 +127,7 @@
                       style="filter: brightness(2.5)"
                       src="/assets/img/messages.svg"
                       alt=""
-                    />Support Tickets</router-link
+                    />{{$t('support_tickets_nav')}}</router-link
                   >
                 </li>
                 <li>
@@ -136,7 +136,7 @@
                       src="/assets/img/signout.svg"
                       style="margin-right: 15px !important; margin-left: 3px"
                       alt=""
-                    />Sign out</a
+                    />{{$t('logout_nav')}}</a
                   >
                 </li>
               </ul>
@@ -163,22 +163,22 @@
           <ul class="navbar-nav justify-content-center mb-md-0">
             <li class="nav-item">
               <router-link class="nav-link" to="/dashboard"
-                >Dashboard</router-link
+                >{{$t('dashboard_nav')}}</router-link
               >
             </li>
             <li class="nav-item">
               <router-link class="nav-link" to="/support-ticket">
-                Tickets
+                {{$t('tickets_nav')}}
               </router-link>
             </li>
             <li class="nav-item">
               <router-link class="nav-link" to="/servers">
-                Servers
+                {{$t('servers_nav')}}
               </router-link>
             </li>
             <li class="nav-item">
               <router-link class="nav-link" to="/balance">
-                Invoices
+                {{$t('invoices_nav')}}
               </router-link>
             </li>
           </ul>

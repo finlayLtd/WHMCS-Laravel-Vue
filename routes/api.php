@@ -33,6 +33,11 @@ Route::group(['middleware' => 'auth:sanctum' ,  'namespace' => 'App\\Http\\Contr
 
     // support-ticket page fetch apis
     Route::get('support-ticket', 'SupportTicketController@index');
+
+    // servers page fetch apis
+    Route::get('servers', 'ServersController@index');
+
+
     Route::post('ticket-create', 'SupportTicketController@openticket');
     Route::post('get-ticketDetails', 'TicketDetailController@index');
     Route::post('download-file', 'TicketDetailController@downloadFile');

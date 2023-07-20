@@ -149,6 +149,9 @@
                 </tbody>
               </table>
             </div>
+            <div class="w-100 server-list-pagination">
+              <Pagination :currentPage="params.page" :totalPages="totalFilterPages[ticketStatus]" @page-changed="onPageChanged" />
+            </div>
             <!-- pagination -->
             <!-- <div class="w-100 server-list-pagination">
                 <nav aria-label="...">
@@ -209,6 +212,7 @@ import { commonApis } from '@/apis/commonApis';
 import { useStore } from 'vuex';
 import useAuth from "@/composables/auth";
 import { showLoader } from '@/plugins/loading.js';
+import Pagination from '@/components/Pagination.vue'; 
 
 const commonApi = commonApis()
 const sortBy = ref(false);
@@ -216,14 +220,19 @@ const store = useStore();
 const user = computed(() => store.state.auth.user)
 const tickets = ref([]);
 const status = ref([]);
+const totalPages = ref(0);
 const ticketStatus = ref("All");
+
+const onlyShow = ref(['All' , 'Open' , 'Answered' , 'Customer-Reply' , 'Closed'])
 
 console.log(user.value.client_id)
 
 
 const params = ref(
-	{'client_id': user.value.client_id , orderby:'', order:''}
+	{'client_id': user.value.client_id , orderby:'', order:'' , page:1}
 )
+const perPage = 8;
+
 const getTicketsData = ()=>{
 	showLoader(true);
 	commonApi.runGetApi('/support-ticket' , params.value).then((res)=>{
@@ -231,7 +240,15 @@ const getTicketsData = ()=>{
 	sortBy.value = false;
 	console.log(res.data)
 	tickets.value = res.data.tickets
-	status.value = res.data.status
+  const filteredStatus = computed(() => {
+      return res?.data?.status?.filter(statu => onlyShow.value.includes(statu.title));
+    });
+	console.log('filteredStatus' , filteredStatus.value)
+		status.value = filteredStatus.value;
+    const totalTickets = res.data.totalTickets;
+      
+    totalPages.value = Math.ceil(totalTickets / perPage);
+	// status.value = res.data.status
    
 	}).catch((e)=>{
 	console.log(e)
@@ -243,7 +260,11 @@ getTicketsData()
 function formatDate(date) {
   return new Date(date).toISOString().slice(0, 10);
 }
-
+function onPageChanged(page) 
+{
+	params.value.page = page;
+	//getTicketsData(); // Fetch tickets for the new page
+}
 function getTabId(title) {
   return `pills-${slugify(title)}`;
 }
@@ -256,9 +277,6 @@ function slugify(text) {
   return text.toLowerCase().replace(/ /g, '-');
 }
 
-function getTicketsByStatus(ticketStatus) {
-  return tickets.value.filter((ticket) => ticket.status === ticketStatus);
-}
 
 function setOrder(orderBy , order) {
   params.value.orderby = orderBy
@@ -271,15 +289,30 @@ function getCellClass(status) {
   if (status == "Closed") return "cancelled-cell";
   return "in-progress-cell";
 }
-
+const totalFilterPages = ref([]);
 const filteredTickets = computed(() => {
+  let ticketData;
   if (ticketStatus.value === "All") {
-    return tickets.value;
+    ticketData = tickets.value;
+  }
+  else
+  {
+    ticketData = tickets.value.filter(
+    (ticket) => ticket.status === ticketStatus.value
+    );
+
   }
 
-  return tickets.value.filter(
-    (ticket) => ticket.status === ticketStatus.value
-  );
+  
+
+  const paginatedTickets = computed(() => {
+  const startIndex = (params.value.page - 1) * perPage;
+  const endIndex = startIndex + perPage;
+    return ticketData.slice(startIndex, endIndex);
+  });
+  totalFilterPages.value[ticketStatus.value] = Math.ceil(ticketData.length / perPage); 
+  return paginatedTickets.value
+  
 });
 </script>
   

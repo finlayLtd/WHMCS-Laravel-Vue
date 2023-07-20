@@ -42,6 +42,7 @@
 								:aria-controls="getTabId(statu.title)"
 								:aria-selected="false"
 							>
+							
 								{{ statu.title }}
 							</button>
 						</li>                              
@@ -62,7 +63,7 @@
 				
 					<h5 v-if="!tickets || tickets.length === 0">No tickets found</h5>
 					
-					<div v-else v-for="ticket in tickets" :key="ticket.id" class="col-12 col-lg-6 col-md-6 col-sm-12">
+					<div v-else v-for="ticket in paginatedTickets" :key="ticket.id" class="col-12 col-lg-6 col-md-6 col-sm-12">
 						<div class="card-item p-4 mb-4 support-item flex-column">
 						<div class="d-flex justify-content-between support-item-header">
 							<router-link
@@ -101,11 +102,15 @@
 					</div>
 					
                 </div>
-
+				<div class="w-100 server-list-pagination">
+    
+					<Pagination :currentPage="params.page" :totalPages="totalPages" @page-changed="onPageChanged" />
+				</div>
               </div>
 
             <div v-for="statu in status" :key="statu.title" class="tab-pane fade" :id="getTabId(statu.title)" :aria-labelledby="getTabLabelId(statu.title)">
 				<div class="row mb-5">
+					 
 					<h5 v-if="!getTicketsByStatus(statu.title) || getTicketsByStatus(statu.title).length === 0">No tickets found</h5>
 					<div v-else v-for="ticket in getTicketsByStatus(statu.title)" :key="ticket.id" class="col-12 col-lg-6 col-md-6 col-sm-12">
 					<div class="card-item p-4 mb-4 support-item flex-column">
@@ -139,6 +144,9 @@
 						</div>
 					</div>
 					</div>
+				</div>
+				<div class="w-100 server-list-pagination">
+					<Pagination :currentPage="params.page" :totalPages="totalFilterPages[statu.title]" @page-changed="onPageChanged" />
 				</div>
 			</div>
 
@@ -223,6 +231,7 @@ import { showLoader } from '@/plugins/loading.js';
 // toast
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
+import Pagination from '@/components/Pagination.vue'; 
 const $toast = useToast();
 
 const commonApi = commonApis()
@@ -238,11 +247,17 @@ const selectedService = ref(0);
 const selectedDepartment = ref(0);
 const subject = ref('');
 const message = ref('');
-
+const totalPages = ref(0);
+const onlyShow = ref(['All' , 'Open' , 'Answered' , 'Customer-Reply' , 'Closed'])
 const params = ref(
-	{'client_id': user.value.client_id , orderby:'', order:''}
+	{'client_id': user.value.client_id , orderby:'', order:'' , page :1}
 )
-
+const perPage = 8;
+const paginatedTickets = computed(() => {
+  const startIndex = (params.value.page - 1) * perPage;
+  const endIndex = startIndex + perPage;
+  return tickets.value.slice(startIndex, endIndex);
+});
 const getTicketsData = ()=>{
 		showLoader(true);
 		commonApi.runGetApi('/support-ticket' , params.value).then((res)=>{
@@ -250,11 +265,17 @@ const getTicketsData = ()=>{
 		sortBy.value = false;
 		console.log(res.data)
 		tickets.value = res.data.tickets;
-		status.value = res.data.status;
-
+		const filteredStatus = computed(() => {
+      		return res?.data?.status?.filter(statu => onlyShow.value.includes(statu.title));
+    	});
+		status.value = filteredStatus.value;
 		// for create ticket
 		departments.value = res.data.departments
 		orders.value = res.data.orders
+		const totalTickets = res.data.totalTickets;
+      
+      	totalPages.value = Math.ceil(totalTickets / perPage);
+
    
 	}).catch((e)=>{
 	console.log(e)
@@ -265,6 +286,11 @@ const getTicketsData = ()=>{
 getTicketsData()
 function formatDate(date) {
   return new Date(date).toISOString().slice(0, 10);
+}
+function onPageChanged(page) 
+{
+	params.value.page = page;
+	//getTicketsData(); // Fetch tickets for the new page
 }
 
 function getTabId(title) {
@@ -278,10 +304,20 @@ function getTabLabelId(title) {
 function slugify(text) {
   return text.toLowerCase().replace(/ /g, '-');
 }
-
+const totalFilterPages = ref([]);
 function getTicketsByStatus(ticketStatus) {
-  return tickets.value.filter((ticket) => ticket.status === ticketStatus);
+  const filterTickets = tickets.value.filter((ticket) => ticket.status === ticketStatus);
+  const filterticketsPaged = computed(() => {
+    const startIndex = (params.value.page - 1) * perPage;
+    const endIndex = startIndex + perPage;
+    return filterTickets.slice(startIndex, endIndex);
+  });
+  
+  
+  totalFilterPages.value[ticketStatus] = Math.ceil(filterTickets.length / perPage); 
+  return filterticketsPaged.value;
 }
+
 
 function setOrder(orderBy , order) {
   params.value.orderby = orderBy

@@ -24,322 +24,95 @@
             </div>
           </div>
 
-          <ul
-            class="nav nav-pills mb-3 mb-md-0 order-1 order-md-2 mb-lg-0"
-            id="pills-tab"
-            role="tablist"
-          >
-            <li class="nav-item" role="presentation">
+          <ul class="nav nav-pills four-pills mb-3 mb-md-0 order-1 order-md-2 mb-lg-0 flex-nowrap" id="pills-tab" role="tablist">
+            <li v-for="state in states" :key="state" class="nav-item" role="presentation" >
               <button
-                class="nav-link active"
-                id="pills-home-tab"
+              v-if="state_order?.[state]?.length"
+                :class="['nav-link', state === 'Active' ? 'active' : '']"
+                :id="'pills-' + state + '-tab'"
                 data-bs-toggle="pill"
-                data-bs-target="#pills-home"
+                :data-bs-target="'#pills-' + state"
                 type="button"
                 role="tab"
-                aria-controls="pills-home"
-                aria-selected="true"
+                :aria-controls="'pills-' + state"
+                :aria-selected="state === 'Active'"
               >
-                Active
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class="nav-link"
-                id="pills-profile-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#pills-profile"
-                type="button"
-                role="tab"
-                aria-controls="pills-profile"
-                aria-selected="false"
-              >
-                Consumed
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class="nav-link"
-                id="pills-profile-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#pills-profile"
-                type="button"
-                role="tab"
-                aria-controls="pills-profile"
-                aria-selected="false"
-              >
-                Suspended
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class="nav-link"
-                id="pills-profile-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#pills-profile"
-                type="button"
-                role="tab"
-                aria-controls="pills-profile"
-                aria-selected="false"
-              >
-                Attracted
+                {{ state }}
               </button>
             </li>
           </ul>
+
         </div>
       </div>
       <div class="tab-content" id="pills-tabContent">
-        <div
-          class="tab-pane fade show active"
-          id="pills-home"
-          role="tabpanel"
-          aria-labelledby="pills-home-tab"
-        >
-          <div class="row mb-5">
-            <div class="col-12 col-lg-4 col-md-6 col-sm-12">
-              <div class="card-item p-4 mb-4">
-                <div class="server-list-item">
-                  <div class="server-list-item-wrapper">
-                    <div class="image-wrapper">
-                      <img src="assets/img/windows-logo.png" alt="" />
-                    </div>
-                    <div class="list-item-detail">
-                      <h2 class="list-name">UdodovVPS</h2>
-                      <h3 class="detail">Windows RDP 2019</h3>
-                    </div>
-                    <div class="server-list-options">
-                      <div class="options-toggle"></div>
+   
+  
+    
+      <div v-for="state in states" :key="state" :class="['tab-pane', {'fade': state !== 'Active'}, {'show active': state === 'Active'}]"
+           :id="'pills-' + state"
+           role="tabpanel"
+           :aria-labelledby="'pills-' + state + '-tab'">
+        <div class="row mb-5">
+          <div v-if="state_order?.[state]" v-for="order in state_order[state]" :key="order.orderid" class="col-12 col-lg-4 col-md-6 col-sm-12">
+            <div class="card-item p-4 mb-4">
+              <div class="server-list-item">
+                <div class="server-list-item-wrapper">
+                  <div class="image-wrapper">
+                    <img :src="'assets/img/' + order.sys_log + '-logo.png'" alt="">
+                  </div>
+                  <div class="list-item-detail">
+                    <h2 class="list-name">{{ order.name }}</h2>
+                    <h3 class="detail">{{ order.configoptions.configoption[1].value }}</h3>
+                    <div v-if="state !== 'Cancelled'" class="server-list-options">
+                      <div class="options-toggle" style="padding-right: 10px; padding-left: 10px;"></div>
                       <div class="options-toggle-dropdown">
                         <ul>
-                          <li><a href="#">Launch Control Panel</a></li>
-                          <li><a href="#">View Invoices</a></li>
+                          <li><a :href="'/overview/' + order.orderid">Launch Control Panel </a></li>
+                          <li><a href="/balance">View Invoices </a></li>
                         </ul>
                       </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="server-list-item">
-                  <div class="server-list-item-wrapper">
-                    <div class="image-wrapper">
-                      <img
-                        class="dark-img-filter"
-                        src="assets/img/cloud-connection.png"
-                        alt=""
-                      />
-                    </div>
-                    <div class="list-item-detail">
-                      <h2 class="list-name">192.178.12.14</h2>
-                      <h3 class="detail">Created at 2023-13-03</h3>
-                    </div>
-
-                    <div class="server-list-options">
-                      <button class="active-badge">
-                        <span class="active-dot"></span>Active
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="server-list-item">
-                  <div class="server-list-item-wrapper">
-                    <div class="image-wrapper">
-                      <img src="assets/img/flag-nl.png" alt="" />
-                    </div>
-                    <div class="list-item-detail">
-                      <h2 class="list-name">Netherlands</h2>
-                      <h3 class="detail">1x Intel E5-2697v3 (14C, 28T)</h3>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="col-12 col-lg-4 col-md-6 col-sm-12">
-              <div class="card-item p-4 mb-4">
-                <div class="server-list-item">
-                  <div class="server-list-item-wrapper">
-                    <div class="image-wrapper">
-                      <img src="assets/img/windows-logo.png" alt="" />
-                    </div>
-                    <div class="list-item-detail">
-                      <h2 class="list-name">UdodovVPS</h2>
-                      <h3 class="detail">Windows RDP 2019</h3>
-                    </div>
-                    <div class="server-list-options">
-                      <div class="options-toggle"></div>
-                      <div class="options-toggle-dropdown">
-                        <ul>
-                          <li><a href="#">Launch Control Panel</a></li>
-                          <li><a href="#">View Invoices</a></li>
-                        </ul>
-                      </div>
-                    </div>
+              <div v-if="state === 'Active'" class="server-list-item">
+                <div class="server-list-item-wrapper">
+                  <div class="image-wrapper">
+                    <img class="dark-img-filter" src="assets/img/cloud-connection.png" alt="">
                   </div>
-                </div>
-
-                <div class="server-list-item">
-                  <div class="server-list-item-wrapper">
-                    <div class="image-wrapper">
-                      <img
-                        class="dark-img-filter"
-                        src="assets/img/cloud-connection.png"
-                        alt=""
-                      />
-                    </div>
-                    <div class="list-item-detail">
-                      <h2 class="list-name">192.178.12.14</h2>
-                      <h3 class="detail">Created at 2023-13-03</h3>
-                    </div>
-
-                    <div class="server-list-options">
-                      <button class="active-badge">
-                        <span class="active-dot"></span>Active
-                      </button>
-                    </div>
+                  <div class="list-item-detail">
+                    <h2 class="list-name">{{ order.dedicatedip }}</h2>
+                    <h3 class="detail">Created_at  {{ order.regdate }}</h3>
+                    <h3 class="detail" style="margin-top:5px;">Due date at  &nbsp;{{ order.nextduedate }}</h3>
                   </div>
-                </div>
-
-                <div class="server-list-item">
-                  <div class="server-list-item-wrapper">
-                    <div class="image-wrapper">
-                      <img src="assets/img/flag-nl.png" alt="" />
-                    </div>
-                    <div class="list-item-detail">
-                      <h2 class="list-name">Netherlands</h2>
-                      <h3 class="detail">1x Intel E5-2697v3 (14C, 28T)</h3>
-                    </div>
+                  <div v-if="state === 'Active'" class="server-list-options">
+                    <button class="active-badge"><span class="active-dot"></span>Active</button>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="col-12 col-lg-4 col-md-6 col-sm-12">
-              <div class="card-item p-4 mb-4">
-                <div class="server-list-item">
-                  <div class="server-list-item-wrapper">
-                    <div class="image-wrapper">
-                      <img src="assets/img/windows-logo.png" alt="" />
-                    </div>
-                    <div class="list-item-detail">
-                      <h2 class="list-name">UdodovVPS</h2>
-                      <h3 class="detail">Windows RDP 2019</h3>
-                    </div>
-                    <div class="server-list-options">
-                      <div class="options-toggle"></div>
-                      <div class="options-toggle-dropdown">
-                        <ul>
-                          <li><a href="#">Launch Control Panel</a></li>
-                          <li><a href="#">View Invoices</a></li>
-                        </ul>
-                      </div>
-                    </div>
+              <div class="server-list-item">
+                <div class="server-list-item-wrapper">
+                  <div class="image-wrapper">
+                    <img :src="'assets/img/' + order.flag + '.png'" alt="">
                   </div>
-                </div>
-
-                <div class="server-list-item">
-                  <div class="server-list-item-wrapper">
-                    <div class="image-wrapper">
-                      <img
-                        class="dark-img-filter"
-                        src="assets/img/cloud-connection.png"
-                        alt=""
-                      />
-                    </div>
-                    <div class="list-item-detail">
-                      <h2 class="list-name">192.178.12.14</h2>
-                      <h3 class="detail">Created at 2023-13-03</h3>
-                    </div>
-
-                    <div class="server-list-options">
-                      <button class="active-badge">
-                        <span class="active-dot"></span>Active
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="server-list-item">
-                  <div class="server-list-item-wrapper">
-                    <div class="image-wrapper">
-                      <img src="assets/img/flag-nl.png" alt="" />
-                    </div>
-                    <div class="list-item-detail">
-                      <h2 class="list-name">Netherlands</h2>
-                      <h3 class="detail">1x Intel E5-2697v3 (14C, 28T)</h3>
-                    </div>
+                  <div class="list-item-detail">
+                    <h2 class="list-name">{{ order.groupname }}</h2>
+                    <h3 class="detail">Hostname : {{ order.domain }}</h3>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-
-        <div
-          class="tab-pane fade"
-          id="pills-profile"
-          role="tabpanel"
-          aria-labelledby="pills-profile-tab"
-        >
-          <div class="row mb-5">
-            <div class="col-12 col-lg-4 col-md-6 col-sm-12">
-              <div class="card-item p-4 mb-4">
-                <div class="server-list-item">
-                  <div class="server-list-item-wrapper">
-                    <div class="image-wrapper">
-                      <img src="assets/img/windows-logo.png" alt="" />
-                    </div>
-                    <div class="list-item-detail">
-                      <h2 class="list-name">UdodovVPS</h2>
-                      <h3 class="detail">Windows RDP 2019</h3>
-                    </div>
-                    <div class="server-list-options">
-                      <div class="options-toggle"></div>
-                      <div class="options-toggle-dropdown">
-                        <ul>
-                          <li><a href="#">Launch Control Panel</a></li>
-                          <li><a href="#">View Invoices</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="server-list-item">
-                  <div class="server-list-item-wrapper">
-                    <div class="image-wrapper">
-                      <img
-                        class="dark-img-filter"
-                        src="assets/img/cloud-connection.png"
-                        alt=""
-                      />
-                    </div>
-                    <div class="list-item-detail">
-                      <h2 class="list-name">192.178.12.14</h2>
-                      <h3 class="detail">Created at 2023-13-03</h3>
-                    </div>
-
-                    <div class="server-list-options">
-                      <button class="active-badge">
-                        <span class="active-dot"></span>Active
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="server-list-item">
-                  <div class="server-list-item-wrapper">
-                    <div class="image-wrapper">
-                      <img src="assets/img/flag-nl.png" alt="" />
-                    </div>
-                    <div class="list-item-detail">
-                      <h2 class="list-name">Netherlands</h2>
-                      <h3 class="detail">1x Intel E5-2697v3 (14C, 28T)</h3>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div v-if="state === 'Active' && (!state_order?.[state] || state_order?.[state]?.length === 0)">
+            <h5 style="margin-top: 20px; text-align: center;">No Active Product </h5>
           </div>
         </div>
+      </div>
+    
+  
+
+
+
       </div>
     </div>
   </div>
@@ -347,7 +120,42 @@
 
 <script setup>
 import { computed, onMounted, ref, onBeforeUnmount } from "vue";
+
+import { useStore } from 'vuex';
+import { commonApis } from '@/apis/commonApis';
+import { showLoader } from '@/plugins/loading.js';
+// toast
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
+const $toast = useToast();
 const sortBy = ref(false);
+const store = useStore();
+const user = computed(() => store.state.auth.user)
+const commonApi = commonApis()
+const servers = ref([]);
+const states = ref([]);
+const state_order = ref([]);
+const params = ref(
+	{'client_id': user.value.client_id , orderby:'', order:''}
+)
+const getServersData = ()=>{
+		showLoader(true);
+		commonApi.runGetApi('/servers' , params.value).then((res)=>{
+		showLoader(false);
+		sortBy.value = false;
+		console.log(res.data)
+		servers.value = res.data.products;
+		states.value = res.data.states;
+		state_order.value = res.data.state_order;
+	
+   
+	}).catch((e)=>{
+	console.log(e)
+
+	})
+}
+
+getServersData()
 </script>
 
 <style scoped>

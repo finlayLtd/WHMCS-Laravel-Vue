@@ -94,6 +94,9 @@
 
 <script setup>
 import useAuth from "@/composables/auth";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
+const $toast = useToast();
 
 const { loginForm, validationErrors, processing, submitLogin } = useAuth();
 </script>

@@ -43,5 +43,6 @@
     "servers_nav" : "Servers",
     "invoices_nav" : "Invoices",
     "support_tickets_nav" : "Support Tickets",
-    "logout_nav" : "Sign out"
+    "logout_nav" : "Sign out",
+    "Switch Account" : "Switch Account"
 }

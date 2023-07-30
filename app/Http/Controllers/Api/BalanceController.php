@@ -27,7 +27,7 @@ class BalanceController extends Controller
         // $oslist = $this->getOSlist();
         $orderby = 'date';
         $order = 'desc';
-        $perPage = 100;
+        $perPage = 300;
 
         $totalresults = 0;
         $startnumber = 0;

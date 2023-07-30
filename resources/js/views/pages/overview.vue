@@ -5,15 +5,41 @@
         class="d-flex flex-column justify-content-start align-items-start title-button-wrapper"
       >
         <div class="overview-header">
-          <img src="/assets/img/ubuntu-overview.png" alt="" />
-          <h2 class="title mb-0">Papa-efyu-01.evoxt.com</h2>
+          <img
+            class="not-filterable"
+            :src="'/assets/img/' + sys_logo + '-logo.png'"
+            alt=""
+            v-if="sys_logo"
+          />
+          <h2 class="title mb-0" v-if="order_product_info">
+            {{ order_product_info.domain }}
+          </h2>
         </div>
         <div class="overview-info">
-          <span>Created 8 days ago</span>
+          <span v-if="dayDiff > 0">Created {{ dayDiff }} days ago</span>
+          <span v-else>Created today</span>
+          <div
+            class="alert alert-warning mt-2"
+            id="alertUnpaidInvoice"
+            v-if="invoiceInfo && invoiceInfo.status == 'Unpaid'"
+          >
+            You have an unpaid invoice. Pay it now to avoid interruption in
+            service.
+            <a
+              style="color: blue; cursor: pointer"
+              @click="openInvoiceWindow(invoiceInfo.invoiceid)"
+              target="_blank"
+              >Pay Invoice</a
+            >
+          </div>
         </div>
       </div>
 
-      <div class="sub-section server-list-tab">
+      <!-- if status is ative -->
+      <div
+        class="sub-section server-list-tab"
+        v-if="status && status == 'Active'"
+      >
         <div class="row justify-content-between align-items-center">
           <div class="row mb-5 pe-0 overview-cols">
             <div class="col-xl-4 col-lg-6 col-md-6 mb-4 mb-md-0">
@@ -24,61 +50,48 @@
                   </div>
                   <div class="due-date-info">
                     <h2 class="due-date-title">Due Date</h2>
-                    <span>2023-17-05</span>
+                    <span v-if="order_product_info">{{
+                       order_product_info.nextduedate 
+                    }}</span>
                   </div>
-                </div>
-                <div
-                  class="overview-button-wrapper d-flex justify-content-between"
-                >
-                  <button class="btn-dark hover-dark-light">Update VM</button>
-                  <button class="btn-red">Request for cancellation</button>
                 </div>
               </div>
             </div>
 
             <div class="col-xl-4 col-lg-6 col-md-6 mb-4 mb-md-0">
               <div class="card-item info-table">
-                <table>
+                <table v-if="order_product_info">
                   <tbody>
                     <tr>
                       <td>Public IPv4</td>
-                      <td class="clipboard-input" data-copy="147.189.161.205">
-                        147.189.161.205
+                      <td class="clipboard-input">
+                        {{ order_product_info.dedicatedip }}
                       </td>
                       <td>
-                        <img src="/assets/img/copy.svg" class="icon-clipboard" />
-                      </td>
-                    </tr>
-
-                    <tr>
-                      <td>Public IPv6</td>
-                      <td class="clipboard-input" data-copy="147.189.161.205">
-                        147.189.161.205
-                      </td>
-                      <td>
-                        <img src="/assets/img/copy.svg" class="icon-clipboard" />
-                      </td>
-                    </tr>
-
-                    <tr>
-                      <td>Private IPv4</td>
-                      <td class="privatev4">
-                        <span
-                          class="clipboard-input"
-                          data-copy="2400:8d60:0002:0000:0000:0001:37b5:388b"
-                          >2400:8d60:0002:0000:0000:0001:37b5:388b</span
-                        >
-                      </td>
-                      <td>
-                        <img src="/assets/img/copy.svg" class="icon-clipboard" />
+                        <img
+                          src="/assets/img/copy.svg"
+                          class="icon-clipboard"
+                          @click="
+                            copyToClipboard(order_product_info.dedicatedip)
+                          "
+                        />
                       </td>
                     </tr>
 
                     <tr>
                       <td>Username</td>
-                      <td class="clipboard-input" data-copy="root">root</td>
+                      <td class="clipboard-input" v-if="sys_logo == 'windows'">
+                        Administrator
+                      </td>
+                      <td class="clipboard-input" v-else>
+                        root
+                      </td>
                       <td>
-                        <img src="/assets/img/copy.svg" class="icon-clipboard" />
+                        <img
+                          src="/assets/img/copy.svg"
+                          class="icon-clipboard"
+                          @click="copyToClipboard(order_product_info.username)"
+                        />
                       </td>
                     </tr>
 
@@ -87,23 +100,30 @@
                       <td>
                         <input
                           class="clipboard-input"
-                          data-copy="12345678"
                           disabled
-                          type="password"
-                          value="12345678"
+                          :type="(show1)?'text':'password'"
+                          :value="order_product_info.password"
                         />
                       </td>
                       <td>
                         <img
-                          src="/assets/img/eye.svg"
-                          class="icon-password eye-closed"
-                        /><img
                           src="/assets/img/eye-open.svg"
                           class="icon-password eye-open"
-                          style="display: none"
-                        /><img
+                          v-if="show1"
+                          @click="show1 = !show1"
+                          
+                        />
+                        <img
+                          src="/assets/img/eye.svg"
+                          class="icon-password eye-closed"
+                          v-else
+                          @click="show1 = !show1"
+                        />
+                        
+                        <img
                           src="/assets/img/copy.svg"
                           class="icon-clipboard"
+                          @click="copyToClipboard(order_product_info.password)"
                         />
                       </td>
                     </tr>
@@ -115,16 +135,16 @@
             <div class="col-xl-4 col-lg-6 col-md-6 mb-4 mb-md-0">
               <div class="card-item info-table">
                 <table>
-                  <tbody>
+                  <tbody v-if="detail_info">
                     <tr>
                       <td><img src="/assets/img/cpu.png" alt="" />CPU</td>
-                      <td>12vCore</td>
+                      <td>{{ detail_info[0] }}</td>
                       <td></td>
                     </tr>
 
                     <tr>
                       <td><img src="/assets/img/ram.png" alt="" />Ram</td>
-                      <td>512 MB</td>
+                      <td>{{ detail_info[1] }}</td>
                       <td></td>
                     </tr>
 
@@ -132,30 +152,8 @@
                       <td>
                         <img src="/assets/img/hard-disk.png" alt="" />Storage
                       </td>
-                      <td>5 GB</td>
+                      <td>{{ detail_info[2] }}</td>
                       <td></td>
-                    </tr>
-
-                    <tr>
-                      <td>
-                        <img src="/assets/img/speedometer.png" alt="" />
-                        Bandwidth
-                      </td>
-                      <td>1500 GB</td>
-                      <td>
-                        <img src="/assets/img/info.svg" class="icon-clipboard" />
-                      </td>
-                    </tr>
-
-                    <tr>
-                      <td>
-                        <img src="/assets/img/simcard-2.png" alt="" /> Backup
-                        Plan
-                      </td>
-                      <td>Free</td>
-                      <td>
-                        <img src="/assets/img/info.svg" class="icon-password" />
-                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -165,7 +163,7 @@
         </div>
       </div>
 
-      <div class="sub-section overview-tab">
+      <div class="sub-section overview-tab" v-if="status == 'Active'">
         <div class="row justify-content-between align-items-center">
           <div class="row mb-2 mb-lg-5 pe-0">
             <div class="col-md-12 d-flex justify-content-start pe-0 flex-wrap">
@@ -173,6 +171,7 @@
                 class="nav nav-pills mb-3 mb-md-0 order-1 order-md-2 mb-lg-0 flex-nowrap"
                 id="pills-tab"
                 role="tablist"
+                v-if="order_product_info"
               >
                 <li class="nav-item" role="presentation">
                   <button
@@ -188,7 +187,11 @@
                     Overview
                   </button>
                 </li>
-                <li class="nav-item" role="presentation">
+                <li
+                  class="nav-item"
+                  role="presentation"
+                  v-if="order_product_info.status == 'Active'"
+                >
                   <button
                     class="nav-link"
                     id="pills-analytics-tab"
@@ -202,7 +205,11 @@
                     Analytics
                   </button>
                 </li>
-                <li class="nav-item" role="presentation">
+                <li
+                  class="nav-item"
+                  role="presentation"
+                  v-if="order_product_info.status == 'Active'"
+                >
                   <button
                     class="nav-link"
                     id="pills-connect-tab"
@@ -217,7 +224,11 @@
                   </button>
                 </li>
 
-                <li class="nav-item" role="presentation">
+                <li
+                  class="nav-item"
+                  role="presentation"
+                  v-if="order_product_info.status == 'Active'"
+                >
                   <button
                     class="nav-link"
                     id="pills-reinstall-tab"
@@ -232,49 +243,11 @@
                   </button>
                 </li>
 
-                <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link"
-                    id="pills-clone-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-clone"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-clone"
-                    aria-selected="false"
-                  >
-                    Clone
-                  </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link"
-                    id="pills-firewall-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-firewall"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-firewall"
-                    aria-selected="false"
-                  >
-                    Firewall
-                  </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link"
-                    id="pills-backup-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-backup"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-backup"
-                    aria-selected="false"
-                  >
-                    Backup
-                  </button>
-                </li>
-                <li class="nav-item" role="presentation">
+                <li
+                  class="nav-item"
+                  role="presentation"
+                  v-if="order_product_info.status == 'Active'"
+                >
                   <button
                     class="nav-link"
                     id="pills-management-tab"
@@ -288,7 +261,12 @@
                     IP Address Management
                   </button>
                 </li>
-                <li class="nav-item" role="presentation">
+
+                <li
+                  class="nav-item"
+                  role="presentation"
+                  v-if="order_product_info.status == 'Active'"
+                >
                   <button
                     class="nav-link"
                     id="pills-vnc-tab"
@@ -302,7 +280,31 @@
                     VNC
                   </button>
                 </li>
-                <li class="nav-item" role="presentation">
+
+                <li
+                  class="nav-item"
+                  role="presentation"
+                  v-if="order_product_info.status == 'Active'"
+                >
+                  <button
+                    class="nav-link"
+                    id="pills-dns-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#pills-dns"
+                    type="button"
+                    role="tab"
+                    aria-controls="pills-dns"
+                    aria-selected="false"
+                  >
+                    ReverseDNS
+                  </button>
+                </li>
+
+                <li
+                  class="nav-item"
+                  role="presentation"
+                  v-if="order_product_info.status == 'Active'"
+                >
                   <button
                     class="nav-link"
                     id="pills-billing-tab"
@@ -316,21 +318,12 @@
                     Billing
                   </button>
                 </li>
-                <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link"
-                    id="pills-upgrade-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-upgrade"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-upgrade"
-                    aria-selected="false"
-                  >
-                    Upgrade
-                  </button>
-                </li>
-                <li class="nav-item" role="presentation">
+
+                <li
+                  class="nav-item"
+                  role="presentation"
+                  v-if="order_product_info.status == 'Active'"
+                >
                   <button
                     class="nav-link"
                     id="pills-settings-tab"
@@ -371,14 +364,16 @@
                         <div class="img-wrapper">
                           <img
                             class="not-filterable"
-                            src="/assets/img/flag-nl.png"
+                            :src="'/assets/img/' + flag + '.png'"
                             alt=""
                           />
                         </div>
                         <div class="info">
-                          <h4 class="title2">Netherlands, Amsterdam</h4>
+                          <h4 class="title2">
+                            {{ order_product_info.groupname }}
+                          </h4>
                           <p class="description2">
-                            1x Intel E5-2697v3 (14C, 28T)
+                            {{ order_product_info.domain }}
                           </p>
                         </div>
                       </div>
@@ -388,16 +383,16 @@
                         <div class="img-wrapper">
                           <img
                             class="not-filterable"
-                            src="/assets/img/windows-logo.png"
+                            :src="'/assets/img/' + sys_logo + '-logo.png'"
                             alt=""
                           />
                         </div>
                         <div class="info">
-                          <h4 class="title2">Papa-efyu-01.evoxt.com</h4>
-                          <p class="description2">Windows RDP 2019</p>
+                          <h4 class="title2">{{ order_product_info.name }}</h4>
+                          <p class="description2">{{ system }}</p>
                         </div>
 
-                        <div class="server-list-options me-3 me-lg-4">
+                        <!-- <div class="server-list-options me-3 me-lg-4">
                           <div class="options-toggle"></div>
                           <div class="options-toggle-dropdown">
                             <ul>
@@ -405,7 +400,7 @@
                               <li><a href="#">View Invoices</a></li>
                             </ul>
                           </div>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                     <div class="col-12 col-lg-4 col-md-12">
@@ -418,11 +413,17 @@
                           />
                         </div>
                         <div class="info">
-                          <h4 class="title2">192.178.12.14</h4>
-                          <p class="description2">Created at 2023-13-03</p>
+                          <h4 class="title2">
+                            {{ order_product_info.dedicatedip }}
+                          </h4>
+                          <p class="description2">
+                            Created at {{ order_product_info.regdate }}
+                          </p>
                         </div>
-
-                        <div class="server-list-options me-3 me-lg-4">
+                        <div
+                          class="server-list-options me-3 me-lg-4"
+                          v-if="order_product_info.status == 'Active'"
+                        >
                           <button class="active-badge">
                             <span class="active-dot"></span>Active
                           </button>
@@ -430,27 +431,37 @@
                       </div>
                     </div>
                   </div>
+
                   <div
                     class="d-flex justify-content-end px-0 server-btn-options"
+                    v-if="order_product_info.status == 'Active'"
                   >
-                    <button class="btn img-btn me-0 me-lg-2">
+                    <button
+                      class="btn img-btn me-0 me-lg-2"
+                      @click="TurnOnVPS(vpsid)"
+                    >
+                      <i class="fa fa-play" style="color: #3fbb27"></i
+                      >&nbsp;&nbsp;Start
+                    </button>
+                    <button
+                      class="btn img-btn me-0 me-lg-2"
+                      @click="TurnOffVPS(vpsid)"
+                    >
                       <img src="/assets/img/power.svg" alt="" />Shutdown
                     </button>
-                    <button class="btn img-btn me-0 me-lg-2">
-                      <img src="/assets/img/reboot.svg" alt="" />Reboot
+                    <!-- <button class="btn img-btn me-0 me-lg-2" onclick="RebootVPS({{ $vpsid }})">
+                      <img src="/assets/img/reboot.svg" alt="">Reboot
                     </button>
-                    <button class="btn img-btn mt-2 mt-lg-0">
-                      <img
-                        class="dark-img-filter"
-                        src="/assets/img/power-off.svg"
-                        alt=""
-                      />Power Off
-                    </button>
+                    <button class="btn img-btn mt-2 mt-lg-0" onclick="PowerOffVPS({{ $vpsid }})">
+                      <img class="dark-img-filter" src="/assets/img/power-off.svg" alt="">Power Off
+                    </button> -->
                   </div>
                 </div>
               </div>
-
-              <div class="tab-inner">
+              <div
+                class="tab-inner"
+                v-if="order_product_info.status == 'Active'"
+              >
                 <div class="row">
                   <h3 class="title fs-17">Resource Usage</h3>
                 </div>
@@ -458,7 +469,7 @@
                   <div
                     class="general-info bg-white overview-col5 d-flex w-100 mb-4"
                   >
-                    <div class="col-md-3 col-sm-12">
+                    <div class="col-md-4 col-sm-12">
                       <div class="col-content-wrapper sm-border-bottom">
                         <div class="img-wrapper">
                           <img src="/assets/img/cpu.png" alt="" />
@@ -466,12 +477,13 @@
                         <div class="info">
                           <h4 class="title2">CPU</h4>
                           <p class="description2">
-                            <span>5.05%</span> of 1 CPU
+                            <span>{{ cpu.percent }}%</span> of
+                            {{ detail_info[0] }} CPU
                           </p>
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-3 col-sm-12">
+                    <div class="col-md-4 col-sm-12">
                       <div class="col-content-wrapper sm-border-bottom">
                         <div class="img-wrapper">
                           <img src="/assets/img/ram.png" alt="" />
@@ -479,85 +491,54 @@
                         <div class="info">
                           <h4 class="title2">RAM</h4>
                           <p class="description2">
-                            <span>81.85%</span> of 512 MB
+                            <span v-if="vps_info && vpsid && vps_info.vps_data">
+                              <!-- {{number_format(($vps_info['vps_data'][$vpsid]['used_ram']/$vps_info['vps_data'][$vpsid]['ram'])*100, 2)}} -->
+                              {{
+                                (
+                                  (vps_info.vps_data[vpsid].used_ram /
+                                    vps_info.vps_data[vpsid].ram) *
+                                  100
+                                ).toFixed(2)
+                              }}
+                              %
+                            </span>
+                            of {{ detail_info[1] }}
                           </p>
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-3 col-sm-12">
+                    <div class="col-md-4 col-sm-12">
                       <div class="col-content-wrapper sm-border-bottom">
                         <div class="img-wrapper">
                           <img src="/assets/img/hard-disk.png" alt="" />
                         </div>
                         <div class="info">
                           <h4 class="title2">Storage</h4>
-                          <p class="description2"><span>45%</span> of 5 GB</p>
+                          <p class="description2" v-if="vps_info">
+                            <span>
+                              <!-- {{number_format($vps_info['vps_data'][$vpsid]['used_disk'], 2)}}  -->
+                              {{
+                                vps_info.vps_data[vpsid].used_disk.toFixed(2)
+                              }}
+                              %
+                            </span>
+                            of
+                            {{ vps_info.vps_data[vpsid].disk }}
+                            GB
+                          </p>
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-3 col-sm-12">
+                    <div class="col-md-4 col-sm-12">
                       <div class="col-content-wrapper sm-border-bottom">
                         <div class="img-wrapper">
                           <img src="/assets/img/speedometer.png" alt="" />
                         </div>
                         <div class="info">
                           <h4 class="title2">Network Speed</h4>
-                          <p class="description2">
-                            <span>0.1</span> Mbps of 1 Gbps
+                          <p class="description2" v-if="vps_info">
+                            <span>{{ vps_info.vps_data[vpsid].used_bandwidth.toFixed(2) }}</span> Mbps
                           </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-3 col-sm-12">
-                      <div class="col-content-wrapper">
-                        <div class="img-wrapper">
-                          <img src="/assets/img/cable.png" alt="" />
-                        </div>
-                        <div class="info">
-                          <h4 class="title2">Bandwith</h4>
-                          <p class="description2"><span>1%</span> of 500 GB</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="divider"></div>
-                <div class="row pt-4">
-                  <h3 class="title fs-17">Networking</h3>
-                </div>
-                <div class="row px-12 pt-3">
-                  <div
-                    class="general-info bg-white overview-col2 d-flex w-100 mb-4"
-                  >
-                    <div class="col-md-6">
-                      <div class="col-content-wrapper">
-                        <div class="img-wrapper">
-                          <img src="/assets/img/cloud-connection.png" alt="" />
-                        </div>
-                        <div class="info">
-                          <h4 class="title2">
-                            Public Network
-                            <span class="text-color-light">|</span> Ethernet 0
-                          </h4>
-                          <p class="description2">147.189.161.205</p>
-                          <p class="description2" style="word-break: break-all">
-                            2400:8d60:0002:0000:0000:0001:37b5:388b
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="col-content-wrapper">
-                        <div class="img-wrapper">
-                          <img src="/assets/img/cloud-connection.png" alt="" />
-                        </div>
-                        <div class="info">
-                          <h4 class="title2">
-                            Public Network
-                            <span class="text-color-light">|</span> Ethernet 1
-                          </h4>
-                          <p class="description2">10.1.1.80</p>
                         </div>
                       </div>
                     </div>
@@ -566,50 +547,703 @@
               </div>
             </div>
 
+            <!-- display when only in active state -->
             <!--analytics-->
             <div
               class="tab-pane fade"
               id="pills-analytics"
               role="tabpanel"
               aria-labelledby="pills-analytics-tab"
+              v-if="order_product_info.status == 'Active'"
             >
-              <div class="tab-inner mb-3">
-                <div class="row">
-                  <h3 class="title">Analytics</h3>
-                  <p class="description mb-4">
-                    Detailed analytic charts on virtual machine usage
-                  </p>
+              <div class="row">
+                <div id="cpu-container" class="col-md-6 col-sm-12">
+                  <Chart
+                    :data="{
+                      chart: {
+                        type: 'area',
+                        backgroundColor: chart_color,
+                      },
+                      title: {
+                        text: 'CPU Usage',
+                        align: 'left',
+                        style: {
+                          color: revertColor(chart_color),
+                        },
+                      },
+                      // chart options
+                      tooltip: {
+                        formatter: function () {
+                          return (
+                            'Time: ' +
+                            Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+                            '<br/>' +
+                            'CPU Usage rate: ' +
+                            this.y +
+                            '%'
+                          );
+                        },
+                      },
+                      xAxis: {
+                        type: 'datetime',
+                        labels: {
+                          style: {
+                            color: revertColor(chart_color),
+                          },
+                        },
+                      },
+                      yAxis: {
+                        title: {
+                          text: 'CPU Usage rate',
+                        },
+                        labels: {
+                          style: {
+                            color: revertColor(chart_color),
+                          },
+                        },
+                      },
+                      legend: {
+                        enabled: false,
+                      },
+                      plotOptions: {
+                        area: {
+                          fillColor: {
+                            linearGradient: {
+                              x1: 0,
+                              y1: 0,
+                              x2: 0,
+                              y2: 1,
+                            },
+                            stops: [
+                              [0, Highcharts.getOptions().colors[0]],
+                              [
+                                1,
+                                Highcharts.color(
+                                  Highcharts.getOptions().colors[0]
+                                )
+                                  .setOpacity(0)
+                                  .get('rgba'),
+                              ],
+                            ],
+                          },
+                          marker: {
+                            radius: 2,
+                          },
+                          lineWidth: 1,
+                          states: {
+                            hover: {
+                              lineWidth: 1,
+                            },
+                          },
+                          threshold: null,
+                        },
+                      },
+
+                      series: [
+                        {
+                          name: 'CPU',
+                          data: cpu_data_state.map(([date, value]) => [
+                            new Date(date).getTime(),
+                            value,
+                          ]),
+                        },
+                      ],
+                    }"
+                    v-if="cpu_data_state"
+                  >
+                  </Chart>
                 </div>
-                <div class="divider"></div>
-                <div class="row px-0 pt-4">
-                  <div class="col-md-6">
-                    <div class="col-content-wrapper">
-                      <img
-                        class="dark-img-filter"
-                        src="/assets/img/cart1.png"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="col-content-wrapper">
-                      <img
-                        class="dark-img-filter"
-                        src="/assets/img/cart2.png"
-                        alt=""
-                      />
-                    </div>
-                  </div>
+                <div id="ram-container" class="col-md-6 col-sm-12">
+                  <Chart
+                    :data="{
+                      chart: {
+                        type: 'area',
+                        backgroundColor: chart_color,
+                      },
+                      title: {
+                        text: 'RAM Usage',
+                        align: 'left',
+                        style: {
+                          color: revertColor(chart_color),
+                        },
+                      },
+                      // chart options
+                      tooltip: {
+                        formatter: function () {
+                          return (
+                            'Time: ' +
+                            Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+                            '<br/>' +
+                            'RAM Usage rate: ' +
+                            this.y +
+                            'MB'
+                          );
+                        },
+                      },
+                      xAxis: {
+                        type: 'datetime',
+                        labels: {
+                          style: {
+                            color: revertColor(chart_color),
+                          },
+                        },
+                      },
+                      yAxis: {
+                        title: {
+                          text: 'RAM Usage rate',
+                        },
+                        labels: {
+                          style: {
+                            color: revertColor(chart_color),
+                          },
+                        },
+                      },
+                      legend: {
+                        enabled: false,
+                      },
+                      plotOptions: {
+                        area: {
+                          fillColor: {
+                            linearGradient: {
+                              x1: 0,
+                              y1: 0,
+                              x2: 0,
+                              y2: 1,
+                            },
+                            stops: [
+                              [0, Highcharts.getOptions().colors[0]],
+                              [
+                                1,
+                                Highcharts.color(
+                                  Highcharts.getOptions().colors[0]
+                                )
+                                  .setOpacity(0)
+                                  .get('rgba'),
+                              ],
+                            ],
+                          },
+                          marker: {
+                            radius: 2,
+                          },
+                          lineWidth: 1,
+                          states: {
+                            hover: {
+                              lineWidth: 1,
+                            },
+                          },
+                          threshold: null,
+                        },
+                      },
+
+                      series: [
+                        {
+                          name: 'RAM',
+                          data: ram_data_state.map(([date, value]) => [
+                            new Date(date).getTime(),
+                            value,
+                          ]),
+                        },
+                      ],
+                    }"
+                    v-if="ram_data_state"
+                  >
+                  </Chart>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div id="disk-container" class="col-md-6 col-sm-12">
+                  <Chart
+                    :data="{
+                      chart: {
+                        type: 'area',
+                        backgroundColor: chart_color,
+                      },
+                      title: {
+                        text: 'Disk Usage',
+                        align: 'left',
+                        style: {
+                          color: revertColor(chart_color),
+                        },
+                      },
+                      // chart options
+                      tooltip: {
+                        formatter: function () {
+                          return (
+                            'Time: ' +
+                            Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+                            '<br/>' +
+                            'Disk Usage rate: ' +
+                            this.y +
+                            'MB'
+                          );
+                        },
+                      },
+                      xAxis: {
+                        type: 'datetime',
+                        labels: {
+                          style: {
+                            color: revertColor(chart_color),
+                          },
+                        },
+                      },
+                      yAxis: {
+                        title: {
+                          text: 'Disk Usage rate',
+                        },
+                        labels: {
+                          style: {
+                            color: revertColor(chart_color),
+                          },
+                        },
+                      },
+                      legend: {
+                        enabled: false,
+                      },
+                      plotOptions: {
+                        area: {
+                          fillColor: {
+                            linearGradient: {
+                              x1: 0,
+                              y1: 0,
+                              x2: 0,
+                              y2: 1,
+                            },
+                            stops: [
+                              [0, Highcharts.getOptions().colors[0]],
+                              [
+                                1,
+                                Highcharts.color(
+                                  Highcharts.getOptions().colors[0]
+                                )
+                                  .setOpacity(0)
+                                  .get('rgba'),
+                              ],
+                            ],
+                          },
+                          marker: {
+                            radius: 2,
+                          },
+                          lineWidth: 1,
+                          states: {
+                            hover: {
+                              lineWidth: 1,
+                            },
+                          },
+                          threshold: null,
+                        },
+                      },
+
+                      series: [
+                        {
+                          name: 'Disk',
+                          data: disk_data_state.map(([date, value]) => [
+                            new Date(date).getTime(),
+                            value,
+                          ]),
+                        },
+                      ],
+                    }"
+                    v-if="disk_data_state"
+                  >
+                  </Chart>
+                </div>
+                <div id="inode-container" class="col-md-6 col-sm-12">
+                  <Chart
+                    :data="{
+                      chart: {
+                        type: 'area',
+                        backgroundColor: chart_color,
+                      },
+                      title: {
+                        text: 'Inode Information',
+                        align: 'left',
+                        style: {
+                          color: revertColor(chart_color),
+                        },
+                      },
+                      // chart options
+                      tooltip: {
+                        formatter: function () {
+                          return (
+                            'Time: ' +
+                            Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+                            '<br/>' +
+                            'Innode Usage rate: ' +
+                            this.y +
+                            'Blocks'
+                          );
+                        },
+                      },
+                      xAxis: {
+                        type: 'datetime',
+                        labels: {
+                          style: {
+                            color: revertColor(chart_color),
+                          },
+                        },
+                      },
+                      yAxis: {
+                        title: {
+                          text: 'Inode Usage rate',
+                        },
+                        labels: {
+                          style: {
+                            color: revertColor(chart_color),
+                          },
+                        },
+                      },
+                      legend: {
+                        enabled: false,
+                      },
+                      plotOptions: {
+                        area: {
+                          fillColor: {
+                            linearGradient: {
+                              x1: 0,
+                              y1: 0,
+                              x2: 0,
+                              y2: 1,
+                            },
+                            stops: [
+                              [0, Highcharts.getOptions().colors[0]],
+                              [
+                                1,
+                                Highcharts.color(
+                                  Highcharts.getOptions().colors[0]
+                                )
+                                  .setOpacity(0)
+                                  .get('rgba'),
+                              ],
+                            ],
+                          },
+                          marker: {
+                            radius: 2,
+                          },
+                          lineWidth: 1,
+                          states: {
+                            hover: {
+                              lineWidth: 1,
+                            },
+                          },
+                          threshold: null,
+                        },
+                      },
+
+                      series: [
+                        {
+                          name: 'Inode',
+                          data: inode_data_state.map(([date, value]) => [
+                            new Date(date).getTime(),
+                            value,
+                          ]),
+                        },
+                      ],
+                    }"
+                    v-if="inode_data_state"
+                  >
+                  </Chart>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div id="net-in-container" class="col-md-6 col-sm-12">
+                  <Chart
+                    :data="{
+                      chart: {
+                        type: 'area',
+                        backgroundColor: chart_color,
+                      },
+                      title: {
+                        text: 'Network Download Information',
+                        align: 'left',
+                        style: {
+                          color: revertColor(chart_color),
+                        },
+                      },
+                      // chart options
+                      tooltip: {
+                        formatter: function () {
+                          return (
+                            'Time: ' +
+                            Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+                            '<br/>' +
+                            'Download rate: ' +
+                            this.y +
+                            'MB'
+                          );
+                        },
+                      },
+                      xAxis: {
+                        type: 'datetime',
+                        labels: {
+                          style: {
+                            color: revertColor(chart_color),
+                          },
+                        },
+                      },
+                      yAxis: {
+                        title: {
+                          text: 'Network Download rate',
+                        },
+                        labels: {
+                          style: {
+                            color: revertColor(chart_color),
+                          },
+                        },
+                      },
+                      legend: {
+                        enabled: false,
+                      },
+                      plotOptions: {
+                        area: {
+                          fillColor: {
+                            linearGradient: {
+                              x1: 0,
+                              y1: 0,
+                              x2: 0,
+                              y2: 1,
+                            },
+                            stops: [
+                              [0, Highcharts.getOptions().colors[0]],
+                              [
+                                1,
+                                Highcharts.color(
+                                  Highcharts.getOptions().colors[0]
+                                )
+                                  .setOpacity(0)
+                                  .get('rgba'),
+                              ],
+                            ],
+                          },
+                          marker: {
+                            radius: 2,
+                          },
+                          lineWidth: 1,
+                          states: {
+                            hover: {
+                              lineWidth: 1,
+                            },
+                          },
+                          threshold: null,
+                        },
+                      },
+
+                      series: [
+                        {
+                          name: 'Network Download',
+                          data: net_in_data_state.map(([date, value]) => [
+                            new Date(date).getTime(),
+                            value,
+                          ]),
+                        },
+                      ],
+                    }"
+                    v-if="net_in_data_state"
+                  >
+                  </Chart>
+                </div>
+                <div id="net-out-container" class="col-md-6 col-sm-12">
+                  <Chart
+                    :data="{
+                      chart: {
+                        type: 'area',
+                        backgroundColor: chart_color,
+                      },
+                      title: {
+                        text: 'Network Upload Information',
+                        align: 'left',
+                        style: {
+                          color: revertColor(chart_color),
+                        },
+                      },
+                      // chart options
+                      tooltip: {
+                        formatter: function () {
+                          return (
+                            'Time: ' +
+                            Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+                            '<br/>' +
+                            'Upload rate: ' +
+                            this.y +
+                            'MB'
+                          );
+                        },
+                      },
+                      xAxis: {
+                        type: 'datetime',
+                        labels: {
+                          style: {
+                            color: revertColor(chart_color),
+                          },
+                        },
+                      },
+                      yAxis: {
+                        title: {
+                          text: 'Network Upload rate',
+                        },
+                        labels: {
+                          style: {
+                            color: revertColor(chart_color),
+                          },
+                        },
+                      },
+                      legend: {
+                        enabled: false,
+                      },
+                      plotOptions: {
+                        area: {
+                          fillColor: {
+                            linearGradient: {
+                              x1: 0,
+                              y1: 0,
+                              x2: 0,
+                              y2: 1,
+                            },
+                            stops: [
+                              [0, Highcharts.getOptions().colors[0]],
+                              [
+                                1,
+                                Highcharts.color(
+                                  Highcharts.getOptions().colors[0]
+                                )
+                                  .setOpacity(0)
+                                  .get('rgba'),
+                              ],
+                            ],
+                          },
+                          marker: {
+                            radius: 2,
+                          },
+                          lineWidth: 1,
+                          states: {
+                            hover: {
+                              lineWidth: 1,
+                            },
+                          },
+                          threshold: null,
+                        },
+                      },
+
+                      series: [
+                        {
+                          name: 'Network Upload',
+                          data: net_out_data_state.map(([date, value]) => [
+                            new Date(date).getTime(),
+                            value,
+                          ]),
+                        },
+                      ],
+                    }"
+                    v-if="net_out_data_state"
+                  >
+                  </Chart>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div id="net-total-container" class="col-md-6 col-sm-12">
+                  <Chart
+                    :data="{
+                      chart: {
+                        type: 'area',
+                        backgroundColor: chart_color,
+                      },
+                      title: {
+                        text: 'Network Information',
+                        align: 'left',
+                        style: {
+                          color: revertColor(chart_color),
+                        },
+                      },
+                      // chart options
+                      tooltip: {
+                        formatter: function () {
+                          return (
+                            'Time: ' +
+                            Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+                            '<br/>' +
+                            'Network Usage rate: ' +
+                            this.y +
+                            'MB'
+                          );
+                        },
+                      },
+                      xAxis: {
+                        type: 'datetime',
+                        labels: {
+                          style: {
+                            color: revertColor(chart_color),
+                          },
+                        },
+                      },
+                      yAxis: {
+                        title: {
+                          text: 'Network rate',
+                        },
+                        labels: {
+                          style: {
+                            color: revertColor(chart_color),
+                          },
+                        },
+                      },
+                      legend: {
+                        enabled: false,
+                      },
+                      plotOptions: {
+                        area: {
+                          fillColor: {
+                            linearGradient: {
+                              x1: 0,
+                              y1: 0,
+                              x2: 0,
+                              y2: 1,
+                            },
+                            stops: [
+                              [0, Highcharts.getOptions().colors[0]],
+                              [
+                                1,
+                                Highcharts.color(
+                                  Highcharts.getOptions().colors[0]
+                                )
+                                  .setOpacity(0)
+                                  .get('rgba'),
+                              ],
+                            ],
+                          },
+                          marker: {
+                            radius: 2,
+                          },
+                          lineWidth: 1,
+                          states: {
+                            hover: {
+                              lineWidth: 1,
+                            },
+                          },
+                          threshold: null,
+                        },
+                      },
+
+                      series: [
+                        {
+                          name: 'Network',
+                          data: net_total_data_state.map(([date, value]) => [
+                            new Date(date).getTime(),
+                            value,
+                          ]),
+                        },
+                      ],
+                    }"
+                    v-if="net_total_data_state"
+                  >
+                  </Chart>
                 </div>
               </div>
             </div>
-
             <!--connect-->
             <div
               class="tab-pane fade"
               id="pills-connect"
               role="tabpanel"
               aria-labelledby="pills-connect-tab"
+              v-if="order_product_info.status == 'Active'"
             >
               <div class="tab-inner mb-3">
                 <div class="row">
@@ -623,29 +1257,41 @@
                   <div
                     class="col-md-12 d-flex flex-column align-items-center text-center"
                   >
-                    <p class="fs-15">
-                      To connect to your Linux virtual machine using SSH, please
-                      use the following command.
-                    </p>
-
-                    <p class="fs-16">ssh root@147.189.161.205</p>
-
+                    <template v-if="system.indexOf('windows') == -1">
+                      <p class="fs-15">
+                        To connect to your Linux virtual machine using SSH,
+                        please use the following command.
+                      </p>
+                      <p class="fs-16">
+                        ssh root@{{ order_product_info.dedicatedip }}
+                      </p>
+                    </template>
+                    <template v-else>
+                      <p class="fs-15">
+                        To open Remote Desktop Connection app in Windows, please
+                        use the following command in cmd. And you can then enter
+                        the IP address or hostname of the remote computer in the
+                        Remote Desktop Connection client to establish a
+                        connection.
+                      </p>
+                      <p class="fs-15">mstsc</p>
+                    </template>
                     <p class="fs-14 mb-0 sub-detail" style="max-width: 500px">
                       You will most likely be using cmd if you are connecting
                       from Windows OS or Terminal if you are running macOS or
-                      Linux For more information, please visit this guide.
+                      Linux.
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-
             <!--reinstall-->
             <div
               class="tab-pane fade"
               id="pills-reinstall"
               role="tabpanel"
               aria-labelledby="pills-reinstall-tab"
+              v-if="order_product_info.status == 'Active'"
             >
               <div class="tab-inner mb-3">
                 <div class="row">
@@ -656,21 +1302,151 @@
                 </div>
                 <div class="divider"></div>
                 <div class="row px-0 pt-4">
-                  <div class="col-md-12 d-flex flex-column align-items-start">
-                    <p class="fs-13-5">
-                      Select an Operating System / Application to reinstall
-                    </p>
+                  <p class="fs-13-5">Select an Operating System</p>
+                  <div class="form-group d-flex">
+                    <select
+                      name="oslist"
+                      id="Operating-system"
+                      class="form-control"
+                      style="height: 40px !important; max-width: 300px"
+                      v-model="selected_os_id"
+                    >
+                      <!-- @foreach($oslists as $os)
+                          <option value="{{$os['osid']}}" data-image="/assets/img/'.$os['group_name'].'-logo.png">{{ __('messages.'.$os['name']) }}</option>
+                        @endforeach -->
+                      <option
+                        v-for="os in oslists"
+                        :key="os.osid"
+                        :value="os.osid"
+                      >
+                        <img
+                          :src="'/assets/img/' + os.group_name + '-logo.png'"
+                        />
+                        {{ os.name }}
+                      </option>
+                    </select>
 
-                    <div class="overview-select">
-                      <select name="" id="">
-                        <option value="">Debian 11</option>
-                        <option value="">Debian 12</option>
-                        <option value="">Debian 13</option>
-                      </select>
+                    <input
+                      id="format-disk"
+                      type="checkbox"
+                      class="format-disk"
+                      style="
+                        width: 20px;
+                        height: 20px;
+                        padding: 0;
+                        margin-top: 10px;
+                        margin-left: 20px;
+                      "
+                      v-model="format_disk"
+                    />
+                    <label for="format-disk" style="line-height: 40px"
+                      >&nbsp;Format Primary Disk Only</label
+                    >
+                  </div>
+
+                  <div
+                    id="newPassword1"
+                    class="form-group has-feedback has-success mt-3"
+                  >
+                    <label
+                      for="inputNewPassword1-os"
+                      class="col-sm-4 control-label"
+                      >New Password</label
+                    >
+                    <div class="col-sm-5" style="position: relative">
+                      <input
+                        :type="(show2)?'text':'password'"
+                        class="form-control"
+                        name="newpw"
+                        id="inputNewPassword1"
+                        v-model="newPassword1"
+                        autocomplete="off"
+                      />
+                      <img
+                        src="/assets/img/eye-open.svg"
+                        class="settings-password-img icon-password eye-open"
+                        v-if="show2"
+                      />
+                      <img
+                        src="/assets/img/eye.svg"
+                        class="settings-password-img icon-password eye-closed"
+                        v-else
+                      />
+                      <br />
+
+                      <div class="progress" id="passwordStrengthBar">
+                        <div
+                          class="progress-bar progress-bar-success"
+                          role="progressbar"
+                          aria-valuenow="0"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                          :style="'width: '+passwordStrength+'%'"
+                        >
+                          <span class="rating"
+                            >Password Rating: {{ passwordStrength }}%</span
+                          >
+                        </div>
+                      </div>
+
+                      <div class="alert alert-info">
+                        <strong>Tips for a good password</strong><br />Use both
+                        upper and lowercase characters<br />Include at least one
+                        symbol (only ! and @)<br />Don't use dictionary words
+                        and special characters
+                      </div>
                     </div>
-
-                    <div class="overview-button-wrapper">
-                      <button class="btn-dark px-4 hover-dark-light">
+                  </div>
+                  <div
+                    id="newPassword2"
+                    class="form-group has-feedback has-success"
+                  >
+                    <label
+                      for="inputNewPassword2"
+                      class="col-sm-4 control-label"
+                      >Confirm New Password</label
+                    >
+                    <div class="col-sm-5" style="position: relative">
+                      <input
+                        class="form-control"
+                        name="confirmpw"
+                        id="inputNewPassword2"
+                        v-model="newPassword2"
+                        autocomplete="off"
+                        :type="(show3)?'text':'password'"
+                      />
+                      <img
+                        src="/assets/img/eye-open.svg"
+                        class="settings-password-img icon-password eye-open"
+                        v-if="show3"
+                        @click="show3 = !show3"
+                      />
+                      <img
+                        src="/assets/img/eye.svg"
+                        class="settings-password-img icon-password eye-closed"
+                        @click="show3 = !show3"
+                        v-else
+                      />
+                      
+                      <div id="inputNewPassword2-os-Msg" v-if="newPassword1 != newPassword2 && newPassword1!=''">
+                        <p class="help-block" id="nonMatchingPasswordResult">The passwords entered do not match</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="overview-button-wrapper pt-0 mt-4">
+                    <div class="col-sm-5">
+                      <button
+                        id="submitButton"
+                        class="btn-dark px-4 me-2 hover-dark-light"
+                        @click="rebuildOS(vpsid)"
+                        :disabled="
+                          newPassword1 != newPassword2 ||
+                          newPassword1 == '' ||
+                          newPassword2 == '' ||
+                          selected_os_id == null ||
+                          passwordStrength < 80 
+                        "
+                      >
                         Reinstall
                       </button>
                     </div>
@@ -678,257 +1454,13 @@
                 </div>
               </div>
             </div>
-
-            <!--clone-->
-            <div
-              class="tab-pane fade"
-              id="pills-clone"
-              role="tabpanel"
-              aria-labelledby="pills-clone-tab"
-            >
-              <div class="tab-inner mb-3">
-                <div class="row">
-                  <h3 class="title">Clone VM</h3>
-                  <p class="description mb-4">
-                    Clone virtual machines, avoid the hassle of setting up the
-                    same thing.
-                  </p>
-                </div>
-                <div class="divider"></div>
-                <div class="row px-0 pt-4">
-                  <div class="col-md-12 d-flex flex-column align-items-start">
-                    <p class="fs-13-5">Virtual Machine to Clone</p>
-
-                    <div class="overview-select">
-                      <select name="" id="">
-                        <option value="">
-                          Service ID : 25896 | papa-efyu-01.evoxt.com
-                        </option>
-                        <option value="">
-                          Service ID : 25896 | papa-efyu-01.evoxt.com
-                        </option>
-                        <option value="">
-                          Service ID : 25896 | papa-efyu-01.evoxt.com
-                        </option>
-                      </select>
-                    </div>
-
-                    <p class="fs-13-5 mt-4 mb-2">New VM Label</p>
-                    <p class="fs-12">
-                      Set a name to identify the new servers from others
-                    </p>
-                    <div class="overview-input">
-                      <input type="text" placeholder="Virtual Machine Name" />
-                    </div>
-
-                    <p class="fs-13-5 mt-4 mb-2">Quantity</p>
-                    <p class="fs-12">Number of clones</p>
-                    <div class="overview-input">
-                      <input type="number" />
-                    </div>
-
-                    <p class="fs-13-5 mt-4 mb-2">Promo Code</p>
-                    <div class="overview-input">
-                      <input
-                        type="text"
-                        style="max-width: 200px"
-                        placeholder="Promocode"
-                      />
-                    </div>
-
-                    <div class="overview-button-wrapper">
-                      <button class="btn-dark px-4 hover-dark-light">
-                        Clone VM
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!--firewall-->
-            <div
-              class="tab-pane fade"
-              id="pills-firewall"
-              role="tabpanel"
-              aria-labelledby="pills-firewall-tab"
-            >
-              <div class="tab-inner mb-3">
-                <div class="row">
-                  <h3 class="title mb-4">Firewall</h3>
-                </div>
-                <div class="divider"></div>
-                <div class="row px-0 pt-4">
-                  <div
-                    class="col-md-12 d-flex flex-column flex-lg-row align-items-start"
-                  >
-                    <ul
-                      class="nav nav-pills mb-3 mb-md-0 mb-lg-0 d-flex flex-column inner-tab-pills"
-                      id="pills-tab"
-                      role="tablist"
-                    >
-                      <li class="nav-item mb-2" role="presentation">
-                        <button
-                          class="nav-link active"
-                          id="pills-ipv4-tab"
-                          data-bs-toggle="pill"
-                          data-bs-target="#pills-ipv4"
-                          type="button"
-                          role="tab"
-                          aria-controls="pills-ipv4"
-                          aria-selected="false"
-                        >
-                          IPv4
-                        </button>
-                      </li>
-                      <li class="nav-item" role="presentation">
-                        <button
-                          class="nav-link"
-                          id="pills-ipv6-tab"
-                          data-bs-toggle="pill"
-                          data-bs-target="#pills-ipv6"
-                          type="button"
-                          role="tab"
-                          aria-controls="pills-ipv6"
-                          aria-selected="false"
-                        >
-                          IPv6
-                        </button>
-                      </li>
-                    </ul>
-
-                    <div class="tab-content w-100" id="pills-tabContent">
-                      <!--ipv4-->
-                      <div
-                        class="tab-pane fade show active"
-                        id="pills-ipv4"
-                        role="tabpanel"
-                        aria-labelledby="pills-ipv4-tab"
-                      >
-                        <div class="tab-inner text-center">
-                          <p class="fs-15">
-                            Enable Firewall IPv4 to get started
-                          </p>
-                          <div class="overview-button-wrapper">
-                            <button class="btn-dark px-4 hover-dark-light">
-                              Enable Firewall IPv4
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                      <!--ipv6-->
-                      <div
-                        class="tab-pane fade"
-                        id="pills-ipv6"
-                        role="tabpanel"
-                        aria-labelledby="pills-ipv6-tab"
-                      >
-                        <div class="tab-inner text-center">
-                          <p class="fs-15">
-                            Enable Firewall IPv6 to get started
-                          </p>
-                          <div class="overview-button-wrapper">
-                            <button class="btn-dark px-4 hover-dark-light">
-                              Enable Firewall IPv6
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!--backup-->
-            <div
-              class="tab-pane fade"
-              id="pills-backup"
-              role="tabpanel"
-              aria-labelledby="pills-backup-tab"
-            >
-              <div class="tab-inner mb-3">
-                <div class="row">
-                  <h3 class="title">Backup</h3>
-                  <p class="description mb-4">Backup and Restore.</p>
-                </div>
-                <div class="divider"></div>
-                <div class="row px-2 pt-4">
-                  <div class="support-table v-align-middle p-0">
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th scope="col">File Name</th>
-                          <th scope="col">Backup Date (YYYY/MM/DD)</th>
-                          <th scope="col">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>21199_2023-04-24-16_51_48</td>
-                          <td class="date-cell">2023-13-03</td>
-                          <td>
-                            <div class="overview-button-wrapper pt-0">
-                              <button class="btn-dark hover-dark-light">
-                                Restore
-                              </button>
-                              <button
-                                class="btn-light bg-gray hover-light-dark"
-                              >
-                                Restore to new VM
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>21199_2023-04-24-16_51_48-3</td>
-                          <td class="date-cell">2023-13-03</td>
-                          <td>
-                            <div class="overview-button-wrapper pt-0">
-                              <button class="btn-dark hover-dark-light">
-                                Restore
-                              </button>
-                              <button
-                                class="btn-light bg-gray hover-light-dark"
-                              >
-                                Restore to new VM
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-
-              <div class="tab-inner">
-                <div class="row">
-                  <div class="text-center">
-                    <p class="fs-15 mb-0">
-                      Date time shown above are based on GMT+0
-                    </p>
-                    <div
-                      class="overview-button-wrapper d-flex flex-column align-items-center justify-content-center"
-                    >
-                      <button class="btn-dark px-4 mb-2 w-200">
-                        Enable Firewall IPv6
-                      </button>
-                      <button class="btn-light bg-gray w-200 px-4">
-                        Purchase Backup Plan
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <!--management-->
             <div
               class="tab-pane fade"
               id="pills-management"
               role="tabpanel"
               aria-labelledby="pills-management-tab"
+              v-if="order_product_info.status == 'Active'"
             >
               <div class="tab-inner management mb-3">
                 <div class="row">
@@ -942,41 +1474,6 @@
                   <div
                     class="col-md-12 d-flex flex-column flex-lg-row align-items-start"
                   >
-                    <ul
-                      class="nav nav-pills mb-3 mb-md-0 mb-lg-0 d-flex flex-column inner-tab-pills"
-                      id="pills-tab"
-                      role="tablist"
-                    >
-                      <li class="nav-item mb-2" role="presentation">
-                        <button
-                          class="nav-link active"
-                          id="pills-ipv4m-tab"
-                          data-bs-toggle="pill"
-                          data-bs-target="#pills-ipv4m"
-                          type="button"
-                          role="tab"
-                          aria-controls="pills-ipv4m"
-                          aria-selected="false"
-                        >
-                          Assign IPv4
-                        </button>
-                      </li>
-                      <li class="nav-item" role="presentation">
-                        <button
-                          class="nav-link"
-                          id="pills-ipv6m-tab"
-                          data-bs-toggle="pill"
-                          data-bs-target="#pills-ipv6m"
-                          type="button"
-                          role="tab"
-                          aria-controls="pills-ipv6m"
-                          aria-selected="false"
-                        >
-                          Swap IPv4
-                        </button>
-                      </li>
-                    </ul>
-
                     <div class="tab-content w-100" id="pills-tabContent">
                       <!--ipv4m-->
                       <div
@@ -995,14 +1492,31 @@
                             Assigned IP Address List
                           </p>
                           <div class="inner-table p-3">
-                            <table class="w-100 table-flex-col">
+                            <table class="w-100 table-flex-col" v-if="ip_list">
                               <tbody>
-                                <tr>
-                                  <td>147.189.161.205</td>
-                                  <td>Primary</td>
-                                  <td>
+                                <!-- @foreach($ip_list['ips'] as $ip)
+                                  @if($ip['primary'] == 1)
+                                    <tr>
+                                      <td>{{$ip['ip']}}</td>
+                                      <td>Primary</td>
+                                      <td>Main Server IP (Sticky) - Cannot be removed</td>
+                                    </tr>
+                                  @else
+                                    <tr>
+                                      <td>{{$ip['ip']}}</td>
+                                      <td></td>
+                                      <td></td>
+                                    </tr>
+                                  @endif
+                                @endforeach -->
+                                <tr v-for="ip in ip_list.ips" :key="ip.ip">
+                                  <td>{{ ip.ip }}</td>
+                                  <td v-if="ip.primary">Primary</td>
+                                  <td v-else></td>
+                                  <td v-if="ip.primary">
                                     Main Server IP (Sticky) - Cannot be removed
                                   </td>
+                                  <td v-else></td>
                                 </tr>
                               </tbody>
                             </table>
@@ -1010,21 +1524,37 @@
 
                           <div class="divider my-3"></div>
 
-                          <p class="fs-13-5">Assign IP to server</p>
+                          <p class="fs-13-5">Choose Primary IP</p>
 
                           <div class="overview-select d-inline-block mb-3">
-                            <select name="" id="">
-                              <option value="">papa-efyu-01.evoxt.com</option>
-                              <option value="">papa-efyu-01.evoxt.com</option>
-                              <option value="">papa-efyu-01.evoxt.com</option>
+                            <select
+                              name="iplist"
+                              id="primary-ip"
+                              v-model="selected_ip"
+                              v-if="ip_list"
+                            >
+                              <!-- @foreach($ip_list['ips'] as $ip)
+                                @if($ip['primary'] != 1)
+                                  <option value="{{$ip['ipid']}}">{{$ip['ip']}}</option>
+                                @endif
+                              @endforeach -->
+                              <template
+                                v-for="ip in ip_list.ips"
+                                :key="ip.ipid"
+                              >
+                                <option v-if="ip.primary != 1" :value="ip.ipid">
+                                  {{ ip.ip }}
+                                </option>
+                              </template>
                             </select>
                           </div>
 
                           <div class="overview-button-wrapper pt-0 d-flex">
-                            <button class="btn-dark px-4 me-2 hover-dark-light">
-                              Assign
-                            </button>
-                            <button class="btn-light bg-gray hover-light-dark">
+                            <button
+                              class="btn-dark px-4 me-2 hover-dark-light"
+                              @click="assignPrimaryIp(vpsid)"
+                              :disabled="selected_ip == '0.0.0.0'"
+                            >
                               Assign as Primary IP
                             </button>
                           </div>
@@ -1037,52 +1567,6 @@
                             to your account even after server termination unless
                             you cancel the extra IP address subscription.
                           </p>
-                          <a style="color: #0078d4" class="fs-14" href="#"
-                            >Click here to purchase Extra IP Address</a
-                          >
-                        </div>
-                      </div>
-                      <!--ipv6m-->
-                      <div
-                        class="tab-pane fade"
-                        id="pills-ipv6m"
-                        role="tabpanel"
-                        aria-labelledby="pills-ipv6m-tab"
-                      >
-                        <div class="tab-inner py-0">
-                          <h3 class="fs-15 mb-1">Swap IP</h3>
-                          <p class="fs-13 mb-0">
-                            Swap the IP addresses of two virtual machines with
-                            each other
-                          </p>
-                          <div class="divider my-3"></div>
-
-                          <p class="fs-13-5">Server 1</p>
-                          <p class="fs-15">papa-efyu-01.evoxt.com</p>
-
-                          <p class="fs-13-5">Server 2</p>
-
-                          <div class="overview-select d-inline-block mb-3">
-                            <select name="" id="">
-                              <option value="">Server 2</option>
-                              <option value="">Server 2</option>
-                              <option value="">Server 2</option>
-                            </select>
-                          </div>
-
-                          <div class="overview-button-wrapper pt-0">
-                            <button class="btn-dark px-4 hover-dark-light">
-                              Swap IP
-                            </button>
-                          </div>
-
-                          <p class="fs-14 mt-4 mb-2">
-                            After Swapping IP address, our system will perform a
-                            reboot on your server, please make sure any
-                            temporary files are saved before performing IP
-                            assignment. This process will take around 3 minutes,
-                            please do not refresh this page.
-                          </p>
                         </div>
                       </div>
                     </div>
@@ -1090,13 +1574,13 @@
                 </div>
               </div>
             </div>
-
             <!--vnc-->
             <div
               class="tab-pane fade"
               id="pills-vnc"
               role="tabpanel"
               aria-labelledby="pills-vnc-tab"
+              v-if="order_product_info.status == 'Active'"
             >
               <div class="tab-inner mb-3">
                 <div class="row">
@@ -1109,18 +1593,106 @@
                 <div class="row px-0 pt-4">
                   <div class="col-md-12 d-flex justify-content-center">
                     <div class="overview-button-wrapper pt-0">
-                      <button class="btn-dark px-4 hover-dark-light">
+                      <router-link :to="{ name: 'noVNC', params: { id: vpsid } }" class="btn-dark px-4 hover-dark-light" target="_blank">
                         Connect VNC
-                      </button>
+                      </router-link>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+            <!--DNS-->
+            <div
+              class="tab-pane fade"
+              id="pills-dns"
+              role="tabpanel"
+              aria-labelledby="pills-dns-tab"
+              v-if="order_product_info.status == 'Active'"
+            >
+              <div class="tab-inner mb-3">
+                <div class="row">
+                  <h3 class="title mb-4">ReverseDNS Management</h3>
+                </div>
+                <div class="d-flex">
+                  <div class="overview-dns-select">
+                    <select
+                      name="iplist"
+                      id="rdns-ip"
+                      v-model="selected_rdns_ip"
+                    >
+                      <!-- @foreach($ip_list['ips'] as $ip)
+                        <option value="{{$ip['ip']}}">{{$ip['ip']}}</option>
+                      @endforeach -->
+                      <option
+                        v-for="ip in ip_list.ips"
+                        :key="ip.ip"
+                        :value="ip.ip"
+                      >
+                        {{ ip.ip }}
+                      </option>
+                    </select>
+                  </div>
+                  <input
+                    class="form-control"
+                    id="dns-content"
+                    type="text"
+                    style="width: auto; margin-left: 10px"
+                    v-model="newDNS"
+                  />
+                  <button
+                    class="btn-dark px-4 me-2 hover-dark-light"
+                    type="submit"
+                    style="padding: 0px 20px; margin-left: 10px"
+                    @click="addRDNS()"
+                    :disabled="newDNS == '' || selected_rdns_ip == ''"
+                  >
+                    Add Reverse DNS
+                  </button>
+                </div>
+                <div class="support-table">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">IP address</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Domain</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="rdns in rdnslist" :key="rdns.id">
+                        <td>{{ rdns.id }}</td>
+                        <td>{{ order_product_info.dedicatedip }}</td>
+                        <td>{{ rdns.name }}</td>
+                        <td>{{ rdns.content }}</td>
+                        <td @click="deleteRdns(rdns.id)">
+                          <i
+                            class="fa fa-trash-can"
+                            style="color: red; cursor: pointer"
+                          ></i>
+                        </td>
+                      </tr>
+                      <tr v-if="rdnslist.length == 0">
+                        <td>id1</td>
+                        <td>{{ order_product_info.dedicatedip }}</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
 
             <!--billing-->
             <div
-              class="tab-pane fade"
+              :class="
+                order_product_info.status != 'Active'
+                  ? 'tab-pane fade  show active'
+                  : 'tab-pane fade'
+              "
               id="pills-billing"
               role="tabpanel"
               aria-labelledby="pills-billing-tab"
@@ -1144,7 +1716,7 @@
                     >
                       <li class="nav-item mb-2" role="presentation">
                         <button
-                          class="nav-link active"
+                          class="nav-link"
                           id="pills-renew-tab"
                           data-bs-toggle="pill"
                           data-bs-target="#pills-renew"
@@ -1159,7 +1731,7 @@
 
                       <li class="nav-item mb-2" role="presentation">
                         <button
-                          class="nav-link"
+                          class="nav-link active"
                           id="pills-invoices-tab"
                           data-bs-toggle="pill"
                           data-bs-target="#pills-invoices"
@@ -1168,22 +1740,7 @@
                           aria-controls="pills-invoices"
                           aria-selected="false"
                         >
-                          Invoices
-                        </button>
-                      </li>
-
-                      <li class="nav-item mb-2" role="presentation">
-                        <button
-                          class="nav-link"
-                          id="pills-cancellation-tab"
-                          data-bs-toggle="pill"
-                          data-bs-target="#pills-cancellation"
-                          type="button"
-                          role="tab"
-                          aria-controls="pills-cancellation"
-                          aria-selected="false"
-                        >
-                          Cancellation
+                          Invoice
                         </button>
                       </li>
 
@@ -1206,7 +1763,7 @@
                     <div class="tab-content w-100" id="pills-tabContent">
                       <!--renew-->
                       <div
-                        class="tab-pane fade show active"
+                        class="tab-pane fade"
                         id="pills-renew"
                         role="tabpanel"
                         aria-labelledby="pills-renew-tab"
@@ -1223,15 +1780,13 @@
                               <div class="text-center">
                                 <p class="fs-14 mb-0">Current Due Date</p>
                                 <p class="fs-15 mb-0" style="font-weight: 500">
-                                  17/05/2023
+                                  {{ order_product_info.nextduedate }}
                                 </p>
 
                                 <div
-                                  class="overview-button-wrapper d-flex flex-column align-items-center justify-content-center"
+                                  class="overview-button-wrapper d-flex flex-column align-items-center justify-content-center" v-if="invoiceInfo && invoiceInfo.status == 'Unpaid'"
                                 >
-                                  <button
-                                    class="btn-dark px-4 hover-dark-light"
-                                  >
+                                  <button class="btn btn-primary" @click="openInvoiceWindow(invoiceInfo.invoiceid)">
                                     Renew Service
                                   </button>
                                 </div>
@@ -1249,15 +1804,14 @@
                             "
                           >
                             An invoice will be generated 7 days before the
-                            service's due date. Click Renew Service to manually
-                            renew your service before invoice generation.
+                            service's due date. 
                           </p>
                         </div>
                       </div>
 
                       <!--invoices-->
                       <div
-                        class="tab-pane fade"
+                        class="tab-pane fade active show"
                         id="pills-invoices"
                         role="tabpanel"
                         aria-labelledby="pills-invoices-tab"
@@ -1273,67 +1827,57 @@
                                   <th scope="col">Date Paid</th>
                                   <th scope="col">Amount</th>
                                   <th scope="col">Status</th>
+                                  <th scope="col" class="text-center">
+                                    View Invoice
+                                  </th>
                                 </tr>
                               </thead>
-                              <tbody>
+                              <tbody v-if="invoiceInfo">
                                 <tr>
-                                  <td>58775</td>
-                                  <td class="date-cell">2023-13-03</td>
-                                  <td class="date-cell">2023-13-03</td>
-                                  <td class="date-cell">2023-13-03 06:00:03</td>
+                                  <td>{{ invoiceInfo.invoiceid }}</td>
+                                  <td class="date-cell">
+                                    {{ invoiceInfo.date }}
+                                  </td>
+                                  <td class="date-cell">
+                                    {{ invoiceInfo.duedate }}
+                                  </td>
+                                  <td class="date-cell">
+                                    {{ invoiceInfo.datepaid }}
+                                  </td>
                                   <td class="remaining-cell">
-                                    <span>€50.50</span>
+                                    <span>€ {{ invoiceInfo.subtotal }}</span>
                                   </td>
-                                  <td class="successful-cell">
-                                    <span>Successful</span>
+                                  <td
+                                    class="successful-cell"
+                                    v-if="invoiceInfo.status == 'Paid'"
+                                  >
+                                    <span>
+                                      {{ invoiceInfo.status }}
+                                    </span>
                                   </td>
-                                </tr>
-                                <tr>
-                                  <td>58775</td>
-                                  <td class="date-cell">2023-13-03</td>
-                                  <td class="date-cell">2023-13-03</td>
-                                  <td class="date-cell">2023-13-03 06:00:03</td>
-                                  <td class="remaining-cell">
-                                    <span>€50.50</span>
+                                  <td
+                                    class="cancelled-cell"
+                                    v-else-if="invoiceInfo.status == 'Unpaid'"
+                                  >
+                                    <span>
+                                      {{ invoiceInfo.status }}
+                                    </span>
                                   </td>
-                                  <td class="cancelled-cell">
-                                    <span>Cancelled</span>
+                                  <td class="in-progress-cell" v-else>
+                                    <span>
+                                      {{ invoiceInfo.status }}
+                                    </span>
                                   </td>
-                                </tr>
-                                <tr>
-                                  <td>58775</td>
-                                  <td class="date-cell">2023-13-03</td>
-                                  <td class="date-cell">2023-13-03</td>
-                                  <td class="date-cell">2023-13-03 06:00:03</td>
-                                  <td class="remaining-cell">
-                                    <span>€50.50</span>
-                                  </td>
-                                  <td class="cancelled-cell">
-                                    <span>Cancelled</span>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td>58775</td>
-                                  <td class="date-cell">2023-13-03</td>
-                                  <td class="date-cell">2023-13-03</td>
-                                  <td class="date-cell">2023-13-03 06:00:03</td>
-                                  <td class="remaining-cell">
-                                    <span>€50.50</span>
-                                  </td>
-                                  <td class="cancelled-cell">
-                                    <span>Cancelled</span>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td>58775</td>
-                                  <td class="date-cell">2023-13-03</td>
-                                  <td class="date-cell">2023-13-03</td>
-                                  <td class="date-cell">2023-13-03 06:00:03</td>
-                                  <td class="remaining-cell">
-                                    <span>€50.50</span>
-                                  </td>
-                                  <td class="cancelled-cell">
-                                    <span>Cancelled</span>
+                                  <td class="text-center">
+                                    <a
+                                      @click="
+                                        openInvoiceWindow(invoiceInfo.invoiceid)
+                                      "
+                                      target="_blank"
+                                      ><img
+                                        src="/assets/img/eye-open.svg"
+                                        class="icon-password view-invoice"
+                                    /></a>
                                   </td>
                                 </tr>
                               </tbody>
@@ -1342,57 +1886,7 @@
                         </div>
                       </div>
 
-                      <div
-                        class="tab-pane fade"
-                        id="pills-cancellation"
-                        role="tabpanel"
-                        aria-labelledby="pills-cancellation-tab"
-                      >
-                        <div class="tab-inner py-0 p-mb-0">
-                          <h3 class="fs-15 mb-1">Cancellation</h3>
-                          <div
-                            class="divider divider-inner"
-                            style="margin: 20px 0"
-                          ></div>
-
-                          <div class="tab-inner">
-                            <div class="row">
-                              <div class="text-center">
-                                <p class="fs-14 mb-0">
-                                  Please click the button below to request for a
-                                  service cancellation.
-                                </p>
-
-                                <div
-                                  class="overview-button-wrapper d-flex flex-column align-items-center justify-content-center"
-                                >
-                                  <button
-                                    class="btn-dark px-4 hover-dark-light"
-                                  >
-                                    Cancel Service
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <p
-                            class="fs-13 mt-2 inner-sub-title"
-                            style="
-                              max-width: 474px;
-                              text-align: center;
-                              margin: 0 auto;
-                              color: rgba(23, 30, 38, 0.75);
-                            "
-                          >
-                            We will not process any refund request submitted
-                            through cancellation request. Please do not file for
-                            a cancellation if you wish to request for a refund,
-                            open a ticket to request for a refund.
-                          </p>
-                        </div>
-                      </div>
-
+                      <!--create ticket for refund-->
                       <div
                         class="tab-pane fade"
                         id="pills-refund"
@@ -1418,6 +1912,8 @@
                                 >
                                   <button
                                     class="btn-dark px-4 hover-dark-light"
+                                    id="open-ticket"
+                                    @click="openModal = true"
                                   >
                                     Open Ticket
                                   </button>
@@ -1445,423 +1941,13 @@
                 </div>
               </div>
             </div>
-
-            <!--upgrade-->
-            <div
-              class="tab-pane fade"
-              id="pills-upgrade"
-              role="tabpanel"
-              aria-labelledby="pills-upgrade-tab"
-            >
-              <div class="tab-inner billing mb-3">
-                <div class="row">
-                  <h3 class="title mb-4">Upgrade Virtual Machine</h3>
-                  <p class="description mb-4">
-                    Outgrown your server? Upgrade now.
-                  </p>
-                </div>
-                <div class="divider"></div>
-                <div class="row px-0 pt-4">
-                  <div
-                    class="col-md-12 d-flex flex-column flex-lg-row align-items-start"
-                  >
-                    <ul
-                      class="nav nav-pills mb-3 mb-md-0 mb-lg-0 d-flex flex-column inner-tab-pills sc-mobile no-border-mobile"
-                      id="pills-tab"
-                      role="tablist"
-                    >
-                      <li class="nav-item mb-2" role="presentation">
-                        <button
-                          class="nav-link active"
-                          id="pills-plan-tab"
-                          data-bs-toggle="pill"
-                          data-bs-target="#pills-plan"
-                          type="button"
-                          role="tab"
-                          aria-controls="pills-plan"
-                          aria-selected="false"
-                        >
-                          Plan
-                        </button>
-                      </li>
-
-                      <li class="nav-item mb-2" role="presentation">
-                        <button
-                          class="nav-link"
-                          id="pills-network-tab"
-                          data-bs-toggle="pill"
-                          data-bs-target="#pills-network"
-                          type="button"
-                          role="tab"
-                          aria-controls="pills-network"
-                          aria-selected="false"
-                        >
-                          Network
-                        </button>
-                      </li>
-
-                      <li class="nav-item mb-2" role="presentation">
-                        <button
-                          class="nav-link"
-                          id="pills-cpu-tab"
-                          data-bs-toggle="pill"
-                          data-bs-target="#pills-cpu"
-                          type="button"
-                          role="tab"
-                          aria-controls="pills-cpu"
-                          aria-selected="false"
-                        >
-                          CPU
-                        </button>
-                      </li>
-
-                      <li class="nav-item mb-2" role="presentation">
-                        <button
-                          class="nav-link"
-                          id="pills-ram-tab"
-                          data-bs-toggle="pill"
-                          data-bs-target="#pills-ram"
-                          type="button"
-                          role="tab"
-                          aria-controls="pills-ram"
-                          aria-selected="false"
-                        >
-                          RAM
-                        </button>
-                      </li>
-
-                      <li class="nav-item" role="presentation">
-                        <button
-                          class="nav-link"
-                          id="pills-backupplan-tab"
-                          data-bs-toggle="pill"
-                          data-bs-target="#pills-backupplan"
-                          type="button"
-                          role="tab"
-                          aria-controls="pills-backupplan"
-                          aria-selected="false"
-                        >
-                          Backup Plan
-                        </button>
-                      </li>
-                    </ul>
-
-                    <div class="tab-content w-100" id="pills-tabContent">
-                      <!--plan-->
-                      <div
-                        class="tab-pane fade show active"
-                        id="pills-plan"
-                        role="tabpanel"
-                        aria-labelledby="pills-plan-tab"
-                      >
-                        <div class="tab-inner py-0 p-mb-0">
-                          <h3 class="fs-15 mb-1">Upgrade Service Plan</h3>
-                          <div class="divider" style="margin: 20px 0"></div>
-
-                          <div class="tab-inner pt-0 p-mb-0">
-                            <div class="row">
-                              <div
-                                style="text-align: center; margin: 0 auto"
-                                class="text-center sc-mobile pt-3"
-                              >
-                                <div
-                                  class="overview-select d-inline-block mb-3"
-                                >
-                                  <select name="" id="">
-                                    <option value="">
-                                      VM-0.75 | 1 vCore (3.5 GHz), 1 GB RAM, 10
-                                      GB Storage & 0.5 TB Bandwidth
-                                    </option>
-                                    <option value="">
-                                      VM-0.75 | 1 vCore (3.5 GHz), 1 GB RAM, 10
-                                      GB Storage & 0.5 TB Bandwidth
-                                    </option>
-                                    <option value="">
-                                      VM-0.75 | 1 vCore (3.5 GHz), 1 GB RAM, 10
-                                      GB Storage & 0.5 TB Bandwidth
-                                    </option>
-                                  </select>
-                                </div>
-
-                                <div
-                                  class="overview-button-wrapper d-flex flex-column align-items-center justify-content-center pt-0 pb-4"
-                                >
-                                  <button
-                                    class="btn-dark px-4 hover-dark-light"
-                                  >
-                                    Upgrade Plan
-                                  </button>
-                                </div>
-
-                                <a style="color: #0078d4" class="fs-13" href="#"
-                                  >View the prices of plans and specifications
-                                  here</a
-                                >
-
-                                <p
-                                  class="fs-13 mt-1 inner-sub-title"
-                                  style="color: rgba(23, 30, 38, 0.75)"
-                                >
-                                  Note: A power cycle is needed after upgrading
-                                  to apply the upgrade.
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!--network-->
-                      <div
-                        class="tab-pane fade"
-                        id="pills-network"
-                        role="tabpanel"
-                        aria-labelledby="pills-network-tab"
-                      >
-                        <div class="tab-inner py-0 p-mb-0">
-                          <h3 class="fs-15 mb-1">
-                            Buy Extra Monthly Bandwidth
-                          </h3>
-                          <div class="divider" style="margin: 20px 0"></div>
-
-                          <div class="tab-inner pt-0">
-                            <div class="row">
-                              <div
-                                style="
-                                  text-align: center;
-                                  margin: 0 auto;
-                                  max-width: 626px;
-                                "
-                                class="text-center"
-                              >
-                                <div
-                                  class="overview-select d-inline-block mb-3"
-                                >
-                                  <select name="" id="">
-                                    <option value="">
-                                      Extra 500 GB monthly | +$2 /month
-                                    </option>
-                                    <option value="">
-                                      Extra 500 GB monthly | +$2 /month
-                                    </option>
-                                    <option value="">
-                                      Extra 500 GB monthly | +$2 /month
-                                    </option>
-                                  </select>
-                                </div>
-
-                                <div
-                                  class="overview-button-wrapper d-flex flex-column align-items-center justify-content-center pt-0 pb-4"
-                                >
-                                  <button
-                                    class="btn-dark px-4 hover-dark-light"
-                                  >
-                                    Upgrade Bandwidth
-                                  </button>
-                                </div>
-
-                                <p
-                                  class="fs-13 mt-1 inner-sub-title"
-                                  style="color: rgba(23, 30, 38, 0.75)"
-                                >
-                                  If the extra bandwidth you order has decimals,
-                                  this will be automatically rounded up.
-                                  Example: You have 500GB extra bandwidth and
-                                  you order an extra 2 TB, this will be rounded
-                                  up to 3 TB
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!--cpu-->
-                      <div
-                        class="tab-pane fade"
-                        id="pills-cpu"
-                        role="tabpanel"
-                        aria-labelledby="pills-cpu-tab"
-                      >
-                        <div class="tab-inner py-0 p-mb-0">
-                          <h3 class="fs-15 mb-1">Upgrade CPU</h3>
-                          <div class="divider" style="margin: 20px 0"></div>
-
-                          <div class="tab-inner pt-0">
-                            <div class="row">
-                              <div
-                                style="
-                                  text-align: center;
-                                  margin: 0 auto;
-                                  max-width: 626px;
-                                "
-                                class="text-center"
-                              >
-                                <div
-                                  class="overview-select d-inline-block mb-3"
-                                >
-                                  <select name="" id="">
-                                    <option value="">
-                                      1 Extra vCore | +$3 /month
-                                    </option>
-                                    <option value="">
-                                      1 Extra vCore | +$3 /month
-                                    </option>
-                                    <option value="">
-                                      1 Extra vCore | +$3 /month
-                                    </option>
-                                  </select>
-                                </div>
-
-                                <div
-                                  class="overview-button-wrapper d-flex flex-column align-items-center justify-content-center pt-0 pb-4"
-                                >
-                                  <button
-                                    class="btn-dark px-4 hover-dark-light"
-                                  >
-                                    Upgrade Bandwidth
-                                  </button>
-                                </div>
-
-                                <p
-                                  class="fs-13 mt-1 inner-sub-title"
-                                  style="color: rgba(23, 30, 38, 0.75)"
-                                >
-                                  If the extra bandwidth you order has decimals,
-                                  this will be automatically rounded up.
-                                  Example: You have 500GB extra bandwidth and
-                                  you order an extra 2 TB, this will be rounded
-                                  up to 3 TB
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!--ram-->
-                      <div
-                        class="tab-pane fade"
-                        id="pills-ram"
-                        role="tabpanel"
-                        aria-labelledby="pills-ram-tab"
-                      >
-                        <div class="tab-inner py-0 p-mb-0">
-                          <h3 class="fs-15 mb-1">Upgrade RAM</h3>
-                          <div class="divider" style="margin: 20px 0"></div>
-
-                          <div class="tab-inner pt-0">
-                            <div class="row">
-                              <div
-                                style="text-align: center; margin: 0 auto"
-                                class="text-center"
-                              >
-                                <div
-                                  class="overview-select d-inline-block mb-3"
-                                >
-                                  <select name="" id="">
-                                    <option value="">
-                                      1 GB RAM | +$2 /month
-                                    </option>
-                                    <option value="">
-                                      1 GB RAM | +$2 /month
-                                    </option>
-                                    <option value="">
-                                      1 GB RAM | +$2 /month
-                                    </option>
-                                  </select>
-                                </div>
-
-                                <div
-                                  class="overview-button-wrapper d-flex flex-column align-items-center justify-content-center pt-0 pb-4"
-                                >
-                                  <button
-                                    class="btn-dark px-4 hover-dark-light"
-                                  >
-                                    Upgrade Bandwidth
-                                  </button>
-                                </div>
-
-                                <p
-                                  class="fs-13 mt-1 inner-sub-title"
-                                  style="color: rgba(23, 30, 38, 0.75)"
-                                >
-                                  Note: A power cycle is needed after upgrading
-                                  to apply the upgrade.
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!--backupplan-->
-                      <div
-                        class="tab-pane fade"
-                        id="pills-backupplan"
-                        role="tabpanel"
-                        aria-labelledby="pills-backupplan-tab"
-                      >
-                        <div class="tab-inner py-0 p-mb-0">
-                          <h3 class="fs-15 mb-1">Purchase a Backup Plan</h3>
-                          <div class="divider" style="margin: 20px 0"></div>
-
-                          <div class="tab-inner pt-0">
-                            <div class="row">
-                              <div
-                                style="
-                                  text-align: center;
-                                  margin: 0 auto;
-                                  max-width: 491px;
-                                "
-                                class="text-center"
-                              >
-                                <p
-                                  class="fs-13 inner-sub-title"
-                                  style="color: rgba(23, 30, 38, 0.75)"
-                                >
-                                  Backup Plan's price depends on your virtual
-                                  machine's storage size. Your virtual machine
-                                  has 5 GB of storage. The backup plan will be
-                                  $0.5 per month
-                                </p>
-
-                                <p
-                                  class="fs-13 mt-1 inner-sub-title"
-                                  style="color: rgba(23, 30, 38, 0.75)"
-                                >
-                                  Backup Plan will include daily backup with<br />
-                                  - 5 Rotating copies<br />
-                                  - 5 Manual backup per month<br />
-                                  - 5 Backup restores per month<br />
-                                </p>
-
-                                <div
-                                  class="overview-button-wrapper d-flex flex-column align-items-center justify-content-center pt-0"
-                                >
-                                  <button
-                                    class="btn-dark px-4 hover-dark-light"
-                                  >
-                                    Purchase Backup Plan
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <!--settings-->
             <div
               class="tab-pane fade"
               id="pills-settings"
               role="tabpanel"
               aria-labelledby="pills-settings-tab"
+              v-if="order_product_info.status == 'Active'"
             >
               <div class="row mb-5 pe-0">
                 <div class="tab-inner settings mb-3">
@@ -1891,6 +1977,7 @@
                             role="tab"
                             aria-controls="pills-password"
                             aria-selected="false"
+
                           >
                             Change Password
                           </button>
@@ -1921,33 +2008,113 @@
                         >
                           <div class="tab-inner py-0 p-mb-0">
                             <h3 class="fs-15 mb-1">Change Password</h3>
-
                             <div class="divider" style="margin: 20px 0"></div>
-
-                            <p class="fs-13-5">New server password</p>
-
-                            <div class="overview-input mb-4">
-                              <input
-                                type="text"
-                                placeholder="Write new password"
-                              />
-                            </div>
-
-                            <p class="fs-13-5">Confirm new server password</p>
-
-                            <div class="overview-input mb-4">
-                              <input
-                                type="text"
-                                placeholder="Minimum 8 character"
-                              />
-                            </div>
-
-                            <div class="overview-button-wrapper pt-0">
-                              <button
-                                class="btn-dark px-4 me-2 hover-dark-light"
+                            <div
+                              id="newPassword1-os"
+                              class="form-group has-feedback has-success mt-3"
+                            >
+                              <label
+                                for="inputNewPassword1-os"
+                                class="col-sm-4 control-label"
+                                >New Server Password</label
                               >
-                                Change Password
-                              </button>
+                              <div class="col-sm-5" style="position: relative">
+                                <input
+                                  :type="(show2)?'text':'password'"
+                                  class="form-control"
+                                  name="newpw"
+                                  id="inputNewPassword1-os"
+                                  autocomplete="off"
+                                  v-model="newPassword1"
+                                />
+                                <img
+                                  src="/assets/img/eye-open.svg"
+                                  class="settings-password-img icon-password eye-open"
+                                  v-if="show2"
+                                  @click="show2 = !show2"
+                                />
+                                <img
+                                  src="/assets/img/eye.svg"
+                                  class="settings-password-img icon-password eye-closed"
+                                  v-else
+                                  @click="show2 = !show2"
+                                />
+                                <br />
+
+                                <div
+                                  class="progress"
+                                  id="passwordStrengthBar-os"
+                                >
+                                  <div
+                                    class="progress-bar progress-bar-success"
+                                    role="progressbar"
+                                    aria-valuenow="0"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100"
+                                    :style="'width: '+passwordStrength+'%'"
+                                  >
+                                    <span class="rating"
+                                      >Password Rating: {{ passwordStrength }}%</span
+                                    >
+                                  </div>
+                                </div>
+
+                                <div class="alert alert-info">
+                                  <strong>Tips for a good password</strong
+                                  ><br />Use both upper and lowercase
+                                  characters<br />Include at least one symbol
+                                  (only ! and @)<br />Don't use dictionary words
+                                  and special characters
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              id="newPassword2-os"
+                              class="form-group has-feedback has-success"
+                            >
+                              <label
+                                for="inputNewPassword2-os"
+                                class="col-sm-4 control-label"
+                                >Confirm New Password</label
+                              >
+                              <div class="col-sm-5" style="position: relative">
+                                <input
+                                  :type="(show3)?'text':'password'"
+                                  class="form-control"
+                                  name="confirmpw"
+                                  id="inputNewPassword2-os"
+                                  autocomplete="off"
+                                  v-model="newPassword2"
+                                />
+                                <img
+                                  src="/assets/img/eye-open.svg"
+                                  class="settings-password-img icon-password eye-open"
+                                  @click="show3 = !show3"
+                                  v-if="show3"
+                                />
+                                <img
+                                  src="/assets/img/eye.svg"
+                                  class="settings-password-img icon-password eye-closed"
+                                  @click="show3 = !show3"
+                                  v-else
+                                />
+                                
+                                <div id="inputNewPassword2-os-Msg" v-if="newPassword1 != newPassword2 && newPassword1!=''">
+                                  <p class="help-block" id="nonMatchingPasswordResult">The passwords entered do not match</p>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="overview-button-wrapper pt-0 mt-4">
+                              <div class="col-sm-5">
+                                <button
+                                  id="submitButtonOS"
+                                  class="btn-dark px-4 me-2 hover-dark-light"
+                                  @click="changePWD(vpsid)"
+                                  :disabled = "newPassword1 != newPassword2 || newPassword1=='' || newPassword2=='' || passwordStrength < 80"
+                                >
+                                  Change Password
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -1970,12 +2137,17 @@
                               <input
                                 type="text"
                                 placeholder="Write new hostname"
+                                id="hostname"
+                                v-model="hostname"
                               />
+                              <div id="inputHostNameMsg"></div>
                             </div>
 
                             <div class="overview-button-wrapper pt-0 mb-4">
                               <button
                                 class="btn-dark px-4 me-2 hover-dark-light"
+                                @click="changeHostName(vpsid)"
+                                :disabled = "hostname==''"
                               >
                                 Change Hostname
                               </button>
@@ -1996,11 +2168,700 @@
           </div>
         </div>
       </div>
+
+      <!-- if status is not active -->
+      <div
+        class="alert alert-warning mt-2"
+        id="alertUnpaidInvoice"
+        v-if="status != 'Active'"
+      >
+        This VPS has not been activated yet. Pay the invoice or wait for
+        confirmation of payment in case you did pay already.
+      </div>
+
+      <div class="support-table" v-if="status != 'Active'">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Invoice ID</th>
+              <th scope="col">Invoice Date</th>
+              <th scope="col">Due Date</th>
+              <th scope="col">Date Paid</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Status</th>
+              <th scope="col" class="text-center">View Invoice</th>
+            </tr>
+          </thead>
+          <tbody v-if="invoiceInfo">
+            <tr>
+              <td>{{ invoiceInfo.invoiceid }}</td>
+              <td class="date-cell">{{ invoiceInfo.date }}</td>
+              <td class="date-cell">{{ invoiceInfo.duedate }}</td>
+              <td class="date-cell">{{ invoiceInfo.datepaid }}</td>
+              <td class="remaining-cell">
+                <span>€ {{ invoiceInfo.subtotal }}</span>
+              </td>
+              <td class="successful-cell" v-if="invoiceInfo.status == 'Paid'">
+                <span>
+                  {{ invoiceInfo.status }}
+                </span>
+              </td>
+              <td
+                class="cancelled-cell"
+                v-else-if="invoiceInfo.status == 'Unpaid'"
+              >
+                <span>
+                  {{ invoiceInfo.status }}
+                </span>
+              </td>
+              <td class="in-progress-cell" v-else>
+                <span>
+                  {{ invoiceInfo.status }}
+                </span>
+              </td>
+              <td class="text-center">
+                <a
+                  @click="openInvoiceWindow(invoiceInfo.invoiceid)"
+                  target="_blank"
+                >
+                  <img
+                    src="/assets/img/eye-open.svg"
+                    class="icon-password view-invoice"
+                  />
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- modal -->
+    <div class="modal modal-ticket" v-if="openModal">
+      <div class="modal-inner">
+        <div class="modal-close" @click="openModal = false">
+          <img class="close-dark" src="/assets/img/close.svg" alt="" />
+          <img class="close-light" src="/assets/img/close-light.svg" alt="" />
+        </div>
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="modal-title">
+              <h2>New ticket</h2>
+              <h3>Create new ticket now.</h3>
+            </div>
+          </div>
+          <div class="modal-main">
+            <div class="amounts">
+              <!-- <form id="openTicket" enctype="multipart/form-data" method="POST" action="{{route('ticket.open"> -->
+              <h4>Subject</h4>
+              <input
+                class="mb-3"
+                name="subject"
+                type="text"
+                placeholder="Write subject"
+                v-model="subject"
+              />
+
+              <h4>Describe the problem</h4>
+              <textarea
+                class="mb-3"
+                name="message"
+                id=""
+                cols="30"
+                rows="8"
+                v-model="message"
+              ></textarea>
+
+              <h4>Department*</h4>
+              <select name="department" id="department" v-model="selectedDepartment">
+                <!-- @foreach ($departments as $department)
+                  <option value="{{$department['id']}}">{{$department['name']}}</option>
+                  @endforeach -->
+                <option
+                  v-for="department in departments"
+                  :key="department.id"
+                  :value="department.id"
+                >
+                  {{ department.name }}
+                </option>
+              </select>
+
+                <h4>Service related</h4>
+                <select name="service" id="service" v-model="selectedService">
+                  <option value="0">- None -</option>
+                  <option :value="selectedService">Current Vps Service</option>
+                </select>
+
+              <button class="btn-dark d-block w-100 mt-5" id="create-ticket" :disabled="subject=='' || selectedDepartment==0" @click="createTicket()">
+                Create Ticket
+              </button>
+              <!-- </form> -->
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 </template>
 
 <script setup>
+import { computed, onMounted, ref, onBeforeUnmount, watch, watchEffect } from "vue";
+import { commonApis } from "@/apis/commonApis";
+import { useStore } from "vuex";
+import useAuth from "@/composables/auth";
+import { showLoader } from "@/plugins/loading.js";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
+import { useRouter } from "vue-router";
+
+import { useRoute } from "vue-router";
+
+import Highcharts from "highcharts";
+
+import Chart from "./Chart.vue";
+const cpu_data_state = ref([]);
+const inode_data_state = ref([]);
+const ram_data_state = ref([]);
+const disk_data_state = ref([]);
+const net_in_data_state = ref([]);
+const net_out_data_state = ref([]);
+const net_total_data_state = ref([]);
+
+
+const route = useRoute();
+
+const router = useRouter();
+const $toast = useToast({
+  toastOptions: {
+    zIndex: 99999, // set a high z-index value
+  },
+});
+
+const commonApi = commonApis();
+const openModal = ref(false);
+
+// eye show
+const show1 = ref(false);
+const show2 = ref(false);
+const show3 = ref(false);
+
+
+const store = useStore();
+const user = computed(() => store.state.auth.user);
+
+const analysis_data = ref([]);
+const relid = ref(null);
+const order_id = ref(null);
+const order_product_info = ref([]);
+const dayDiff = ref(null);
+const detail_info = ref([]);
+const flag = ref(null);
+const sys_logo = ref("windows");
+const system = ref(null);
+const vpsid = ref(0);
+const vps_info = ref(null);
+const oslists = ref([]);
+const cpu = ref(null);
+const invoiceInfo = ref(null);
+// const orders = ref([]);
+const departments = ref([]);
+const ip_list = ref(null);
+const status = ref("Active");
+const rdnslist = ref(null);
+
+// selected Values
+const format_disk = ref(false);
+const selected_os_id = ref(null);
+const newPassword1 = ref("");
+const newPassword2 = ref("");
+const selected_ip = ref("0.0.0.0");
+const newDNS = ref("");
+const selected_rdns_ip = ref("");
+const selected_rdns_id = ref(null);
+
+// for creating tickets
+const selectedService = ref(0);
+const selectedDepartment = ref(0);
+const subject = ref('Refund request');
+const message = ref('I want to cancel this service.');
+
+// settings
+const hostname = ref('');
+
+const params = ref({
+  client_id: user.value.client_id,
+});
+
+const openInNewTab = (url) => {
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+    if (newWindow) newWindow.opener = null
+}
+
+const openInvoiceWindow = (invoice_id) => {
+  showLoader(true);
+  commonApi
+    .runPostApi("/invoice_detail_sso", invoice_id)
+    .then((res) => {
+      showLoader(false);
+      if (res.data.result == "success") {
+        openInNewTab(res.data.redirect_url);
+      }
+    })
+    .catch((e) => {
+      showLoader(false);
+      console.log(e);
+    });
+};
+
+function copyToClipboard(text) {
+  // Copy the generated hostname to the clipboard
+  var copyTextarea = document.createElement("textarea");
+  copyTextarea.value = text;
+  document.body.appendChild(copyTextarea);
+  copyTextarea.select();
+  document.execCommand("copy");
+  document.body.removeChild(copyTextarea);
+  $toast.success("Copied");
+}
+
+function TurnOnVPS(vpsid) {
+  showLoader(true);
+  commonApi
+    .runPostApi("/overview/turnon", {
+      vpsid: vpsid,
+    })
+    .then((res) => {
+      showLoader(false);
+      if (res.status == 200) {
+        $toast.success("VPS has been started successfully");
+      } else {
+        $toast.error(res.data);
+      }
+    })
+    .catch((e) => {
+      showLoader(false);
+      $toast.error(e);
+    });
+}
+
+function TurnOffVPS(vpsid) {
+  showLoader(true);
+  commonApi
+    .runPostApi("/overview/turnoff", {
+      vpsid: vpsid,
+    })
+    .then((res) => {
+      showLoader(false);
+      if (res.status == 200) {
+        $toast.success("Shutdown signal has been sent to the VPS");
+      } else {
+        $toast.error(res.data);
+      }
+    })
+    .catch((e) => {
+      showLoader(false);
+      $toast.error(e);
+    });
+}
+
+function assignPrimaryIp(vpsid) {
+  var reorder_ips = [];
+  var iplist = ip_list.value.ips;
+
+  var ipid = selected_ip.value;
+  const index = iplist.findIndex((obj) => obj.ipid === ipid);
+  if (index > -1) {
+    const obj = iplist.splice(index, 1)[0];
+    iplist.unshift(obj);
+  }
+
+  iplist.forEach(function (element) {
+    reorder_ips.push(element.ip);
+  });
+
+  showLoader(true);
+  commonApi
+    .runPostApi("/overview/changeip", {
+      vpsid: vpsid,
+      reorder_ips: reorder_ips,
+    })
+    .then((res) => {
+      showLoader(false);
+      if (res.status == 200) {
+        $toast.success(
+          "Your IP settings have been saved.Your IP settings will be changed when the VPS is booted again"
+        );
+      } else {
+        $toast.error(res.data);
+      }
+    })
+    .catch((e) => {
+      showLoader(false);
+      $toast.error(e);
+    });
+}
+
+function changeHostName(vpsid) {
+  showLoader(true);
+  commonApi
+    .runPostApi("/overview/checkhostName", {
+      hostname: hostname.value
+    })
+    .then((res) => {
+      if(res.data== 'Already Exist.'){
+        showLoader(false);
+        $toast.error('Inputed New hostname already exist');
+      } else{
+        commonApi
+          .runPostApi("/overview/changehostName", {
+            vpsid: vpsid,
+            hostname: hostname.value
+          })
+          .then((res) => {
+            showLoader(false);
+            if (res.status == 200) {
+              $toast.success("Your hostname will be changed when the VPS is booted again");
+            } else {
+              $toast.error(res.data);
+            }
+          })
+          .catch((e) => {
+            showLoader(false);
+            $toast.error(e);
+          });
+      }
+    })
+    .catch((e) => {
+      showLoader(false);
+      $toast.error(e);
+    });
+}
+
+function rebuildOS(vpsid) {
+  showLoader(true);
+  commonApi
+    .runPostApi("/overview/rebuild", {
+      vpsid: vpsid,
+      format_disk_flag: format_disk.value,
+      selected_osid: selected_os_id.value,
+      root_pwd: newPassword1.value,
+    })
+    .then((res) => {
+      showLoader(false);
+      if (res.status == 200) {
+        $toast.success(
+          "VPS is being rebuilt, hence no actions are allowed to be performed on this VPS"
+        );
+      } else {
+        $toast.error(res.data);
+      }
+    })
+    .catch((e) => {
+      showLoader(false);
+      $toast.error(e);
+    });
+}
+
+function changePWD(vpsid) {
+  showLoader(true);
+  commonApi
+    .runPostApi("/overview/changepwd", {
+      vpsid: vpsid,
+      root_pwd: newPassword1.value,
+    })
+    .then((res) => {
+      showLoader(false);
+      if (res.status == 200) {
+        $toast.success("VPS password will be changed after you SHUTDOWN and START the VPS from the panel.");
+      } else {
+        $toast.error(res.data);
+      }
+    })
+    .catch((e) => {
+      showLoader(false);
+      $toast.error(e);
+    });
+}
+
+function addRDNS() {
+  showLoader(true);
+  commonApi
+    .runPostApi("/overview/addrdns", {
+      ip: selected_rdns_ip.value,
+      domain: newDNS.value,
+    })
+    .then((res) => {
+      showLoader(false);
+      if (res.status == 200) {
+        $toast.success("Added successfully");
+        rdnslist.value = res.data.rdnslist;
+      } else {
+        $toast.error(res.data);
+      }
+    })
+    .catch((e) => {
+      showLoader(false);
+      $toast.error(e);
+    });
+}
+
+function deleteRdns(id) {
+  showLoader(true);
+  commonApi
+    .runPostApi("/overview/deleterdns", {
+      ip: selected_rdns_ip.value,
+      rdns_record_id: id,
+    })
+    .then((res) => {
+      showLoader(false);
+      if (res.status == 200) {
+        $toast.success("Deleted successfully");
+        rdnslist.value = res.data.rdnslist;
+      } else {
+        $toast.error(res.data);
+      }
+    })
+    .catch((e) => {
+      showLoader(false);
+      $toast.error(e);
+    });
+}
+
+const createTicket = () => {
+  showLoader(true);
+
+  commonApi
+    .runPostApi("/ticket-create", {
+      subject: subject.value,
+      message: message.value,
+      department: selectedDepartment.value,
+      service: selectedService.value,
+    })
+    .then((res) => {
+      showLoader(false);
+      if (res.data.result == "success") {
+        $toast.success("Successfully created ticket!");
+		openModal.value = false;
+      } else $toast.warning("Cannot connect to whmcs api.");
+    })
+    .catch((e) => {
+      showLoader(false);
+      console.log(e);
+    });
+};
+
+const getOverviewData = () => {
+  showLoader(true);
+  commonApi
+    .runPostApi("/overview", {
+      id: route.params.id,
+    })
+    .then((res) => {
+      showLoader(false);
+      analysis_data.value = res.data.analysis_data;
+      relid.value = res.data.relid;
+      selectedService.value = res.data.relid;
+      order_id.value = res.data.order_id;
+      order_product_info.value = res.data.order_product_info;
+      dayDiff.value = res.data.dayDiff;
+      detail_info.value = res.data.detail_info;
+      flag.value = res.data.flag;
+      sys_logo.value = res.data.sys_logo;
+      system.value = res.data.system;
+      vpsid.value = res.data.vpsid;
+      vps_info.value = res.data.vps_info;
+      oslists.value = res.data.oslists;
+      if(oslists.value && oslists.value.length !=0) selected_os_id.value = res.data.oslists[0].osid;
+      cpu.value = res.data.cpu;
+
+      invoiceInfo.value = res.data.invoiceInfo;
+      departments.value = res.data.departments;
+      if(departments.value && departments.value.length !=0) selectedDepartment.value = res.data.departments[0].id;
+      ip_list.value = res.data.ip_list;
+      status.value = res.data.status;
+      rdnslist.value = res.data.rdnslist;
+
+      selected_rdns_ip.value = order_product_info.value.dedicatedip;
+
+      // render
+      renderChat(analysis_data.value, "#1C1C1E");
+    })
+    .catch((e) => {
+      showLoader(false);
+      console.log(e);
+    });
+};
+
+getOverviewData();
+
+function ucfirst(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function renderChat(data, color) {
+  //For showing up the average download and upload speed
+  var avg_download = 0;
+  var avg_upload = 0;
+  var avg_io_read = 0;
+  var avg_io_write = 0;
+  var count = 0;
+  var cpu_data = new Array();
+  var inode_data = new Array();
+  var ram_data = new Array();
+  var disk_data = new Array();
+  var ntw_in_data = new Array();
+  var ntw_out_data = new Array();
+  var ntw_total_data = new Array();
+  var io_read_data = new Array();
+  var io_write_data = new Array();
+
+  if (data) {
+    data.forEach(function (val, key) {
+      //Array is in format [vpsid, time, status, disk, inode, ram, cpu, net_in, net_out]
+      cpu_data.push([val[1], val[6] * 1]);
+      inode_data.push([val[1], val[4] * 1]);
+      ram_data.push([val[1], val[5] * 1]);
+      disk_data.push([val[1], val[3] * 1]);
+      ntw_in_data.push([val[1], val[7] * 1]);
+      ntw_out_data.push([val[1], val[8] * 1]);
+      ntw_total_data.push([val[1], parseInt(val[7]) + parseInt(val[8])]);
+      // io_read_data.push([val[1], val[9] * 1]);
+      // io_write_data.push([val[1], val[10] * 1]);
+      // Display the average speed of available data
+      avg_download += parseInt(val[7]);
+      avg_upload += parseInt(val[8]);
+      avg_io_read += parseInt(val[9]);
+      avg_io_write += parseInt(val[10]);
+      count++;
+    });
+    // Calculating the average Downloading Speed per month
+    avg_download = (avg_download / count / 1024 / 1024).toFixed(5);
+    // Calculating the average Uploading Speed per month
+    avg_upload = (avg_upload / count / 1024 / 1024).toFixed(5);
+    // Calculating the average I/O read per month
+    avg_io_read = (avg_io_read / count / 1024 / 1024).toFixed(5);
+    // Calculating the average I/O write per month
+    avg_io_write = (avg_io_write / count / 1024 / 1024).toFixed(5);
+
+    cpu_data_state.value = cpu_data;
+    inode_data_state.value = inode_data;
+    ram_data_state.value = ram_data;
+    disk_data_state.value = disk_data;
+    net_in_data_state.value = ntw_in_data;
+    net_out_data_state.value = ntw_out_data;
+    net_total_data_state.value = ntw_total_data;
+  }
+}
+
+function revertColor(color) {
+  // Convert the color to RGB format
+  var r = parseInt(color.substring(1, 3), 16);
+  var g = parseInt(color.substring(3, 5), 16);
+  var b = parseInt(color.substring(5, 7), 16);
+
+  // Calculate the inverted color
+  var invertedR = 255 - r;
+  var invertedG = 255 - g;
+  var invertedB = 255 - b;
+
+  // Convert the inverted color back to hex format
+  var invertedColor =
+    "#" +
+    invertedR.toString(16).padStart(2, "0") +
+    invertedG.toString(16).padStart(2, "0") +
+    invertedB.toString(16).padStart(2, "0");
+
+  return invertedColor;
+}
+
+
+// const theme = ref(document.documentElement.getAttribute('data-theme'));
+// const chart_color = ref(theme.value === 'dark' ? '#1C1C1E' : '#ffffff');
+
+// watch(
+//   () => document.documentElement.getAttribute('data-theme'),
+//   (newTheme) => {
+//     theme.value = newTheme;
+//     chart_color.value = newTheme === 'dark' ? '#1C1C1E' : '#ffffff';
+//   }
+// );
+
+const theme = ref(document.documentElement.getAttribute('data-theme'));
+const chart_color = ref(theme.value === 'dark' ? '#1C1C1E' : '#ffffff');
+
+watchEffect(() => {
+  const newTheme = document.documentElement.getAttribute('data-theme');
+  if (newTheme !== theme.value) {
+    theme.value = newTheme;
+    chart_color.value = newTheme === 'dark' ? '#1C1C1E' : '#ffffff';
+  }
+});
+
+// const theme = ref();
+// const chart_color = ref('#ffffff');
+
+// console.log(document.documentElement.getAttribute("data-theme"))
+
+// watch(theme, (newVal) => {
+//   console.log(newVal);
+// });
+
+// const chart_color = watch(()=>{
+//   // var theme = localStorage.getItem('theme');
+//   if(theme.value == 'dark') return '#1C1C1E';
+//   else return '#ffffff';
+// });
+
+
+
+
+// watchEffect(() => {
+//   const newTheme = localStorage.getItem("theme");
+//   if (newTheme !== theme.value) {
+//     theme.value = newTheme;
+//     // The value of the "theme" key in localStorage has changed
+//     // Do something here, such as updating the theme of the app
+//   }
+// });
+
+
+const passwordStrength = computed(() => {
+  var pwStrengthErrorThreshold = 50;
+    var pwStrengthWarningThreshold = 75;
+
+			var pw = newPassword1.value;
+
+			// Check if the password contains any disallowed special symbols
+  if (/[^A-Za-z0-9!@]/.test(pw)) {
+    // Set password strength to 0 if disallowed special symbols are found
+    return 10;
+  }
+
+			// Update the previous password value
+
+			var pwlength = (pw.length);
+			if (pwlength > 7) pwlength = 5;
+			else pwlength = 2;
+
+			var numnumeric = pw.replace(/[0-9]/g, "");
+			var numeric = (pw.length - numnumeric.length);
+			if (numeric > 3) numeric = 3;
+
+			// Update the regular expression to only match "!" and "@"
+			var symbols = pw.replace(/[!@]/g, "");
+			var numsymbols = (pw.length - symbols.length);
+			if (numsymbols > 3) numsymbols = 3;
+
+			var numupper = pw.replace(/[A-Z]/g, "");
+			var upper = (pw.length - numupper.length);
+			if (upper > 3) upper = 3;
+			var pwstrength = ((pwlength * 10) - 20) + (numeric * 10) + (numsymbols * 15) + (upper * 10);
+			if (pwstrength < 0) pwstrength = 0;
+			if (pwstrength > 100) pwstrength = 100;
+  
+        return pwstrength;
+});
+
+
 </script>
 
 <style scoped>

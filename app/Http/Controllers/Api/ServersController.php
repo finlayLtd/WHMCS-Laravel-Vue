@@ -28,9 +28,12 @@ class ServersController extends Controller
             'action' => 'GetOrderStatuses',
         ]);
 
-        foreach ($order_state_response['statuses']['status'] as $state_info)
+        if($order_state_response['result'] == 'success'){
+            foreach ($order_state_response['statuses']['status'] as $state_info)
             array_push($states, $state_info['title']);
         asort($states);
+        }
+        
 
         $orders_response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetClientsProducts',
@@ -63,47 +66,51 @@ class ServersController extends Controller
             }
         }
 
-        if ($orders_response['totalresults'] > 0) {
-            $total_tickets = $orders_response['totalresults'];
-            $orders = $orders_response['products']['product'];
-
-            foreach ($states as $state)
-                foreach ($orders as $order)
-                    $state_order[$state] = [];
-
-            foreach ($states as $state)
-                foreach ($orders as $order){
-                    if ($order['status'] == $state) {
-                        array_push($state_order[$state], $order);
-                        $last_index = count($state_order[$state]) - 1;
-                        if(strpos($order['configoptions']['configoption'][1]['value'],'Netherlands') !== false){
-                            $state_order[$state][$last_index]['flag'] = 'flag-en';
-                        }else{
-                            $state_order[$state][$last_index]['flag'] = 'flag-nl';
-                        }
-                        
-                        $system = explode('-',$order['configoptions']['configoption'][1]['value'])[0];
-                        switch($system){
-                            case 'windows':
-                                $state_order[$state][$last_index]['sys_log'] = 'windows'; break;
-                            case 'ubuntu':
-                                $state_order[$state][$last_index]['sys_log'] = 'ubuntu'; break;
-                            case 'centos':
-                                $state_order[$state][$last_index]['sys_log'] = 'centos'; break;
-                            case 'debian':
-                                $state_order[$state][$last_index]['sys_log'] = 'debian'; break;
-                            case 'almalinux':
-                                $state_order[$state][$last_index]['sys_log'] = 'almalinux'; break;
-                            case 'fedora':
-                                $state_order[$state][$last_index]['sys_log'] = 'fedora'; break;
-                            case 'rocky':
-                                $state_order[$state][$last_index]['sys_log'] = 'rocky'; break;
-                            default:
-                                $state_order[$state][$last_index]['sys_log'] = 'windows'; break;
+        if($orders_response['result'] == 'success'){
+            if ($orders_response['totalresults'] > 0) {
+                // $total_tickets = $orders_response['totalresults'];
+                $orders = $orders_response['products']['product'];
+                if($request->orderby && $request->orderby!='');
+                $orders = collect($orders)->sortByDesc($request->orderby)->values()->all();
+                foreach ($states as $state)
+                    foreach ($orders as $order)
+                        $state_order[$state] = [];
+    
+                foreach ($states as $state)
+                    foreach ($orders as $order){
+                        if ($order['status'] == $state) {
+                            array_push($state_order[$state], $order);
+                            $last_index = count($state_order[$state]) - 1;
+                            if(strpos($order['configoptions']['configoption'][1]['value'],'Netherlands') !== false){
+                                $state_order[$state][$last_index]['flag'] = 'flag-en';
+                            }else{
+                                $state_order[$state][$last_index]['flag'] = 'flag-nl';
+                            }
+                            
+                            $system = explode('-',$order['configoptions']['configoption'][1]['value'])[0];
+                            switch($system){
+                                case 'windows':
+                                    $state_order[$state][$last_index]['sys_log'] = 'windows'; break;
+                                case 'ubuntu':
+                                    $state_order[$state][$last_index]['sys_log'] = 'ubuntu'; break;
+                                case 'centos':
+                                    $state_order[$state][$last_index]['sys_log'] = 'centos'; break;
+                                case 'debian':
+                                    $state_order[$state][$last_index]['sys_log'] = 'debian'; break;
+                                case 'almalinux':
+                                    $state_order[$state][$last_index]['sys_log'] = 'almalinux'; break;
+                                case 'fedora':
+                                    $state_order[$state][$last_index]['sys_log'] = 'fedora'; break;
+                                case 'rocky':
+                                    $state_order[$state][$last_index]['sys_log'] = 'rocky'; break;
+                                default:
+                                    $state_order[$state][$last_index]['sys_log'] = 'windows'; break;
+                            }
                         }
                     }
-                }
+            }
         }
+        
         
         // $vps = $this->getVPSList();
         // print_r($vps);exit;

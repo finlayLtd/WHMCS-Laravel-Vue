@@ -1,5 +1,7 @@
 <template>
-  <div class="sub-section server-list-tab">
+  <div class="sub-section server-list-tab vl-parent">
+    <loading v-model:active="isLoading" :is-full-page="false"
+                 />
     <div
       class="d-flex justify-content-between align-items-center title-button-wrapper"
     ></div>
@@ -18,8 +20,9 @@
             </div>
             <div class="sorting-items" v-if="sortBy">
               <ul>
-                <li>Created date</li>
-                <li>Expiration date</li>
+                <li @click="setOrder('regdate', 'desc')">Created date</li>
+                <li @click="setOrder('nextduedate', 'asc')">Expiration date</li>
+                
               </ul>
             </div>
           </div>
@@ -27,7 +30,7 @@
           <ul class="nav nav-pills four-pills mb-3 mb-md-0 order-1 order-md-2 mb-lg-0 flex-nowrap" id="pills-tab" role="tablist">
             <li v-for="state in states" :key="state" class="nav-item" role="presentation" >
               <button
-              v-if="state_order?.[state]?.length"
+              v-if="state_order?.[state] && state!='Fraud'"
                 :class="['nav-link', state === 'Active' ? 'active' : '']"
                 :id="'pills-' + state + '-tab'"
                 data-bs-toggle="pill"
@@ -45,7 +48,8 @@
         </div>
       </div>
       <div class="tab-content" id="pills-tabContent">
-   
+        
+                 <!-- s -->
   
     
       <div v-for="state in states" :key="state" :class="['tab-pane', {'fade': state !== 'Active'}, {'show active': state === 'Active'}]"
@@ -64,11 +68,25 @@
                     <h2 class="list-name">{{ order.name }}</h2>
                     <h3 class="detail">{{ order.configoptions.configoption[1].value }}</h3>
                     <div v-if="state !== 'Cancelled'" class="server-list-options">
-                      <div class="options-toggle" style="padding-right: 10px; padding-left: 10px;"></div>
-                      <div class="options-toggle-dropdown">
+                      <div class="options-toggle dropdown-toggle hideIcon" style="padding-right: 10px; padding-left: 10px;" data-bs-toggle="dropdown"></div>
+                      <div class="options-toggle-dropdown dropdown-menu dropdown-menu-end">
                         <ul>
-                          <li><a :href="'/overview/' + order.orderid">Launch Control Panel </a></li>
-                          <li><a href="/balance">View Invoices </a></li>
+                          <li>
+                            <router-link
+                              class="logo-wrapper d-flex align-items-center col-md-2 text-dark text-decoration-none order-lg-1"
+                              :to="{ name: 'overview', params: { id: order.orderid } }"
+                            >
+                              Launch Control Panel
+                            </router-link>
+                          </li>
+                          <li>
+                            <router-link
+                              class="logo-wrapper d-flex align-items-center col-md-2 text-dark text-decoration-none order-lg-1"
+                              to="/balance"
+                            >
+                              View Invoices
+                            </router-link> 
+                          </li>
                         </ul>
                       </div>
                     </div>
@@ -82,7 +100,7 @@
                   </div>
                   <div class="list-item-detail">
                     <h2 class="list-name">{{ order.dedicatedip }}</h2>
-                    <h3 class="detail">Created_at  {{ order.regdate }}</h3>
+                    <h3 class="detail">Created at  {{ order.regdate }}</h3>
                     <h3 class="detail" style="margin-top:5px;">Due date at  &nbsp;{{ order.nextduedate }}</h3>
                   </div>
                   <div v-if="state === 'Active'" class="server-list-options">
@@ -120,7 +138,8 @@
 
 <script setup>
 import { computed, onMounted, ref, onBeforeUnmount } from "vue";
-
+import Loading from 'vue-loading-overlay';
+    import 'vue-loading-overlay/dist/css/index.css';
 import { useStore } from 'vuex';
 import { commonApis } from '@/apis/commonApis';
 import { showLoader } from '@/plugins/loading.js';
@@ -138,25 +157,40 @@ const state_order = ref([]);
 const params = ref(
 	{'client_id': user.value.client_id , orderby:'', order:''}
 )
+const isLoading = ref(false);
 const getServersData = ()=>{
-		showLoader(true);
+		// showLoader(true);
+    isLoading.value = true;
 		commonApi.runGetApi('/servers' , params.value).then((res)=>{
-		showLoader(false);
+      isLoading.value = false;
 		sortBy.value = false;
-		console.log(res.data)
 		servers.value = res.data.products;
 		states.value = res.data.states;
 		state_order.value = res.data.state_order;
 	
    
 	}).catch((e)=>{
-	console.log(e)
+	console.log(e);
+  isLoading.value = false;
 
 	})
 }
+
+function setOrder(orderBy , order) {
+    params.value.orderby = orderBy
+    // params.value.order = order
+    getServersData()
+  }
 
 getServersData()
 </script>
 
 <style scoped>
+.hide-icon::after {
+  display: none !important; /* hide the ::after pseudo-element */
+}
+
+.dropdown-toggle:empty::after {
+  display: none !important;
+}
 </style>

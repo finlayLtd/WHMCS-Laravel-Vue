@@ -56,6 +56,7 @@ import { computed, onMounted, ref, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
+import { showLoader } from "@/plugins/loading.js";
 const $toast = useToast();
 
 const processing = ref(false);
@@ -65,6 +66,7 @@ const email = ref("");
 const submitForgot = async () => {
   if (processing.value) return;
   processing.value = true;
+  showLoader(true);
   await axios
     .post("api/whmcs/forgot-password", {
       email: email.value,
@@ -72,6 +74,7 @@ const submitForgot = async () => {
     .then((res) => {
       if (res) {
         if (res.status == 200) {
+          showLoader(false);
           if (res.data.data == "success") {
             //
             $toast.success("Successfully sent forgot password request!");
@@ -80,6 +83,7 @@ const submitForgot = async () => {
             $toast.warning("Email is not valid!");
           }
         } else {
+          showLoader(false);
           console.log(res.data);
         }
       }

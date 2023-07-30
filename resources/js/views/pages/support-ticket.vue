@@ -96,7 +96,7 @@
 							</div>
 						</div>
 						<div class="support-item-detail">
-							<p class="fs-15 mb-0">{{ ticket.subject }}</p>
+							<p class="fs-15 mb-0" v-html="ticket.subject"></p>
 						</div>
 						</div>
 					</div>

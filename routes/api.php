@@ -6,7 +6,11 @@ use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\CreateVpsServerController;
+use App\Http\Controllers\Api\OverviewController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\SwitchAccountController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -47,6 +51,11 @@ Route::group(['middleware' => 'auth:sanctum' ,  'namespace' => 'App\\Http\\Contr
     // balance page fetch apis
     Route::get('get-invoices', 'BalanceController@index');
 
+
+    // switch account
+    Route::get('getCurrentState', 'SwitchAccountController@index');
+    Route::post('switch', 'SwitchAccountController@switch');
+    
     // balance page redirect apis
     Route::post('add_funds_sso', 'SSOController@add_funds_sso');
     Route::post('invoice_detail_sso', 'SSOController@invoice_detail_sso');
@@ -59,8 +68,27 @@ Route::group(['middleware' => 'auth:sanctum' ,  'namespace' => 'App\\Http\\Contr
     Route::post('get_permission_detail_per_ser', 'HomeController@managePermissions');
     Route::post('edit_user_permissions', 'HomeController@edit_user_permissions');
     
+    // create-vps-server apis
+    Route::get('create-vps-server', 'CreateVpsServerController@index');
+    Route::post('create-vps', 'CreateVpsServerController@create');
     
-    
+     // overview apis
+     Route::post('overview', 'OverviewController@index');
+    //  overview actions
+     Route::post('overview/turnon', 'OverviewController@turnon');
+     Route::post('overview/turnoff', 'OverviewController@turnoff');
+    //  Route::post('overview/reboot', 'OverviewController@reboot');
+    //  Route::post('overview/poweroff', 'OverviewController@poweroff');
+     Route::post('overview/rebuild', 'OverviewController@rebuild');
+     Route::post('overview/changepwd', 'OverviewController@changeRootPwd');
+     Route::post('overview/changehostName', 'OverviewController@changehostNames');
+     Route::post('overview/changeip', 'OverviewController@changeip');
+     Route::post('overview/checkhostName', 'OverviewController@checkhostName');
+
+     Route::post('overview/addrdns', 'OverviewController@addRDNS');
+     Route::post('overview/deleterdns', 'OverviewController@deleteRDNS');
+     //  connect vnc api
+     Route::post('overview/noVNC-connect', 'OverviewController@connectvnc');
     
 });
 

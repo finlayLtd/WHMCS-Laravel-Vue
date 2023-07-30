@@ -28,32 +28,50 @@ class SupportTicketController extends Controller
             'userid' => $request->client_id,
         ]);
 
+        
+
+        if($order_info['result'] == 'success'){
+            if ($order_info['totalresults'] > 0) {
+                $orders = $order_info['orders']['order'];
+            }
+        }
+
         $departments_info =  (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetSupportDepartments'
         ]);
-        if ($order_info['totalresults'] > 0) {
-            $orders = $order_info['orders']['order'];
-        }
 
-        if ($departments_info['totalresults'] > 0) {
-            $departments = $departments_info['departments']['department'];
-        }
-
-
-        if ($tickets_response['totalresults'] > 0) {
-            $tickets = $tickets_response['tickets']['ticket'];
-            if($request->order && $request->orderby)
-            {
-                if($request->order == 'desc') $tickets = collect($tickets)->sortByDesc($request->orderby)->values()->all();
-                else  $tickets = collect($tickets)->sortBy($request->orderby)->values()->all();
+        if($departments_info['result'] == 'success'){
+            if ($departments_info['totalresults'] > 0) {
+                $departments = $departments_info['departments']['department'];
             }
-            
-            
         }
 
-        if ($tickets_status['totalresults'] > 0) {
-            $status = $tickets_status['statuses']['status'];
+        
+        if($tickets_response['result'] == 'success'){
+            if ($tickets_response['totalresults'] > 0) {
+                $tickets = $tickets_response['tickets']['ticket'];
+                if($request->order && $request->orderby)
+                {
+                    if($request->order == 'desc') $tickets = collect($tickets)->sortByDesc($request->orderby)->values()->all();
+                    else  $tickets = collect($tickets)->sortBy($request->orderby)->values()->all();
+                }
+                
+                
+            }
         }
+        
+        if($tickets_status['result'] == 'success'){
+            if ($tickets_status['totalresults'] > 0) {
+                $status = $tickets_status['statuses']['status'];
+            }
+        }
+
+        
+
+
+        
+
+        
         
         $perPage = 8; // Number of items per page
         $page = $request->input('page', 1); // Get the current page number (default to 1 if not provided)

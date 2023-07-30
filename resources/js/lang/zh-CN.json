@@ -38,6 +38,6 @@
     "servers_nav" : "服務器",
     "invoices_nav" : "發票",
     "support_tickets_nav" : "支持門票",
-    "logout_nav" : "登出"
-    
+    "logout_nav" : "登出",
+    "Switch Account" : "切换帐户"
 }

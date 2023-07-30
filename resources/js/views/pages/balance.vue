@@ -116,21 +116,6 @@
                     Unpaid
                   </button>
                 </li>
-                <!-- <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link"
-                    id="pills-profile-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-profile"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-profile"
-                    aria-selected="false"
-                    @click="invoiceStatus = 'Cancelled'"
-                  >
-                    Cancelled
-                  </button>
-                </li> -->
               </ul>
             </div>
           </div>
@@ -188,47 +173,9 @@
                   </tbody>
                 </table>
               </div>
-              <!-- pagination -->
-              <!-- <div class="w-100 server-list-pagination">
-                <nav aria-label="...">
-                  <ul class="pagination">
-                    <li class="page-item disabled first">
-                      <a
-                        class="page-link"
-                        href="#"
-                        tabindex="-1"
-                        aria-disabled="true"
-                        >Previous</a
-                      >
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="#">1</a>
-                    </li>
-                    <li class="page-item active" aria-current="page">
-                      <a class="page-link" href="#">2</a>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="#">3</a>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="#">4</a>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="#">5</a>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="#">...</a>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="#">124</a>
-                    </li>
-
-                    <li class="page-item last">
-                      <a class="page-link" href="#">Next</a>
-                    </li>
-                  </ul>
-                </nav>
-              </div> -->
+              <div class="w-100 server-list-pagination">
+                <Pagination :currentPage="params.page" :totalPages="totalFilterPages[invoiceStatus]" @page-changed="onPageChanged" />
+              </div>
             </div>
           </div>
         </div>
@@ -303,6 +250,7 @@ import { commonApis } from "@/apis/commonApis";
 import { useStore } from "vuex";
 import useAuth from "@/composables/auth";
 import { showLoader } from "@/plugins/loading.js";
+import Pagination from '@/components/Pagination.vue'; 
 
 const commonApi = commonApis();
 const sortBy = ref(false);
@@ -312,10 +260,13 @@ const user = computed(() => store.state.auth.user);
 const invoices = ref([]);
 // const status = ref([]);
 const invoiceStatus = ref("All");
-const page = ref(1);
+// const page = ref(1);
+const totalPages = ref(0);
 const totalresults = ref(0);
-const startnumber = ref(0);
-const numreturned = ref(0);
+// const startnumber = ref(0);
+// const numreturned = ref(0);
+
+const perPage = 15;
 
 console.log(user.value.client_id);
 
@@ -323,7 +274,7 @@ const params = ref({
   client_id: user.value.client_id,
   orderby: "",
   order: "",
-  page: page.value,
+  page: 1,
 });
 
 const getInvoicesData = () => {
@@ -335,14 +286,22 @@ const getInvoicesData = () => {
       sortBy.value = false;
       invoices.value = res.data.invoices;
       totalresults.value = res.data.totalresults;
-      startnumber.value = res.data.startnumber;
-      numreturned.value = res.data.numreturned;
+      // startnumber.value = res.data.startnumber;
+      // numreturned.value = res.data.numreturned;
+
+      totalPages.value = Math.ceil(totalresults.value / perPage);
     })
     .catch((e) => {
       showLoader(false);
       console.log(e);
     });
 };
+
+function onPageChanged(page) 
+{
+	params.value.page = page;
+	//getTicketsData(); // Fetch tickets for the new page
+}
 
 const openAddFundsWindow = () => {
   showLoader(true);
@@ -351,7 +310,7 @@ const openAddFundsWindow = () => {
     .then((res) => {
       showLoader(false);
       if (res.data.result == "success") {
-        window.open(res.data.redirect_url, "_blank");
+        openInNewTab(res.data.redirect_url);
       }
     })
     .catch((e) => {
@@ -359,6 +318,11 @@ const openAddFundsWindow = () => {
       console.log(e);
     });
 };
+
+const openInNewTab = (url) => {
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+    if (newWindow) newWindow.opener = null
+}
 
 const openInvoiceWindow = (invoice_id) => {
 
@@ -368,7 +332,7 @@ const openInvoiceWindow = (invoice_id) => {
     .then((res) => {
       showLoader(false);
       if (res.data.result == "success") {
-        window.open(res.data.redirect_url, "_blank");
+        openInNewTab(res.data.redirect_url);
       }
     })
     .catch((e) => {
@@ -388,15 +352,25 @@ function getCellClass(status) {
   if (status == "Unpaid") return "cancelled-cell";
   return "in-progress-cell";
 }
-
+const totalFilterPages = ref([]);
 const filteredInvoices = computed(() => {
+  let invoiceData;
   if (invoiceStatus.value === "All") {
-    return invoices.value;
+    invoiceData = invoices.value;
+  } else{
+    invoiceData = invoices.value.filter(
+      (invoice) => invoice.status === invoiceStatus.value
+    );
   }
 
-  return invoices.value.filter(
-    (invoice) => invoice.status === invoiceStatus.value
-  );
+  const paginatedInvoices = computed(() => {
+  const startIndex = (params.value.page - 1) * perPage;
+  const endIndex = startIndex + perPage;
+    return invoiceData.slice(startIndex, endIndex);
+  });
+  totalFilterPages.value[invoiceStatus.value] = Math.ceil(invoiceData.length / perPage); 
+  return paginatedInvoices.value
+
 });
 
 function setOrder(orderBy, order) {

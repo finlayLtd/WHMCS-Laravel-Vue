@@ -1,5 +1,6 @@
 <template>
   <section class="dashboard">
+
     <div class="container">
       <div
         class="d-flex justify-content-between align-items-center title-button-wrapper position-relative"
@@ -26,7 +27,9 @@
         </div>
       </div>
 
-      <div class="sub-section server-list-tab">
+      <div class="sub-section server-list-tab vl-parent">
+        <loading v-model:active="isLoading" :is-full-page="false"
+                   />
         <div class="row justify-content-between align-items-center">
           <div class="col-md-12">
             <div class="w-100 mb-2 mb-lg-5">
@@ -137,7 +140,7 @@
                           #{{ ticket.tid }}
                         </router-link>
                         </td>
-                      <td>{{ ticket.subject }}</td>
+                      <td v-html="ticket.subject"></td>
                       <td class="refund-request">{{ ticket.priority }}</td>
                       <td class="date-cell">{{ ticket.date }}</td>
                       <td :class="getCellClass(ticket.status)">
@@ -152,49 +155,6 @@
             <div class="w-100 server-list-pagination">
               <Pagination :currentPage="params.page" :totalPages="totalFilterPages[ticketStatus]" @page-changed="onPageChanged" />
             </div>
-            <!-- pagination -->
-            <!-- <div class="w-100 server-list-pagination">
-                <nav aria-label="...">
-                  <ul class="pagination">
-                    <li class="page-item disabled first">
-                      <a
-                        class="page-link"
-                        href="#"
-                        tabindex="-1"
-                        aria-disabled="true"
-                        >Previous</a
-                      >
-                    </li>
-                    <li class="page-item inner-page-item">
-                      <a class="page-link" href="#">1</a>
-                    </li>
-                    <li
-                      class="page-item inner-page-item active"
-                      aria-current="page"
-                    >
-                      <a class="page-link" href="#">2</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-  
-                    <li class="page-item inner-page-item d-none d-lg-block">
-                      <a class="page-link" href="#">4</a>
-                    </li>
-                    <li class="page-item inner-page-item d-none d-lg-block">
-                      <a class="page-link" href="#">5</a>
-                    </li>
-                    <li class="page-item inner-page-item d-none d-lg-block">
-                      <a class="page-link" href="#">...</a>
-                    </li>
-                    <li class="page-item d-none d-lg-block">
-                      <a class="page-link" href="#">124</a>
-                    </li>
-  
-                    <li class="page-item last">
-                      <a class="page-link" href="#">Next</a>
-                    </li>
-                  </ul>
-                </nav>
-              </div> -->
           </div>
         </div>
       </div>
@@ -213,7 +173,9 @@ import { useStore } from 'vuex';
 import useAuth from "@/composables/auth";
 import { showLoader } from '@/plugins/loading.js';
 import Pagination from '@/components/Pagination.vue'; 
-
+import Loading from 'vue-loading-overlay';
+      import 'vue-loading-overlay/dist/css/index.css';
+      const isLoading = ref(false);
 const commonApi = commonApis()
 const sortBy = ref(false);
 const store = useStore();
@@ -225,25 +187,21 @@ const ticketStatus = ref("All");
 
 const onlyShow = ref(['All' , 'Open' , 'Answered' , 'Customer-Reply' , 'Closed'])
 
-console.log(user.value.client_id)
-
 
 const params = ref(
 	{'client_id': user.value.client_id , orderby:'', order:'' , page:1}
 )
-const perPage = 8;
+const perPage = 5;
 
 const getTicketsData = ()=>{
-	showLoader(true);
+	isLoading.value = true;
 	commonApi.runGetApi('/support-ticket' , params.value).then((res)=>{
-	showLoader(false);
+    isLoading.value = false;
 	sortBy.value = false;
-	console.log(res.data)
 	tickets.value = res.data.tickets
   const filteredStatus = computed(() => {
       return res?.data?.status?.filter(statu => onlyShow.value.includes(statu.title));
     });
-	console.log('filteredStatus' , filteredStatus.value)
 		status.value = filteredStatus.value;
     const totalTickets = res.data.totalTickets;
       
@@ -252,7 +210,7 @@ const getTicketsData = ()=>{
    
 	}).catch((e)=>{
 	console.log(e)
-
+  isLoading.value = false;
 	})
 }
 
@@ -260,11 +218,13 @@ getTicketsData()
 function formatDate(date) {
   return new Date(date).toISOString().slice(0, 10);
 }
+
 function onPageChanged(page) 
 {
 	params.value.page = page;
 	//getTicketsData(); // Fetch tickets for the new page
 }
+
 function getTabId(title) {
   return `pills-${slugify(title)}`;
 }

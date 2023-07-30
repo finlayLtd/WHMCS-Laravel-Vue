@@ -43,5 +43,6 @@
     "servers_nav" : "Серверы",
     "invoices_nav" : "Счета-фактуры",
     "support_tickets_nav" : "Техническая поддержка",
-    "logout_nav" : "Выйти"
+    "logout_nav" : "Выйти",
+    "Switch Account" : "Сменить аккаунт"
 }

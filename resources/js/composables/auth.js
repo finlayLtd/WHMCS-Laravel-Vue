@@ -2,7 +2,13 @@ import { ref, reactive, inject } from 'vue'
 import { useRouter } from "vue-router";
 import { AbilityBuilder, Ability } from '@casl/ability';
 import { ABILITY_TOKEN } from '@casl/vue';
-import store from '../store'
+import store from '../store';
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
+const $toast = useToast();
+
+import { showLoader } from '@/plugins/loading.js';
+
 
 let user = reactive({
     name: '',
@@ -35,6 +41,7 @@ export default function useAuth() {
         processing.value = true
         validationErrors.value = {}
 
+        showLoader(true);
         await axios.post('/login', loginForm)
             .then(async response => {
                 await store.dispatch('auth/getUser')
@@ -45,20 +52,20 @@ export default function useAuth() {
                 ability.update(userAbilities)
                 localStorage.setItem('userData', JSON.stringify(userData))
                 localStorage.setItem('accessToken', JSON.stringify(accessToken))
-                swal({
-                    icon: 'success',
-                    title: 'Login successfully',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
+                showLoader(false);
+                $toast.success("Login successfully!");
                 await router.push({ name: 'dashboard' })
             })
             .catch(error => {
+                showLoader(false);
                 if (error.response?.data) {
                     validationErrors.value = error.response.data.errors
                 }
             })
-            .finally(() => processing.value = false)
+            .finally(() => {
+                showLoader(false);
+                processing.value = false;
+            })
     }
 
     const submitRegister = async () => {
@@ -71,12 +78,7 @@ export default function useAuth() {
             .then(async response => {
                 // await store.dispatch('auth/getUser')
                 // await loginUser()
-                swal({
-                    icon: 'success',
-                    title: 'Registration successfully',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
+                $toast.success("Registration successfully!");
                 await router.push({ name: 'auth.login' })
             })
             .catch(error => {

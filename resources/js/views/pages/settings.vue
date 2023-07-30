@@ -748,7 +748,7 @@ const getSettingsData = () => {
     .runGetApi("/get-profileData", params.value)
     .then((res) => {
       showLoader(false);
-      emailsList.value = res.data.emailsList;
+      emailsList.value = res.data.emails;
       users_list.value = res.data.users_list;
       clientDetails.value = res.data.clientDetails;
     })

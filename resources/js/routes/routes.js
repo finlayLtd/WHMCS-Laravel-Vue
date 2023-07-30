@@ -86,10 +86,17 @@ export default [
                 component: () => import('../views/pages/support-ticket.vue'),
             },
             {
+                path: 'switch-account',
+                name: 'switch-account',
+                component: () => import('../views/pages/switch-account.vue'),
+            },
+            {
                 path: 'ticket-detail/:id',
                 name: 'ticket-detail',
                 component: () => import('../views/pages/ticket-detail.vue'),
             },
+
+            
 
             {
                 path: 'manageUser-detail/:id/:email',
@@ -151,6 +158,12 @@ export default [
                 name: 'forgot-password',
                 component: () => import('../views/forgot-password/index.vue'),
                 beforeEnter: guest,
+            },
+            {
+                path: 'noVNC/:id',
+                name: 'noVNC',
+                component: () => import('../views/pages/noVNC.vue'),
+                beforeEnter: requireLogin,
             },
         ]
     },

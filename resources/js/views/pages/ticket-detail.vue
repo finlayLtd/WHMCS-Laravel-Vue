@@ -41,8 +41,7 @@
                           class="message-body"
                           v-if="reply.message && reply.message != ' '"
                         >
-                          <div>
-                            {{ reply.message }}
+                          <div style="text-align: left;" v-html=reply.message>
                           </div>
                         </div>
                         <div
@@ -72,9 +71,9 @@
                     <div class="message-item message-sent" v-else>
                       <div class="message-item-header">
                         <div class="message-sender">
-                          <span class="fs-15">{{ $reply["name"] }}</span
+                          <span class="fs-15">{{ reply.name }}</span
                           ><span class="message-sent-time fs-13">{{
-                            $reply["date"]
+                            reply.date
                           }}</span>
                         </div>
                       </div>
@@ -84,8 +83,7 @@
                           class="message-body"
                           v-if="reply.message && reply.message != ' '"
                         >
-                          <div>
-                            {{ reply.message }}
+                          <div v-html="reply.message" style="text-align: left;">
                           </div>
                         </div>
 
@@ -239,7 +237,7 @@ const download_file = (id) => {
     .then((res) => {
       showLoader(false);
       if (res.data.result == "success") {
-        window.open(res.data.redirect_url, "_blank");
+        openInNewTab(res.data.redirect_url);
       }
     })
     .catch((e) => {
@@ -247,6 +245,11 @@ const download_file = (id) => {
       console.log(e);
     });
 };
+
+const openInNewTab = (url) => {
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+    if (newWindow) newWindow.opener = null
+}
 
 const sendReply = () => {
   showLoader(true);

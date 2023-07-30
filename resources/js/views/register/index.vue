@@ -1,65 +1,4 @@
 <template>
-  <!-- <div class="container">
-          <div class="row justify-content-center my-5">
-              <div class="col-md-6">
-                  <div class="card border-0 shadow-sm">
-                      <div class="card-header bg-transparent">{{ $t('register') }}</div>
-                      <div class="card-body">
-                          <form @submit.prevent="submitRegister">
-                              <div class="">
-                                  <div class="mb-3">
-                                      <label for="name" class="form-label">{{ $t('name') }}</label>
-                                      <input v-model="registerForm.name" id="name" type="text" class="form-control" autofocus>
-                                      <div class="text-danger mt-1">
-                                          <div v-for="message in validationErrors?.name">
-                                              {{ message }}
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <div class="mb-3">
-                                      <label for="email" class="form-label">{{ $t('email') }}</label>
-                                      <input v-model="registerForm.email" id="email" type="email" class="form-control" autocomplete="username">
-                                      <div class="text-danger mt-1">
-                                          <div v-for="message in validationErrors?.email">
-                                              {{ message }}
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <div class="mb-4">
-                                      <label for="password" class="form-label">
-                                          {{ $t('password') }}
-                                      </label>
-                                      <input v-model="registerForm.password" id="password" type="password" class="form-control" autocomplete="current-password">
-                                      <div class="text-danger-600 mt-1">
-                                          <div v-for="message in validationErrors?.password">
-                                              {{ message }}
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <div class="mb-4">
-                                      <label for="password_confirmation" class="form-label">
-                                          {{ $t('confirm_password') }}
-                                      </label>
-                                      <input v-model="registerForm.password_confirmation" id="password_confirmation" type="password" class="form-control" autocomplete="current-password">
-                                      <div class="text-danger-600 mt-1">
-                                          <div v-for="message in validationErrors?.password_confirmation">
-                                              {{ message }}
-                                          </div>
-                                      </div>
-                                  </div>
-  
-                                  <div class="flex items-center justify-end mt-4">
-                                      <button class="btn btn-primary" :class="{ 'opacity-25': processing }" :disabled="processing">
-                                          {{ $t('register') }}
-                                      </button>
-                                  </div>
-                              </div>
-                          </form>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div> -->
   <section class="home-hero login">
     <!-- alert messges -->
     <div class="badge reset-success" style="background: crimson" v-show="false">
@@ -144,18 +83,20 @@
                 class="progress-bar progress-bar-success"
                 role="progressbar"
                 aria-valuenow="0"
-                aria-valuemin="0"
-                aria-valuemax="100"
-                style="width: 0%"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            :style="'width: '+passwordStrength+'%'"
               >
-                <span class="sr-only">Password Rating: 0%</span>
+                <span class="rating">Password Rating: {{ passwordStrength }}%</span>
               </div>
             </div>
 
             <div class="alert alert-info" style="text-align: left">
-              <strong>Tips for a good password</strong><br />Use both upper and
-              lowercase characters<br />Include at least one symbol (# $ ! %
-              &amp; etc...)<br />Don't use dictionary words
+              <strong>Tips for a good password</strong
+                                    ><br />Use both upper and lowercase
+                                    characters<br />Include at least one symbol
+                                    (only ! and @)<br />Don't use dictionary words
+                                    and special characters
             </div>
 
             <div class="checkbox-item-wrapper mb-4">
@@ -176,7 +117,7 @@
               type="submit"
               class="btn-dark w-100 mb-2"
               :class="{ 'opacity-25': processing }"
-              :disabled="processing"
+              :disabled="processing || password == '' || passwordStrength < 80 "
             >
               Register account
             </button>
@@ -200,6 +141,7 @@ import { computed, onMounted, ref, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
+import { showLoader } from "@/plugins/loading.js";
 const $toast = useToast();
 
 const router = useRouter();
@@ -212,6 +154,7 @@ const processing = ref(false);
 const submitRegister = async () => {
   if (processing.value) return;
   processing.value = true;
+  showLoader(true);
   await axios
     .post("/register", {
       firstname: firstname.value,
@@ -220,6 +163,7 @@ const submitRegister = async () => {
       password: password.value,
     })
     .then((res) => {
+      showLoader(false);
       if (res) {
         if (res.status == 200) {
           if (res.data.data == "success") {
@@ -238,8 +182,44 @@ const submitRegister = async () => {
     })
     .catch(function (error) {
       console.log(error);
+      showLoader(false);
     })
-    .finally(() => (processing.value = false));
+    .finally(() => (processing.value = false, showLoader(false)));
 };
+
+const passwordStrength = computed(() => {
+  var pwStrengthErrorThreshold = 50;
+  var pwStrengthWarningThreshold = 75;
+
+  var pw = password.value;
+
+  // Check if the password contains any disallowed special symbols
+  if (/[^A-Za-z0-9!@]/.test(pw)) {
+    // Set password strength to 0 if disallowed special symbols are found
+    return 10;
+  }
+
+  var pwlength = (pw.length);
+  if (pwlength > 7) pwlength = 5;
+  else pwlength = 2;
+
+  var numnumeric = pw.replace(/[0-9]/g, "");
+  var numeric = (pw.length - numnumeric.length);
+  if (numeric > 3) numeric = 3;
+
+  // Update the regular expression to only match "!" and "@"
+  var symbols = pw.replace(/[!@]/g, "");
+  var numsymbols = (pw.length - symbols.length);
+  if (numsymbols > 3) numsymbols = 3;
+
+  var numupper = pw.replace(/[A-Z]/g, "");
+  var upper = (pw.length - numupper.length);
+  if (upper > 3) upper = 3;
+  var pwstrength = ((pwlength * 10) - 20) + (numeric * 10) + (numsymbols * 15) + (upper * 10);
+  if (pwstrength < 0) pwstrength = 0;
+  if (pwstrength > 100) pwstrength = 100;
+
+  return pwstrength;
+});
 </script>
   

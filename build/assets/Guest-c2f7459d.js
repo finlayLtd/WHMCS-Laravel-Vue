@@ -1,1 +1,0 @@
-import{r as o,b as t,d as a,h as e,F as n}from"./app-1c59e5b4.js";import{N as s}from"./Nav-599f428f.js";const l={__name:"Guest",setup(c){return(_,m)=>{const r=o("router-view");return t(),a(n,null,[e(s),e(r)],64)}}};export{l as default};

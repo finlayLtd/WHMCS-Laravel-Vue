@@ -1,9 +1,5 @@
 <template>
   <section class="home-hero login">
-    <div class="badge reset-success" style="background: crimson" v-show="false">
-      <img src="assets/img/reset-success.svg" alt="" /> Wrong email address or
-      unregistered user.
-    </div>
 
     <div class="login-wrapper pb-0 w-100">
       <div class="bg-dots bg-dots-left"></div>
@@ -18,11 +14,11 @@
             <img class="logo-dark" src="assets/img/crazy-rdp-logo.svg" alt="" />
             <img class="logo-light" src="assets/img/logo-light.svg" alt="" />
           </div>
-          <h2 class="login-title">Forgot password</h2>
+          <h2 class="login-title">{{ $t('Forgot_password') }}</h2>
 
           <form @submit.prevent="submitForgot">
             <div class="login-input-wrapper mb-3">
-              <label for="#email">Email Address</label>
+              <label for="#email">{{ $t('Email_Address') }}</label>
               <input
                 type="email"
                 id="email"
@@ -34,13 +30,13 @@
             </div>
 
             <button type="submit" class="btn-dark w-100 mb-2" :class="{ 'opacity-25': processing }" :disabled="processing">
-              Send Reset Email
+              {{ $t('sent_reset') }}
             </button>
 
             <div class="text-center">
               <p class="mb-0 mt-3 fs-14">
                 <router-link to="/login"
-                  >Back <img class="ms-1" src="assets/img/blue-back.svg" alt=""
+                  >{{ $t('Back') }} <img class="ms-1" src="assets/img/blue-back.svg" alt=""
                 /></router-link>
               </p>
             </div>

@@ -5,13 +5,13 @@
       <div
         class="d-flex justify-content-between align-items-center title-button-wrapper position-relative"
       >
-        <h2 class="title mb-0">Dashboard</h2>
+        <h2 class="title mb-0">{{ $t('Dashboard') }}</h2>
         <button
           type="submit"
           class="btn btn-dark btn-chevron chevron-dark hover-dark-light options-toggle dropdown-toggle"
           data-bs-toggle="dropdown"
         >
-          Create Server
+        {{ $t('Create_server') }}
         </button>
 
         <div
@@ -20,7 +20,7 @@
           <ul>
             <li>
               <router-link to="/create-vps-server"
-                >Create VPS Server</router-link
+                >{{ $t('Create_VPS_Server') }}</router-link
               >
             </li>
           </ul>
@@ -33,7 +33,7 @@
         <div class="row justify-content-between align-items-center">
           <div class="col-md-12">
             <div class="w-100 mb-2 mb-lg-5">
-              <h3 class="sub-title">Support Tickets</h3>
+              <h3 class="sub-title">{{ $t('Support_Tickets') }}</h3>
               <div style="display: flex; justify-content: space-between;">
                 <div class="sort-servers order-2 order-md-1">
                   <div
@@ -42,24 +42,24 @@
                     style="width: 160px"
                     @click="sortBy = !sortBy"
                   >
-                    <span>Sort by...</span>
+                    <span>{{ $t('Sort_by') }}...</span>
                   </div>
                   <div class="sorting-items" v-if="sortBy">
                     <ul>
                       <li class="touch-item" @click="setOrder('date', 'desc')">
-                        Opened-latest
+                        {{ $t('Opened-latest') }}
                       </li>
                       <li class="touch-item" @click="setOrder('date', 'asc')">
-                        Opened-oldest
+                        {{ $t('Opened-oldest') }}
                       </li>
                       <li
                         class="touch-item"
                         @click="setOrder('lastreply', 'desc')"
                       >
-                        Last-Reply-latest
+                        {{ $t('Last-Reply-latest') }}
                       </li>
                       <li class="touch-item" @click="setOrder('date', 'asc')">
-                        Last-Reply-oldest
+                        {{ $t('Last-Reply-oldest') }}
                       </li>
                     </ul>
                   </div>
@@ -112,17 +112,17 @@
               <table class="table">
                 <thead>
                   <tr>
-                    <th scope="col">Ticket No</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Priority</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">{{ $t('Ticket_No') }}</th>
+                    <th scope="col">{{ $t('Title') }}</th>
+                    <th scope="col">{{ $t('Priority') }}</th>
+                    <th scope="col">{{ $t('Date') }}</th>
+                    <th scope="col">{{ $t('Status') }}</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-if="!tickets || tickets.length === 0">
                     <td colspan="5" style="text-align: center">
-                      <h5 style="margin-top: 20px">No tickets</h5>
+                      <h5 style="margin-top: 20px">{{ $t('No_tickets') }}</h5>
                     </td>
                   </tr>
                   <tr

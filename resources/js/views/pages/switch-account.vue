@@ -5,7 +5,7 @@
 <div class="container">
     <div class="d-flex flex-column justify-content-start align-items-start title-button-wrapper">
         <div class="overview-header">
-            <h2 class="title mb-0">Switch Account</h2>
+            <h2 class="title mb-0">{{ $t('Switch_Account') }}</h2>
         </div>
     </div>
 
@@ -17,7 +17,7 @@
                 <div class="tab-pane fade show active" id="pills-userManagement" role="tabpanel" aria-labelledby="pills-userManagement-tab">
                     <div class="tab-inner mb-3">
                         <div class="row">
-                            <h3 class="title mb-4">Choose account to login and manage</h3>
+                            <h3 class="title mb-4">{{ $t('switch_title') }}</h3>
                         </div>
                         <div class="divider"></div>
                         <div class="row px-2 pt-4 px-lg-4 pt-lg-4">
@@ -51,9 +51,9 @@
                                             >
                                                 {{ client.email }}
                                             </button>
-                                            <span v-if="client.email == user.email" class="badge bg-info">Owner</span>
+                                            <span v-if="client.email == user.email" class="badge bg-info">{{ $t('Owner') }}</span>
                                             &nbsp;
-                                            <span v-if="client.client_id == user.client_id" class="badge bg-info">Current logged in account</span>
+                                            <span v-if="client.client_id == user.client_id" class="badge bg-info">{{ $t('Current_logged_in_account') }}</span>
                                             <br>
                                             </td>
                                         </tr>

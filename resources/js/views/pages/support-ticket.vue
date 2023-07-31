@@ -2,7 +2,7 @@
     <section class="dashboard">
 	<div class="container">
 		<div class="d-flex justify-content-between align-items-center title-button-wrapper">
-			<h2 class="title mb-0">Support Ticket</h2>
+			<h2 class="title mb-0">{{ $t('Support_Ticket') }}</h2>
 		</div>
 
 
@@ -15,14 +15,14 @@
 
 						<div class="sort-servers order-2 order-md-1" >
 							<div id="toggleButton" class="sort-item-active btn-chevron chevron-dark" style="width: 160px;" @click="sortBy = !sortBy">
-								<span>Sort by</span>
+								<span>{{ $t('Sort_by') }}</span>
 							</div>
 							<div class="sorting-items" v-if="sortBy">
 								<ul>
-									<li class="touch-item" @click="setOrder('date' , 'desc')">Opened-latest</li>
-									<li class="touch-item" @click="setOrder('date' , 'asc')">Opened-oldest</li>
-									<li class="touch-item" @click="setOrder('lastreply' , 'desc')">Last-Reply-latest</li>
-									<li class="touch-item" @click="setOrder('date' , 'asc')">Last-Reply-oldest</li>
+									<li class="touch-item" @click="setOrder('date' , 'desc')">{{ $t('Opened-latest') }}</li>
+									<li class="touch-item" @click="setOrder('date' , 'asc')">{{ $t('Opened-oldest') }}</li>
+									<li class="touch-item" @click="setOrder('lastreply' , 'desc')">{{ $t('Last-Reply-latest') }}</li>
+									<li class="touch-item" @click="setOrder('date' , 'asc')">{{ $t('Last-Reply-oldest') }}</li>
 								</ul>
 							</div>
 						</div>
@@ -49,7 +49,7 @@
 		              </ul>
 		            </div>
 		            <div class="col-md-3 text-end">
-                        <button type="submit" class="btn btn-dark hover-dark-light d-inline" id="create-ticket" @click="openModal=true">Create Ticket</button>			
+                        <button type="submit" class="btn btn-dark hover-dark-light d-inline" id="create-ticket" @click="openModal=true">{{ $t('Create_Ticket') }}</button>			
 		            </div>
 
 		        </div> 
@@ -61,7 +61,7 @@
 
                 <div class="row mb-5">
 				
-					<h5 v-if="!tickets || tickets.length === 0">No tickets found</h5>
+					<h5 v-if="!tickets || tickets.length === 0">{{ $t('No_tickets_found') }}</h5>
 					
 					<div v-else v-for="ticket in paginatedTickets" :key="ticket.id" class="col-12 col-lg-6 col-md-6 col-sm-12">
 						<div class="card-item p-4 mb-4 support-item flex-column">
@@ -74,13 +74,13 @@
 								>
 								<div class="support-item-title">
 									<img class="me-2" src="assets/img/support.svg" alt="">
-									<span style="color:rgba(23, 30, 38, 0.5);"> Ticket#{{ ticket.tid }}</span>
+									<span style="color:rgba(23, 30, 38, 0.5);"> {{ $t('Ticket') }}#{{ ticket.tid }}</span>
 								</div>
 								<h3 class="detail" style="margin-top: 10px;">
-									Opened at : {{ formatDate(ticket.date) }}
+									{{ $t('Opened_at') }} : {{ formatDate(ticket.date) }}
 								</h3>
 								<h3 class="detail" style="margin-top: 5px;">
-									Last reply at : {{ formatDate(ticket.lastreply) }}
+									{{ $t('Last_reply_at') }} : {{ formatDate(ticket.lastreply) }}
 								</h3>
 							</router-link>
 							<div class="support-item-status">
@@ -111,20 +111,20 @@
             <div v-for="statu in status" :key="statu.title" class="tab-pane fade" :id="getTabId(statu.title)" :aria-labelledby="getTabLabelId(statu.title)">
 				<div class="row mb-5">
 					 
-					<h5 v-if="!getTicketsByStatus(statu.title) || getTicketsByStatus(statu.title).length === 0">No tickets found</h5>
+					<h5 v-if="!getTicketsByStatus(statu.title) || getTicketsByStatus(statu.title).length === 0">{{ $t('No_tickets_found') }}</h5>
 					<div v-else v-for="ticket in getTicketsByStatus(statu.title)" :key="ticket.id" class="col-12 col-lg-6 col-md-6 col-sm-12">
 					<div class="card-item p-4 mb-4 support-item flex-column">
 						<div class="d-flex justify-content-between support-item-header">
 						<a :href="'/ticket-detail/' + ticket.id">
 							<div class="support-item-title">
 							<img class="me-2" src="assets/img/support.svg" alt="">
-							<span style="color: rgba(23, 30, 38, 0.5);">Ticket#{{ ticket.tid }}</span>
+							<span style="color: rgba(23, 30, 38, 0.5);">{{ $t('Ticket') }}#{{ ticket.tid }}</span>
 							</div>
 							<h3 class="detail" style="margin-top: 10px;">
-							Opened at : {{ formatDate(ticket.date) }}
+								{{ $t('Opened_at') }} : {{ formatDate(ticket.date) }}
 							</h3>
 							<h3 class="detail" style="margin-top: 5px;">
-							Last reply at : {{ formatDate(ticket.lastreply) }}
+								{{ $t('Last_reply_at') }} : {{ formatDate(ticket.lastreply) }}
 							</h3>
 						</a>
 						<div class="support-item-status">
@@ -177,28 +177,28 @@
 
 			<div class="modal-header">
 				<div class="modal-title">
-					<h2>New ticket</h2>
-					<h3>Create new ticket now.</h3>
+					<h2>{{ $t('New_ticket') }}</h2>
+					<h3>{{ $t('Create_new_ticket_now') }}.</h3>
 				</div>
 			</div>
 			<div class="modal-main">
 				<div class="amounts">
-						<h4>Subject</h4>
+						<h4>{{ $t('Subject') }}</h4>
 						<input class="mb-3" name="subject" type="text" placeholder="Write subject" v-model="subject">
 
-						<h4>Describe the problem</h4>
+						<h4>{{ $t('Describe_the_problem') }}</h4>
 						<textarea class="mb-3" name="message" id="" cols="30" rows="8" v-model="message"></textarea>
 
-						<h4>Department*</h4>
+						<h4>{{ $t('Department') }}*</h4>
 						<select name="department" id="department" v-model="selectedDepartment">
 							<option :value="department.id" v-for="department in departments" :key="department.id" >{{ department.name }}</option>
 						</select>
 
 						<div v-if="orders.length > 0">
-							<h4>Service related</h4>
+							<h4>{{ $t('Service_related') }}</h4>
 
 							<select name="service" id="service" v-model="selectedService">
-								<option value="0">- None -</option>
+								<option value="0">- {{ $t('None') }} -</option>
 								<!-- @foreach ($orders as $order_info)
 									@foreach($order_info['lineitems']['lineitem'] as $order_value)
 									<option value="{{$order_value['relid']}}">{{$order_value['product']}} - {{ $order_value['status'] }}</option>
@@ -214,7 +214,7 @@
 							</select>
 						</div>
 							
-						<button class="btn-dark d-block w-100 mt-5" id="open-ticket" :disabled="subject=='' || selectedDepartment==0" @click="createTicket()">Create Ticket</button>
+						<button class="btn-dark d-block w-100 mt-5" id="open-ticket" :disabled="subject=='' || selectedDepartment==0" @click="createTicket()">{{ $t('Create_Ticket') }}</button>
 				</div>
 			</div>
 		</div>

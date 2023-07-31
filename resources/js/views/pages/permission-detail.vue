@@ -5,7 +5,7 @@
         <router-link to="/settings">
           <img class="status-arrow" src="/assets/img/status-arrow.svg" alt="" />
         </router-link>
-        <h3 class="ticket-status-title color-in-work">Manage Permissions</h3>
+        <h3 class="ticket-status-title color-in-work">{{ $t('Manage_Permissions') }}</h3>
         <h2 class="title mb-0 mt-2">{{ route.params.email }}</h2>
       </div>
       <div class="sub-section server-list-tab">
@@ -14,25 +14,24 @@
             <div class="col-12">
               <!-- <form method="POST" action="{{ route('edit_user_permissions') }}"> -->
               <div class="card-item p-4 mb-4 support-item flex-column">
-                <h3>Permissions</h3>
+                <h3>{{ $t('Permissions') }}</h3>
                 <br />
                 <!-- <input type="hidden" name="user_id" value="{{ $user_id }}"> -->
                 <div class="well" id="invitePermissions">
                   <label class="checkbox-inline">
                     <input type="checkbox" name="profile" v-model="profile" />
-                    Modify Master Account Profile - Access and modify the client
-                    profile information
+                    {{ $t('permission_detail_1') }}
+                    
                   </label>
                   <br />
                   <label class="checkbox-inline">
                     <input type="checkbox" name="contacts" v-model="contacts" />
-                    View &amp; Manage Contacts - Access and manage contacts
+                    {{ $t('permission_detail_2') }}
                   </label>
                   <br />
                   <label class="checkbox-inline">
                     <input type="checkbox" name="products" v-model="products" />
-                    View Products &amp; Services - View access to products,
-                    services and addons
+                    {{ $t('permission_detail_3') }}
                   </label>
                   <br />
                   <label class="checkbox-inline">
@@ -41,8 +40,8 @@
                       name="manageproducts"
                       v-model="manageproducts"
                     />
-                    View &amp; Modify Product Passwords - Allow password resets
-                    and other actions
+                    {{ $t('permission_detail_4') }}
+                    
                   </label>
                   <br />
                   <label class="checkbox-inline">
@@ -51,12 +50,14 @@
                       name="productsso"
                       v-model="productsso"
                     />
-                    Perform Single Sign-On - Allow single sign-on into services
+                    {{ $t('permission_detail_5') }}
+                    
                   </label>
                   <br />
                   <label class="checkbox-inline">
                     <input type="checkbox" name="domains" v-model="domains" />
-                    View Domains - View access to domain registrations
+                    {{ $t('permission_detail_6') }}
+                    
                   </label>
                   <br />
                   <label class="checkbox-inline">
@@ -65,26 +66,26 @@
                       name="managedomains"
                       v-model="managedomains"
                     />
-                    Manage Domain Settings - Allow domain management eg.
-                    nameservers/whois/transfers
+                    {{ $t('permission_detail_7') }}
+                    
                   </label>
                   <br />
                   <label class="checkbox-inline">
                     <input type="checkbox" name="invoices" v-model="invoices" />
-                    View &amp; Pay Invoices - View and payment access to
-                    invoices
+                    {{ $t('permission_detail_8') }}
+                    
                   </label>
                   <br />
                   <label class="checkbox-inline">
                     <input type="checkbox" name="quotes" v-model="quotes" />
-                    View &amp; Accept Quotes - View and acceptance permissions
-                    for quotes
+                    {{ $t('permission_detail_9') }}
+                    
                   </label>
                   <br />
                   <label class="checkbox-inline">
                     <input type="checkbox" name="tickets" v-model="tickets" />
-                    View &amp; Open Support Tickets - Access to open, respond
-                    and manage support tickets
+                    {{ $t('permission_detail_10') }}
+                    
                   </label>
                   <br />
                   <label class="checkbox-inline">
@@ -93,24 +94,25 @@
                       name="affiliates"
                       v-model="affiliates"
                     />
-                    View &amp; Manage Affiliate Account - Access to view and
-                    request withdrawals
+                    {{ $t('permission_detail_11') }}
+                    
                   </label>
                   <br />
                   <label class="checkbox-inline">
                     <input type="checkbox" name="emails" v-model="emails" />
-                    View Emails - Access to view account email history
+                    {{ $t('permission_detail_12') }}
+                    
                   </label>
                   <br />
                   <label class="checkbox-inline">
                     <input type="checkbox" name="orders" v-model="orders" />
-                    Place New Orders/Upgrades/Cancellations - Allow placing of
-                    new orders
+                    {{ $t('permission_detail_13') }}
+                    
                   </label>
                   <br />
                 </div>
                 <button class="btn btn-dark mt-4" @click="saveChanges()">
-                  Save Changes
+                  {{ $t('Save_Changes') }}
                 </button>
               </div>
               <!-- </form> -->

@@ -1,9 +1,5 @@
 <template>
   <section class="home-hero login">
-    <!-- alert messges -->
-    <div class="badge reset-success" style="background: crimson" v-show="false">
-      <img src="assets/img/reset-success.svg" alt="" /> Error message
-    </div>
 
     <div class="register-wrapper pb-0 w-100">
       <div class="bg-dots bg-dots-left"></div>
@@ -18,11 +14,11 @@
             <img class="logo-dark" src="assets/img/crazy-rdp-logo.svg" alt="" />
             <img class="logo-light" src="assets/img/logo-light.svg" alt="" />
           </div>
-          <h2 class="login-title">Register Account</h2>
+          <h2 class="login-title">{{ $t('Register_account') }}</h2>
 
           <form @submit.prevent="submitRegister">
             <div class="login-input-wrapper mb-3">
-              <label for="#firstname">First Name</label>
+              <label for="#firstname">{{ $t('First_Name') }}</label>
 
               <div class="col-md-6">
                 <input
@@ -38,7 +34,7 @@
             </div>
 
             <div class="login-input-wrapper mb-3">
-              <label for="#lastname">Last Name</label>
+              <label for="#lastname">{{ $t('Last_Name') }}</label>
 
               <input
                 id="lastname"
@@ -52,7 +48,7 @@
             </div>
 
             <div class="login-input-wrapper mb-3">
-              <label for="#email">Email Address</label>
+              <label for="#email">{{ $t('Email_Address') }}</label>
               <input
                 id="email"
                 type="email"
@@ -65,7 +61,7 @@
             </div>
 
             <div class="login-input-wrapper mb-3">
-              <label for="#password">Password</label>
+              <label for="#password">{{ $t('Password') }}</label>
               <div class="col-md-6">
                 <input
                   id="password"
@@ -87,16 +83,17 @@
                             aria-valuemax="100"
                             :style="'width: '+passwordStrength+'%'"
               >
-                <span class="rating">Password Rating: {{ passwordStrength }}%</span>
+                <span class="rating">{{ $t('Password_Rating') }}: {{ passwordStrength }}%</span>
               </div>
             </div>
 
             <div class="alert alert-info" style="text-align: left">
-              <strong>Tips for a good password</strong
-                                    ><br />Use both upper and lowercase
-                                    characters<br />Include at least one symbol
-                                    (only ! and @)<br />Don't use dictionary words
-                                    and special characters
+              <strong>{{ $t('tips_title') }}
+              </strong><br />
+              {{ $t('tips_content1') }}
+              <br />
+              {{ $t('tips_content2') }}
+              <br />{{ $t('tips_content3') }}
             </div>
 
             <div class="checkbox-item-wrapper mb-4">
@@ -107,8 +104,7 @@
                 id="inStockCheckbox"
               />
               <label class="form-check-label checked" for="inStockCheckbox"
-                >I agree to the User Agreement, and I have read the Privacy
-                Policy.</label
+                >{{ $t('Agree_Policy') }}</label
               >
             </div>
 
@@ -119,13 +115,13 @@
               :class="{ 'opacity-25': processing }"
               :disabled="processing || password == '' || passwordStrength < 80 "
             >
-              Register account
+              {{ $t('Register_account') }}
             </button>
 
             <div class="text-center">
               <p class="mb-0 mt-3 fs-14">
-                Already have an account?
-                <router-link to="/login">Log in</router-link>
+                {{ $t('already_have') }}
+                <router-link to="/login">{{  $t('log_in') }}</router-link>
               </p>
             </div>
           </form>

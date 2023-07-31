@@ -10,7 +10,7 @@
         <h3 class="ticket-status-title color-in-work">
           {{ ticket_detail.status }}
         </h3>
-        <h2 class="title mb-0 mt-2">Ticket#{{ route.params.id }}</h2>
+        <h2 class="title mb-0 mt-2">{{ $t('Ticket') }}#{{ route.params.id }}</h2>
       </div>
       <div class="sub-section server-list-tab">
         <div class="row justify-content-between align-items-center">
@@ -145,7 +145,7 @@
                       v-model="message"
                     ></textarea>
                     <div v-if="file">
-                      File Selected: <span id="file-name" style="overflow-wrap: anywhere;" v-if="file_name != ''">{{ file_name }}</span>
+                      {{ $t('File_Selected') }}: <span id="file-name" style="overflow-wrap: anywhere;" v-if="file_name != ''">{{ file_name }}</span>
                       <span
                         id="file-name"
                         style="overflow-wrap: anywhere"
@@ -160,7 +160,7 @@
                     @click="sendReply()"
                     :disabled="message=='' && file==null"
                   >
-                    Send
+                  {{ $t('Send') }}
                   </button>
                 </div>
                 <!-- </form> -->

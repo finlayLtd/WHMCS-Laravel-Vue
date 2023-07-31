@@ -1,10 +1,10 @@
 <template>
   <section class="dashboard">
     <div class="container">
-      <h2 class="title">Create Server</h2>
+      <h2 class="title">{{ $t('Create_Server') }}</h2>
 
       <div class="sub-section">
-        <h3 class="sub-title">Choose a OS</h3>
+        <h3 class="sub-title">{{ $t('Choose_a_OS') }}</h3>
         <div class="row server-item-wrapper">
             <div
               v-for="(os, key) in oslist"
@@ -21,7 +21,7 @@
       </div>
 
       <div class="sub-section">
-        <h3 class="sub-title">Choose a OS Version</h3>
+        <h3 class="sub-title">{{ $t('Choose_a_OS_Version') }}</h3>
         <div
           v-for="(kind, index) in os_kind"
           :key="index"
@@ -52,7 +52,7 @@
 
         <!-- server list -->
 
-        <h3 class="sub-title">Choose a Datacenter region</h3>
+        <h3 class="sub-title">{{ $t('Choose_a_Datacenter_region') }}</h3>
 
         <div v-if="products.length > 0">
           <div v-for="(group, key) in product_group" :key="key">
@@ -67,8 +67,8 @@
                   style="width: 28px"
                   alt=""
                 />
-                <span v-if="key == 2">&nbsp;Netherlands</span>
-                <span v-else>&nbsp;USA</span>
+                <span v-if="key == 2">&nbsp;{{ $t('Netherlands') }}</span>
+                <span v-else>&nbsp;{{ $t('USA') }}</span>
               </div>
               <div
                 v-for="product in products.filter((p) => p.gid == key)"
@@ -91,7 +91,7 @@
                             : 'stockUnavailable',
                         ]"
                       >
-                        {{ product.stocklevel }} Available
+                        {{ product.stocklevel }} {{ $t('Available') }}
                       </span>
                     </span>
                   </div>
@@ -100,7 +100,7 @@
                       >€<span class="price-value">{{
                         product.pricing.EUR.monthly
                       }}</span>
-                      <span class="month">/ month</span>
+                      <span class="month">/ {{ $t('month') }}</span>
                     </span>
                   </div>
                   <div class="">
@@ -144,7 +144,7 @@
                     </div>
                     <a
                       class="btn btn-light btn-chevron d-lg-block hover-light-dark toggle-more-detail"
-                      >More Details</a
+                      >{{ $t('More_Details') }}</a
                     >
                   </div>
                 </div>
@@ -156,11 +156,11 @@
       </div>
 
       <div class="sub-section">
-        <h3 class="sub-title">Configure Server</h3>
+        <h3 class="sub-title">{{ $t('Configure_Server') }}</h3>
         <div class="row">
           <div class="configure-server-form">
             <div class="mb-3">
-              <label for="email" class="form-label">VPS Hostname</label>
+              <label for="email" class="form-label">{{ $t('VPS_Hostname') }}</label>
               <div style="display: flex">
                 <input
                   type="text"
@@ -177,12 +177,12 @@
                   id="randomizeButton"
                   @click="hostname = randomizehostname()"
                 >
-                  Random
+                {{ $t('Random') }}
                 </button>
               </div>
             </div>
             <div class="mb-4">
-              <label for="password" class="form-label">VPS Password</label>
+              <label for="password" class="form-label">{{ $t('VPS_Password') }}</label>
               <div style="display: flex" class="mb-4">
                 <input
                   type="text"
@@ -201,7 +201,7 @@
                   id="randomizeButton_password"
                   @click="hostpassword = randomizePassword()"
                 >
-                  Random
+                {{ $t('Random') }}
                 </button>
               </div>
               <div class="progress" id="passwordStrengthBar">
@@ -213,17 +213,16 @@
                   aria-valuemax="100"
                   :style="hostpassword?'width: 100%':'width: 0%'"
                 >
-                  <span class="rating">Password Rating: 100%</span>
+                  <span class="rating">{{ $t('Password_Rating') }}: 100%</span>
                 </div>
               </div>
-              <div
-                class="alert alert-info"
-                style="text-align: left; position: inherit"
-              >
-                <strong>Tips for a good password</strong>
-                <br />Use both upper and lowercase characters <br />Include at
-                least one symbol (only ! and @) <br />Don't use dictionary words
-                and special characters
+              <div class="alert alert-info" style="text-align: left">
+                <strong>{{ $t('tips_title') }}
+                </strong><br />
+                {{ $t('tips_content1') }}
+                <br />
+                {{ $t('tips_content2') }}
+                <br />{{ $t('tips_content3') }}
               </div>
             </div>
             <div class="mb-3 text-end">
@@ -234,7 +233,7 @@
                 @click="clickCreate()"
                 
               >
-                Create Server
+              {{ $t('Create_Server') }}
               </button>
             </div>
           </div>
@@ -251,19 +250,19 @@
         <div class="modal-content">
           <div class="modal-header">
             <div class="modal-title">
-              <h2>Review & Checkout</h2>
+              <h2>{{ $t('Review_and_Checkout') }}</h2>
             </div>
           </div>
           <div class="modal-main">
             <div class="vps-info mb-2">
               <div class="vps-info-review card">
-                <h6 class="sub-title">VPS info</h6>
+                <h6 class="sub-title">{{ $t('VPS_info') }}</h6>
                 <hr />
                 <div class="vps-name">
                   {{ selected_product ? selected_product.name : "" }}
                 </div>
                 <div class="vps-price">
-                  €{{ selected_product ? selected_product.pricing.EUR.monthly : "" }}/month
+                  €{{ selected_product ? selected_product.pricing.EUR.monthly : "" }}/{{ $t('month') }}
                 </div>
                 <div class="vps-groupname">
                   <div v-for="(group, key) in product_group" :key="key" v-show="selected_group_id == key">
@@ -278,17 +277,17 @@
                           style="width: 28px"
                           alt=""
                         />
-                        <span v-if="key == 2">&nbsp;Netherlands</span>
-                        <span v-else>&nbsp;USA</span>
+                        <span v-if="key == 2">&nbsp;{{ $t('Netherlands') }}</span>
+                        <span v-else>&nbsp;{{ $t('USA') }}</span>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="vps-hostname">
-                  Host Name: {{ hostname }}
+                  {{ $t('Host_Name') }}: {{ hostname }}
                 </div>
                 <div class="vps-ipnum">
-                  Number of IPs: 1
+                  {{ $t('Number_of_IPs') }}: 1
                 </div>
                 <div class="vps-os">
                   {{ selected_os_name?selected_os_name:"" }}
@@ -298,17 +297,17 @@
 
             <div class="user-info mt-2 mb-2">
               <div class="user-info-review card">
-                <h6 class="sub-title">User info</h6>
+                <h6 class="sub-title">{{ $t('User_info') }}</h6>
                 <hr />
-                <div class="user-name">Name: {{ user.name }}</div>
-                <div class="user-email">Email: {{ user.email }}</div>
-                <div class="user-currency-code">Currency: EUR</div>
+                <div class="user-name">{{ $t('Name') }}: {{ user.name }}</div>
+                <div class="user-email">{{ $t('Email') }}: {{ user.email }}</div>
+                <div class="user-currency-code">{{ $t('Currency') }}: EUR</div>
               </div>
             </div>
 
             <div class="payment-info mt-2">
               <div class="payment-info-review card">
-                <h6 class="sub-title">Payment Method</h6>
+                <h6 class="sub-title">{{ $t('Payment_Method') }}</h6>
                 <hr />
 
                 <div
@@ -341,7 +340,7 @@
                     value="credit"
                   />
                   <label class="form-check-label" for="paymentMethod"
-                    >Account Funds (available €{{ user.credit }})</label
+                    >{{ $t('Account_Funds') }} ({{ $t('available') }} €{{ user.credit }})</label
                   >
                 </div>
               </div>
@@ -352,7 +351,7 @@
               id="continue-order"
               @click="clickCheckout()"
             >
-              CheckOut
+            {{ $t('CheckOut') }}
             </button>
           </div>
         </div>

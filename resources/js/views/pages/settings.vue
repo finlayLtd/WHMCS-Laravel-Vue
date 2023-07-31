@@ -5,7 +5,7 @@
         class="d-flex flex-column justify-content-start align-items-start title-button-wrapper"
       >
         <div class="overview-header">
-          <h2 class="title mb-0">Settings</h2>
+          <h2 class="title mb-0">{{ $t('Settings') }}</h2>
         </div>
       </div>
 
@@ -66,7 +66,7 @@
                     aria-controls="pills-overview"
                     aria-selected="true"
                   >
-                    Your Profile
+                  {{ $t('Your_Profile') }}
                   </button>
                   <!-- </a> -->
                 </li>
@@ -82,7 +82,7 @@
                     aria-controls="pills-analytics"
                     aria-selected="false"
                   >
-                    Change Password
+                  {{ $t('Change_Password') }}
                   </button>
                   <!-- </a> -->
                 </li>
@@ -98,7 +98,7 @@
                     aria-controls="pills-userManagement"
                     aria-selected="false"
                   >
-                    User Management
+                  {{ $t('User_Management') }}
                   </button>
                   <!-- </a> -->
                 </li>
@@ -114,7 +114,7 @@
                     aria-controls="pills-emails"
                     aria-selected="false"
                   >
-                    Email History
+                  {{ $t('Email_History') }}
                   </button>
                   <!-- </a> -->
                 </li>
@@ -132,13 +132,13 @@
             >
               <div class="tab-inner mb-3">
                 <div class="row">
-                  <h3 class="title mb-4">Your Profile</h3>
+                  <h3 class="title mb-4">{{ $t('Your_Profile') }}</h3>
                 </div>
                 <div class="divider"></div>
                 <!-- @if(in_array('profile', Auth::user()->permissions)) -->
                 <div class="row px-2 pt-4 px-lg-4 pt-lg-4">
                   <div class="col-12 col-lg-6 tab-inner py-0 p-mb-0">
-                    <p class="fs-13-5">Email</p>
+                    <p class="fs-13-5">{{ $t('Email') }}</p>
                     <div class="overview-input mb-4">
                       <div class="d-inline">
                         <input
@@ -151,7 +151,7 @@
                         />
                       </div>
                     </div>
-                    <p class="fs-13-5">First Name</p>
+                    <p class="fs-13-5">{{ $t('First_Name') }}</p>
                     <div class="overview-input mb-4">
                       <div class="d-inline">
                         <input
@@ -165,7 +165,7 @@
                       </div>
                     </div>
 
-                    <p class="fs-13-5">Last Name</p>
+                    <p class="fs-13-5">{{ $t('Last_Name') }}</p>
                     <div class="overview-input mb-4">
                       <input
                         type="text"
@@ -187,7 +187,7 @@
                         "
                         class="btn-dark px-4 me-2 hover-dark-light"
                       >
-                        Change name
+                      {{ $t('Change_name') }}
                       </button>
                     </div>
                   </div>
@@ -205,7 +205,7 @@
             >
               <div class="tab-inner mb-3">
                 <div class="row">
-                  <h3 class="title mb-4">Change Password</h3>
+                  <h3 class="title mb-4">{{ $t('Change_Password') }}</h3>
                 </div>
                 <div class="divider"></div>
                 <!-- @if(in_array('profile', Auth::user()->permissions)) -->
@@ -213,7 +213,7 @@
                   <form class="form-horizontal using-password-strength">
                     <div id="currentpwBox" class="form-group">
                       <label for="currentpw" class="col-sm-4 control-label"
-                        >Current Password</label
+                        >{{ $t('Current_Password') }}</label
                       >
                       <div class="col-sm-5" style="position: relative">
                         <input
@@ -242,7 +242,7 @@
                       <label
                         for="inputNewPassword1"
                         class="col-sm-4 control-label"
-                        >New Password</label
+                        >{{ $t('New_Password') }}</label
                       >
                       <div class="col-sm-5" style="position: relative">
                         <input
@@ -272,7 +272,7 @@
                             aria-valuemax="100"
                             style="width: 0%"
                           >
-                            <span class="sr-only">Password Rating: 0%</span>
+                            <span class="sr-only">{{ $t('Password_Rating') }}: 0%</span>
                           </div>
                         </div>
 
@@ -291,7 +291,7 @@
                       <label
                         for="inputNewPassword2"
                         class="col-sm-4 control-label"
-                        >Confirm New Password</label
+                        >{{ $t('Confirm_New_Password') }}</label
                       >
                       <div class="col-sm-5" style="position: relative">
                         <input
@@ -320,7 +320,7 @@
                           class="btn-dark px-4 me-2 hover-dark-light"
                           disabled="disabled"
                         >
-                          Save changes
+                        {{ $t('Save_changes') }}
                         </button>
                       </div>
                     </div>
@@ -341,8 +341,8 @@
               <div class="tab-inner mb-3">
                 <div class="row">
                   <h3 class="title mb-4">
-                    User Management ({{ users_list.length }}
-                    {{ users_list.length === 1 ? "User" : "Users" }} found)
+                    {{ $t('User_Management') }} ({{ users_list.length }}
+                    {{ users_list.length === 1 ? "User" : "Users" }} {{ $t('found') }})
                   </h3>
                 </div>
                 <div class="divider"></div>
@@ -351,8 +351,8 @@
                     <table class="table">
                       <thead>
                         <tr>
-                          <th scope="col">Email Address / Last Login</th>
-                          <th scope="col">Actions</th>
+                          <th scope="col">{{ $t('Email_Address') }} / {{ $t('Last_Login') }}</th>
+                          <th scope="col">{{ $t('Actions') }}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -360,7 +360,7 @@
                           <td>
                             {{ item.email }}
                             <span class="badge bg-info" v-if="item.is_owner"
-                              >Owner</span
+                              >{{ $t('Owner') }}</span
                             >
                             <br />
                           </td>
@@ -377,7 +377,7 @@
                                 :disabled="item.is_owner"
                                 style="margin-right: 5px"
                               >
-                                Manage Permissions
+                              {{ $t('Manage_Permissions') }}
                               </button>
                             </router-link>
 
@@ -387,7 +387,7 @@
                               :disabled="item.is_owner"
                               style="margin-right: 5px"
                             >
-                              Manage Permissions
+                            {{ $t('Manage_Permissions') }}
                             </button>
 
                             <button
@@ -395,7 +395,7 @@
                               :disabled="item.is_owner"
                               @click="removeAccess(item.id)"
                             >
-                              Remove Access
+                            {{ $t('Remove_Access') }}
                             </button>
                           </td>
                         </tr>
@@ -404,16 +404,13 @@
                   </div>
                 </div>
                 <div class="row">
-                  <h3 class="title mb-4">Invite New User</h3>
+                  <h3 class="title mb-4">{{ $t('Invite_New_User') }}</h3>
                 </div>
                 <div class="divider"></div>
                 <div class="row px-2 pt-4 px-lg-4 pt-lg-4">
                   <p>
-                    Inviting a new user allows you to invite a new user to your
-                    account. If the invitee already has an existing user
-                    account, they will be able to access your account using
-                    their existing login credentials. If the user does not yet
-                    have a user account, they will be able to create one.
+                    {{ $t('invite_desc') }}
+                    
                   </p>
                   <div class="mb-4">
                     <!-- method="POST" action="{{ route('invite_user') }}" -->
@@ -437,7 +434,7 @@
                           checked="checked"
                           @click="selectAllPermissions()"
                         />
-                        All Permissions
+                        {{ $t('All_Permissions') }}
                       </label>
                       <label class="radio-inline">
                         <input
@@ -446,7 +443,7 @@
                           value="choose"
                           @click="permissionListVisible = true"
                         />
-                        Choose Permissions
+                        {{ $t('Choose_Permissions') }}
                       </label>
                       <div
                         class="well"
@@ -459,8 +456,8 @@
                             name="profile"
                             v-model="profile"
                           />
-                          Modify Master Account Profile - Access and modify the
-                          client profile information
+                          
+                          {{ $t('permission_detail_1') }}
                         </label>
                         <br />
                         <label class="checkbox-inline">
@@ -469,8 +466,7 @@
                             name="contacts"
                             v-model="contacts"
                           />
-                          View &amp; Manage Contacts - Access and manage
-                          contacts
+                          {{ $t('permission_detail_2') }}
                         </label>
                         <br />
                         <label class="checkbox-inline">
@@ -479,8 +475,7 @@
                             name="products"
                             v-model="products"
                           />
-                          View Products &amp; Services - View access to
-                          products, services and addons
+                          {{ $t('permission_detail_3') }}
                         </label>
                         <br />
                         <label class="checkbox-inline">
@@ -489,8 +484,7 @@
                             name="manageproducts"
                             v-model="manageproducts"
                           />
-                          View &amp; Modify Product Passwords - Allow password
-                          resets and other actions
+                          {{ $t('permission_detail_4') }}
                         </label>
                         <br />
                         <label class="checkbox-inline">
@@ -499,8 +493,7 @@
                             name="productsso"
                             v-model="productsso"
                           />
-                          Perform Single Sign-On - Allow single sign-on into
-                          services
+                          {{ $t('permission_detail_5') }}
                         </label>
                         <br />
                         <label class="checkbox-inline">
@@ -509,7 +502,7 @@
                             name="domains"
                             v-model="domains"
                           />
-                          View Domains - View access to domain registrations
+                          {{ $t('permission_detail_6') }}
                         </label>
                         <br />
                         <label class="checkbox-inline">
@@ -518,8 +511,7 @@
                             name="managedomains"
                             v-model="managedomains"
                           />
-                          Manage Domain Settings - Allow domain management eg.
-                          nameservers/whois/transfers
+                          {{ $t('permission_detail_7') }}
                         </label>
                         <br />
                         <label class="checkbox-inline">
@@ -528,8 +520,7 @@
                             name="invoices"
                             v-model="invoices"
                           />
-                          View &amp; Pay Invoices - View and payment access to
-                          invoices
+                          {{ $t('permission_detail_8') }}
                         </label>
                         <br />
                         <label class="checkbox-inline">
@@ -538,8 +529,7 @@
                             name="quotes"
                             v-model="quotes"
                           />
-                          View &amp; Accept Quotes - View and acceptance
-                          permissions for quotes
+                          {{ $t('permission_detail_9') }}
                         </label>
                         <br />
                         <label class="checkbox-inline">
@@ -548,8 +538,7 @@
                             name="tickets"
                             v-model="tickets"
                           />
-                          View &amp; Open Support Tickets - Access to open,
-                          respond and manage support tickets
+                          {{ $t('permission_detail_10') }}
                         </label>
                         <br />
                         <label class="checkbox-inline">
@@ -558,8 +547,7 @@
                             name="affiliates"
                             v-model="affiliates"
                           />
-                          View &amp; Manage Affiliate Account - Access to view
-                          and request withdrawals
+                          {{ $t('permission_detail_11') }}
                         </label>
                         <br />
                         <label class="checkbox-inline">
@@ -568,7 +556,7 @@
                             name="emails"
                             v-model="emails"
                           />
-                          View Emails - Access to view account email history
+                          {{ $t('permission_detail_12') }}
                         </label>
                         <br />
                         <label class="checkbox-inline">
@@ -577,8 +565,7 @@
                             name="orders"
                             v-model="orders"
                           />
-                          Place New Orders/Upgrades/Cancellations - Allow
-                          placing of new orders
+                          {{ $t('permission_detail_13') }}
                         </label>
                         <br />
                       </div>
@@ -588,7 +575,7 @@
                       class="btn btn-dark mt-4"
                       :disabled="invite_email == ''"
                     >
-                      Send Invite
+                    {{ $t('Send_Invite') }}
                     </button>
 
                     <!-- <form
@@ -619,7 +606,7 @@
             >
               <div class="tab-inner mb-3">
                 <div class="row">
-                  <h3 class="title mb-4">Email History</h3>
+                  <h3 class="title mb-4">{{ $t('Email_History') }}</h3>
                 </div>
                 <div class="divider"></div>
                 <!-- @if(in_array('emails', Auth::user()->permissions)) -->
@@ -628,16 +615,16 @@
                     <table class="table">
                       <thead>
                         <tr>
-                          <th scope="col">ID</th>
-                          <th scope="col">Date Sent</th>
-                          <th scope="col">Message subject</th>
+                          <th scope="col">{{ $t('ID') }}</th>
+                          <th scope="col">{{ $t('Date_Sent') }}</th>
+                          <th scope="col">{{ $t('Message subject') }}</th>
                         </tr>
                       </thead>
                       <tbody>
                         <!-- @foreach($emails as $email) -->
                         <tr v-if="!emailsList || emailsList.length === 0">
                           <td colspan="3" style="text-align: center">
-                            <h5 style="margin-top: 20px">No emails</h5>
+                            <h5 style="margin-top: 20px">{{ $t('No_emails') }}</h5>
                           </td>
                         </tr>
                         <tr v-else v-for="email in emailsList" :key="email.id">

@@ -16,20 +16,19 @@
           </h2>
         </div>
         <div class="overview-info">
-          <span v-if="dayDiff > 0">Created {{ dayDiff }} days ago</span>
-          <span v-else>Created today</span>
+          <span v-if="dayDiff > 0">{{ $t('Created') }} {{ dayDiff }} {{ $t('days_ago') }}</span>
+          <span v-else>{{ $t('Created_today') }}</span>
           <div
             class="alert alert-warning mt-2"
             id="alertUnpaidInvoice"
             v-if="invoiceInfo && invoiceInfo.status == 'Unpaid'"
           >
-            You have an unpaid invoice. Pay it now to avoid interruption in
-            service.
+            {{ $t('interruption') }} 
             <a
               style="color: blue; cursor: pointer"
               @click="openInvoiceWindow(invoiceInfo.invoiceid)"
               target="_blank"
-              >Pay Invoice</a
+              >{{ $t('Pay_Invoice') }}</a
             >
           </div>
         </div>
@@ -49,7 +48,7 @@
                     <img src="/assets/img/calendar.svg" alt="" />
                   </div>
                   <div class="due-date-info">
-                    <h2 class="due-date-title">Due Date</h2>
+                    <h2 class="due-date-title">{{ $t('Due_Date') }}</h2>
                     <span v-if="order_product_info">{{
                        order_product_info.nextduedate 
                     }}</span>
@@ -63,7 +62,7 @@
                 <table v-if="order_product_info">
                   <tbody>
                     <tr>
-                      <td>Public IPv4</td>
+                      <td>{{ $t('Public_IPv4') }}</td>
                       <td class="clipboard-input">
                         {{ order_product_info.dedicatedip }}
                       </td>
@@ -79,7 +78,7 @@
                     </tr>
 
                     <tr>
-                      <td>Username</td>
+                      <td>{{ $t('Username') }}</td>
                       <td class="clipboard-input" v-if="sys_logo == 'windows'">
                         Administrator
                       </td>
@@ -96,7 +95,7 @@
                     </tr>
 
                     <tr>
-                      <td>Password</td>
+                      <td>{{ $t('Password') }}</td>
                       <td>
                         <input
                           class="clipboard-input"
@@ -150,7 +149,7 @@
 
                     <tr>
                       <td>
-                        <img src="/assets/img/hard-disk.png" alt="" />Storage
+                        <img src="/assets/img/hard-disk.png" alt="" />{{ $t('Storage') }}
                       </td>
                       <td>{{ detail_info[2] }}</td>
                       <td></td>
@@ -184,7 +183,7 @@
                     aria-controls="pills-overview"
                     aria-selected="true"
                   >
-                    Overview
+                  {{ $t('Overview') }}
                   </button>
                 </li>
                 <li
@@ -202,7 +201,7 @@
                     aria-controls="pills-analytics"
                     aria-selected="false"
                   >
-                    Analytics
+                  {{ $t('Analytics') }}
                   </button>
                 </li>
                 <li
@@ -220,7 +219,7 @@
                     aria-controls="pills-connect"
                     aria-selected="false"
                   >
-                    Connect
+                  {{ $t('Connect') }}
                   </button>
                 </li>
 
@@ -239,7 +238,7 @@
                     aria-controls="pills-reinstall"
                     aria-selected="false"
                   >
-                    Reinstall
+                  {{ $t('Reinstall') }}
                   </button>
                 </li>
 
@@ -258,7 +257,7 @@
                     aria-controls="pills-management"
                     aria-selected="false"
                   >
-                    IP Address Management
+                  {{ $t('IP_Address_Management') }}
                   </button>
                 </li>
 
@@ -277,7 +276,7 @@
                     aria-controls="pills-vnc"
                     aria-selected="false"
                   >
-                    VNC
+                  {{ $t('VNC') }}
                   </button>
                 </li>
 
@@ -296,7 +295,7 @@
                     aria-controls="pills-dns"
                     aria-selected="false"
                   >
-                    ReverseDNS
+                  {{ $t('ReverseDNS') }}
                   </button>
                 </li>
 
@@ -315,7 +314,7 @@
                     aria-controls="pills-billing"
                     aria-selected="false"
                   >
-                    Billing
+                  {{ $t('Billing') }}
                   </button>
                 </li>
 
@@ -334,7 +333,7 @@
                     aria-controls="pills-settings"
                     aria-selected="false"
                   >
-                    Settings
+                  {{ $t('Settings') }}
                   </button>
                 </li>
               </ul>
@@ -351,9 +350,9 @@
             >
               <div class="tab-inner mb-3">
                 <div class="row">
-                  <h3 class="title">Overview</h3>
+                  <h3 class="title">{{ $t('Overview') }}</h3>
                   <p class="description mb-4">
-                    Information on virtual machine usage
+                    {{ $t('Information_on_virtual_machine_usage') }}
                   </p>
                 </div>
                 <div class="divider"></div>
@@ -417,7 +416,7 @@
                             {{ order_product_info.dedicatedip }}
                           </h4>
                           <p class="description2">
-                            Created at {{ order_product_info.regdate }}
+                            {{ $t('Created_at') }} {{ order_product_info.regdate }}
                           </p>
                         </div>
                         <div
@@ -425,7 +424,7 @@
                           v-if="order_product_info.status == 'Active'"
                         >
                           <button class="active-badge">
-                            <span class="active-dot"></span>Active
+                            <span class="active-dot"></span>{{ $t('Active') }}
                           </button>
                         </div>
                       </div>
@@ -441,13 +440,13 @@
                       @click="TurnOnVPS(vpsid)"
                     >
                       <i class="fa fa-play" style="color: #3fbb27"></i
-                      >&nbsp;&nbsp;Start
+                      >&nbsp;&nbsp;{{ $t('Start') }}
                     </button>
                     <button
                       class="btn img-btn me-0 me-lg-2"
                       @click="TurnOffVPS(vpsid)"
                     >
-                      <img src="/assets/img/power.svg" alt="" />Shutdown
+                      <img src="/assets/img/power.svg" alt="" />{{ $t('Shutdown') }}
                     </button>
                     <!-- <button class="btn img-btn me-0 me-lg-2" onclick="RebootVPS({{ $vpsid }})">
                       <img src="/assets/img/reboot.svg" alt="">Reboot
@@ -463,7 +462,7 @@
                 v-if="order_product_info.status == 'Active'"
               >
                 <div class="row">
-                  <h3 class="title fs-17">Resource Usage</h3>
+                  <h3 class="title fs-17">{{ $t('Resource_Usage') }}</h3>
                 </div>
                 <div class="row px-12 pt-3">
                   <div
@@ -513,7 +512,7 @@
                           <img src="/assets/img/hard-disk.png" alt="" />
                         </div>
                         <div class="info">
-                          <h4 class="title2">Storage</h4>
+                          <h4 class="title2">{{ $t('Storage') }}</h4>
                           <p class="description2" v-if="vps_info">
                             <span>
                               <!-- {{number_format($vps_info['vps_data'][$vpsid]['used_disk'], 2)}}  -->
@@ -535,7 +534,7 @@
                           <img src="/assets/img/speedometer.png" alt="" />
                         </div>
                         <div class="info">
-                          <h4 class="title2">Network Speed</h4>
+                          <h4 class="title2">{{ $t('Network Speed') }}</h4>
                           <p class="description2" v-if="vps_info">
                             <span>{{ vps_info.vps_data[vpsid].used_bandwidth.toFixed(2) }}</span> Mbps
                           </p>
@@ -1247,9 +1246,9 @@
             >
               <div class="tab-inner mb-3">
                 <div class="row">
-                  <h3 class="title">Connect</h3>
+                  <h3 class="title">{{ $t('Connect') }}</h3>
                   <p class="description mb-4">
-                    Connecting to your virtual machine.
+                    {{ $t('Connecting_to_your_virtual_machine') }}.
                   </p>
                 </div>
                 <div class="divider"></div>
@@ -1259,8 +1258,7 @@
                   >
                     <template v-if="system.indexOf('windows') == -1">
                       <p class="fs-15">
-                        To connect to your Linux virtual machine using SSH,
-                        please use the following command.
+                        {{ $t('cmd_title') }}
                       </p>
                       <p class="fs-16">
                         ssh root@{{ order_product_info.dedicatedip }}
@@ -1268,18 +1266,12 @@
                     </template>
                     <template v-else>
                       <p class="fs-15">
-                        To open Remote Desktop Connection app in Windows, please
-                        use the following command in cmd. And you can then enter
-                        the IP address or hostname of the remote computer in the
-                        Remote Desktop Connection client to establish a
-                        connection.
+                        {{ $t('cmd_1') }}
                       </p>
                       <p class="fs-15">mstsc</p>
                     </template>
                     <p class="fs-14 mb-0 sub-detail" style="max-width: 500px">
-                      You will most likely be using cmd if you are connecting
-                      from Windows OS or Terminal if you are running macOS or
-                      Linux.
+                      {{ $t('cmd_2') }}
                     </p>
                   </div>
                 </div>
@@ -1295,14 +1287,14 @@
             >
               <div class="tab-inner mb-3">
                 <div class="row">
-                  <h3 class="title">Reinstall</h3>
+                  <h3 class="title">{{ $t('Reinstall') }}</h3>
                   <p class="description mb-4">
-                    Reinstall your Virtual Machine.
+                    {{ $t('Reinstall_your_Virtual_Machine') }}.
                   </p>
                 </div>
                 <div class="divider"></div>
                 <div class="row px-0 pt-4">
-                  <p class="fs-13-5">Select an Operating System</p>
+                  <p class="fs-13-5">{{ $t('Select_an_Operating_System') }}</p>
                   <div class="form-group d-flex">
                     <select
                       name="oslist"
@@ -1340,7 +1332,7 @@
                       v-model="format_disk"
                     />
                     <label for="format-disk" style="line-height: 40px"
-                      >&nbsp;Format Primary Disk Only</label
+                      >&nbsp;{{ $t('Format_Primary_Disk_Only') }}</label
                     >
                   </div>
 
@@ -1351,7 +1343,7 @@
                     <label
                       for="inputNewPassword1-os"
                       class="col-sm-4 control-label"
-                      >New Password</label
+                      >{{ $t('New_Password') }}</label
                     >
                     <div class="col-sm-5" style="position: relative">
                       <input
@@ -1384,16 +1376,18 @@
                           :style="'width: '+passwordStrength+'%'"
                         >
                           <span class="rating"
-                            >Password Rating: {{ passwordStrength }}%</span
+                            >{{ $t('Password_Rating') }}: {{ passwordStrength }}%</span
                           >
                         </div>
                       </div>
 
-                      <div class="alert alert-info">
-                        <strong>Tips for a good password</strong><br />Use both
-                        upper and lowercase characters<br />Include at least one
-                        symbol (only ! and @)<br />Don't use dictionary words
-                        and special characters
+                      <div class="alert alert-info" style="text-align: left">
+                        <strong>{{ $t('tips_title') }}
+                        </strong><br />
+                        {{ $t('tips_content1') }}
+                        <br />
+                        {{ $t('tips_content2') }}
+                        <br />{{ $t('tips_content3') }}
                       </div>
                     </div>
                   </div>
@@ -1404,7 +1398,7 @@
                     <label
                       for="inputNewPassword2"
                       class="col-sm-4 control-label"
-                      >Confirm New Password</label
+                      >{{ $t('Confirm_New_Password') }}</label
                     >
                     <div class="col-sm-5" style="position: relative">
                       <input
@@ -1429,7 +1423,7 @@
                       />
                       
                       <div id="inputNewPassword2-os-Msg" v-if="newPassword1 != newPassword2 && newPassword1!=''">
-                        <p class="help-block" id="nonMatchingPasswordResult">The passwords entered do not match</p>
+                        <p class="help-block" id="nonMatchingPasswordResult">{{ $t('password_not_match') }}</p>
                       </div>
                     </div>
                   </div>
@@ -1447,7 +1441,7 @@
                           passwordStrength < 80 
                         "
                       >
-                        Reinstall
+                      {{ $t('Reinstall') }}
                       </button>
                     </div>
                   </div>
@@ -1464,9 +1458,9 @@
             >
               <div class="tab-inner management mb-3">
                 <div class="row">
-                  <h3 class="title mb-4">IP Address Management</h3>
+                  <h3 class="title mb-4">{{ $t('IP_Address_Management') }}</h3>
                   <p class="description mb-4">
-                    Virtual Machines IP Address Management.
+                    {{ $t('Virtual_Machines_IP_Address_Management') }}.
                   </p>
                 </div>
                 <div class="divider"></div>
@@ -1483,13 +1477,13 @@
                         aria-labelledby="pills-ipv4m-tab"
                       >
                         <div class="tab-inner py-0">
-                          <h3 class="fs-15 mb-1">IP Address Assignment</h3>
+                          <h3 class="fs-15 mb-1">{{ $t('IP_Address_Assignment') }}</h3>
                           <p class="fs-13 mb-0 inner-sub-title">
-                            Assign floating IP address to VM
+                            {{ $t('Assign_floating_IP_address_to_VM') }}
                           </p>
                           <div class="divider my-3"></div>
                           <p class="fs-12 inner-sub-title2">
-                            Assigned IP Address List
+                            {{ $t('Assigned_IP_Address_List') }}
                           </p>
                           <div class="inner-table p-3">
                             <table class="w-100 table-flex-col" v-if="ip_list">
@@ -1511,10 +1505,10 @@
                                 @endforeach -->
                                 <tr v-for="ip in ip_list.ips" :key="ip.ip">
                                   <td>{{ ip.ip }}</td>
-                                  <td v-if="ip.primary">Primary</td>
+                                  <td v-if="ip.primary">{{ $t('Primary') }}</td>
                                   <td v-else></td>
                                   <td v-if="ip.primary">
-                                    Main Server IP (Sticky) - Cannot be removed
+                                    {{ $t('mainip_desc') }}
                                   </td>
                                   <td v-else></td>
                                 </tr>
@@ -1524,7 +1518,7 @@
 
                           <div class="divider my-3"></div>
 
-                          <p class="fs-13-5">Choose Primary IP</p>
+                          <p class="fs-13-5">{{ $t('Choose_Primary_IP') }}</p>
 
                           <div class="overview-select d-inline-block mb-3">
                             <select
@@ -1555,17 +1549,13 @@
                               @click="assignPrimaryIp(vpsid)"
                               :disabled="selected_ip == '0.0.0.0'"
                             >
-                              Assign as Primary IP
+                            {{ $t('Assign_as_Primary_IP') }}
                             </button>
                           </div>
 
                           <p class="fs-14 mt-4 mb-2 inner-sub-title2">
-                            After assigning IP address, our system will perform
-                            a reboot on your server, please make sure any
-                            temporary files are saved before performing IP
-                            assignment. Note: Extra IP address will still remain
-                            to your account even after server termination unless
-                            you cancel the extra IP address subscription.
+                            {{ $t('ipset_desc') }}
+                            
                           </p>
                         </div>
                       </div>
@@ -1584,9 +1574,9 @@
             >
               <div class="tab-inner mb-3">
                 <div class="row">
-                  <h3 class="title mb-4">VNC</h3>
+                  <h3 class="title mb-4">{{ $t('VNC') }}</h3>
                   <p class="description mb-4">
-                    Remote access your virtual machines through host VNC.
+                    {{ $t('remote_desc') }}
                   </p>
                 </div>
                 <div class="divider"></div>
@@ -1594,7 +1584,7 @@
                   <div class="col-md-12 d-flex justify-content-center">
                     <div class="overview-button-wrapper pt-0">
                       <router-link :to="{ name: 'noVNC', params: { id: vpsid } }" class="btn-dark px-4 hover-dark-light" target="_blank">
-                        Connect VNC
+                        {{ $t('Connect_VNC') }}
                       </router-link>
                     </div>
                   </div>
@@ -1611,7 +1601,7 @@
             >
               <div class="tab-inner mb-3">
                 <div class="row">
-                  <h3 class="title mb-4">ReverseDNS Management</h3>
+                  <h3 class="title mb-4">{{ $t('ReverseDNS_Management') }}</h3>
                 </div>
                 <div class="d-flex">
                   <div class="overview-dns-select">
@@ -1646,18 +1636,18 @@
                     @click="addRDNS()"
                     :disabled="newDNS == '' || selected_rdns_ip == ''"
                   >
-                    Add Reverse DNS
+                  {{ $t('Add_Reverse_DNS') }}
                   </button>
                 </div>
                 <div class="support-table">
                   <table class="table">
                     <thead>
                       <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">IP address</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Domain</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">{{ $t('ID') }}</th>
+                        <th scope="col">{{ $t('IP_address') }}</th>
+                        <th scope="col">{{ $t('Name') }}</th>
+                        <th scope="col">{{ $t('Domain') }}</th>
+                        <th scope="col">{{ $t('Action') }}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1699,9 +1689,9 @@
             >
               <div class="tab-inner billing mb-3">
                 <div class="row">
-                  <h3 class="title mb-4">Billing</h3>
+                  <h3 class="title mb-4">{{ $t('Billing') }}</h3>
                   <p class="description mb-4">
-                    Billing management for this service.
+                    {{ $t('billing_desc') }}
                   </p>
                 </div>
                 <div class="divider"></div>
@@ -1725,7 +1715,7 @@
                           aria-controls="pills-renew"
                           aria-selected="false"
                         >
-                          Renew Service
+                        {{ $t('Renew_Service') }}
                         </button>
                       </li>
 
@@ -1740,7 +1730,7 @@
                           aria-controls="pills-invoices"
                           aria-selected="false"
                         >
-                          Invoice
+                        {{ $t('Invoice') }}
                         </button>
                       </li>
 
@@ -1755,7 +1745,7 @@
                           aria-controls="pills-refund"
                           aria-selected="false"
                         >
-                          Refund
+                        {{ $t('Refund') }}
                         </button>
                       </li>
                     </ul>
@@ -1769,7 +1759,7 @@
                         aria-labelledby="pills-renew-tab"
                       >
                         <div class="tab-inner py-0 p-mb-0">
-                          <h3 class="fs-15 mb-1">Renew Service</h3>
+                          <h3 class="fs-15 mb-1">{{ $t('Renew_Service') }}</h3>
                           <div
                             class="divider divider-inner"
                             style="margin: 20px 0"
@@ -1778,7 +1768,7 @@
                           <div class="tab-inner">
                             <div class="row">
                               <div class="text-center">
-                                <p class="fs-14 mb-0">Current Due Date</p>
+                                <p class="fs-14 mb-0">{{ $t('Current_Due_Date') }}</p>
                                 <p class="fs-15 mb-0" style="font-weight: 500">
                                   {{ order_product_info.nextduedate }}
                                 </p>
@@ -1787,7 +1777,7 @@
                                   class="overview-button-wrapper d-flex flex-column align-items-center justify-content-center" v-if="invoiceInfo && invoiceInfo.status == 'Unpaid'"
                                 >
                                   <button class="btn btn-primary" @click="openInvoiceWindow(invoiceInfo.invoiceid)">
-                                    Renew Service
+                                    {{ $t('Renew_Service') }}
                                   </button>
                                 </div>
                               </div>
@@ -1803,8 +1793,7 @@
                               color: rgba(23, 30, 38, 0.75);
                             "
                           >
-                            An invoice will be generated 7 days before the
-                            service's due date. 
+                          {{ $t('invoice_due_desc') }}
                           </p>
                         </div>
                       </div>
@@ -1821,14 +1810,14 @@
                             <table class="table">
                               <thead>
                                 <tr>
-                                  <th scope="col">Invoice ID</th>
-                                  <th scope="col">Invoice Date</th>
-                                  <th scope="col">Due Date</th>
-                                  <th scope="col">Date Paid</th>
-                                  <th scope="col">Amount</th>
-                                  <th scope="col">Status</th>
+                                  <th scope="col">{{ $t('Invoice_ID') }}</th>
+                                  <th scope="col">{{ $t('Invoice_Date') }}</th>
+                                  <th scope="col">{{ $t('Due_Date') }}</th>
+                                  <th scope="col">{{ $t('Date_Paid') }}</th>
+                                  <th scope="col">{{ $t('Amount') }}</th>
+                                  <th scope="col">{{ $t('Status') }}</th>
                                   <th scope="col" class="text-center">
-                                    View Invoice
+                                    {{ $t('View_Invoice') }}
                                   </th>
                                 </tr>
                               </thead>
@@ -1894,7 +1883,7 @@
                         aria-labelledby="pills-refund-tab"
                       >
                         <div class="tab-inner py-0 p-mb-0">
-                          <h3 class="fs-15 mb-1">Refund Request</h3>
+                          <h3 class="fs-15 mb-1">{{ $t('Refund_Request') }}</h3>
                           <div
                             class="divider divider-inner"
                             style="margin: 20px 0"
@@ -1904,7 +1893,7 @@
                             <div class="row">
                               <div class="text-center">
                                 <p class="fs-14 mb-0">
-                                  Please open a ticket to request a refund.
+                                  {{ $t('refund_title') }}
                                 </p>
 
                                 <div
@@ -1915,7 +1904,7 @@
                                     id="open-ticket"
                                     @click="openModal = true"
                                   >
-                                    Open Ticket
+                                  {{ $t('Open_Ticket') }}
                                   </button>
                                 </div>
                               </div>
@@ -1931,8 +1920,7 @@
                               color: rgba(23, 30, 38, 0.75);
                             "
                           >
-                            This is subject to approval according to our Terms
-                            of Service.
+                          {{ $t('approval_terms') }}
                           </p>
                         </div>
                       </div>
@@ -1952,9 +1940,8 @@
               <div class="row mb-5 pe-0">
                 <div class="tab-inner settings mb-3">
                   <div class="row">
-                    <h3 class="title mb-4">Settings</h3>
+                    <h3 class="title mb-4">{{ $t('Settings') }}</h3>
                     <p class="description mb-4">
-                      All other settings that do not belongs to other tabs.
                     </p>
                   </div>
                   <div class="divider"></div>
@@ -1979,7 +1966,7 @@
                             aria-selected="false"
 
                           >
-                            Change Password
+                          {{ $t('Change_Password') }}
                           </button>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -1993,7 +1980,7 @@
                             aria-controls="pills-host"
                             aria-selected="false"
                           >
-                            Change Hostname
+                          {{ $t('Change_Hostname') }}
                           </button>
                         </li>
                       </ul>
@@ -2007,7 +1994,7 @@
                           aria-labelledby="pills-password-tab"
                         >
                           <div class="tab-inner py-0 p-mb-0">
-                            <h3 class="fs-15 mb-1">Change Password</h3>
+                            <h3 class="fs-15 mb-1">{{ $t('Change_Password') }}</h3>
                             <div class="divider" style="margin: 20px 0"></div>
                             <div
                               id="newPassword1-os"
@@ -2016,7 +2003,7 @@
                               <label
                                 for="inputNewPassword1-os"
                                 class="col-sm-4 control-label"
-                                >New Server Password</label
+                                >{{ $t('New_Server_Password') }}</label
                               >
                               <div class="col-sm-5" style="position: relative">
                                 <input
@@ -2054,17 +2041,18 @@
                                     :style="'width: '+passwordStrength+'%'"
                                   >
                                     <span class="rating"
-                                      >Password Rating: {{ passwordStrength }}%</span
+                                      >{{ $t('Password_Rating') }}: {{ passwordStrength }}%</span
                                     >
                                   </div>
                                 </div>
 
-                                <div class="alert alert-info">
-                                  <strong>Tips for a good password</strong
-                                  ><br />Use both upper and lowercase
-                                  characters<br />Include at least one symbol
-                                  (only ! and @)<br />Don't use dictionary words
-                                  and special characters
+                                <div class="alert alert-info" style="text-align: left">
+                                  <strong>{{ $t('tips_title') }}
+                                  </strong><br />
+                                  {{ $t('tips_content1') }}
+                                  <br />
+                                  {{ $t('tips_content2') }}
+                                  <br />{{ $t('tips_content3') }}
                                 </div>
                               </div>
                             </div>
@@ -2075,7 +2063,7 @@
                               <label
                                 for="inputNewPassword2-os"
                                 class="col-sm-4 control-label"
-                                >Confirm New Password</label
+                                >{{ $t('Confirm_New_Password') }}</label
                               >
                               <div class="col-sm-5" style="position: relative">
                                 <input
@@ -2100,7 +2088,7 @@
                                 />
                                 
                                 <div id="inputNewPassword2-os-Msg" v-if="newPassword1 != newPassword2 && newPassword1!=''">
-                                  <p class="help-block" id="nonMatchingPasswordResult">The passwords entered do not match</p>
+                                  <p class="help-block" id="nonMatchingPasswordResult">{{ $t('password_not_match') }}</p>
                                 </div>
                               </div>
                             </div>
@@ -2112,7 +2100,7 @@
                                   @click="changePWD(vpsid)"
                                   :disabled = "newPassword1 != newPassword2 || newPassword1=='' || newPassword2=='' || passwordStrength < 80"
                                 >
-                                  Change Password
+                                {{ $t('Change_Password') }}
                                 </button>
                               </div>
                             </div>
@@ -2127,11 +2115,11 @@
                           aria-labelledby="pills-host-tab"
                         >
                           <div class="tab-inner py-0 p-mb-0">
-                            <h3 class="fs-15 mb-1">Change Hostname</h3>
+                            <h3 class="fs-15 mb-1">{{ $t('Change_Hostname') }}</h3>
 
                             <div class="divider" style="margin: 20px 0"></div>
 
-                            <p class="fs-13-5">New hostname</p>
+                            <p class="fs-13-5">{{ $t('New_hostname') }}</p>
 
                             <div class="overview-input mb-4">
                               <input
@@ -2149,13 +2137,12 @@
                                 @click="changeHostName(vpsid)"
                                 :disabled = "hostname==''"
                               >
-                                Change Hostname
+                              {{ $t('Change_Hostname') }}
                               </button>
                             </div>
                             <p class="fs-13-5 mb-0 inner-sub-title">
-                              Note: A power cycle is required after changing
-                              hostname in order for the new hostname to be
-                              applied.
+                              {{ $t('changed_hostname') }}
+                              
                             </p>
                           </div>
                         </div>
@@ -2175,21 +2162,23 @@
         id="alertUnpaidInvoice"
         v-if="status != 'Active'"
       >
-        This VPS has not been activated yet. Pay the invoice or wait for
-        confirmation of payment in case you did pay already.
+      {{ $t('not_activated') }}
+        
       </div>
 
       <div class="support-table" v-if="status != 'Active'">
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">Invoice ID</th>
-              <th scope="col">Invoice Date</th>
-              <th scope="col">Due Date</th>
-              <th scope="col">Date Paid</th>
-              <th scope="col">Amount</th>
-              <th scope="col">Status</th>
-              <th scope="col" class="text-center">View Invoice</th>
+              <th scope="col">{{ $t('Invoice_ID') }}</th>
+              <th scope="col">{{ $t('Invoice_Date') }}</th>
+              <th scope="col">{{ $t('Due_Date') }}</th>
+              <th scope="col">{{ $t('Date_Paid') }}</th>
+              <th scope="col">{{ $t('Amount') }}</th>
+              <th scope="col">{{ $t('Status') }}</th>
+              <th scope="col" class="text-center">
+                {{ $t('View_Invoice') }}
+              </th>
             </tr>
           </thead>
           <tbody v-if="invoiceInfo">
@@ -2245,14 +2234,14 @@
         <div class="modal-content">
           <div class="modal-header">
             <div class="modal-title">
-              <h2>New ticket</h2>
-              <h3>Create new ticket now.</h3>
+              <h2>{{ $t('New_ticket') }}</h2>
+              <h3>{{ $t('Create_new_ticket_now.') }}</h3>
             </div>
           </div>
           <div class="modal-main">
             <div class="amounts">
               <!-- <form id="openTicket" enctype="multipart/form-data" method="POST" action="{{route('ticket.open"> -->
-              <h4>Subject</h4>
+              <h4>{{ $t('Subject') }}</h4>
               <input
                 class="mb-3"
                 name="subject"
@@ -2261,7 +2250,7 @@
                 v-model="subject"
               />
 
-              <h4>Describe the problem</h4>
+              <h4>{{ $t('Describe_the_problem') }}</h4>
               <textarea
                 class="mb-3"
                 name="message"
@@ -2271,7 +2260,7 @@
                 v-model="message"
               ></textarea>
 
-              <h4>Department*</h4>
+              <h4>{{ $t('Department') }}*</h4>
               <select name="department" id="department" v-model="selectedDepartment">
                 <!-- @foreach ($departments as $department)
                   <option value="{{$department['id']}}">{{$department['name']}}</option>
@@ -2285,14 +2274,14 @@
                 </option>
               </select>
 
-                <h4>Service related</h4>
+                <h4>{{ $t('Service_related') }}</h4>
                 <select name="service" id="service" v-model="selectedService">
                   <option value="0">- None -</option>
-                  <option :value="selectedService">Current Vps Service</option>
+                  <option :value="selectedService">{{ $t('Current_Vps_Service') }}</option>
                 </select>
 
               <button class="btn-dark d-block w-100 mt-5" id="create-ticket" :disabled="subject=='' || selectedDepartment==0" @click="createTicket()">
-                Create Ticket
+                {{ $t('Create_Ticket') }}
               </button>
               <!-- </form> -->
             </div>

@@ -138,7 +138,7 @@
                       style="filter: brightness(2.5); width: 18px;"
                       src="/assets/img/switch_account.png"
                       alt=""
-                    />{{$t('Switch Account')}}
+                    />{{$t('Switch_Account')}}
                   </router-link>
                 </li>
                 <li>

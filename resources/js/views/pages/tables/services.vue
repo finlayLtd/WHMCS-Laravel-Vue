@@ -7,7 +7,7 @@
     ></div>
     <div class="row justify-content-between align-items-center">
       <div class="row mb-5 pe-0">
-        <h3 class="col-md-3 sub-title">My Products & Services</h3>
+        <h3 class="col-md-3 sub-title">{{ $t('services_title') }}</h3>
 
         <div class="col-md-9 d-flex justify-content-end pe-0 flex-wrap">
           <div class="sort-servers order-2 order-md-1">
@@ -16,12 +16,12 @@
               class="sort-item-active btn-chevron chevron-dark"
               @click="sortBy = !sortBy"
             >
-              <span>Sort by name</span>
+              <span>{{ $t('Sort_by_name') }}</span>
             </div>
             <div class="sorting-items" v-if="sortBy">
               <ul>
-                <li @click="setOrder('regdate', 'desc')">Created date</li>
-                <li @click="setOrder('nextduedate', 'asc')">Expiration date</li>
+                <li @click="setOrder('regdate', 'desc')">{{ $t('Created_date') }}</li>
+                <li @click="setOrder('nextduedate', 'asc')">{{ $t('Expiration_date') }}</li>
                 
               </ul>
             </div>
@@ -76,7 +76,7 @@
                               class="logo-wrapper d-flex align-items-center col-md-2 text-dark text-decoration-none order-lg-1"
                               :to="{ name: 'overview', params: { id: order.orderid } }"
                             >
-                              Launch Control Panel
+                              {{ $t('Launch_Control_Panel') }}
                             </router-link>
                           </li>
                           <li>
@@ -84,7 +84,7 @@
                               class="logo-wrapper d-flex align-items-center col-md-2 text-dark text-decoration-none order-lg-1"
                               to="/balance"
                             >
-                              View Invoices
+                              {{ $t('View_Invoices') }}
                             </router-link> 
                           </li>
                         </ul>
@@ -100,8 +100,8 @@
                   </div>
                   <div class="list-item-detail">
                     <h2 class="list-name">{{ order.dedicatedip }}</h2>
-                    <h3 class="detail">Created at  {{ order.regdate }}</h3>
-                    <h3 class="detail" style="margin-top:5px;">Due date at  &nbsp;{{ order.nextduedate }}</h3>
+                    <h3 class="detail">{{ $t('Created_at') }} at  {{ order.regdate }}</h3>
+                    <h3 class="detail" style="margin-top:5px;">{{ $t('Due_date_at') }}  &nbsp;{{ order.nextduedate }}</h3>
                   </div>
                   <div v-if="state === 'Active'" class="server-list-options">
                     <button class="active-badge"><span class="active-dot"></span>Active</button>
@@ -115,14 +115,14 @@
                   </div>
                   <div class="list-item-detail">
                     <h2 class="list-name">{{ order.groupname }}</h2>
-                    <h3 class="detail">Hostname : {{ order.domain }}</h3>
+                    <h3 class="detail">{{ $t('Hostname') }} : {{ order.domain }}</h3>
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div v-if="state === 'Active' && (!state_order?.[state] || state_order?.[state]?.length === 0)">
-            <h5 style="margin-top: 20px; text-align: center;">No Active Product </h5>
+            <h5 style="margin-top: 20px; text-align: center;">{{ $t('No_Active_Product') }} </h5>
           </div>
         </div>
       </div>

@@ -1,8 +1,7 @@
 <template>
   <section class="home-hero login">
     <div class="badge reset-success" v-show="false">
-      <img src="assets/img/reset-success.svg" alt="" /> Account registration
-      successfully done.
+      <img src="assets/img/reset-success.svg" alt="" /> {{ $t('success_register') }}
     </div>
     
 
@@ -16,13 +15,12 @@
             <img class="logo-dark" src="assets/img/crazy-rdp-logo.svg" alt="" />
             <img class="logo-light" src="assets/img/logo-light.svg" alt="" />
           </div>
-          <h2 class="login-title">Login Account</h2>
+          <h2 class="login-title">{{ $t('Login_Account') }}</h2>
 
           <form @submit.prevent="submitLogin">
               
                 <div class="login-input-wrapper mb-3">
-                    <label for="#email">Email Address</label>
-                    <!-- <input id="email" type="email" class="@error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="email@address.com"> -->
+                    <label for="#email">{{ $t('Email_Address') }}</label>
                     <input
                         v-model="loginForm.email"
                         id="email"
@@ -41,7 +39,7 @@
                 </div>
                 <!-- Password -->
                 <div class="login-input-wrapper mb-4">
-                    <label for="#password">Password</label>
+                    <label for="#password">{{ $t('Password') }}</label>
                     <!-- <input id="password" type="password" class="@error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="••••••••••"> -->
                     <input
                         v-model="loginForm.password"
@@ -78,12 +76,12 @@
             </form>
 
             <router-link to="/register" style="color: black">
-              <button class="btn-light w-100 mb-3">Register account</button>
+              <button class="btn-light w-100 mb-3">{{ $t('Register_account') }}</button>
             </router-link>
 
             <div class="text-center">
               <router-link class="fs-14" to="/forgot-password">
-                Forgot Your Password?
+                {{ $t('forgot_password') }}
               </router-link>
             </div>
         </div>

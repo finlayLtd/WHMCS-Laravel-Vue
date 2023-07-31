@@ -4,7 +4,7 @@
       <div
         class="d-flex justify-content-between align-items-center title-button-wrapper"
       >
-        <h2 class="title mb-0">Balance</h2>
+        <h2 class="title mb-0">{{ $t('Balance') }}</h2>
       </div>
 
       <div class="sub-section server-list-tab">
@@ -18,7 +18,7 @@
                       <img src="assets/img/wallet.svg" alt="" />
                     </div>
                     <div class="balance-title">
-                      <h3>Main balance</h3>
+                      <h3>{{ $t('Main_balance') }}</h3>
                     </div>
                   </div>
                   <div class="balance">
@@ -31,7 +31,7 @@
                     id="addFunds"
                     @click="openModal = true"
                   >
-                    Add Funds
+                  {{ $t('Add_Funds') }}
                   </button>
                 </div>
               </div>
@@ -43,7 +43,7 @@
       <div class="sub-section server-list-tab">
         <div class="row justify-content-between align-items-center">
           <div class="row mb-3 mb-lg-5 pe-0">
-            <h3 class="col-md-3 sub-title pt-2">My Invoices</h3>
+            <h3 class="col-md-3 sub-title pt-2">{{ $t('My_Invoices') }}</h3>
 
             <div
               class="col-md-9 d-flex justify-content-end pe-0 flex-wrap list-flex-nav"
@@ -54,14 +54,14 @@
                   class="sort-item-active btn-chevron chevron-dark"
                   @click="sortBy = !sortBy"
                 >
-                  <span>Sort by &nbsp;&nbsp;</span>
+                  <span>{{ $t('Sort_by') }} &nbsp;&nbsp;</span>
                 </div>
                 <div class="sorting-items" v-if="sortBy">
                   <ul>
-                    <li @click="setOrder('date', 'desc')">Date-latest</li>
-                    <li @click="setOrder('date', 'asc')">Date-oldest</li>
-                    <li @click="setOrder('total', 'desc')">Price-highest</li>
-                    <li @click="setOrder('total', 'asc')">Price-lowest</li>
+                    <li @click="setOrder('date', 'desc')">{{ $t('Date-latest') }}</li>
+                    <li @click="setOrder('date', 'asc')">{{ $t('Date-oldest') }}</li>
+                    <li @click="setOrder('total', 'desc')">{{ $t('Price-highest') }}</li>
+                    <li @click="setOrder('total', 'asc')">{{ $t('Price-lowest') }}</li>
                   </ul>
                 </div>
               </div>
@@ -83,7 +83,7 @@
                     aria-selected="true"
                     @click="invoiceStatus = 'All'"
                   >
-                    All
+                    {{ $t('All') }}
                   </button>
                 </li>
                 <li class="nav-item" role="presentation">
@@ -98,7 +98,7 @@
                     aria-selected="false"
                     @click="invoiceStatus = 'Paid'"
                   >
-                    Paid
+                    {{ $t('Paid') }}
                   </button>
                 </li>
                 <li class="nav-item" role="presentation">
@@ -113,7 +113,7 @@
                     aria-selected="false"
                     @click="invoiceStatus = 'Unpaid'"
                   >
-                    Unpaid
+                    {{ $t('Unpaid') }}
                   </button>
                 </li>
               </ul>
@@ -131,18 +131,18 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th scope="col">Invoice</th>
-                      <th scope="col">Amount</th>
-                      <th scope="col">Invoice Date</th>
-                      <th scope="col">Due Date</th>
-                      <th scope="col">Status</th>
-                      <th scope="col" class="text-center">View Invoice</th>
+                      <th scope="col">{{ $t('Invoice') }}</th>
+                      <th scope="col">{{ $t('Amount') }}</th>
+                      <th scope="col">{{ $t('Invoice_Date') }}</th>
+                      <th scope="col">{{ $t('Due_Date') }}</th>
+                      <th scope="col">{{ $t('Status') }}</th>
+                      <th scope="col" class="text-center">{{ $t('View_Invoice') }}</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-if="!invoices || invoices.length === 0">
                       <td colspan="6" style="text-align: center">
-                        <h5 style="margin-top: 20px">No invoice</h5>
+                        <h5 style="margin-top: 20px">{{ $t('No_invoice') }}</h5>
                       </td>
                     </tr>
                     <tr
@@ -192,13 +192,13 @@
       <div class="modal-content">
         <div class="modal-header">
           <div class="modal-title">
-            <h2>Deposit</h2>
-            <h3>Deposit cryptocurrency</h3>
+            <h2>{{ $t('Deposit') }}</h2>
+            <h3>{{ $t('Deposit cryptocurrency') }}</h3>
           </div>
         </div>
         <div class="modal-main">
           <div class="main-title">
-            <p>Choose Payment method</p>
+            <p>{{ $t('Choose_Payment_method') }}</p>
           </div>
           <div class="modal-buttons">
             <button class="modal-payment">
@@ -231,12 +231,12 @@
           </div>
           <div class="amounts">
             <div class="amount-footer">
-              <span>Amount of one deposit</span>
+              <span>{{ $t('Amount_of_one_deposit') }}</span>
               <span>€10,00 - €1.000,00</span>
             </div>
           </div>
           <button class="btn-dark d-block" @click="openAddFundsWindow()">
-            Continue
+            {{ $t('Continue') }}
           </button>
         </div>
       </div>

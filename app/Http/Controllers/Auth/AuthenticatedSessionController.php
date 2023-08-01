@@ -43,6 +43,8 @@ class AuthenticatedSessionController extends Controller
             $request->password
         );
 
+       
+
         if ($data['result'] == 'error') {
             return response()->json([
                 'errors' => ['email' => ['Email or Password is Invalid']]
@@ -111,9 +113,6 @@ class AuthenticatedSessionController extends Controller
 
         $user = User::where('whmcs_id', $data['userid'])->first();
 
-        
-
-        
 
         if (!$user) {
             $user = new User();

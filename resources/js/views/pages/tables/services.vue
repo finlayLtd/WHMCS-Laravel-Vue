@@ -39,6 +39,7 @@
                 role="tab"
                 :aria-controls="'pills-' + state"
                 :aria-selected="state === 'Active'"
+                @click="clickState(state)"
               >
                 {{ state }}
               </button>
@@ -57,7 +58,7 @@
            role="tabpanel"
            :aria-labelledby="'pills-' + state + '-tab'">
         <div class="row mb-5">
-          <div v-if="state_order?.[state]" v-for="order in state_order[state]" :key="order.orderid" class="col-12 col-lg-4 col-md-6 col-sm-12">
+          <div v-if="state_order?.[state]" v-for="order in paginatedServers(state) " :key="order.orderid" class="col-12 col-lg-4 col-md-6 col-sm-12">
             <div class="card-item p-4 mb-4">
               <div class="server-list-item">
                 <div class="server-list-item-wrapper">
@@ -126,12 +127,11 @@
           </div>
         </div>
       </div>
-    
-  
-
-
 
       </div>
+    </div>
+    <div class="w-100 server-list-pagination">
+      <Pagination :currentPage="params.page" :totalPages="totalFilterPages" @page-changed="onPageChanged" />
     </div>
   </div>
 </template>
@@ -146,6 +146,19 @@ import { showLoader } from '@/plugins/loading.js';
 // toast
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
+import Pagination from '@/components/Pagination.vue'; 
+
+const totalPages = ref(0);
+const perPage_servers = 9;
+
+
+function paginatedServers(state) {
+  let tempArray = state_order.value;
+  const startIndex = (params.value.page - 1) * perPage_servers;
+  const endIndex = startIndex + perPage_servers;
+  return tempArray[state].slice(startIndex, endIndex);
+}
+
 const $toast = useToast();
 const sortBy = ref(false);
 const store = useStore();
@@ -155,19 +168,34 @@ const servers = ref([]);
 const states = ref([]);
 const state_order = ref([]);
 const params = ref(
-	{'client_id': user.value.client_id , orderby:'', order:''}
+	{'client_id': user.value.client_id , orderby:'', order:'', page :1}
 )
 const isLoading = ref(false);
+const totalFilterPages = ref(1);
+
+function onPageChanged(page) 
+{
+	params.value.page = page;
+	//getTicketsData(); // Fetch tickets for the new page
+}
+
+const  clickState = (state)=>{
+  let tempArray = state_order.value;
+  totalFilterPages.value = Math.ceil(tempArray[state].length / perPage_servers);
+}
+
 const getServersData = ()=>{
 		// showLoader(true);
     isLoading.value = true;
 		commonApi.runGetApi('/servers' , params.value).then((res)=>{
-      isLoading.value = false;
+    isLoading.value = false;
 		sortBy.value = false;
 		servers.value = res.data.products;
 		states.value = res.data.states;
 		state_order.value = res.data.state_order;
-	
+    let tempArray = state_order.value;
+    // totalPages.value = Math.ceil(servers.value.length / perPage_servers);
+    totalFilterPages.value = Math.ceil(tempArray['Active'].length / perPage_servers);
    
 	}).catch((e)=>{
 	console.log(e);
@@ -176,9 +204,12 @@ const getServersData = ()=>{
 	})
 }
 
+
+
+
+
 function setOrder(orderBy , order) {
     params.value.orderby = orderBy
-    // params.value.order = order
     getServersData()
   }
 
@@ -187,7 +218,7 @@ getServersData()
 
 <style scoped>
 .hide-icon::after {
-  display: none !important; /* hide the ::after pseudo-element */
+  display: none !important; 
 }
 
 .dropdown-toggle:empty::after {

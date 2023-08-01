@@ -4,7 +4,7 @@ import axios from 'axios'
 const axiosIns = axios.create({
 // You can add your headers here
 // ================================
-baseURL: 'http://87.120.88.249/api/',
+baseURL: 'http://87.121.221.161/api/',
 headers: {'X-Custom-Header': 'foobar'}
 })
 

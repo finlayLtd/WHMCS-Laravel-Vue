@@ -19,10 +19,10 @@
 							</div>
 							<div class="sorting-items" v-if="sortBy">
 								<ul>
-									<li class="touch-item" @click="setOrder('date' , 'desc')">{{ $t('Opened-latest') }}</li>
-									<li class="touch-item" @click="setOrder('date' , 'asc')">{{ $t('Opened-oldest') }}</li>
-									<li class="touch-item" @click="setOrder('lastreply' , 'desc')">{{ $t('Last-Reply-latest') }}</li>
-									<li class="touch-item" @click="setOrder('date' , 'asc')">{{ $t('Last-Reply-oldest') }}</li>
+									<li class="touch-item" @click="setOrder('date' , 'desc')">{{ $t('Opened_latest') }}</li>
+									<li class="touch-item" @click="setOrder('date' , 'asc')">{{ $t('Opened_oldest') }}</li>
+									<li class="touch-item" @click="setOrder('lastreply' , 'desc')">{{ $t('Last_Reply_latest') }}</li>
+									<li class="touch-item" @click="setOrder('date' , 'asc')">{{ $t('Last_Reply_oldest') }}</li>
 								</ul>
 							</div>
 						</div>
@@ -199,11 +199,6 @@
 
 							<select name="service" id="service" v-model="selectedService">
 								<option value="0">- {{ $t('None') }} -</option>
-								<!-- @foreach ($orders as $order_info)
-									@foreach($order_info['lineitems']['lineitem'] as $order_value)
-									<option value="{{$order_value['relid']}}">{{$order_value['product']}} - {{ $order_value['status'] }}</option>
-									@endforeach
-								@endforeach -->
 								<template v-for="orderInfo in orders">
 									<template v-for="orderValue in orderInfo.lineitems.lineitem" :key="orderValue.relid">
 										<option :value="orderValue.relid" >
@@ -263,7 +258,6 @@ const getTicketsData = ()=>{
 		commonApi.runGetApi('/support-ticket' , params.value).then((res)=>{
 		showLoader(false);
 		sortBy.value = false;
-		console.log(res.data)
 		tickets.value = res.data.tickets;
 		const filteredStatus = computed(() => {
       		return res?.data?.status?.filter(statu => onlyShow.value.includes(statu.title));

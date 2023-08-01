@@ -13,41 +13,6 @@
         <div class="row justify-content-between align-items-center">
           <div class="row mb-2 mb-lg-5 pe-0">
             <div class="col-md-12 d-flex justify-content-start pe-0 flex-wrap">
-              <!-- <ul
-                style="overflow-x: unset"
-                class="nav nav-pills mb-3 mb-md-0 order-1 order-md-2 mb-lg-0 flex-nowrap"
-                id="pills-tab"
-                role="tablist"
-              >
-                <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link active"
-                    id="pills-overview-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-overview"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-overview"
-                    aria-selected="true"
-                  >
-                    Profile
-                  </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link"
-                    id="pills-analytics-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-analytics"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-analytics"
-                    aria-selected="false"
-                  >
-                    Security
-                  </button>
-                </li>
-              </ul> -->
               <ul
                 style="overflow-x: unset"
                 class="nav nav-pills mb-3 mb-md-0 order-1 order-md-2 mb-lg-0 flex-nowrap"
@@ -275,13 +240,6 @@
                             <span class="sr-only">{{ $t('Password_Rating') }}: 0%</span>
                           </div>
                         </div>
-
-                        <!-- <div class="alert alert-info">
-                          <strong>{{ __("messages.tips") }}</strong
-                          ><br />{{ __("messages.tips_content1") }}<br />{{
-                            __("messages.tips_content4")
-                          }}<br />{{ __("messages.tips_content3") }}
-                        </div> -->
                       </div>
                     </div>
                     <div
@@ -337,7 +295,6 @@
               role="tabpanel"
               aria-labelledby="pills-userManagement-tab"
             >
-              <!-- @if(Auth::user()->originUserData['email'] == Auth::user()->email) -->
               <div class="tab-inner mb-3">
                 <div class="row">
                   <h3 class="title mb-4">
@@ -413,7 +370,6 @@
                     
                   </p>
                   <div class="mb-4">
-                    <!-- method="POST" action="{{ route('invite_user') }}" -->
                     <div>
                       <input
                         type="email"
@@ -577,20 +533,6 @@
                     >
                     {{ $t('Send_Invite') }}
                     </button>
-
-                    <!-- <form
-                      id="remove-user-form"
-                      method="POST"
-                      action="{{ route('remove_access') }}"
-                    >
-                      @csrf
-                      <input
-                        type="hidden"
-                        id="remove-user-id"
-                        name="user_id"
-                        value=""
-                      />
-                    </form> -->
                   </div>
                 </div>
               </div>
@@ -637,6 +579,10 @@
                     </table>
                   </div>
                 </div>
+                <div class="w-100 server-list-pagination">
+    
+                  <Pagination :currentPage="params.page" :totalPages="Math.ceil(totalPages / perPage)" @page-changed="onPageChanged" />
+                </div>
                 <!-- @else @include('component.no-permission-go-back') @endif -->
               </div>
             </div>
@@ -648,11 +594,13 @@
 </template>
 
 <script setup>
+
 import { computed, onMounted, ref, onBeforeUnmount, watch } from "vue";
 import { commonApis } from "@/apis/commonApis";
 import { useStore } from "vuex";
 import useAuth from "@/composables/auth";
 import { showLoader } from "@/plugins/loading.js";
+import Pagination from '@/components/Pagination.vue'; 
 // toast
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
@@ -666,7 +614,7 @@ const users_list = ref([]);
 const clientDetails = ref({});
 const permissionListVisible = ref(false);
 const invite_email = ref("");
-
+const perPage = 15;
 // permission values
 const profile = ref(true);
 const contacts = ref(true);
@@ -681,13 +629,22 @@ const tickets = ref(true);
 const affiliates = ref(true);
 const emails = ref(true);
 const orders = ref(true);
-
+const totalPages = ref(0);
 // const status = ref([]);
 const params = ref({
   client_id: user.value.client_id,
   orderby: "",
   order: "",
+  page: 1,
+  perPage: perPage,
 });
+
+function onPageChanged(page) 
+{
+	params.value.page = page;
+	getSettingsData(); // Fetch tickets for the new page
+}
+
 
 const selectAllPermissions = () => {
   permissionListVisible.value = false;
@@ -738,6 +695,7 @@ const getSettingsData = () => {
       emailsList.value = res.data.emails;
       users_list.value = res.data.users_list;
       clientDetails.value = res.data.clientDetails;
+      totalPages.value = res.data.totalresults;
     })
     .catch((e) => {
       showLoader(false);

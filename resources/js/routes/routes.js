@@ -42,22 +42,7 @@ export default [
                 component: () => import('../views/pages/dashboard.vue'),
                 beforeEnter: requireLogin,
             },
-            // original pages
-            {
-                path: 'posts',
-                name: 'public-posts.index',
-                component: () => import('../views/posts/index.vue'),
-            },
-            {
-                path: 'posts/:id',
-                name: 'public-posts.details',
-                component: () => import('../views/posts/details.vue'),
-            },
-            {
-                path: 'category/:id',
-                name: 'category-posts.index',
-                component: () => import('../views/category/posts.vue'),
-            },
+
             
         ]
     },

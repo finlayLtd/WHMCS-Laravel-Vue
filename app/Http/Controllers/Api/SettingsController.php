@@ -21,15 +21,17 @@ class SettingsController extends Controller
         $emails = [];
         $clientDetails = null;
         $users_list = [];
+        $totalresults = 0;
 
         $email_response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetEmails',
-            'limitstart' => 0,
-            'limitnum' => 30, // Set number of tickets to retrieve per request
+            'limitstart' => ($request->page - 1) * $request->perPage,
+            'limitnum' => $request->perPage, // Set number of tickets to retrieve per request
             'clientid' => Auth::user()->client_id, // Set number of tickets to retrieve per request
         ]);
         if (count($email_response['emails']) != 0) {
             $emails = $email_response['emails']['email'];
+            $totalresults = $email_response['totalresults'];
         } 
 
         $check_user_response = (new \Sburina\Whmcs\Client)->post([
@@ -44,6 +46,7 @@ class SettingsController extends Controller
 
         return response()->json([
             'emails' => $emails,
+            'totalresults' => $totalresults,
             'clientDetails' => $clientDetails,
             'users_list' => $users_list,
         ]);

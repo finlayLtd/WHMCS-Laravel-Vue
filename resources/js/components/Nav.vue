@@ -4,25 +4,18 @@
       <div
         class="container d-flex flex-wrap align-items-center justify-content-between py-3"
       >
-        <!-- <a
-            href="/"
-            class="logo-wrapper d-flex align-items-center col-md-2 text-dark text-decoration-none order-lg-1"
-          > -->
         <router-link
           class="logo-wrapper d-flex align-items-center col-md-2 text-dark text-decoration-none order-lg-1"
           to="/dashboard"
         >
           <img class="logo-dark"  src="/assets/img/crazy-rdp-logo.svg" alt="" />
           <img class="logo-light" src="/assets/img/logo-light.svg" alt="" />
-          <!-- <img class="status-arrow" :src="require('@//assets/img/status-arrow.svg')" alt="" /> -->
         </router-link>
-
-        <!-- </a> -->
 
         <div
           class="col-md-4 d-flex align-items-center justify-content-end order-lg-3"
         >
-          <div class="profile-area position-relative">
+          <div class="profile-area position-relative d-mobile-none">
             <div
               class="options-toggle dropdown-toggle lang-div"
               style="margin-right: 24px; cursor: pointer"
@@ -30,7 +23,7 @@
             >
               <span class="ip2location-flag-16 flag-round flag-ru"
                 style="margin: 10px 0px -3px 5px"
-                id="language-flag" v-if="locales[locale] == 'FR'">
+                id="language-flag" v-if="locale == 'ru'">
               </span>
               <span class="ip2location-flag-16 flag-round flag-cn"
                 style="margin: 10px 0px -3px 5px"
@@ -41,7 +34,7 @@
                 id="language-flag" v-else>
               </span>
               <small  id="language-code" style="user-select: none">&nbsp;
-                <span v-if="locales[locale] == 'FR'">RU</span>
+                <span v-if="locale == 'ru'">RU</span>
                 <span v-else-if="locales[locale] == '中文'">CN</span>
                 <span v-else>EN</span>
               </small>
@@ -59,7 +52,7 @@
                     >English</b
                   >
                 </li>
-                <li style="cursor: pointer" @click.prevent="setLocale('fr')">
+                <li style="cursor: pointer" @click.prevent="setLocale('ru')">
                   <span
                     class="ip2location-flag-16 flag-round flag-ru"
                     style="margin: 10px 0px -3px 5px"
@@ -248,21 +241,23 @@ function setLocale(locale) {
     }
 }
 
+
+
 const switchTheme = (event) => {
   if (event.target.checked) {
     document.documentElement.setAttribute("data-theme", "dark");
     localStorage.setItem("theme", "dark");
+    store.dispatch('theme/setTheme', { theme: "dark" })
   } else {
     document.documentElement.setAttribute("data-theme", "light");
     localStorage.setItem("theme", "light");
+    store.dispatch('theme/setTheme', { theme: "light" })
   }
 };
 
 onMounted(() => {
   const toggleSwitch = document.querySelector("#modeSwitch");
   toggleSwitch.addEventListener("change", switchTheme, false);
-  console.log(locale.value);
-  console.log(locales.value);
 });
 </script>
 
@@ -270,5 +265,14 @@ onMounted(() => {
 .lang-div::after {
   display: none; /* hide the ::after pseudo-element */
 }
+
+
+
+@media screen and (max-width: 767px) {
+    .d-mobile-none {
+      display: none;
+      /* Your styles here */
+    }
+  }
 </style>
   

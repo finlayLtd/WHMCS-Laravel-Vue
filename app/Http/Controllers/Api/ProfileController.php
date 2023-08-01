@@ -29,6 +29,7 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
+
         return $this->successResponse($user, 'User found');
     }
 }

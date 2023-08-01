@@ -34,11 +34,11 @@
           <div class="col-md-12">
             <div class="w-100 mb-2 mb-lg-5">
               <h3 class="sub-title">{{ $t('Support_Tickets') }}</h3>
-              <div style="display: flex; justify-content: space-between;">
+              <div class="topTicketBar">
                 <div class="sort-servers order-2 order-md-1">
                   <div
                     id="toggleButton"
-                    class="sort-item-active btn-chevron chevron-dark"
+                    class="sort-item-active btn-chevron chevron-dark topSortBox"
                     style="width: 160px"
                     @click="sortBy = !sortBy"
                   >
@@ -47,26 +47,26 @@
                   <div class="sorting-items" v-if="sortBy">
                     <ul>
                       <li class="touch-item" @click="setOrder('date', 'desc')">
-                        {{ $t('Opened-latest') }}
+                        {{ $t('Opened_latest') }}
                       </li>
                       <li class="touch-item" @click="setOrder('date', 'asc')">
-                        {{ $t('Opened-oldest') }}
+                        {{ $t('Opened_oldest') }}
                       </li>
                       <li
                         class="touch-item"
                         @click="setOrder('lastreply', 'desc')"
                       >
-                        {{ $t('Last-Reply-latest') }}
+                        {{ $t('Last_Reply_latest') }}
                       </li>
                       <li class="touch-item" @click="setOrder('date', 'asc')">
-                        {{ $t('Last-Reply-oldest') }}
+                        {{ $t('Last_Reply_oldest') }}
                       </li>
                     </ul>
                   </div>
                 </div>
 
                 <ul
-                  class="nav nav-pills mb-3 mb-md-0 order-1 order-md-2 mb-lg-0"
+                  class="nav nav-pills mb-3 mb-md-0 order-1 order-md-2 mb-lg-0 topFilterBox"
                   id="pills-tab"
                   role="tablist"
                 >
@@ -115,7 +115,7 @@
                     <th scope="col">{{ $t('Ticket_No') }}</th>
                     <th scope="col">{{ $t('Title') }}</th>
                     <th scope="col">{{ $t('Priority') }}</th>
-                    <th scope="col">{{ $t('Date') }}</th>
+                    <th scope="col">{{ $t('Date_title') }}</th>
                     <th scope="col">{{ $t('Status') }}</th>
                   </tr>
                 </thead>
@@ -277,5 +277,24 @@ const filteredTickets = computed(() => {
 </script>
   
   <style scoped>
+  .topTicketBar{
+    display: flex; justify-content: space-between;
+  }
+  .topFilterBox{
+
+  }
+  @media screen and (max-width: 767px) {
+    .topTicketBar {
+      display: block;
+      /* Your styles here */
+    }
+    .topFilterBox{
+      float:right;
+      margin-top: 10px;
+    }
+    .topSortBox{
+      float: right;
+    }
+  }
 </style>
   

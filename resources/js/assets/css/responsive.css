@@ -454,7 +454,7 @@
 		width: 49%;
 	}
 	.server-btn-options button:last-child{
-		width: 100%;
+		/* width: 100%; */
 	}
 	.overview-tab .tab-content .title2 {
 	    font-size: 14px;

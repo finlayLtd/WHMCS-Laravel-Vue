@@ -33,6 +33,12 @@ class ServersController extends Controller
             array_push($states, $state_info['title']);
         asort($states);
         }
+
+        $temp = $states[1];
+        $states[1] = $states[0];
+        $states[0] = $temp;
+
+        
         
 
         $orders_response = (new \Sburina\Whmcs\Client)->post([

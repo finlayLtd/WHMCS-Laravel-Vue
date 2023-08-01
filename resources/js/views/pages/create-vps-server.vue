@@ -480,7 +480,6 @@ const getCreateVpsServerData = () => {
       oslist.value = res.data.oslist;
       os_kind.value = res.data.os_kind;
       payment_methods.value = res.data.payment_methods;
-      console.log(res.data);
     })
     .catch((e) => {
       showLoader(false);
@@ -540,7 +539,6 @@ function randomizehostname(){
   document.body.removeChild(copyTextarea);
 
   $toast.success("Copied hostname to clipboard");
-  console.log('Copied hostname to clipboard');
   return hostname;
 }
 

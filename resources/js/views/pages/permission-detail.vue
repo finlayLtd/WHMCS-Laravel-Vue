@@ -12,11 +12,9 @@
         <div class="row justify-content-between align-items-center">
           <div class="row mb-5 pe-0">
             <div class="col-12">
-              <!-- <form method="POST" action="{{ route('edit_user_permissions') }}"> -->
               <div class="card-item p-4 mb-4 support-item flex-column">
                 <h3>{{ $t('Permissions') }}</h3>
                 <br />
-                <!-- <input type="hidden" name="user_id" value="{{ $user_id }}"> -->
                 <div class="well" id="invitePermissions">
                   <label class="checkbox-inline">
                     <input type="checkbox" name="profile" v-model="profile" />
@@ -115,7 +113,6 @@
                   {{ $t('Save_Changes') }}
                 </button>
               </div>
-              <!-- </form> -->
             </div>
           </div>
         </div>

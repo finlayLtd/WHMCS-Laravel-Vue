@@ -47,7 +47,6 @@ export default function useAuth() {
                 await store.dispatch('auth/getUser')
                 await loginUser()
                 const { accessToken, userData, userAbilities } = response.data
-                console.log('userAbilities' ,userAbilities)
                 localStorage.setItem('userAbilities', JSON.stringify(userAbilities))
                 ability.update(userAbilities)
                 localStorage.setItem('userData', JSON.stringify(userData))

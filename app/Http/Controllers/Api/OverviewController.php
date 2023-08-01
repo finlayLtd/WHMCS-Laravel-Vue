@@ -75,6 +75,7 @@ class OverviewController extends Controller
         
         $OSlist = $this->getOSlist();
         $status = $order_info[0]['status'];
+        if($status!='Active' && $order_product_info['status'] == 'Active') $status = 'Active';
 
         if($status == 'Active'){
             $vpsid = $other_info['vps_info']['vpsid'];
@@ -185,6 +186,8 @@ class OverviewController extends Controller
             'analysis_data' => $analysis_data,
             'status' => $status,
             'rdnslist' => $rdnslist,
+            // 'other_info' => $other_info,
+            
         ]);
         
         // return view('pages/overview', compact('relid','order_id','order_product_info','dayDiff','detail_info','flag','sys_logo',

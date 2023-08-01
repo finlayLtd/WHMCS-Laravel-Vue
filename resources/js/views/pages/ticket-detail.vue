@@ -3,6 +3,7 @@
     <!-- @auth -->
     <!-- @if(in_array('tickets', Auth::user()->permissions)) -->
     <div class="container">
+      <a ref="customLink" style="display: none;" target="_blank">Custom Link</a>
       <div class="title-button-wrapper ticket-detail">
         <router-link to="/support-ticket">
           <img class="status-arrow" src="/assets/img/status-arrow.svg" alt="" />
@@ -190,7 +191,7 @@ const route = useRoute();
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 const $toast = useToast();
-
+const customLink = ref(null);
 const commonApi = commonApis();
 const store = useStore();
 const user = computed(() => store.state.auth.user);
@@ -225,7 +226,6 @@ const getTicketDetail = () => {
 const handleFileInput = (event) => {
   file.value = event.target.files[0];
   file_name.value = event.target.files[0].name;
-  console.log(file_name.value);
 }
 
 const download_file = (id) => {
@@ -237,7 +237,9 @@ const download_file = (id) => {
     .then((res) => {
       showLoader(false);
       if (res.data.result == "success") {
-        openInNewTab(res.data.redirect_url);
+        // openInNewTab(res.data.redirect_url);
+        customLink.value.href = res.data.redirect_url;
+        customLink.value.click();
       }
     })
     .catch((e) => {

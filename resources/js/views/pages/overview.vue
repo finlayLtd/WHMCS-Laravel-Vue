@@ -4,6 +4,7 @@
       <div
         class="d-flex flex-column justify-content-start align-items-start title-button-wrapper"
       >
+        <a ref="customLink" style="display: none;" target="_blank">Custom Link</a>
         <div class="overview-header">
           <img
             class="not-filterable"
@@ -390,16 +391,6 @@
                           <h4 class="title2">{{ order_product_info.name }}</h4>
                           <p class="description2">{{ system }}</p>
                         </div>
-
-                        <!-- <div class="server-list-options me-3 me-lg-4">
-                          <div class="options-toggle"></div>
-                          <div class="options-toggle-dropdown">
-                            <ul>
-                              <li><a href="#">Launch Control Panel</a></li>
-                              <li><a href="#">View Invoices</a></li>
-                            </ul>
-                          </div>
-                        </div> -->
                       </div>
                     </div>
                     <div class="col-12 col-lg-4 col-md-12">
@@ -448,12 +439,6 @@
                     >
                       <img src="/assets/img/power.svg" alt="" />{{ $t('Shutdown') }}
                     </button>
-                    <!-- <button class="btn img-btn me-0 me-lg-2" onclick="RebootVPS({{ $vpsid }})">
-                      <img src="/assets/img/reboot.svg" alt="">Reboot
-                    </button>
-                    <button class="btn img-btn mt-2 mt-lg-0" onclick="PowerOffVPS({{ $vpsid }})">
-                      <img class="dark-img-filter" src="/assets/img/power-off.svg" alt="">Power Off
-                    </button> -->
                   </div>
                 </div>
               </div>
@@ -534,7 +519,7 @@
                           <img src="/assets/img/speedometer.png" alt="" />
                         </div>
                         <div class="info">
-                          <h4 class="title2">{{ $t('Network Speed') }}</h4>
+                          <h4 class="title2">{{ $t('Network_Speed') }}</h4>
                           <p class="description2" v-if="vps_info">
                             <span>{{ vps_info.vps_data[vpsid].used_bandwidth.toFixed(2) }}</span> Mbps
                           </p>
@@ -558,6 +543,7 @@
               <div class="row">
                 <div id="cpu-container" class="col-md-6 col-sm-12">
                   <Chart
+                    :key="componentKey"
                     :data="{
                       chart: {
                         type: 'area',
@@ -654,6 +640,7 @@
                 </div>
                 <div id="ram-container" class="col-md-6 col-sm-12">
                   <Chart
+                  :key="componentKey"
                     :data="{
                       chart: {
                         type: 'area',
@@ -752,6 +739,7 @@
               <div class="row mt-2">
                 <div id="disk-container" class="col-md-6 col-sm-12">
                   <Chart
+                  :key="componentKey"
                     :data="{
                       chart: {
                         type: 'area',
@@ -847,7 +835,9 @@
                   </Chart>
                 </div>
                 <div id="inode-container" class="col-md-6 col-sm-12">
+
                   <Chart
+                  :key="componentKey"
                     :data="{
                       chart: {
                         type: 'area',
@@ -946,6 +936,7 @@
               <div class="row mt-2">
                 <div id="net-in-container" class="col-md-6 col-sm-12">
                   <Chart
+                  :key="componentKey"
                     :data="{
                       chart: {
                         type: 'area',
@@ -1042,6 +1033,7 @@
                 </div>
                 <div id="net-out-container" class="col-md-6 col-sm-12">
                   <Chart
+                  :key="componentKey"
                     :data="{
                       chart: {
                         type: 'area',
@@ -1140,6 +1132,7 @@
               <div class="row mt-2">
                 <div id="net-total-container" class="col-md-6 col-sm-12">
                   <Chart
+                  :key="componentKey"
                     :data="{
                       chart: {
                         type: 'area',
@@ -1303,9 +1296,6 @@
                       style="height: 40px !important; max-width: 300px"
                       v-model="selected_os_id"
                     >
-                      <!-- @foreach($oslists as $os)
-                          <option value="{{$os['osid']}}" data-image="/assets/img/'.$os['group_name'].'-logo.png">{{ __('messages.'.$os['name']) }}</option>
-                        @endforeach -->
                       <option
                         v-for="os in oslists"
                         :key="os.osid"
@@ -1488,21 +1478,6 @@
                           <div class="inner-table p-3">
                             <table class="w-100 table-flex-col" v-if="ip_list">
                               <tbody>
-                                <!-- @foreach($ip_list['ips'] as $ip)
-                                  @if($ip['primary'] == 1)
-                                    <tr>
-                                      <td>{{$ip['ip']}}</td>
-                                      <td>Primary</td>
-                                      <td>Main Server IP (Sticky) - Cannot be removed</td>
-                                    </tr>
-                                  @else
-                                    <tr>
-                                      <td>{{$ip['ip']}}</td>
-                                      <td></td>
-                                      <td></td>
-                                    </tr>
-                                  @endif
-                                @endforeach -->
                                 <tr v-for="ip in ip_list.ips" :key="ip.ip">
                                   <td>{{ ip.ip }}</td>
                                   <td v-if="ip.primary">{{ $t('Primary') }}</td>
@@ -1527,11 +1502,6 @@
                               v-model="selected_ip"
                               v-if="ip_list"
                             >
-                              <!-- @foreach($ip_list['ips'] as $ip)
-                                @if($ip['primary'] != 1)
-                                  <option value="{{$ip['ipid']}}">{{$ip['ip']}}</option>
-                                @endif
-                              @endforeach -->
                               <template
                                 v-for="ip in ip_list.ips"
                                 :key="ip.ipid"
@@ -1603,40 +1573,31 @@
                 <div class="row">
                   <h3 class="title mb-4">{{ $t('ReverseDNS_Management') }}</h3>
                 </div>
-                <div class="d-flex">
-                  <div class="overview-dns-select">
-                    <select
-                      name="iplist"
-                      id="rdns-ip"
-                      v-model="selected_rdns_ip"
+                <div class="d-flex reverseDNSContainer">
+                  <select name="iplist" id="rdns-ip" class="form-select" v-model="selected_rdns_ip" style="margin-right: 10px; margin-bottom: 10px; width: auto;">
+                    <option
+                      v-for="ip in ip_list.ips"
+                      :key="ip.ip"
+                      :value="ip.ip"
                     >
-                      <!-- @foreach($ip_list['ips'] as $ip)
-                        <option value="{{$ip['ip']}}">{{$ip['ip']}}</option>
-                      @endforeach -->
-                      <option
-                        v-for="ip in ip_list.ips"
-                        :key="ip.ip"
-                        :value="ip.ip"
-                      >
-                        {{ ip.ip }}
-                      </option>
-                    </select>
-                  </div>
+                      {{ ip.ip }}
+                    </option>
+                  </select>
                   <input
                     class="form-control"
                     id="dns-content"
                     type="text"
-                    style="width: auto; margin-left: 10px"
+                    style="width: auto; margin-right: 10px;  margin-bottom: 10px; "
                     v-model="newDNS"
                   />
                   <button
                     class="btn-dark px-4 me-2 hover-dark-light"
                     type="submit"
-                    style="padding: 0px 20px; margin-left: 10px"
+                    style="padding: 0px 20px; margin-bottom: 10px; "
                     @click="addRDNS()"
                     :disabled="newDNS == '' || selected_rdns_ip == ''"
                   >
-                  {{ $t('Add_Reverse_DNS') }}
+                    {{ $t('Add_Reverse_DNS') }}
                   </button>
                 </div>
                 <div class="support-table">
@@ -2262,9 +2223,6 @@
 
               <h4>{{ $t('Department') }}*</h4>
               <select name="department" id="department" v-model="selectedDepartment">
-                <!-- @foreach ($departments as $department)
-                  <option value="{{$department['id']}}">{{$department['name']}}</option>
-                  @endforeach -->
                 <option
                   v-for="department in departments"
                   :key="department.id"
@@ -2283,7 +2241,6 @@
               <button class="btn-dark d-block w-100 mt-5" id="create-ticket" :disabled="subject=='' || selectedDepartment==0" @click="createTicket()">
                 {{ $t('Create_Ticket') }}
               </button>
-              <!-- </form> -->
             </div>
           </div>
         </div>
@@ -2307,6 +2264,8 @@ import { useRoute } from "vue-router";
 import Highcharts from "highcharts";
 
 import Chart from "./Chart.vue";
+const customLink = ref(null);
+const store = useStore();
 const cpu_data_state = ref([]);
 const inode_data_state = ref([]);
 const ram_data_state = ref([]);
@@ -2314,7 +2273,15 @@ const disk_data_state = ref([]);
 const net_in_data_state = ref([]);
 const net_out_data_state = ref([]);
 const net_total_data_state = ref([]);
+const theme_state = computed(() => store.getters["theme/theme"]);
+const chart_color = ref(document.documentElement.getAttribute('data-theme') == 'dark' ? '#1C1C1E' : '#ffffff');
+const componentKey = ref(1);
 
+watch(() => store.state.theme.theme, (newVal, oldVal) => {
+  if(newVal == 'dark') chart_color.value = '#1C1C1E';
+  else chart_color.value = '#ffffff';
+  componentKey.value = componentKey.value +1;
+});
 
 const route = useRoute();
 
@@ -2334,7 +2301,6 @@ const show2 = ref(false);
 const show3 = ref(false);
 
 
-const store = useStore();
 const user = computed(() => store.state.auth.user);
 
 const analysis_data = ref([]);
@@ -2351,7 +2317,6 @@ const vps_info = ref(null);
 const oslists = ref([]);
 const cpu = ref(null);
 const invoiceInfo = ref(null);
-// const orders = ref([]);
 const departments = ref([]);
 const ip_list = ref(null);
 const status = ref("Active");
@@ -2392,7 +2357,9 @@ const openInvoiceWindow = (invoice_id) => {
     .then((res) => {
       showLoader(false);
       if (res.data.result == "success") {
-        openInNewTab(res.data.redirect_url);
+        // openInNewTab(res.data.redirect_url);
+        customLink.value.href = res.data.redirect_url;
+        customLink.value.click();
       }
     })
     .catch((e) => {
@@ -2762,57 +2729,6 @@ function revertColor(color) {
   return invertedColor;
 }
 
-
-// const theme = ref(document.documentElement.getAttribute('data-theme'));
-// const chart_color = ref(theme.value === 'dark' ? '#1C1C1E' : '#ffffff');
-
-// watch(
-//   () => document.documentElement.getAttribute('data-theme'),
-//   (newTheme) => {
-//     theme.value = newTheme;
-//     chart_color.value = newTheme === 'dark' ? '#1C1C1E' : '#ffffff';
-//   }
-// );
-
-const theme = ref(document.documentElement.getAttribute('data-theme'));
-const chart_color = ref(theme.value === 'dark' ? '#1C1C1E' : '#ffffff');
-
-watchEffect(() => {
-  const newTheme = document.documentElement.getAttribute('data-theme');
-  if (newTheme !== theme.value) {
-    theme.value = newTheme;
-    chart_color.value = newTheme === 'dark' ? '#1C1C1E' : '#ffffff';
-  }
-});
-
-// const theme = ref();
-// const chart_color = ref('#ffffff');
-
-// console.log(document.documentElement.getAttribute("data-theme"))
-
-// watch(theme, (newVal) => {
-//   console.log(newVal);
-// });
-
-// const chart_color = watch(()=>{
-//   // var theme = localStorage.getItem('theme');
-//   if(theme.value == 'dark') return '#1C1C1E';
-//   else return '#ffffff';
-// });
-
-
-
-
-// watchEffect(() => {
-//   const newTheme = localStorage.getItem("theme");
-//   if (newTheme !== theme.value) {
-//     theme.value = newTheme;
-//     // The value of the "theme" key in localStorage has changed
-//     // Do something here, such as updating the theme of the app
-//   }
-// });
-
-
 const passwordStrength = computed(() => {
   var pwStrengthErrorThreshold = 50;
     var pwStrengthWarningThreshold = 75;
@@ -2854,4 +2770,11 @@ const passwordStrength = computed(() => {
 </script>
 
 <style scoped>
+
+@media screen and (max-width: 767px) {
+    .reverseDNSContainer {
+      display: block !important;
+      /* Your styles here */
+    }
+  }
 </style>

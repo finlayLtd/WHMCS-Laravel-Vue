@@ -27,7 +27,7 @@ export default defineConfig({
     // },
     server: {
         hmr: {
-            host: '87.120.88.249',
+            host: '87.121.221.161',
         },
     },
     resolve: {

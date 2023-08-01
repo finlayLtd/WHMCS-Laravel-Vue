@@ -21,21 +21,21 @@ function revertColor(color) {
 		return invertedColor;
 	}
 
-export default {
-name : "Chart",
-props: {
-  data: Object,
-},
-data : function() {
-   return {
-      target: undefined
-   }
-},
-mounted() { 
-   this.target = Highcharts.chart(this.$el, this.data);
- },
- beforeDestroy: function() {
-    this.target.destroy();
- },
-}
+	export default {
+		name : "Chart",
+		props: {
+			data: Object,
+		},
+		data : function() {
+			return {
+				target: undefined
+			}
+		},
+		mounted() { 
+			this.target = Highcharts.chart(this.$el, this.data);
+		},
+		beforeDestroy: function() {
+			this.target.destroy();
+		},
+	}
 </script>

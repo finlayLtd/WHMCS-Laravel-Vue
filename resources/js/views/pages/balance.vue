@@ -5,6 +5,7 @@
         class="d-flex justify-content-between align-items-center title-button-wrapper"
       >
         <h2 class="title mb-0">{{ $t('Balance') }}</h2>
+        <a ref="customLink" style="display: none;" target="_blank">Custom Link</a>
       </div>
 
       <div class="sub-section server-list-tab">
@@ -58,10 +59,10 @@
                 </div>
                 <div class="sorting-items" v-if="sortBy">
                   <ul>
-                    <li @click="setOrder('date', 'desc')">{{ $t('Date-latest') }}</li>
-                    <li @click="setOrder('date', 'asc')">{{ $t('Date-oldest') }}</li>
-                    <li @click="setOrder('total', 'desc')">{{ $t('Price-highest') }}</li>
-                    <li @click="setOrder('total', 'asc')">{{ $t('Price-lowest') }}</li>
+                    <li @click="setOrder('date', 'desc')">{{ $t('Date_latest') }}</li>
+                    <li @click="setOrder('date', 'asc')">{{ $t('Date_oldest') }}</li>
+                    <li @click="setOrder('total', 'desc')">{{ $t('Price_highest') }}</li>
+                    <li @click="setOrder('total', 'asc')">{{ $t('Price_lowest') }}</li>
                   </ul>
                 </div>
               </div>
@@ -252,19 +253,17 @@ import useAuth from "@/composables/auth";
 import { showLoader } from "@/plugins/loading.js";
 import Pagination from '@/components/Pagination.vue'; 
 
+const customLink = ref(null);
 const commonApi = commonApis();
 const sortBy = ref(false);
 const openModal = ref(false);
 const store = useStore();
 const user = computed(() => store.state.auth.user);
 const invoices = ref([]);
-// const status = ref([]);
 const invoiceStatus = ref("All");
-// const page = ref(1);
 const totalPages = ref(0);
 const totalresults = ref(0);
-// const startnumber = ref(0);
-// const numreturned = ref(0);
+
 
 const perPage = 15;
 
@@ -286,9 +285,6 @@ const getInvoicesData = () => {
       sortBy.value = false;
       invoices.value = res.data.invoices;
       totalresults.value = res.data.totalresults;
-      // startnumber.value = res.data.startnumber;
-      // numreturned.value = res.data.numreturned;
-
       totalPages.value = Math.ceil(totalresults.value / perPage);
     })
     .catch((e) => {
@@ -310,7 +306,9 @@ const openAddFundsWindow = () => {
     .then((res) => {
       showLoader(false);
       if (res.data.result == "success") {
-        openInNewTab(res.data.redirect_url);
+        // openInNewTab(res.data.redirect_url);
+        customLink.value.href = res.data.redirect_url;
+        customLink.value.click();
       }
     })
     .catch((e) => {
@@ -332,7 +330,8 @@ const openInvoiceWindow = (invoice_id) => {
     .then((res) => {
       showLoader(false);
       if (res.data.result == "success") {
-        openInNewTab(res.data.redirect_url);
+        customLink.value.href = res.data.redirect_url;
+        customLink.value.click();
       }
     })
     .catch((e) => {

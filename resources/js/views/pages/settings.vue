@@ -1,11 +1,10 @@
 <template>
   <section class="overview">
     <div class="container">
-      <div
-        class="d-flex flex-column justify-content-start align-items-start title-button-wrapper"
-      >
+      <div class="d-flex flex-column justify-content-start align-items-start title-button-wrapper">
         <div class="overview-header">
           <h2 class="title mb-0">{{ $t('Settings') }}</h2>
+          <span></span>
         </div>
       </div>
 
@@ -13,73 +12,40 @@
         <div class="row justify-content-between align-items-center">
           <div class="row mb-2 mb-lg-5 pe-0">
             <div class="col-md-12 d-flex justify-content-start pe-0 flex-wrap">
-              <ul
-                style="overflow-x: unset"
-                class="nav nav-pills mb-3 mb-md-0 order-1 order-md-2 mb-lg-0 flex-nowrap"
-                id="pills-tab"
-                role="tablist"
-              >
+              <ul style="overflow-x: unset" class="nav nav-pills mb-3 mb-md-0 order-1 order-md-2 mb-lg-0 flex-nowrap"
+                id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
                   <!-- <a href="{{ url('/settings') }}"> -->
-                  <button
-                    class="nav-link active"
-                    id="pills-overview-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-overview"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-overview"
-                    aria-selected="true"
-                  >
-                  {{ $t('Your_Profile') }}
+                  <button class="nav-link active" id="pills-overview-tab" data-bs-toggle="pill"
+                    data-bs-target="#pills-overview" type="button" role="tab" aria-controls="pills-overview"
+                    aria-selected="true">
+                    {{ $t('Your_Profile') }}
                   </button>
                   <!-- </a> -->
                 </li>
                 <li class="nav-item" role="presentation">
                   <!-- <a href="{{ url('/settings_password') }}"> -->
-                  <button
-                    class="nav-link"
-                    id="pills-analytics-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-analytics"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-analytics"
-                    aria-selected="false"
-                  >
-                  {{ $t('Change_Password') }}
+                  <button class="nav-link" id="pills-analytics-tab" data-bs-toggle="pill"
+                    data-bs-target="#pills-analytics" type="button" role="tab" aria-controls="pills-analytics"
+                    aria-selected="false">
+                    {{ $t('Change_Password') }}
                   </button>
                   <!-- </a> -->
                 </li>
                 <li class="nav-item" role="presentation">
                   <!-- <a href="{{ url('/settings_userManage') }}"> -->
-                  <button
-                    class="nav-link"
-                    id="pills-userManagement-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-userManagement"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-userManagement"
-                    aria-selected="false"
-                  >
-                  {{ $t('User_Management') }}
+                  <button class="nav-link" id="pills-userManagement-tab" data-bs-toggle="pill"
+                    data-bs-target="#pills-userManagement" type="button" role="tab" aria-controls="pills-userManagement"
+                    aria-selected="false">
+                    {{ $t('User_Management') }}
                   </button>
                   <!-- </a> -->
                 </li>
                 <li class="nav-item" role="presentation">
                   <!-- <a href="{{ url('/settings_emailHistory') }}"> -->
-                  <button
-                    class="nav-link"
-                    id="pills-emails-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-emails"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-emails"
-                    aria-selected="false"
-                  >
-                  {{ $t('Email_History') }}
+                  <button class="nav-link" id="pills-emails-tab" data-bs-toggle="pill" data-bs-target="#pills-emails"
+                    type="button" role="tab" aria-controls="pills-emails" aria-selected="false">
+                    {{ $t('Email_History') }}
                   </button>
                   <!-- </a> -->
                 </li>
@@ -89,501 +55,338 @@
 
           <div class="tab-content settings-tab-content" id="pills-tabContent">
             <!--overview-->
-            <div
-              class="tab-pane fade show active"
-              id="pills-overview"
-              role="tabpanel"
-              aria-labelledby="pills-overview-tab"
-            >
+            <div class="tab-pane fade show active" id="pills-overview" role="tabpanel"
+              aria-labelledby="pills-overview-tab">
               <div class="tab-inner mb-3">
                 <div class="row">
                   <h3 class="title mb-4">{{ $t('Your_Profile') }}</h3>
                 </div>
                 <div class="divider"></div>
-                <!-- @if(in_array('profile', Auth::user()->permissions)) -->
-                <div class="row px-2 pt-4 px-lg-4 pt-lg-4">
-                  <div class="col-12 col-lg-6 tab-inner py-0 p-mb-0">
-                    <p class="fs-13-5">{{ $t('Email') }}</p>
-                    <div class="overview-input mb-4">
-                      <div class="d-inline">
-                        <input
-                          type="text"
-                          id="disabled_email"
-                          name="disabled_email"
-                          placeholder="Email"
-                          disabled
-                          v-model="clientDetails.email"
-                        />
+                <template v-if="user && user.permissions.split(',').includes('profile')">
+                  <div class="row px-2 pt-4 px-lg-4 pt-lg-4">
+                    <div class="col-12 col-lg-6 tab-inner py-0 p-mb-0">
+                      <p class="fs-13-5">{{ $t('Email') }}</p>
+                      <div class="overview-input mb-4">
+                        <div class="d-inline">
+                          <input type="text" id="disabled_email" name="disabled_email" placeholder="Email" disabled
+                            v-model="clientDetails.email" />
+                        </div>
                       </div>
-                    </div>
-                    <p class="fs-13-5">{{ $t('First_Name') }}</p>
-                    <div class="overview-input mb-4">
-                      <div class="d-inline">
-                        <input
-                          type="text"
-                          id="firstname"
-                          name="firstname"
-                          placeholder="First Name"
-                          required
-                          v-model="clientDetails.firstname"
-                        />
+                      <p class="fs-13-5">{{ $t('First_Name') }}</p>
+                      <div class="overview-input mb-4">
+                        <div class="d-inline">
+                          <input type="text" id="firstname" name="firstname" placeholder="First Name" required
+                            v-model="clientDetails.firstname" />
+                        </div>
                       </div>
-                    </div>
 
-                    <p class="fs-13-5">{{ $t('Last_Name') }}</p>
-                    <div class="overview-input mb-4">
-                      <input
-                        type="text"
-                        id="lastname"
-                        name="lastname"
-                        placeholder="Last Name"
-                        required
-                        v-model="clientDetails.lastname"
-                      />
-                      <!-- value="{{ Auth::user()->lastname }}" -->
-                    </div>
-                    <div class="overview-button-wrapper pt-0">
-                      <button
-                        @click="
+                      <p class="fs-13-5">{{ $t('Last_Name') }}</p>
+                      <div class="overview-input mb-4">
+                        <input type="text" id="lastname" name="lastname" placeholder="Last Name" required
+                          v-model="clientDetails.lastname" />
+                        <!-- value="{{ Auth::user()->lastname }}" -->
+                      </div>
+                      <div class="overview-button-wrapper pt-0">
+                        <button @click="
                           change_name(
                             clientDetails.firstname,
                             clientDetails.lastname
                           )
-                        "
-                        class="btn-dark px-4 me-2 hover-dark-light"
-                      >
-                      {{ $t('Change_name') }}
-                      </button>
+                          " class="btn-dark px-4 me-2 hover-dark-light">
+                          {{ $t('Change_name') }}
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <!-- @else @include('component.no-permission-go-back') @endif -->
+                </template>
+
+                <template v-else>
+                  <NoPermission />
+                </template>
+
+
               </div>
             </div>
 
             <!--password-->
-            <div
-              class="tab-pane fade"
-              id="pills-analytics"
-              role="tabpanel"
-              aria-labelledby="pills-analytics-tab"
-            >
+            <div class="tab-pane fade" id="pills-analytics" role="tabpanel" aria-labelledby="pills-analytics-tab">
               <div class="tab-inner mb-3">
                 <div class="row">
                   <h3 class="title mb-4">{{ $t('Change_Password') }}</h3>
                 </div>
                 <div class="divider"></div>
-                <!-- @if(in_array('profile', Auth::user()->permissions)) -->
-                <div class="row px-2 pt-4 px-lg-4 pt-lg-4">
-                  <form class="form-horizontal using-password-strength">
-                    <div id="currentpwBox" class="form-group">
-                      <label for="currentpw" class="col-sm-4 control-label"
-                        >{{ $t('Current_Password') }}</label
-                      >
-                      <div class="col-sm-5" style="position: relative">
-                        <input
-                          type="password"
-                          class="form-control"
-                          name="currentpw"
-                          id="currentpw"
-                          autocomplete="off"
-                        />
-                        <img
-                          src="assets/img/eye.svg"
-                          class="settings-password-img icon-password eye-closed"
-                        />
-                        <img
-                          src="assets/img/eye-open.svg"
-                          class="settings-password-img icon-password eye-open"
-                          style="display: none"
-                        />
-                        <br />
+                <template v-if="user && user.permissions.split(',').includes('profile')">
+                  <div class="row px-2 pt-4 px-lg-4 pt-lg-4">
+                    <form class="form-horizontal using-password-strength">
+                      <div id="currentpwBox" class="form-group">
+                        <label for="currentpw" class="col-sm-4 control-label">{{ $t('Current_Password') }}</label>
+                        <div class="col-sm-5" style="position: relative">
+                          <input type="password" class="form-control" name="currentpw" id="currentpw"
+                            autocomplete="off" />
+                          <img src="assets/img/eye.svg" class="settings-password-img icon-password eye-closed" />
+                          <img src="assets/img/eye-open.svg" class="settings-password-img icon-password eye-open"
+                            style="display: none" />
+                          <br />
+                        </div>
                       </div>
-                    </div>
-                    <div
-                      id="newPassword1"
-                      class="form-group has-feedback has-success"
-                    >
-                      <label
-                        for="inputNewPassword1"
-                        class="col-sm-4 control-label"
-                        >{{ $t('New_Password') }}</label
-                      >
-                      <div class="col-sm-5" style="position: relative">
-                        <input
-                          type="password"
-                          class="form-control"
-                          name="newpw"
-                          id="inputNewPassword1"
-                          autocomplete="off"
-                        />
-                        <img
-                          src="assets/img/eye.svg"
-                          class="settings-password-img icon-password eye-closed"
-                        />
-                        <img
-                          src="assets/img/eye-open.svg"
-                          class="settings-password-img icon-password eye-open"
-                          style="display: none"
-                        />
-                        <br />
+                      <div id="newPassword1" class="form-group has-feedback has-success">
+                        <label for="inputNewPassword1" class="col-sm-4 control-label">{{ $t('New_Password') }}</label>
+                        <div class="col-sm-5" style="position: relative">
+                          <input type="password" class="form-control" name="newpw" id="inputNewPassword1"
+                            autocomplete="off" />
+                          <img src="assets/img/eye.svg" class="settings-password-img icon-password eye-closed" />
+                          <img src="assets/img/eye-open.svg" class="settings-password-img icon-password eye-open"
+                            style="display: none" />
+                          <br />
 
-                        <div class="progress" id="passwordStrengthBar">
-                          <div
-                            class="progress-bar progress-bar-success"
-                            role="progressbar"
-                            aria-valuenow="0"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                            style="width: 0%"
-                          >
-                            <span class="sr-only">{{ $t('Password_Rating') }}: 0%</span>
+                          <div class="progress" id="passwordStrengthBar">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0"
+                              aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                              <span class="sr-only">{{ $t('Password_Rating') }}: 0%</span>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div
-                      id="newPassword2"
-                      class="form-group has-feedback has-success"
-                    >
-                      <label
-                        for="inputNewPassword2"
-                        class="col-sm-4 control-label"
-                        >{{ $t('Confirm_New_Password') }}</label
-                      >
-                      <div class="col-sm-5" style="position: relative">
-                        <input
-                          type="password"
-                          class="form-control"
-                          name="confirmpw"
-                          id="inputNewPassword2"
-                          autocomplete="off"
-                        />
-                        <img
-                          src="assets/img/eye.svg"
-                          class="settings-password-img icon-password eye-closed"
-                        />
-                        <img
-                          src="assets/img/eye-open.svg"
-                          class="settings-password-img icon-password eye-open"
-                          style="display: none"
-                        />
-                        <div id="inputNewPassword2Msg"></div>
+                      <div id="newPassword2" class="form-group has-feedback has-success">
+                        <label for="inputNewPassword2" class="col-sm-4 control-label">{{ $t('Confirm_New_Password')
+                        }}</label>
+                        <div class="col-sm-5" style="position: relative">
+                          <input type="password" class="form-control" name="confirmpw" id="inputNewPassword2"
+                            autocomplete="off" />
+                          <img src="assets/img/eye.svg" class="settings-password-img icon-password eye-closed" />
+                          <img src="assets/img/eye-open.svg" class="settings-password-img icon-password eye-open"
+                            style="display: none" />
+                          <div id="inputNewPassword2Msg"></div>
+                        </div>
                       </div>
-                    </div>
-                    <div class="overview-button-wrapper pt-0 mt-4">
-                      <div class="col-sm-5">
-                        <button
-                          id="submitButton"
-                          class="btn-dark px-4 me-2 hover-dark-light"
-                          disabled="disabled"
-                        >
-                        {{ $t('Save_changes') }}
-                        </button>
+                      <div class="overview-button-wrapper pt-0 mt-4">
+                        <div class="col-sm-5">
+                          <button id="submitButton" class="btn-dark px-4 me-2 hover-dark-light" disabled="disabled">
+                            {{ $t('Save_changes') }}
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  </form>
-                </div>
-                <!-- @else @include('component.no-permission-go-back') @endif -->
+                    </form>
+                  </div>
+                </template>
+                <template v-else>
+                  <NoPermission />
+                </template>
+
+                <!-- @else <NoPermission/> @endif -->
               </div>
             </div>
 
             <!-- userManagement -->
-            <div
-              class="tab-pane fade"
-              id="pills-userManagement"
-              role="tabpanel"
-              aria-labelledby="pills-userManagement-tab"
-            >
-              <div class="tab-inner mb-3">
-                <div class="row">
-                  <h3 class="title mb-4">
-                    {{ $t('User_Management') }} ({{ users_list.length }}
-                    {{ users_list.length === 1 ? "User" : "Users" }} {{ $t('found') }})
-                  </h3>
-                </div>
-                <div class="divider"></div>
-                <div class="row px-2 pt-4 px-lg-4 pt-lg-4">
-                  <div class="w-100 mb-5 support-table">
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th scope="col">{{ $t('Email_Address') }} / {{ $t('Last_Login') }}</th>
-                          <th scope="col">{{ $t('Actions') }}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="item in users_list" :key="item.id">
-                          <td>
-                            {{ item.email }}
-                            <span class="badge bg-info" v-if="item.is_owner"
-                              >{{ $t('Owner') }}</span
-                            >
-                            <br />
-                          </td>
-                          <td>
-                            <router-link
-                              v-if="item.is_owner == false"
-                              :to="{
+            <div class="tab-pane fade" id="pills-userManagement" role="tabpanel"
+              aria-labelledby="pills-userManagement-tab">
+
+
+              <template v-if="user && user.permissions.split(',').includes('profile')">
+                <div class="tab-inner mb-3">
+                  <div class="row">
+                    <h3 class="title mb-4">
+                      {{ $t('User_Management') }} ({{ users_list.length }}
+                      {{ users_list.length === 1 ? "User" : "Users" }} {{ $t('found') }})
+                    </h3>
+                  </div>
+                  <div class="divider"></div>
+                  <div class="row px-2 pt-4 px-lg-4 pt-lg-4">
+                    <div class="w-100 mb-5 support-table">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">{{ $t('Email_Address') }} / {{ $t('Last_Login') }}</th>
+                            <th scope="col">{{ $t('Actions') }}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="item in users_list" :key="item.id">
+                            <td>
+                              {{ item.email }}
+                              <span class="badge bg-info" v-if="item.is_owner">{{ $t('Owner') }}</span>
+                              <br />
+                            </td>
+                            <td>
+                              <router-link v-if="item.is_owner == false" :to="{
                                 name: 'manageUser-detail',
                                 params: { id: item.id, email: item.email },
-                              }"
-                            >
-                              <button
-                                class="btn btn-dark btn-sm btn-manage-permissions managePermissionBtn"
-                                :disabled="item.is_owner"
-                                style="margin-right: 5px"
-                              >
-                              {{ $t('Manage_Permissions') }}
+                              }">
+                                <button class="btn btn-dark btn-sm btn-manage-permissions managePermissionBtn"
+                                  :disabled="item.is_owner" style="margin-right: 5px">
+                                  {{ $t('Manage_Permissions') }}
+                                </button>
+                              </router-link>
+
+                              <button v-else class="btn btn-dark btn-sm btn-manage-permissions managePermissionBtn"
+                                :disabled="item.is_owner" style="margin-right: 5px">
+                                {{ $t('Manage_Permissions') }}
                               </button>
-                            </router-link>
 
-                            <button
-                              v-else
-                              class="btn btn-dark btn-sm btn-manage-permissions managePermissionBtn"
-                              :disabled="item.is_owner"
-                              style="margin-right: 5px"
-                            >
-                            {{ $t('Manage_Permissions') }}
-                            </button>
-
-                            <button
-                              class="btn btn-danger btn-sm btn-remove-user"
-                              :disabled="item.is_owner"
-                              @click="removeAccess(item.id)"
-                            >
-                            {{ $t('Remove_Access') }}
-                            </button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div class="row">
-                  <h3 class="title mb-4">{{ $t('Invite_New_User') }}</h3>
-                </div>
-                <div class="divider"></div>
-                <div class="row px-2 pt-4 px-lg-4 pt-lg-4">
-                  <p>
-                    {{ $t('invite_desc') }}
-                    
-                  </p>
-                  <div class="mb-4">
-                    <div>
-                      <input
-                        type="email"
-                        id="invite_email"
-                        name="invite_email"
-                        placeholder="Email address to send invite"
-                        required
-                        class="form-control"
-                        v-model="invite_email"
-                      />
+                              <button class="btn btn-danger btn-sm btn-remove-user" :disabled="item.is_owner"
+                                @click="removeAccess(item.id)">
+                                {{ $t('Remove_Access') }}
+                              </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
-                    <div class="form-group selectBoxes mt-4">
-                      <label class="radio-inline" style="padding-right: 20px">
-                        <input
-                          type="radio"
-                          name="permissions"
-                          value="all"
-                          checked="checked"
-                          @click="selectAllPermissions()"
-                        />
-                        {{ $t('All_Permissions') }}
-                      </label>
-                      <label class="radio-inline">
-                        <input
-                          type="radio"
-                          name="permissions"
-                          value="choose"
-                          @click="permissionListVisible = true"
-                        />
-                        {{ $t('Choose_Permissions') }}
-                      </label>
-                      <div
-                        class="well"
-                        id="invitePermissions"
-                        v-show="permissionListVisible"
-                      >
-                        <label class="checkbox-inline">
-                          <input
-                            type="checkbox"
-                            name="profile"
-                            v-model="profile"
-                          />
-                          
-                          {{ $t('permission_detail_1') }}
-                        </label>
-                        <br />
-                        <label class="checkbox-inline">
-                          <input
-                            type="checkbox"
-                            name="contacts"
-                            v-model="contacts"
-                          />
-                          {{ $t('permission_detail_2') }}
-                        </label>
-                        <br />
-                        <label class="checkbox-inline">
-                          <input
-                            type="checkbox"
-                            name="products"
-                            v-model="products"
-                          />
-                          {{ $t('permission_detail_3') }}
-                        </label>
-                        <br />
-                        <label class="checkbox-inline">
-                          <input
-                            type="checkbox"
-                            name="manageproducts"
-                            v-model="manageproducts"
-                          />
-                          {{ $t('permission_detail_4') }}
-                        </label>
-                        <br />
-                        <label class="checkbox-inline">
-                          <input
-                            type="checkbox"
-                            name="productsso"
-                            v-model="productsso"
-                          />
-                          {{ $t('permission_detail_5') }}
-                        </label>
-                        <br />
-                        <label class="checkbox-inline">
-                          <input
-                            type="checkbox"
-                            name="domains"
-                            v-model="domains"
-                          />
-                          {{ $t('permission_detail_6') }}
-                        </label>
-                        <br />
-                        <label class="checkbox-inline">
-                          <input
-                            type="checkbox"
-                            name="managedomains"
-                            v-model="managedomains"
-                          />
-                          {{ $t('permission_detail_7') }}
-                        </label>
-                        <br />
-                        <label class="checkbox-inline">
-                          <input
-                            type="checkbox"
-                            name="invoices"
-                            v-model="invoices"
-                          />
-                          {{ $t('permission_detail_8') }}
-                        </label>
-                        <br />
-                        <label class="checkbox-inline">
-                          <input
-                            type="checkbox"
-                            name="quotes"
-                            v-model="quotes"
-                          />
-                          {{ $t('permission_detail_9') }}
-                        </label>
-                        <br />
-                        <label class="checkbox-inline">
-                          <input
-                            type="checkbox"
-                            name="tickets"
-                            v-model="tickets"
-                          />
-                          {{ $t('permission_detail_10') }}
-                        </label>
-                        <br />
-                        <label class="checkbox-inline">
-                          <input
-                            type="checkbox"
-                            name="affiliates"
-                            v-model="affiliates"
-                          />
-                          {{ $t('permission_detail_11') }}
-                        </label>
-                        <br />
-                        <label class="checkbox-inline">
-                          <input
-                            type="checkbox"
-                            name="emails"
-                            v-model="emails"
-                          />
-                          {{ $t('permission_detail_12') }}
-                        </label>
-                        <br />
-                        <label class="checkbox-inline">
-                          <input
-                            type="checkbox"
-                            name="orders"
-                            v-model="orders"
-                          />
-                          {{ $t('permission_detail_13') }}
-                        </label>
-                        <br />
+                  </div>
+                  <div class="row">
+                    <h3 class="title mb-4">{{ $t('Invite_New_User') }}</h3>
+                  </div>
+                  <div class="divider"></div>
+                  <div class="row px-2 pt-4 px-lg-4 pt-lg-4">
+                    <p>
+                      {{ $t('invite_desc') }}
+
+                    </p>
+                    <div class="mb-4">
+                      <div>
+                        <input type="email" id="invite_email" name="invite_email"
+                          placeholder="Email address to send invite" required class="form-control"
+                          v-model="invite_email" />
                       </div>
+                      <div class="form-group selectBoxes mt-4">
+                        <label class="radio-inline" style="padding-right: 20px">
+                          <input type="radio" name="permissions" value="all" checked="checked"
+                            @click="selectAllPermissions()" />
+                          {{ $t('All_Permissions') }}
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" name="permissions" value="choose" @click="permissionListVisible = true" />
+                          {{ $t('Choose_Permissions') }}
+                        </label>
+                        <div class="well" id="invitePermissions" v-show="permissionListVisible">
+                          <label class="checkbox-inline">
+                            <input type="checkbox" name="profile" v-model="profile" />
+
+                            {{ $t('permission_detail_1') }}
+                          </label>
+                          <br />
+                          <label class="checkbox-inline">
+                            <input type="checkbox" name="contacts" v-model="contacts" />
+                            {{ $t('permission_detail_2') }}
+                          </label>
+                          <br />
+                          <label class="checkbox-inline">
+                            <input type="checkbox" name="products" v-model="products" />
+                            {{ $t('permission_detail_3') }}
+                          </label>
+                          <br />
+                          <label class="checkbox-inline">
+                            <input type="checkbox" name="manageproducts" v-model="manageproducts" />
+                            {{ $t('permission_detail_4') }}
+                          </label>
+                          <br />
+                          <label class="checkbox-inline">
+                            <input type="checkbox" name="productsso" v-model="productsso" />
+                            {{ $t('permission_detail_5') }}
+                          </label>
+                          <br />
+                          <label class="checkbox-inline">
+                            <input type="checkbox" name="domains" v-model="domains" />
+                            {{ $t('permission_detail_6') }}
+                          </label>
+                          <br />
+                          <label class="checkbox-inline">
+                            <input type="checkbox" name="managedomains" v-model="managedomains" />
+                            {{ $t('permission_detail_7') }}
+                          </label>
+                          <br />
+                          <label class="checkbox-inline">
+                            <input type="checkbox" name="invoices" v-model="invoices" />
+                            {{ $t('permission_detail_8') }}
+                          </label>
+                          <br />
+                          <label class="checkbox-inline">
+                            <input type="checkbox" name="quotes" v-model="quotes" />
+                            {{ $t('permission_detail_9') }}
+                          </label>
+                          <br />
+                          <label class="checkbox-inline">
+                            <input type="checkbox" name="tickets" v-model="tickets" />
+                            {{ $t('permission_detail_10') }}
+                          </label>
+                          <br />
+                          <label class="checkbox-inline">
+                            <input type="checkbox" name="affiliates" v-model="affiliates" />
+                            {{ $t('permission_detail_11') }}
+                          </label>
+                          <br />
+                          <label class="checkbox-inline">
+                            <input type="checkbox" name="emails" v-model="emails" />
+                            {{ $t('permission_detail_12') }}
+                          </label>
+                          <br />
+                          <label class="checkbox-inline">
+                            <input type="checkbox" name="orders" v-model="orders" />
+                            {{ $t('permission_detail_13') }}
+                          </label>
+                          <br />
+                        </div>
+                      </div>
+                      <button @click="sendInvite()" class="btn btn-dark mt-4" :disabled="invite_email == ''">
+                        {{ $t('Send_Invite') }}
+                      </button>
                     </div>
-                    <button
-                      @click="sendInvite()"
-                      class="btn btn-dark mt-4"
-                      :disabled="invite_email == ''"
-                    >
-                    {{ $t('Send_Invite') }}
-                    </button>
                   </div>
                 </div>
-              </div>
-              <!-- @else @include('component.no-permission-go-back') @endif -->
+              </template>
+
+              <template v-else>
+                <NoPermission />
+              </template>
+
+              <!-- @else <NoPermission/> @endif -->
             </div>
 
             <!-- email history -->
-            <div
-              class="tab-pane fade"
-              id="pills-emails"
-              role="tabpanel"
-              aria-labelledby="pills-emails-tab"
-            >
+            <div class="tab-pane fade" id="pills-emails" role="tabpanel" aria-labelledby="pills-emails-tab">
               <div class="tab-inner mb-3">
                 <div class="row">
                   <h3 class="title mb-4">{{ $t('Email_History') }}</h3>
                 </div>
                 <div class="divider"></div>
-                <!-- @if(in_array('emails', Auth::user()->permissions)) -->
-                <div class="row px-2 pt-4 px-lg-4 pt-lg-4">
-                  <div class="w-100 mb-5 support-table">
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th scope="col">{{ $t('ID') }}</th>
-                          <th scope="col">{{ $t('Date_Sent') }}</th>
-                          <th scope="col">{{ $t('Message subject') }}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <!-- @foreach($emails as $email) -->
-                        <tr v-if="!emailsList || emailsList.length === 0">
-                          <td colspan="3" style="text-align: center">
-                            <h5 style="margin-top: 20px">{{ $t('No_emails') }}</h5>
-                          </td>
-                        </tr>
-                        <tr v-else v-for="email in emailsList" :key="email.id">
-                          <td>#{{ email.id }}</td>
-                          <td>{{ formatDate(email.date) }}</td>
-                          <td class="date-cell">{{ email.subject }}</td>
-                        </tr>
-                        <!-- @endforeach -->
-                      </tbody>
-                    </table>
+                <template v-if="user && user.permissions.split(',').includes('emails')">
+                  <div class="row px-2 pt-4 px-lg-4 pt-lg-4">
+                    <div class="w-100 mb-5 support-table">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">{{ $t('ID') }}</th>
+                            <th scope="col">{{ $t('Date_Sent') }}</th>
+                            <th scope="col">{{ $t('Message_subject') }}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <!-- @foreach($emails as $email) -->
+                          <tr v-if="!emailsList || emailsList.length === 0">
+                            <td colspan="3" style="text-align: center">
+                              <h5 style="margin-top: 20px">{{ $t('No_emails') }}</h5>
+                            </td>
+                          </tr>
+                          <tr v-else v-for="email in emailsList" :key="email.id">
+                            <td>#{{ email.id }}</td>
+                            <td>{{ formatDate(email.date) }}</td>
+                            <td class="date-cell">{{ email.subject }}</td>
+                          </tr>
+                          <!-- @endforeach -->
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                </div>
-                <div class="w-100 server-list-pagination">
-    
-                  <Pagination :currentPage="params.page" :totalPages="Math.ceil(totalPages / perPage)" @page-changed="onPageChanged" />
-                </div>
-                <!-- @else @include('component.no-permission-go-back') @endif -->
+                  <div class="w-100 server-list-pagination">
+
+                    <Pagination :currentPage="params.page" :totalPages="Math.ceil(totalPages / perPage)"
+                      @page-changed="onPageChanged" />
+                  </div>
+                </template>
+
+                <template v-else>
+                  <NoPermission />
+                </template>
               </div>
             </div>
           </div>
@@ -600,10 +403,12 @@ import { commonApis } from "@/apis/commonApis";
 import { useStore } from "vuex";
 import useAuth from "@/composables/auth";
 import { showLoader } from "@/plugins/loading.js";
-import Pagination from '@/components/Pagination.vue'; 
+import Pagination from '@/components/Pagination.vue';
+import NoPermission from '@/components/NoPermission.vue';
 // toast
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
+
 const $toast = useToast();
 
 const commonApi = commonApis();
@@ -630,6 +435,7 @@ const affiliates = ref(true);
 const emails = ref(true);
 const orders = ref(true);
 const totalPages = ref(0);
+
 // const status = ref([]);
 const params = ref({
   client_id: user.value.client_id,
@@ -639,10 +445,9 @@ const params = ref({
   perPage: perPage,
 });
 
-function onPageChanged(page) 
-{
-	params.value.page = page;
-	getSettingsData(); // Fetch tickets for the new page
+function onPageChanged(page) {
+  params.value.page = page;
+  getSettingsData(); // Fetch tickets for the new page
 }
 
 
@@ -763,5 +568,4 @@ function formatDate(date) {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

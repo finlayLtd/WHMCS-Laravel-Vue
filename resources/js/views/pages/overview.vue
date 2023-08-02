@@ -1,17 +1,10 @@
 <template>
   <section class="overview">
     <div class="container">
-      <div
-        class="d-flex flex-column justify-content-start align-items-start title-button-wrapper"
-      >
+      <div class="d-flex flex-column justify-content-start align-items-start title-button-wrapper">
         <a ref="customLink" style="display: none;" target="_blank">Custom Link</a>
         <div class="overview-header">
-          <img
-            class="not-filterable"
-            :src="'/assets/img/' + sys_logo + '-logo.png'"
-            alt=""
-            v-if="sys_logo"
-          />
+          <img class="not-filterable" :src="'/assets/img/' + sys_logo + '-logo.png'" alt="" v-if="sys_logo" />
           <h2 class="title mb-0" v-if="order_product_info">
             {{ order_product_info.domain }}
           </h2>
@@ -19,27 +12,17 @@
         <div class="overview-info">
           <span v-if="dayDiff > 0">{{ $t('Created') }} {{ dayDiff }} {{ $t('days_ago') }}</span>
           <span v-else>{{ $t('Created_today') }}</span>
-          <div
-            class="alert alert-warning mt-2"
-            id="alertUnpaidInvoice"
-            v-if="invoiceInfo && invoiceInfo.status == 'Unpaid'"
-          >
-            {{ $t('interruption') }} 
-            <a
-              style="color: blue; cursor: pointer"
-              @click="openInvoiceWindow(invoiceInfo.invoiceid)"
-              target="_blank"
-              >{{ $t('Pay_Invoice') }}</a
-            >
+          <div class="alert alert-warning mt-2" id="alertUnpaidInvoice"
+            v-if="invoiceInfo && invoiceInfo.status == 'Unpaid'">
+            {{ $t('interruption') }}
+            <a style="color: blue; cursor: pointer" @click="openInvoiceWindow(invoiceInfo.invoiceid)" target="_blank">{{
+              $t('Pay_Invoice') }}</a>
           </div>
         </div>
       </div>
 
       <!-- if status is ative -->
-      <div
-        class="sub-section server-list-tab"
-        v-if="status && status == 'Active'"
-      >
+      <div class="sub-section server-list-tab" v-if="status && status == 'Active'">
         <div class="row justify-content-between align-items-center">
           <div class="row mb-5 pe-0 overview-cols">
             <div class="col-xl-4 col-lg-6 col-md-6 mb-4 mb-md-0">
@@ -51,7 +34,7 @@
                   <div class="due-date-info">
                     <h2 class="due-date-title">{{ $t('Due_Date') }}</h2>
                     <span v-if="order_product_info">{{
-                       order_product_info.nextduedate 
+                      order_product_info.nextduedate
                     }}</span>
                   </div>
                 </div>
@@ -68,13 +51,9 @@
                         {{ order_product_info.dedicatedip }}
                       </td>
                       <td>
-                        <img
-                          src="/assets/img/copy.svg"
-                          class="icon-clipboard"
-                          @click="
-                            copyToClipboard(order_product_info.dedicatedip)
-                          "
-                        />
+                        <img src="/assets/img/copy.svg" class="icon-clipboard" @click="
+                          copyToClipboard(order_product_info.dedicatedip)
+                          " />
                       </td>
                     </tr>
 
@@ -87,44 +66,24 @@
                         root
                       </td>
                       <td>
-                        <img
-                          src="/assets/img/copy.svg"
-                          class="icon-clipboard"
-                          @click="copyToClipboard(order_product_info.username)"
-                        />
+                        <img src="/assets/img/copy.svg" class="icon-clipboard"
+                          @click="copyToClipboard(order_product_info.username)" />
                       </td>
                     </tr>
 
                     <tr>
                       <td>{{ $t('Password') }}</td>
                       <td>
-                        <input
-                          class="clipboard-input"
-                          disabled
-                          :type="(show1)?'text':'password'"
-                          :value="order_product_info.password"
-                        />
+                        <input class="clipboard-input" disabled :type="(show1) ? 'text' : 'password'"
+                          :value="order_product_info.password" />
                       </td>
                       <td>
-                        <img
-                          src="/assets/img/eye-open.svg"
-                          class="icon-password eye-open"
-                          v-if="show1"
-                          @click="show1 = !show1"
-                          
-                        />
-                        <img
-                          src="/assets/img/eye.svg"
-                          class="icon-password eye-closed"
-                          v-else
-                          @click="show1 = !show1"
-                        />
-                        
-                        <img
-                          src="/assets/img/copy.svg"
-                          class="icon-clipboard"
-                          @click="copyToClipboard(order_product_info.password)"
-                        />
+                        <img src="/assets/img/eye-open.svg" class="icon-password eye-open" v-if="show1"
+                          @click="show1 = !show1" />
+                        <img src="/assets/img/eye.svg" class="icon-password eye-closed" v-else @click="show1 = !show1" />
+
+                        <img src="/assets/img/copy.svg" class="icon-clipboard"
+                          @click="copyToClipboard(order_product_info.password)" />
                       </td>
                     </tr>
                   </tbody>
@@ -167,174 +126,70 @@
         <div class="row justify-content-between align-items-center">
           <div class="row mb-2 mb-lg-5 pe-0">
             <div class="col-md-12 d-flex justify-content-start pe-0 flex-wrap">
-              <ul
-                class="nav nav-pills mb-3 mb-md-0 order-1 order-md-2 mb-lg-0 flex-nowrap"
-                id="pills-tab"
-                role="tablist"
-                v-if="order_product_info"
-              >
+              <ul class="nav nav-pills mb-3 mb-md-0 order-1 order-md-2 mb-lg-0 flex-nowrap" id="pills-tab" role="tablist"
+                v-if="order_product_info">
                 <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link active"
-                    id="pills-overview-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-overview"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-overview"
-                    aria-selected="true"
-                  >
-                  {{ $t('Overview') }}
+                  <button class="nav-link active" id="pills-overview-tab" data-bs-toggle="pill"
+                    data-bs-target="#pills-overview" type="button" role="tab" aria-controls="pills-overview"
+                    aria-selected="true">
+                    {{ $t('Overview') }}
                   </button>
                 </li>
-                <li
-                  class="nav-item"
-                  role="presentation"
-                  v-if="order_product_info.status == 'Active'"
-                >
-                  <button
-                    class="nav-link"
-                    id="pills-analytics-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-analytics"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-analytics"
-                    aria-selected="false"
-                  >
-                  {{ $t('Analytics') }}
+                <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
+                  <button class="nav-link" id="pills-analytics-tab" data-bs-toggle="pill"
+                    data-bs-target="#pills-analytics" type="button" role="tab" aria-controls="pills-analytics"
+                    aria-selected="false">
+                    {{ $t('Analytics') }}
                   </button>
                 </li>
-                <li
-                  class="nav-item"
-                  role="presentation"
-                  v-if="order_product_info.status == 'Active'"
-                >
-                  <button
-                    class="nav-link"
-                    id="pills-connect-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-connect"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-connect"
-                    aria-selected="false"
-                  >
-                  {{ $t('Connect') }}
+                <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
+                  <button class="nav-link" id="pills-connect-tab" data-bs-toggle="pill" data-bs-target="#pills-connect"
+                    type="button" role="tab" aria-controls="pills-connect" aria-selected="false">
+                    {{ $t('Connect') }}
                   </button>
                 </li>
 
-                <li
-                  class="nav-item"
-                  role="presentation"
-                  v-if="order_product_info.status == 'Active'"
-                >
-                  <button
-                    class="nav-link"
-                    id="pills-reinstall-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-reinstall"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-reinstall"
-                    aria-selected="false"
-                  >
-                  {{ $t('Reinstall') }}
+                <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
+                  <button class="nav-link" id="pills-reinstall-tab" data-bs-toggle="pill"
+                    data-bs-target="#pills-reinstall" type="button" role="tab" aria-controls="pills-reinstall"
+                    aria-selected="false">
+                    {{ $t('Reinstall') }}
                   </button>
                 </li>
 
-                <li
-                  class="nav-item"
-                  role="presentation"
-                  v-if="order_product_info.status == 'Active'"
-                >
-                  <button
-                    class="nav-link"
-                    id="pills-management-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-management"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-management"
-                    aria-selected="false"
-                  >
-                  {{ $t('IP_Address_Management') }}
+                <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
+                  <button class="nav-link" id="pills-management-tab" data-bs-toggle="pill"
+                    data-bs-target="#pills-management" type="button" role="tab" aria-controls="pills-management"
+                    aria-selected="false">
+                    {{ $t('IP_Address_Management') }}
                   </button>
                 </li>
 
-                <li
-                  class="nav-item"
-                  role="presentation"
-                  v-if="order_product_info.status == 'Active'"
-                >
-                  <button
-                    class="nav-link"
-                    id="pills-vnc-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-vnc"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-vnc"
-                    aria-selected="false"
-                  >
-                  {{ $t('VNC') }}
+                <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
+                  <button class="nav-link" id="pills-vnc-tab" data-bs-toggle="pill" data-bs-target="#pills-vnc"
+                    type="button" role="tab" aria-controls="pills-vnc" aria-selected="false">
+                    {{ $t('VNC') }}
                   </button>
                 </li>
 
-                <li
-                  class="nav-item"
-                  role="presentation"
-                  v-if="order_product_info.status == 'Active'"
-                >
-                  <button
-                    class="nav-link"
-                    id="pills-dns-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-dns"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-dns"
-                    aria-selected="false"
-                  >
-                  {{ $t('ReverseDNS') }}
+                <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
+                  <button class="nav-link" id="pills-dns-tab" data-bs-toggle="pill" data-bs-target="#pills-dns"
+                    type="button" role="tab" aria-controls="pills-dns" aria-selected="false">
+                    {{ $t('ReverseDNS') }}
                   </button>
                 </li>
 
-                <li
-                  class="nav-item"
-                  role="presentation"
-                  v-if="order_product_info.status == 'Active'"
-                >
-                  <button
-                    class="nav-link"
-                    id="pills-billing-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-billing"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-billing"
-                    aria-selected="false"
-                  >
-                  {{ $t('Billing') }}
+                <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
+                  <button class="nav-link" id="pills-billing-tab" data-bs-toggle="pill" data-bs-target="#pills-billing"
+                    type="button" role="tab" aria-controls="pills-billing" aria-selected="false">
+                    {{ $t('Billing') }}
                   </button>
                 </li>
 
-                <li
-                  class="nav-item"
-                  role="presentation"
-                  v-if="order_product_info.status == 'Active'"
-                >
-                  <button
-                    class="nav-link"
-                    id="pills-settings-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-settings"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-settings"
-                    aria-selected="false"
-                  >
-                  {{ $t('Settings') }}
+                <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
+                  <button class="nav-link" id="pills-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-settings"
+                    type="button" role="tab" aria-controls="pills-settings" aria-selected="false">
+                    {{ $t('Settings') }}
                   </button>
                 </li>
               </ul>
@@ -343,12 +198,8 @@
 
           <div class="tab-content" id="pills-tabContent">
             <!--overview-->
-            <div
-              class="tab-pane fade show active"
-              id="pills-overview"
-              role="tabpanel"
-              aria-labelledby="pills-overview-tab"
-            >
+            <div class="tab-pane fade show active" id="pills-overview" role="tabpanel"
+              aria-labelledby="pills-overview-tab">
               <div class="tab-inner mb-3">
                 <div class="row">
                   <h3 class="title">{{ $t('Overview') }}</h3>
@@ -362,11 +213,7 @@
                     <div class="col-12 col-lg-4 col-md-12">
                       <div class="col-content-wrapper sm-border-bottom">
                         <div class="img-wrapper">
-                          <img
-                            class="not-filterable"
-                            :src="'/assets/img/' + flag + '.png'"
-                            alt=""
-                          />
+                          <img class="not-filterable" :src="'/assets/img/' + flag + '.png'" alt="" />
                         </div>
                         <div class="info">
                           <h4 class="title2">
@@ -381,11 +228,7 @@
                     <div class="col-12 col-lg-4 col-md-12">
                       <div class="col-content-wrapper sm-border-bottom">
                         <div class="img-wrapper">
-                          <img
-                            class="not-filterable"
-                            :src="'/assets/img/' + sys_logo + '-logo.png'"
-                            alt=""
-                          />
+                          <img class="not-filterable" :src="'/assets/img/' + sys_logo + '-logo.png'" alt="" />
                         </div>
                         <div class="info">
                           <h4 class="title2">{{ order_product_info.name }}</h4>
@@ -396,11 +239,7 @@
                     <div class="col-12 col-lg-4 col-md-12">
                       <div class="col-content-wrapper">
                         <div class="img-wrapper">
-                          <img
-                            class="dark-img-filter"
-                            src="/assets/img/cloud-connection.png"
-                            alt=""
-                          />
+                          <img class="dark-img-filter" src="/assets/img/cloud-connection.png" alt="" />
                         </div>
                         <div class="info">
                           <h4 class="title2">
@@ -410,10 +249,7 @@
                             {{ $t('Created_at') }} {{ order_product_info.regdate }}
                           </p>
                         </div>
-                        <div
-                          class="server-list-options me-3 me-lg-4"
-                          v-if="order_product_info.status == 'Active'"
-                        >
+                        <div class="server-list-options me-3 me-lg-4" v-if="order_product_info.status == 'Active'">
                           <button class="active-badge">
                             <span class="active-dot"></span>{{ $t('Active') }}
                           </button>
@@ -422,37 +258,23 @@
                     </div>
                   </div>
 
-                  <div
-                    class="d-flex justify-content-end px-0 server-btn-options"
-                    v-if="order_product_info.status == 'Active'"
-                  >
-                    <button
-                      class="btn img-btn me-0 me-lg-2"
-                      @click="TurnOnVPS(vpsid)"
-                    >
-                      <i class="fa fa-play" style="color: #3fbb27"></i
-                      >&nbsp;&nbsp;{{ $t('Start') }}
+                  <div class="d-flex justify-content-end px-0 server-btn-options"
+                    v-if="order_product_info.status == 'Active'">
+                    <button class="btn img-btn me-0 me-lg-2" @click="TurnOnVPS(vpsid)">
+                      <i class="fa fa-play" style="color: #3fbb27"></i>&nbsp;&nbsp;{{ $t('Start') }}
                     </button>
-                    <button
-                      class="btn img-btn me-0 me-lg-2"
-                      @click="TurnOffVPS(vpsid)"
-                    >
+                    <button class="btn img-btn me-0 me-lg-2" @click="TurnOffVPS(vpsid)">
                       <img src="/assets/img/power.svg" alt="" />{{ $t('Shutdown') }}
                     </button>
                   </div>
                 </div>
               </div>
-              <div
-                class="tab-inner"
-                v-if="order_product_info.status == 'Active'"
-              >
+              <div class="tab-inner" v-if="order_product_info.status == 'Active'">
                 <div class="row">
                   <h3 class="title fs-17">{{ $t('Resource_Usage') }}</h3>
                 </div>
                 <div class="row px-12 pt-3">
-                  <div
-                    class="general-info bg-white overview-col5 d-flex w-100 mb-4"
-                  >
+                  <div class="general-info bg-white overview-col5 d-flex w-100 mb-4">
                     <div class="col-md-4 col-sm-12">
                       <div class="col-content-wrapper sm-border-bottom">
                         <div class="img-wrapper">
@@ -533,710 +355,672 @@
 
             <!-- display when only in active state -->
             <!--analytics-->
-            <div
-              class="tab-pane fade"
-              id="pills-analytics"
-              role="tabpanel"
-              aria-labelledby="pills-analytics-tab"
-              v-if="order_product_info.status == 'Active'"
-            >
+            <div class="tab-pane fade" id="pills-analytics" role="tabpanel" aria-labelledby="pills-analytics-tab"
+              v-if="order_product_info.status == 'Active'">
               <div class="row">
                 <div id="cpu-container" class="col-md-6 col-sm-12">
-                  <Chart
-                    :key="componentKey"
-                    :data="{
-                      chart: {
-                        type: 'area',
-                        backgroundColor: chart_color,
+                  <Chart :key="componentKey" :data="{
+                    chart: {
+                      type: 'area',
+                      backgroundColor: chart_color,
+                    },
+                    title: {
+                      text: 'CPU Usage',
+                      align: 'left',
+                      style: {
+                        color: revertColor(chart_color),
                       },
-                      title: {
-                        text: 'CPU Usage',
-                        align: 'left',
+                    },
+                    // chart options
+                    tooltip: {
+                      formatter: function () {
+                        return (
+                          'Time: ' +
+                          Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+                          '<br/>' +
+                          'CPU Usage rate: ' +
+                          this.y +
+                          '%'
+                        );
+                      },
+                    },
+                    xAxis: {
+                      type: 'datetime',
+                      labels: {
                         style: {
                           color: revertColor(chart_color),
                         },
                       },
-                      // chart options
-                      tooltip: {
-                        formatter: function () {
-                          return (
-                            'Time: ' +
-                            Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
-                            '<br/>' +
-                            'CPU Usage rate: ' +
-                            this.y +
-                            '%'
-                          );
+                    },
+                    yAxis: {
+                      title: {
+                        text: 'CPU Usage rate',
+                      },
+                      labels: {
+                        style: {
+                          color: revertColor(chart_color),
                         },
                       },
-                      xAxis: {
-                        type: 'datetime',
-                        labels: {
-                          style: {
-                            color: revertColor(chart_color),
+                    },
+                    legend: {
+                      enabled: false,
+                    },
+                    plotOptions: {
+                      area: {
+                        fillColor: {
+                          linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1,
                           },
-                        },
-                      },
-                      yAxis: {
-                        title: {
-                          text: 'CPU Usage rate',
-                        },
-                        labels: {
-                          style: {
-                            color: revertColor(chart_color),
-                          },
-                        },
-                      },
-                      legend: {
-                        enabled: false,
-                      },
-                      plotOptions: {
-                        area: {
-                          fillColor: {
-                            linearGradient: {
-                              x1: 0,
-                              y1: 0,
-                              x2: 0,
-                              y2: 1,
-                            },
-                            stops: [
-                              [0, Highcharts.getOptions().colors[0]],
-                              [
-                                1,
-                                Highcharts.color(
-                                  Highcharts.getOptions().colors[0]
-                                )
-                                  .setOpacity(0)
-                                  .get('rgba'),
-                              ],
+                          stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [
+                              1,
+                              Highcharts.color(
+                                Highcharts.getOptions().colors[0]
+                              )
+                                .setOpacity(0)
+                                .get('rgba'),
                             ],
-                          },
-                          marker: {
-                            radius: 2,
-                          },
-                          lineWidth: 1,
-                          states: {
-                            hover: {
-                              lineWidth: 1,
-                            },
-                          },
-                          threshold: null,
+                          ],
                         },
+                        marker: {
+                          radius: 2,
+                        },
+                        lineWidth: 1,
+                        states: {
+                          hover: {
+                            lineWidth: 1,
+                          },
+                        },
+                        threshold: null,
                       },
+                    },
 
-                      series: [
-                        {
-                          name: 'CPU',
-                          data: cpu_data_state.map(([date, value]) => [
-                            new Date(date).getTime(),
-                            value,
-                          ]),
-                        },
-                      ],
-                    }"
-                    v-if="cpu_data_state"
-                  >
+                    series: [
+                      {
+                        name: 'CPU',
+                        data: cpu_data_state.map(([date, value]) => [
+                          new Date(date).getTime(),
+                          value,
+                        ]),
+                      },
+                    ],
+                  }" v-if="cpu_data_state">
                   </Chart>
                 </div>
                 <div id="ram-container" class="col-md-6 col-sm-12">
-                  <Chart
-                  :key="componentKey"
-                    :data="{
-                      chart: {
-                        type: 'area',
-                        backgroundColor: chart_color,
+                  <Chart :key="componentKey" :data="{
+                    chart: {
+                      type: 'area',
+                      backgroundColor: chart_color,
+                    },
+                    title: {
+                      text: 'RAM Usage',
+                      align: 'left',
+                      style: {
+                        color: revertColor(chart_color),
                       },
-                      title: {
-                        text: 'RAM Usage',
-                        align: 'left',
+                    },
+                    // chart options
+                    tooltip: {
+                      formatter: function () {
+                        return (
+                          'Time: ' +
+                          Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+                          '<br/>' +
+                          'RAM Usage rate: ' +
+                          this.y +
+                          'MB'
+                        );
+                      },
+                    },
+                    xAxis: {
+                      type: 'datetime',
+                      labels: {
                         style: {
                           color: revertColor(chart_color),
                         },
                       },
-                      // chart options
-                      tooltip: {
-                        formatter: function () {
-                          return (
-                            'Time: ' +
-                            Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
-                            '<br/>' +
-                            'RAM Usage rate: ' +
-                            this.y +
-                            'MB'
-                          );
+                    },
+                    yAxis: {
+                      title: {
+                        text: 'RAM Usage rate',
+                      },
+                      labels: {
+                        style: {
+                          color: revertColor(chart_color),
                         },
                       },
-                      xAxis: {
-                        type: 'datetime',
-                        labels: {
-                          style: {
-                            color: revertColor(chart_color),
+                    },
+                    legend: {
+                      enabled: false,
+                    },
+                    plotOptions: {
+                      area: {
+                        fillColor: {
+                          linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1,
                           },
-                        },
-                      },
-                      yAxis: {
-                        title: {
-                          text: 'RAM Usage rate',
-                        },
-                        labels: {
-                          style: {
-                            color: revertColor(chart_color),
-                          },
-                        },
-                      },
-                      legend: {
-                        enabled: false,
-                      },
-                      plotOptions: {
-                        area: {
-                          fillColor: {
-                            linearGradient: {
-                              x1: 0,
-                              y1: 0,
-                              x2: 0,
-                              y2: 1,
-                            },
-                            stops: [
-                              [0, Highcharts.getOptions().colors[0]],
-                              [
-                                1,
-                                Highcharts.color(
-                                  Highcharts.getOptions().colors[0]
-                                )
-                                  .setOpacity(0)
-                                  .get('rgba'),
-                              ],
+                          stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [
+                              1,
+                              Highcharts.color(
+                                Highcharts.getOptions().colors[0]
+                              )
+                                .setOpacity(0)
+                                .get('rgba'),
                             ],
-                          },
-                          marker: {
-                            radius: 2,
-                          },
-                          lineWidth: 1,
-                          states: {
-                            hover: {
-                              lineWidth: 1,
-                            },
-                          },
-                          threshold: null,
+                          ],
                         },
+                        marker: {
+                          radius: 2,
+                        },
+                        lineWidth: 1,
+                        states: {
+                          hover: {
+                            lineWidth: 1,
+                          },
+                        },
+                        threshold: null,
                       },
+                    },
 
-                      series: [
-                        {
-                          name: 'RAM',
-                          data: ram_data_state.map(([date, value]) => [
-                            new Date(date).getTime(),
-                            value,
-                          ]),
-                        },
-                      ],
-                    }"
-                    v-if="ram_data_state"
-                  >
+                    series: [
+                      {
+                        name: 'RAM',
+                        data: ram_data_state.map(([date, value]) => [
+                          new Date(date).getTime(),
+                          value,
+                        ]),
+                      },
+                    ],
+                  }" v-if="ram_data_state">
                   </Chart>
                 </div>
               </div>
               <div class="row mt-2">
                 <div id="disk-container" class="col-md-6 col-sm-12">
-                  <Chart
-                  :key="componentKey"
-                    :data="{
-                      chart: {
-                        type: 'area',
-                        backgroundColor: chart_color,
+                  <Chart :key="componentKey" :data="{
+                    chart: {
+                      type: 'area',
+                      backgroundColor: chart_color,
+                    },
+                    title: {
+                      text: 'Disk Usage',
+                      align: 'left',
+                      style: {
+                        color: revertColor(chart_color),
                       },
-                      title: {
-                        text: 'Disk Usage',
-                        align: 'left',
+                    },
+                    // chart options
+                    tooltip: {
+                      formatter: function () {
+                        return (
+                          'Time: ' +
+                          Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+                          '<br/>' +
+                          'Disk Usage rate: ' +
+                          this.y +
+                          'MB'
+                        );
+                      },
+                    },
+                    xAxis: {
+                      type: 'datetime',
+                      labels: {
                         style: {
                           color: revertColor(chart_color),
                         },
                       },
-                      // chart options
-                      tooltip: {
-                        formatter: function () {
-                          return (
-                            'Time: ' +
-                            Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
-                            '<br/>' +
-                            'Disk Usage rate: ' +
-                            this.y +
-                            'MB'
-                          );
+                    },
+                    yAxis: {
+                      title: {
+                        text: 'Disk Usage rate',
+                      },
+                      labels: {
+                        style: {
+                          color: revertColor(chart_color),
                         },
                       },
-                      xAxis: {
-                        type: 'datetime',
-                        labels: {
-                          style: {
-                            color: revertColor(chart_color),
+                    },
+                    legend: {
+                      enabled: false,
+                    },
+                    plotOptions: {
+                      area: {
+                        fillColor: {
+                          linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1,
                           },
-                        },
-                      },
-                      yAxis: {
-                        title: {
-                          text: 'Disk Usage rate',
-                        },
-                        labels: {
-                          style: {
-                            color: revertColor(chart_color),
-                          },
-                        },
-                      },
-                      legend: {
-                        enabled: false,
-                      },
-                      plotOptions: {
-                        area: {
-                          fillColor: {
-                            linearGradient: {
-                              x1: 0,
-                              y1: 0,
-                              x2: 0,
-                              y2: 1,
-                            },
-                            stops: [
-                              [0, Highcharts.getOptions().colors[0]],
-                              [
-                                1,
-                                Highcharts.color(
-                                  Highcharts.getOptions().colors[0]
-                                )
-                                  .setOpacity(0)
-                                  .get('rgba'),
-                              ],
+                          stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [
+                              1,
+                              Highcharts.color(
+                                Highcharts.getOptions().colors[0]
+                              )
+                                .setOpacity(0)
+                                .get('rgba'),
                             ],
-                          },
-                          marker: {
-                            radius: 2,
-                          },
-                          lineWidth: 1,
-                          states: {
-                            hover: {
-                              lineWidth: 1,
-                            },
-                          },
-                          threshold: null,
+                          ],
                         },
+                        marker: {
+                          radius: 2,
+                        },
+                        lineWidth: 1,
+                        states: {
+                          hover: {
+                            lineWidth: 1,
+                          },
+                        },
+                        threshold: null,
                       },
+                    },
 
-                      series: [
-                        {
-                          name: 'Disk',
-                          data: disk_data_state.map(([date, value]) => [
-                            new Date(date).getTime(),
-                            value,
-                          ]),
-                        },
-                      ],
-                    }"
-                    v-if="disk_data_state"
-                  >
+                    series: [
+                      {
+                        name: 'Disk',
+                        data: disk_data_state.map(([date, value]) => [
+                          new Date(date).getTime(),
+                          value,
+                        ]),
+                      },
+                    ],
+                  }" v-if="disk_data_state">
                   </Chart>
                 </div>
                 <div id="inode-container" class="col-md-6 col-sm-12">
 
-                  <Chart
-                  :key="componentKey"
-                    :data="{
-                      chart: {
-                        type: 'area',
-                        backgroundColor: chart_color,
+                  <Chart :key="componentKey" :data="{
+                    chart: {
+                      type: 'area',
+                      backgroundColor: chart_color,
+                    },
+                    title: {
+                      text: 'Inode Information',
+                      align: 'left',
+                      style: {
+                        color: revertColor(chart_color),
                       },
-                      title: {
-                        text: 'Inode Information',
-                        align: 'left',
+                    },
+                    // chart options
+                    tooltip: {
+                      formatter: function () {
+                        return (
+                          'Time: ' +
+                          Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+                          '<br/>' +
+                          'Innode Usage rate: ' +
+                          this.y +
+                          'Blocks'
+                        );
+                      },
+                    },
+                    xAxis: {
+                      type: 'datetime',
+                      labels: {
                         style: {
                           color: revertColor(chart_color),
                         },
                       },
-                      // chart options
-                      tooltip: {
-                        formatter: function () {
-                          return (
-                            'Time: ' +
-                            Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
-                            '<br/>' +
-                            'Innode Usage rate: ' +
-                            this.y +
-                            'Blocks'
-                          );
+                    },
+                    yAxis: {
+                      title: {
+                        text: 'Inode Usage rate',
+                      },
+                      labels: {
+                        style: {
+                          color: revertColor(chart_color),
                         },
                       },
-                      xAxis: {
-                        type: 'datetime',
-                        labels: {
-                          style: {
-                            color: revertColor(chart_color),
+                    },
+                    legend: {
+                      enabled: false,
+                    },
+                    plotOptions: {
+                      area: {
+                        fillColor: {
+                          linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1,
                           },
-                        },
-                      },
-                      yAxis: {
-                        title: {
-                          text: 'Inode Usage rate',
-                        },
-                        labels: {
-                          style: {
-                            color: revertColor(chart_color),
-                          },
-                        },
-                      },
-                      legend: {
-                        enabled: false,
-                      },
-                      plotOptions: {
-                        area: {
-                          fillColor: {
-                            linearGradient: {
-                              x1: 0,
-                              y1: 0,
-                              x2: 0,
-                              y2: 1,
-                            },
-                            stops: [
-                              [0, Highcharts.getOptions().colors[0]],
-                              [
-                                1,
-                                Highcharts.color(
-                                  Highcharts.getOptions().colors[0]
-                                )
-                                  .setOpacity(0)
-                                  .get('rgba'),
-                              ],
+                          stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [
+                              1,
+                              Highcharts.color(
+                                Highcharts.getOptions().colors[0]
+                              )
+                                .setOpacity(0)
+                                .get('rgba'),
                             ],
-                          },
-                          marker: {
-                            radius: 2,
-                          },
-                          lineWidth: 1,
-                          states: {
-                            hover: {
-                              lineWidth: 1,
-                            },
-                          },
-                          threshold: null,
+                          ],
                         },
+                        marker: {
+                          radius: 2,
+                        },
+                        lineWidth: 1,
+                        states: {
+                          hover: {
+                            lineWidth: 1,
+                          },
+                        },
+                        threshold: null,
                       },
+                    },
 
-                      series: [
-                        {
-                          name: 'Inode',
-                          data: inode_data_state.map(([date, value]) => [
-                            new Date(date).getTime(),
-                            value,
-                          ]),
-                        },
-                      ],
-                    }"
-                    v-if="inode_data_state"
-                  >
+                    series: [
+                      {
+                        name: 'Inode',
+                        data: inode_data_state.map(([date, value]) => [
+                          new Date(date).getTime(),
+                          value,
+                        ]),
+                      },
+                    ],
+                  }" v-if="inode_data_state">
                   </Chart>
                 </div>
               </div>
               <div class="row mt-2">
                 <div id="net-in-container" class="col-md-6 col-sm-12">
-                  <Chart
-                  :key="componentKey"
-                    :data="{
-                      chart: {
-                        type: 'area',
-                        backgroundColor: chart_color,
+                  <Chart :key="componentKey" :data="{
+                    chart: {
+                      type: 'area',
+                      backgroundColor: chart_color,
+                    },
+                    title: {
+                      text: 'Network Download Information',
+                      align: 'left',
+                      style: {
+                        color: revertColor(chart_color),
                       },
-                      title: {
-                        text: 'Network Download Information',
-                        align: 'left',
+                    },
+                    // chart options
+                    tooltip: {
+                      formatter: function () {
+                        return (
+                          'Time: ' +
+                          Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+                          '<br/>' +
+                          'Download rate: ' +
+                          this.y +
+                          'MB'
+                        );
+                      },
+                    },
+                    xAxis: {
+                      type: 'datetime',
+                      labels: {
                         style: {
                           color: revertColor(chart_color),
                         },
                       },
-                      // chart options
-                      tooltip: {
-                        formatter: function () {
-                          return (
-                            'Time: ' +
-                            Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
-                            '<br/>' +
-                            'Download rate: ' +
-                            this.y +
-                            'MB'
-                          );
+                    },
+                    yAxis: {
+                      title: {
+                        text: 'Network Download rate',
+                      },
+                      labels: {
+                        style: {
+                          color: revertColor(chart_color),
                         },
                       },
-                      xAxis: {
-                        type: 'datetime',
-                        labels: {
-                          style: {
-                            color: revertColor(chart_color),
+                    },
+                    legend: {
+                      enabled: false,
+                    },
+                    plotOptions: {
+                      area: {
+                        fillColor: {
+                          linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1,
                           },
-                        },
-                      },
-                      yAxis: {
-                        title: {
-                          text: 'Network Download rate',
-                        },
-                        labels: {
-                          style: {
-                            color: revertColor(chart_color),
-                          },
-                        },
-                      },
-                      legend: {
-                        enabled: false,
-                      },
-                      plotOptions: {
-                        area: {
-                          fillColor: {
-                            linearGradient: {
-                              x1: 0,
-                              y1: 0,
-                              x2: 0,
-                              y2: 1,
-                            },
-                            stops: [
-                              [0, Highcharts.getOptions().colors[0]],
-                              [
-                                1,
-                                Highcharts.color(
-                                  Highcharts.getOptions().colors[0]
-                                )
-                                  .setOpacity(0)
-                                  .get('rgba'),
-                              ],
+                          stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [
+                              1,
+                              Highcharts.color(
+                                Highcharts.getOptions().colors[0]
+                              )
+                                .setOpacity(0)
+                                .get('rgba'),
                             ],
-                          },
-                          marker: {
-                            radius: 2,
-                          },
-                          lineWidth: 1,
-                          states: {
-                            hover: {
-                              lineWidth: 1,
-                            },
-                          },
-                          threshold: null,
+                          ],
                         },
+                        marker: {
+                          radius: 2,
+                        },
+                        lineWidth: 1,
+                        states: {
+                          hover: {
+                            lineWidth: 1,
+                          },
+                        },
+                        threshold: null,
                       },
+                    },
 
-                      series: [
-                        {
-                          name: 'Network Download',
-                          data: net_in_data_state.map(([date, value]) => [
-                            new Date(date).getTime(),
-                            value,
-                          ]),
-                        },
-                      ],
-                    }"
-                    v-if="net_in_data_state"
-                  >
+                    series: [
+                      {
+                        name: 'Network Download',
+                        data: net_in_data_state.map(([date, value]) => [
+                          new Date(date).getTime(),
+                          value,
+                        ]),
+                      },
+                    ],
+                  }" v-if="net_in_data_state">
                   </Chart>
                 </div>
                 <div id="net-out-container" class="col-md-6 col-sm-12">
-                  <Chart
-                  :key="componentKey"
-                    :data="{
-                      chart: {
-                        type: 'area',
-                        backgroundColor: chart_color,
+                  <Chart :key="componentKey" :data="{
+                    chart: {
+                      type: 'area',
+                      backgroundColor: chart_color,
+                    },
+                    title: {
+                      text: 'Network Upload Information',
+                      align: 'left',
+                      style: {
+                        color: revertColor(chart_color),
                       },
-                      title: {
-                        text: 'Network Upload Information',
-                        align: 'left',
+                    },
+                    // chart options
+                    tooltip: {
+                      formatter: function () {
+                        return (
+                          'Time: ' +
+                          Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+                          '<br/>' +
+                          'Upload rate: ' +
+                          this.y +
+                          'MB'
+                        );
+                      },
+                    },
+                    xAxis: {
+                      type: 'datetime',
+                      labels: {
                         style: {
                           color: revertColor(chart_color),
                         },
                       },
-                      // chart options
-                      tooltip: {
-                        formatter: function () {
-                          return (
-                            'Time: ' +
-                            Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
-                            '<br/>' +
-                            'Upload rate: ' +
-                            this.y +
-                            'MB'
-                          );
+                    },
+                    yAxis: {
+                      title: {
+                        text: 'Network Upload rate',
+                      },
+                      labels: {
+                        style: {
+                          color: revertColor(chart_color),
                         },
                       },
-                      xAxis: {
-                        type: 'datetime',
-                        labels: {
-                          style: {
-                            color: revertColor(chart_color),
+                    },
+                    legend: {
+                      enabled: false,
+                    },
+                    plotOptions: {
+                      area: {
+                        fillColor: {
+                          linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1,
                           },
-                        },
-                      },
-                      yAxis: {
-                        title: {
-                          text: 'Network Upload rate',
-                        },
-                        labels: {
-                          style: {
-                            color: revertColor(chart_color),
-                          },
-                        },
-                      },
-                      legend: {
-                        enabled: false,
-                      },
-                      plotOptions: {
-                        area: {
-                          fillColor: {
-                            linearGradient: {
-                              x1: 0,
-                              y1: 0,
-                              x2: 0,
-                              y2: 1,
-                            },
-                            stops: [
-                              [0, Highcharts.getOptions().colors[0]],
-                              [
-                                1,
-                                Highcharts.color(
-                                  Highcharts.getOptions().colors[0]
-                                )
-                                  .setOpacity(0)
-                                  .get('rgba'),
-                              ],
+                          stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [
+                              1,
+                              Highcharts.color(
+                                Highcharts.getOptions().colors[0]
+                              )
+                                .setOpacity(0)
+                                .get('rgba'),
                             ],
-                          },
-                          marker: {
-                            radius: 2,
-                          },
-                          lineWidth: 1,
-                          states: {
-                            hover: {
-                              lineWidth: 1,
-                            },
-                          },
-                          threshold: null,
+                          ],
                         },
+                        marker: {
+                          radius: 2,
+                        },
+                        lineWidth: 1,
+                        states: {
+                          hover: {
+                            lineWidth: 1,
+                          },
+                        },
+                        threshold: null,
                       },
+                    },
 
-                      series: [
-                        {
-                          name: 'Network Upload',
-                          data: net_out_data_state.map(([date, value]) => [
-                            new Date(date).getTime(),
-                            value,
-                          ]),
-                        },
-                      ],
-                    }"
-                    v-if="net_out_data_state"
-                  >
+                    series: [
+                      {
+                        name: 'Network Upload',
+                        data: net_out_data_state.map(([date, value]) => [
+                          new Date(date).getTime(),
+                          value,
+                        ]),
+                      },
+                    ],
+                  }" v-if="net_out_data_state">
                   </Chart>
                 </div>
               </div>
               <div class="row mt-2">
                 <div id="net-total-container" class="col-md-6 col-sm-12">
-                  <Chart
-                  :key="componentKey"
-                    :data="{
-                      chart: {
-                        type: 'area',
-                        backgroundColor: chart_color,
+                  <Chart :key="componentKey" :data="{
+                    chart: {
+                      type: 'area',
+                      backgroundColor: chart_color,
+                    },
+                    title: {
+                      text: 'Network Information',
+                      align: 'left',
+                      style: {
+                        color: revertColor(chart_color),
                       },
-                      title: {
-                        text: 'Network Information',
-                        align: 'left',
+                    },
+                    // chart options
+                    tooltip: {
+                      formatter: function () {
+                        return (
+                          'Time: ' +
+                          Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+                          '<br/>' +
+                          'Network Usage rate: ' +
+                          this.y +
+                          'MB'
+                        );
+                      },
+                    },
+                    xAxis: {
+                      type: 'datetime',
+                      labels: {
                         style: {
                           color: revertColor(chart_color),
                         },
                       },
-                      // chart options
-                      tooltip: {
-                        formatter: function () {
-                          return (
-                            'Time: ' +
-                            Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
-                            '<br/>' +
-                            'Network Usage rate: ' +
-                            this.y +
-                            'MB'
-                          );
+                    },
+                    yAxis: {
+                      title: {
+                        text: 'Network rate',
+                      },
+                      labels: {
+                        style: {
+                          color: revertColor(chart_color),
                         },
                       },
-                      xAxis: {
-                        type: 'datetime',
-                        labels: {
-                          style: {
-                            color: revertColor(chart_color),
+                    },
+                    legend: {
+                      enabled: false,
+                    },
+                    plotOptions: {
+                      area: {
+                        fillColor: {
+                          linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1,
                           },
-                        },
-                      },
-                      yAxis: {
-                        title: {
-                          text: 'Network rate',
-                        },
-                        labels: {
-                          style: {
-                            color: revertColor(chart_color),
-                          },
-                        },
-                      },
-                      legend: {
-                        enabled: false,
-                      },
-                      plotOptions: {
-                        area: {
-                          fillColor: {
-                            linearGradient: {
-                              x1: 0,
-                              y1: 0,
-                              x2: 0,
-                              y2: 1,
-                            },
-                            stops: [
-                              [0, Highcharts.getOptions().colors[0]],
-                              [
-                                1,
-                                Highcharts.color(
-                                  Highcharts.getOptions().colors[0]
-                                )
-                                  .setOpacity(0)
-                                  .get('rgba'),
-                              ],
+                          stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [
+                              1,
+                              Highcharts.color(
+                                Highcharts.getOptions().colors[0]
+                              )
+                                .setOpacity(0)
+                                .get('rgba'),
                             ],
-                          },
-                          marker: {
-                            radius: 2,
-                          },
-                          lineWidth: 1,
-                          states: {
-                            hover: {
-                              lineWidth: 1,
-                            },
-                          },
-                          threshold: null,
+                          ],
                         },
+                        marker: {
+                          radius: 2,
+                        },
+                        lineWidth: 1,
+                        states: {
+                          hover: {
+                            lineWidth: 1,
+                          },
+                        },
+                        threshold: null,
                       },
+                    },
 
-                      series: [
-                        {
-                          name: 'Network',
-                          data: net_total_data_state.map(([date, value]) => [
-                            new Date(date).getTime(),
-                            value,
-                          ]),
-                        },
-                      ],
-                    }"
-                    v-if="net_total_data_state"
-                  >
+                    series: [
+                      {
+                        name: 'Network',
+                        data: net_total_data_state.map(([date, value]) => [
+                          new Date(date).getTime(),
+                          value,
+                        ]),
+                      },
+                    ],
+                  }" v-if="net_total_data_state">
                   </Chart>
                 </div>
               </div>
             </div>
             <!--connect-->
-            <div
-              class="tab-pane fade"
-              id="pills-connect"
-              role="tabpanel"
-              aria-labelledby="pills-connect-tab"
-              v-if="order_product_info.status == 'Active'"
-            >
+            <div class="tab-pane fade" id="pills-connect" role="tabpanel" aria-labelledby="pills-connect-tab"
+              v-if="order_product_info.status == 'Active'">
               <div class="tab-inner mb-3">
                 <div class="row">
                   <h3 class="title">{{ $t('Connect') }}</h3>
@@ -1246,9 +1030,7 @@
                 </div>
                 <div class="divider"></div>
                 <div class="row px-0 px-lg-4 pt-4">
-                  <div
-                    class="col-md-12 d-flex flex-column align-items-center text-center"
-                  >
+                  <div class="col-md-12 d-flex flex-column align-items-center text-center">
                     <template v-if="system.indexOf('windows') == -1">
                       <p class="fs-15">
                         {{ $t('cmd_title') }}
@@ -1271,13 +1053,8 @@
               </div>
             </div>
             <!--reinstall-->
-            <div
-              class="tab-pane fade"
-              id="pills-reinstall"
-              role="tabpanel"
-              aria-labelledby="pills-reinstall-tab"
-              v-if="order_product_info.status == 'Active'"
-            >
+            <div class="tab-pane fade" id="pills-reinstall" role="tabpanel" aria-labelledby="pills-reinstall-tab"
+              v-if="order_product_info.status == 'Active'">
               <div class="tab-inner mb-3">
                 <div class="row">
                   <h3 class="title">{{ $t('Reinstall') }}</h3>
@@ -1289,85 +1066,38 @@
                 <div class="row px-0 pt-4">
                   <p class="fs-13-5">{{ $t('Select_an_Operating_System') }}</p>
                   <div class="form-group d-flex">
-                    <select
-                      name="oslist"
-                      id="Operating-system"
-                      class="form-control"
-                      style="height: 40px !important; max-width: 300px"
-                      v-model="selected_os_id"
-                    >
-                      <option
-                        v-for="os in oslists"
-                        :key="os.osid"
-                        :value="os.osid"
-                      >
-                        <img
-                          :src="'/assets/img/' + os.group_name + '-logo.png'"
-                        />
+                    <select name="oslist" id="Operating-system" class="form-control"
+                      style="height: 40px !important; max-width: 300px" v-model="selected_os_id">
+                      <option v-for="os in oslists" :key="os.osid" :value="os.osid">
+                        <img :src="'/assets/img/' + os.group_name + '-logo.png'" />
                         {{ os.name }}
                       </option>
                     </select>
 
-                    <input
-                      id="format-disk"
-                      type="checkbox"
-                      class="format-disk"
-                      style="
+                    <input id="format-disk" type="checkbox" class="format-disk" style="
                         width: 20px;
                         height: 20px;
                         padding: 0;
                         margin-top: 10px;
                         margin-left: 20px;
-                      "
-                      v-model="format_disk"
-                    />
-                    <label for="format-disk" style="line-height: 40px"
-                      >&nbsp;{{ $t('Format_Primary_Disk_Only') }}</label
-                    >
+                      " v-model="format_disk" />
+                    <label for="format-disk" style="line-height: 40px">&nbsp;{{ $t('Format_Primary_Disk_Only') }}</label>
                   </div>
 
-                  <div
-                    id="newPassword1"
-                    class="form-group has-feedback has-success mt-3"
-                  >
-                    <label
-                      for="inputNewPassword1-os"
-                      class="col-sm-4 control-label"
-                      >{{ $t('New_Password') }}</label
-                    >
+                  <div id="newPassword1" class="form-group has-feedback has-success mt-3">
+                    <label for="inputNewPassword1-os" class="col-sm-4 control-label">{{ $t('New_Password') }}</label>
                     <div class="col-sm-5" style="position: relative">
-                      <input
-                        :type="(show2)?'text':'password'"
-                        class="form-control"
-                        name="newpw"
-                        id="inputNewPassword1"
-                        v-model="newPassword1"
-                        autocomplete="off"
-                      />
-                      <img
-                        src="/assets/img/eye-open.svg"
-                        class="settings-password-img icon-password eye-open"
-                        v-if="show2"
-                      />
-                      <img
-                        src="/assets/img/eye.svg"
-                        class="settings-password-img icon-password eye-closed"
-                        v-else
-                      />
+                      <input :type="(show2) ? 'text' : 'password'" class="form-control" name="newpw" id="inputNewPassword1"
+                        v-model="newPassword1" autocomplete="off" />
+                      <img src="/assets/img/eye-open.svg" class="settings-password-img icon-password eye-open"
+                        v-if="show2" />
+                      <img src="/assets/img/eye.svg" class="settings-password-img icon-password eye-closed" v-else />
                       <br />
 
                       <div class="progress" id="passwordStrengthBar">
-                        <div
-                          class="progress-bar progress-bar-success"
-                          role="progressbar"
-                          aria-valuenow="0"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                          :style="'width: '+passwordStrength+'%'"
-                        >
-                          <span class="rating"
-                            >{{ $t('Password_Rating') }}: {{ passwordStrength }}%</span
-                          >
+                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0"
+                          aria-valuemin="0" aria-valuemax="100" :style="'width: ' + passwordStrength + '%'">
+                          <span class="rating">{{ $t('Password_Rating') }}: {{ passwordStrength }}%</span>
                         </div>
                       </div>
 
@@ -1381,57 +1111,31 @@
                       </div>
                     </div>
                   </div>
-                  <div
-                    id="newPassword2"
-                    class="form-group has-feedback has-success"
-                  >
-                    <label
-                      for="inputNewPassword2"
-                      class="col-sm-4 control-label"
-                      >{{ $t('Confirm_New_Password') }}</label
-                    >
+                  <div id="newPassword2" class="form-group has-feedback has-success">
+                    <label for="inputNewPassword2" class="col-sm-4 control-label">{{ $t('Confirm_New_Password') }}</label>
                     <div class="col-sm-5" style="position: relative">
-                      <input
-                        class="form-control"
-                        name="confirmpw"
-                        id="inputNewPassword2"
-                        v-model="newPassword2"
-                        autocomplete="off"
-                        :type="(show3)?'text':'password'"
-                      />
-                      <img
-                        src="/assets/img/eye-open.svg"
-                        class="settings-password-img icon-password eye-open"
-                        v-if="show3"
-                        @click="show3 = !show3"
-                      />
-                      <img
-                        src="/assets/img/eye.svg"
-                        class="settings-password-img icon-password eye-closed"
-                        @click="show3 = !show3"
-                        v-else
-                      />
-                      
-                      <div id="inputNewPassword2-os-Msg" v-if="newPassword1 != newPassword2 && newPassword1!=''">
+                      <input class="form-control" name="confirmpw" id="inputNewPassword2" v-model="newPassword2"
+                        autocomplete="off" :type="(show3) ? 'text' : 'password'" />
+                      <img src="/assets/img/eye-open.svg" class="settings-password-img icon-password eye-open"
+                        v-if="show3" @click="show3 = !show3" />
+                      <img src="/assets/img/eye.svg" class="settings-password-img icon-password eye-closed"
+                        @click="show3 = !show3" v-else />
+
+                      <div id="inputNewPassword2-os-Msg" v-if="newPassword1 != newPassword2 && newPassword1 != ''">
                         <p class="help-block" id="nonMatchingPasswordResult">{{ $t('password_not_match') }}</p>
                       </div>
                     </div>
                   </div>
                   <div class="overview-button-wrapper pt-0 mt-4">
                     <div class="col-sm-5">
-                      <button
-                        id="submitButton"
-                        class="btn-dark px-4 me-2 hover-dark-light"
-                        @click="rebuildOS(vpsid)"
-                        :disabled="
-                          newPassword1 != newPassword2 ||
+                      <button id="submitButton" class="btn-dark px-4 me-2 hover-dark-light" @click="rebuildOS(vpsid)"
+                        :disabled="newPassword1 != newPassword2 ||
                           newPassword1 == '' ||
                           newPassword2 == '' ||
                           selected_os_id == null ||
-                          passwordStrength < 80 
-                        "
-                      >
-                      {{ $t('Reinstall') }}
+                          passwordStrength < 80
+                          ">
+                        {{ $t('Reinstall') }}
                       </button>
                     </div>
                   </div>
@@ -1439,13 +1143,8 @@
               </div>
             </div>
             <!--management-->
-            <div
-              class="tab-pane fade"
-              id="pills-management"
-              role="tabpanel"
-              aria-labelledby="pills-management-tab"
-              v-if="order_product_info.status == 'Active'"
-            >
+            <div class="tab-pane fade" id="pills-management" role="tabpanel" aria-labelledby="pills-management-tab"
+              v-if="order_product_info.status == 'Active'">
               <div class="tab-inner management mb-3">
                 <div class="row">
                   <h3 class="title mb-4">{{ $t('IP_Address_Management') }}</h3>
@@ -1455,17 +1154,11 @@
                 </div>
                 <div class="divider"></div>
                 <div class="row px-0 pt-4">
-                  <div
-                    class="col-md-12 d-flex flex-column flex-lg-row align-items-start"
-                  >
+                  <div class="col-md-12 d-flex flex-column flex-lg-row align-items-start">
                     <div class="tab-content w-100" id="pills-tabContent">
                       <!--ipv4m-->
-                      <div
-                        class="tab-pane fade show active"
-                        id="pills-ipv4m"
-                        role="tabpanel"
-                        aria-labelledby="pills-ipv4m-tab"
-                      >
+                      <div class="tab-pane fade show active" id="pills-ipv4m" role="tabpanel"
+                        aria-labelledby="pills-ipv4m-tab">
                         <div class="tab-inner py-0">
                           <h3 class="fs-15 mb-1">{{ $t('IP_Address_Assignment') }}</h3>
                           <p class="fs-13 mb-0 inner-sub-title">
@@ -1496,16 +1189,8 @@
                           <p class="fs-13-5">{{ $t('Choose_Primary_IP') }}</p>
 
                           <div class="overview-select d-inline-block mb-3">
-                            <select
-                              name="iplist"
-                              id="primary-ip"
-                              v-model="selected_ip"
-                              v-if="ip_list"
-                            >
-                              <template
-                                v-for="ip in ip_list.ips"
-                                :key="ip.ipid"
-                              >
+                            <select name="iplist" id="primary-ip" v-model="selected_ip" v-if="ip_list">
+                              <template v-for="ip in ip_list.ips" :key="ip.ipid">
                                 <option v-if="ip.primary != 1" :value="ip.ipid">
                                   {{ ip.ip }}
                                 </option>
@@ -1514,18 +1199,15 @@
                           </div>
 
                           <div class="overview-button-wrapper pt-0 d-flex">
-                            <button
-                              class="btn-dark px-4 me-2 hover-dark-light"
-                              @click="assignPrimaryIp(vpsid)"
-                              :disabled="selected_ip == '0.0.0.0'"
-                            >
-                            {{ $t('Assign_as_Primary_IP') }}
+                            <button class="btn-dark px-4 me-2 hover-dark-light" @click="assignPrimaryIp(vpsid)"
+                              :disabled="selected_ip == '0.0.0.0'">
+                              {{ $t('Assign_as_Primary_IP') }}
                             </button>
                           </div>
 
                           <p class="fs-14 mt-4 mb-2 inner-sub-title2">
                             {{ $t('ipset_desc') }}
-                            
+
                           </p>
                         </div>
                       </div>
@@ -1535,13 +1217,8 @@
               </div>
             </div>
             <!--vnc-->
-            <div
-              class="tab-pane fade"
-              id="pills-vnc"
-              role="tabpanel"
-              aria-labelledby="pills-vnc-tab"
-              v-if="order_product_info.status == 'Active'"
-            >
+            <div class="tab-pane fade" id="pills-vnc" role="tabpanel" aria-labelledby="pills-vnc-tab"
+              v-if="order_product_info.status == 'Active'">
               <div class="tab-inner mb-3">
                 <div class="row">
                   <h3 class="title mb-4">{{ $t('VNC') }}</h3>
@@ -1553,7 +1230,8 @@
                 <div class="row px-0 pt-4">
                   <div class="col-md-12 d-flex justify-content-center">
                     <div class="overview-button-wrapper pt-0">
-                      <router-link :to="{ name: 'noVNC', params: { id: vpsid } }" class="btn-dark px-4 hover-dark-light" target="_blank">
+                      <router-link :to="{ name: 'noVNC', params: { id: vpsid } }" class="btn-dark px-4 hover-dark-light"
+                        target="_blank">
                         {{ $t('Connect_VNC') }}
                       </router-link>
                     </div>
@@ -1562,41 +1240,24 @@
               </div>
             </div>
             <!--DNS-->
-            <div
-              class="tab-pane fade"
-              id="pills-dns"
-              role="tabpanel"
-              aria-labelledby="pills-dns-tab"
-              v-if="order_product_info.status == 'Active'"
-            >
+            <div class="tab-pane fade" id="pills-dns" role="tabpanel" aria-labelledby="pills-dns-tab"
+              v-if="order_product_info.status == 'Active'">
               <div class="tab-inner mb-3">
                 <div class="row">
                   <h3 class="title mb-4">{{ $t('ReverseDNS_Management') }}</h3>
                 </div>
                 <div class="d-flex reverseDNSContainer">
-                  <select name="iplist" id="rdns-ip" class="form-select" v-model="selected_rdns_ip" style="margin-right: 10px; margin-bottom: 10px; width: auto;">
-                    <option
-                      v-for="ip in ip_list.ips"
-                      :key="ip.ip"
-                      :value="ip.ip"
-                    >
+                  <select name="iplist" id="rdns-ip" class="form-select" v-model="selected_rdns_ip"
+                    style="margin-right: 10px; margin-bottom: 10px; width: auto;">
+                    <option v-for="ip in ip_list.ips" :key="ip.ip" :value="ip.ip">
                       {{ ip.ip }}
                     </option>
                   </select>
-                  <input
-                    class="form-control"
-                    id="dns-content"
-                    type="text"
-                    style="width: auto; margin-right: 10px;  margin-bottom: 10px; "
-                    v-model="newDNS"
-                  />
-                  <button
-                    class="btn-dark px-4 me-2 hover-dark-light"
-                    type="submit"
-                    style="padding: 0px 20px; margin-bottom: 10px; "
-                    @click="addRDNS()"
-                    :disabled="newDNS == '' || selected_rdns_ip == ''"
-                  >
+                  <input class="form-control" id="dns-content" type="text"
+                    style="width: auto; margin-right: 10px;  margin-bottom: 10px; " v-model="newDNS" />
+                  <button class="btn-dark px-4 me-2 hover-dark-light" type="submit"
+                    style="padding: 0px 20px; margin-bottom: 10px; " @click="addRDNS()"
+                    :disabled="newDNS == '' || selected_rdns_ip == ''">
                     {{ $t('Add_Reverse_DNS') }}
                   </button>
                 </div>
@@ -1618,10 +1279,7 @@
                         <td>{{ rdns.name }}</td>
                         <td>{{ rdns.content }}</td>
                         <td @click="deleteRdns(rdns.id)">
-                          <i
-                            class="fa fa-trash-can"
-                            style="color: red; cursor: pointer"
-                          ></i>
+                          <i class="fa fa-trash-can" style="color: red; cursor: pointer"></i>
                         </td>
                       </tr>
                       <tr v-if="rdnslist.length == 0">
@@ -1638,16 +1296,10 @@
             </div>
 
             <!--billing-->
-            <div
-              :class="
-                order_product_info.status != 'Active'
-                  ? 'tab-pane fade  show active'
-                  : 'tab-pane fade'
-              "
-              id="pills-billing"
-              role="tabpanel"
-              aria-labelledby="pills-billing-tab"
-            >
+            <div :class="order_product_info.status != 'Active'
+                ? 'tab-pane fade  show active'
+                : 'tab-pane fade'
+              " id="pills-billing" role="tabpanel" aria-labelledby="pills-billing-tab">
               <div class="tab-inner billing mb-3">
                 <div class="row">
                   <h3 class="title mb-4">{{ $t('Billing') }}</h3>
@@ -1657,74 +1309,40 @@
                 </div>
                 <div class="divider"></div>
                 <div class="row px-0 pt-4">
-                  <div
-                    class="col-md-12 d-flex flex-column flex-lg-row align-items-start"
-                  >
+                  <div class="col-md-12 d-flex flex-column flex-lg-row align-items-start">
                     <ul
                       class="nav nav-pills mb-3 mb-md-0 mb-lg-0 d-flex flex-column inner-tab-pills flex-nowrap sc-mobile no-border-mobile"
-                      id="pills-tab"
-                      role="tablist"
-                    >
+                      id="pills-tab" role="tablist">
                       <li class="nav-item mb-2" role="presentation">
-                        <button
-                          class="nav-link"
-                          id="pills-renew-tab"
-                          data-bs-toggle="pill"
-                          data-bs-target="#pills-renew"
-                          type="button"
-                          role="tab"
-                          aria-controls="pills-renew"
-                          aria-selected="false"
-                        >
-                        {{ $t('Renew_Service') }}
+                        <button class="nav-link" id="pills-renew-tab" data-bs-toggle="pill" data-bs-target="#pills-renew"
+                          type="button" role="tab" aria-controls="pills-renew" aria-selected="false">
+                          {{ $t('Renew_Service') }}
                         </button>
                       </li>
 
                       <li class="nav-item mb-2" role="presentation">
-                        <button
-                          class="nav-link active"
-                          id="pills-invoices-tab"
-                          data-bs-toggle="pill"
-                          data-bs-target="#pills-invoices"
-                          type="button"
-                          role="tab"
-                          aria-controls="pills-invoices"
-                          aria-selected="false"
-                        >
-                        {{ $t('Invoice') }}
+                        <button class="nav-link active" id="pills-invoices-tab" data-bs-toggle="pill"
+                          data-bs-target="#pills-invoices" type="button" role="tab" aria-controls="pills-invoices"
+                          aria-selected="false">
+                          {{ $t('Invoice') }}
                         </button>
                       </li>
 
                       <li class="nav-item" role="presentation">
-                        <button
-                          class="nav-link"
-                          id="pills-refund-tab"
-                          data-bs-toggle="pill"
-                          data-bs-target="#pills-refund"
-                          type="button"
-                          role="tab"
-                          aria-controls="pills-refund"
-                          aria-selected="false"
-                        >
-                        {{ $t('Refund') }}
+                        <button class="nav-link" id="pills-refund-tab" data-bs-toggle="pill"
+                          data-bs-target="#pills-refund" type="button" role="tab" aria-controls="pills-refund"
+                          aria-selected="false">
+                          {{ $t('Refund') }}
                         </button>
                       </li>
                     </ul>
 
                     <div class="tab-content w-100" id="pills-tabContent">
                       <!--renew-->
-                      <div
-                        class="tab-pane fade"
-                        id="pills-renew"
-                        role="tabpanel"
-                        aria-labelledby="pills-renew-tab"
-                      >
+                      <div class="tab-pane fade" id="pills-renew" role="tabpanel" aria-labelledby="pills-renew-tab">
                         <div class="tab-inner py-0 p-mb-0">
                           <h3 class="fs-15 mb-1">{{ $t('Renew_Service') }}</h3>
-                          <div
-                            class="divider divider-inner"
-                            style="margin: 20px 0"
-                          ></div>
+                          <div class="divider divider-inner" style="margin: 20px 0"></div>
 
                           <div class="tab-inner">
                             <div class="row">
@@ -1735,8 +1353,8 @@
                                 </p>
 
                                 <div
-                                  class="overview-button-wrapper d-flex flex-column align-items-center justify-content-center" v-if="invoiceInfo && invoiceInfo.status == 'Unpaid'"
-                                >
+                                  class="overview-button-wrapper d-flex flex-column align-items-center justify-content-center"
+                                  v-if="invoiceInfo && invoiceInfo.status == 'Unpaid'">
                                   <button class="btn btn-primary" @click="openInvoiceWindow(invoiceInfo.invoiceid)">
                                     {{ $t('Renew_Service') }}
                                   </button>
@@ -1745,27 +1363,20 @@
                             </div>
                           </div>
 
-                          <p
-                            class="fs-13 mt-2 inner-sub-title"
-                            style="
+                          <p class="fs-13 mt-2 inner-sub-title" style="
                               max-width: 474px;
                               text-align: center;
                               margin: 0 auto;
                               color: rgba(23, 30, 38, 0.75);
-                            "
-                          >
-                          {{ $t('invoice_due_desc') }}
+                            ">
+                            {{ $t('invoice_due_desc') }}
                           </p>
                         </div>
                       </div>
 
                       <!--invoices-->
-                      <div
-                        class="tab-pane fade active show"
-                        id="pills-invoices"
-                        role="tabpanel"
-                        aria-labelledby="pills-invoices-tab"
-                      >
+                      <div class="tab-pane fade active show" id="pills-invoices" role="tabpanel"
+                        aria-labelledby="pills-invoices-tab">
                         <div class="tab-inner py-0 p-mb-0">
                           <div class="support-table p-0">
                             <table class="table">
@@ -1797,18 +1408,12 @@
                                   <td class="remaining-cell">
                                     <span>€ {{ invoiceInfo.subtotal }}</span>
                                   </td>
-                                  <td
-                                    class="successful-cell"
-                                    v-if="invoiceInfo.status == 'Paid'"
-                                  >
+                                  <td class="successful-cell" v-if="invoiceInfo.status == 'Paid'">
                                     <span>
                                       {{ invoiceInfo.status }}
                                     </span>
                                   </td>
-                                  <td
-                                    class="cancelled-cell"
-                                    v-else-if="invoiceInfo.status == 'Unpaid'"
-                                  >
+                                  <td class="cancelled-cell" v-else-if="invoiceInfo.status == 'Unpaid'">
                                     <span>
                                       {{ invoiceInfo.status }}
                                     </span>
@@ -1819,15 +1424,10 @@
                                     </span>
                                   </td>
                                   <td class="text-center">
-                                    <a
-                                      @click="
-                                        openInvoiceWindow(invoiceInfo.invoiceid)
-                                      "
-                                      target="_blank"
-                                      ><img
-                                        src="/assets/img/eye-open.svg"
-                                        class="icon-password view-invoice"
-                                    /></a>
+                                    <a @click="
+                                      openInvoiceWindow(invoiceInfo.invoiceid)
+                                      " target="_blank"><img src="/assets/img/eye-open.svg"
+                                        class="icon-password view-invoice" /></a>
                                   </td>
                                 </tr>
                               </tbody>
@@ -1837,18 +1437,10 @@
                       </div>
 
                       <!--create ticket for refund-->
-                      <div
-                        class="tab-pane fade"
-                        id="pills-refund"
-                        role="tabpanel"
-                        aria-labelledby="pills-refund-tab"
-                      >
+                      <div class="tab-pane fade" id="pills-refund" role="tabpanel" aria-labelledby="pills-refund-tab">
                         <div class="tab-inner py-0 p-mb-0">
                           <h3 class="fs-15 mb-1">{{ $t('Refund_Request') }}</h3>
-                          <div
-                            class="divider divider-inner"
-                            style="margin: 20px 0"
-                          ></div>
+                          <div class="divider divider-inner" style="margin: 20px 0"></div>
 
                           <div class="tab-inner">
                             <div class="row">
@@ -1858,30 +1450,23 @@
                                 </p>
 
                                 <div
-                                  class="overview-button-wrapper d-flex flex-column align-items-center justify-content-center"
-                                >
-                                  <button
-                                    class="btn-dark px-4 hover-dark-light"
-                                    id="open-ticket"
-                                    @click="openModal = true"
-                                  >
-                                  {{ $t('Open_Ticket') }}
+                                  class="overview-button-wrapper d-flex flex-column align-items-center justify-content-center">
+                                  <button class="btn-dark px-4 hover-dark-light" id="open-ticket"
+                                    @click="openModal = true">
+                                    {{ $t('Open_Ticket') }}
                                   </button>
                                 </div>
                               </div>
                             </div>
                           </div>
 
-                          <p
-                            class="fs-13 mt-2 inner-sub-title"
-                            style="
+                          <p class="fs-13 mt-2 inner-sub-title" style="
                               max-width: 474px;
                               text-align: center;
                               margin: 0 auto;
                               color: rgba(23, 30, 38, 0.75);
-                            "
-                          >
-                          {{ $t('approval_terms') }}
+                            ">
+                            {{ $t('approval_terms') }}
                           </p>
                         </div>
                       </div>
@@ -1891,13 +1476,8 @@
               </div>
             </div>
             <!--settings-->
-            <div
-              class="tab-pane fade"
-              id="pills-settings"
-              role="tabpanel"
-              aria-labelledby="pills-settings-tab"
-              v-if="order_product_info.status == 'Active'"
-            >
+            <div class="tab-pane fade" id="pills-settings" role="tabpanel" aria-labelledby="pills-settings-tab"
+              v-if="order_product_info.status == 'Active'">
               <div class="row mb-5 pe-0">
                 <div class="tab-inner settings mb-3">
                   <div class="row">
@@ -1907,103 +1487,47 @@
                   </div>
                   <div class="divider"></div>
                   <div class="row px-0 pt-4">
-                    <div
-                      class="col-md-12 d-flex flex-column flex-lg-row align-items-start"
-                    >
-                      <ul
-                        class="nav nav-pills mb-3 mb-md-0 mb-lg-0 d-flex flex-column inner-tab-pills"
-                        id="pills-tab"
-                        role="tablist"
-                      >
+                    <div class="col-md-12 d-flex flex-column flex-lg-row align-items-start">
+                      <ul class="nav nav-pills mb-3 mb-md-0 mb-lg-0 d-flex flex-column inner-tab-pills" id="pills-tab"
+                        role="tablist">
                         <li class="nav-item mb-2" role="presentation">
-                          <button
-                            class="nav-link active"
-                            id="pills-password-tab"
-                            data-bs-toggle="pill"
-                            data-bs-target="#pills-password"
-                            type="button"
-                            role="tab"
-                            aria-controls="pills-password"
-                            aria-selected="false"
-
-                          >
-                          {{ $t('Change_Password') }}
+                          <button class="nav-link active" id="pills-password-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-password" type="button" role="tab" aria-controls="pills-password"
+                            aria-selected="false">
+                            {{ $t('Change_Password') }}
                           </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                          <button
-                            class="nav-link"
-                            id="pills-host-tab"
-                            data-bs-toggle="pill"
-                            data-bs-target="#pills-host"
-                            type="button"
-                            role="tab"
-                            aria-controls="pills-host"
-                            aria-selected="false"
-                          >
-                          {{ $t('Change_Hostname') }}
+                          <button class="nav-link" id="pills-host-tab" data-bs-toggle="pill" data-bs-target="#pills-host"
+                            type="button" role="tab" aria-controls="pills-host" aria-selected="false">
+                            {{ $t('Change_Hostname') }}
                           </button>
                         </li>
                       </ul>
 
                       <div class="tab-content w-100" id="pills-tabContent">
                         <!--password-->
-                        <div
-                          class="tab-pane fade show active"
-                          id="pills-password"
-                          role="tabpanel"
-                          aria-labelledby="pills-password-tab"
-                        >
+                        <div class="tab-pane fade show active" id="pills-password" role="tabpanel"
+                          aria-labelledby="pills-password-tab">
                           <div class="tab-inner py-0 p-mb-0">
                             <h3 class="fs-15 mb-1">{{ $t('Change_Password') }}</h3>
                             <div class="divider" style="margin: 20px 0"></div>
-                            <div
-                              id="newPassword1-os"
-                              class="form-group has-feedback has-success mt-3"
-                            >
-                              <label
-                                for="inputNewPassword1-os"
-                                class="col-sm-4 control-label"
-                                >{{ $t('New_Server_Password') }}</label
-                              >
+                            <div id="newPassword1-os" class="form-group has-feedback has-success mt-3">
+                              <label for="inputNewPassword1-os" class="col-sm-4 control-label">{{
+                                $t('New_Server_Password') }}</label>
                               <div class="col-sm-5" style="position: relative">
-                                <input
-                                  :type="(show2)?'text':'password'"
-                                  class="form-control"
-                                  name="newpw"
-                                  id="inputNewPassword1-os"
-                                  autocomplete="off"
-                                  v-model="newPassword1"
-                                />
-                                <img
-                                  src="/assets/img/eye-open.svg"
-                                  class="settings-password-img icon-password eye-open"
-                                  v-if="show2"
-                                  @click="show2 = !show2"
-                                />
-                                <img
-                                  src="/assets/img/eye.svg"
-                                  class="settings-password-img icon-password eye-closed"
-                                  v-else
-                                  @click="show2 = !show2"
-                                />
+                                <input :type="(show2) ? 'text' : 'password'" class="form-control" name="newpw"
+                                  id="inputNewPassword1-os" autocomplete="off" v-model="newPassword1" />
+                                <img src="/assets/img/eye-open.svg" class="settings-password-img icon-password eye-open"
+                                  v-if="show2" @click="show2 = !show2" />
+                                <img src="/assets/img/eye.svg" class="settings-password-img icon-password eye-closed"
+                                  v-else @click="show2 = !show2" />
                                 <br />
 
-                                <div
-                                  class="progress"
-                                  id="passwordStrengthBar-os"
-                                >
-                                  <div
-                                    class="progress-bar progress-bar-success"
-                                    role="progressbar"
-                                    aria-valuenow="0"
-                                    aria-valuemin="0"
-                                    aria-valuemax="100"
-                                    :style="'width: '+passwordStrength+'%'"
-                                  >
-                                    <span class="rating"
-                                      >{{ $t('Password_Rating') }}: {{ passwordStrength }}%</span
-                                    >
+                                <div class="progress" id="passwordStrengthBar-os">
+                                  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0"
+                                    aria-valuemin="0" aria-valuemax="100" :style="'width: ' + passwordStrength + '%'">
+                                    <span class="rating">{{ $t('Password_Rating') }}: {{ passwordStrength }}%</span>
                                   </div>
                                 </div>
 
@@ -2017,51 +1541,29 @@
                                 </div>
                               </div>
                             </div>
-                            <div
-                              id="newPassword2-os"
-                              class="form-group has-feedback has-success"
-                            >
-                              <label
-                                for="inputNewPassword2-os"
-                                class="col-sm-4 control-label"
-                                >{{ $t('Confirm_New_Password') }}</label
-                              >
+                            <div id="newPassword2-os" class="form-group has-feedback has-success">
+                              <label for="inputNewPassword2-os" class="col-sm-4 control-label">{{
+                                $t('Confirm_New_Password') }}</label>
                               <div class="col-sm-5" style="position: relative">
-                                <input
-                                  :type="(show3)?'text':'password'"
-                                  class="form-control"
-                                  name="confirmpw"
-                                  id="inputNewPassword2-os"
-                                  autocomplete="off"
-                                  v-model="newPassword2"
-                                />
-                                <img
-                                  src="/assets/img/eye-open.svg"
-                                  class="settings-password-img icon-password eye-open"
-                                  @click="show3 = !show3"
-                                  v-if="show3"
-                                />
-                                <img
-                                  src="/assets/img/eye.svg"
-                                  class="settings-password-img icon-password eye-closed"
-                                  @click="show3 = !show3"
-                                  v-else
-                                />
-                                
-                                <div id="inputNewPassword2-os-Msg" v-if="newPassword1 != newPassword2 && newPassword1!=''">
+                                <input :type="(show3) ? 'text' : 'password'" class="form-control" name="confirmpw"
+                                  id="inputNewPassword2-os" autocomplete="off" v-model="newPassword2" />
+                                <img src="/assets/img/eye-open.svg" class="settings-password-img icon-password eye-open"
+                                  @click="show3 = !show3" v-if="show3" />
+                                <img src="/assets/img/eye.svg" class="settings-password-img icon-password eye-closed"
+                                  @click="show3 = !show3" v-else />
+
+                                <div id="inputNewPassword2-os-Msg"
+                                  v-if="newPassword1 != newPassword2 && newPassword1 != ''">
                                   <p class="help-block" id="nonMatchingPasswordResult">{{ $t('password_not_match') }}</p>
                                 </div>
                               </div>
                             </div>
                             <div class="overview-button-wrapper pt-0 mt-4">
                               <div class="col-sm-5">
-                                <button
-                                  id="submitButtonOS"
-                                  class="btn-dark px-4 me-2 hover-dark-light"
+                                <button id="submitButtonOS" class="btn-dark px-4 me-2 hover-dark-light"
                                   @click="changePWD(vpsid)"
-                                  :disabled = "newPassword1 != newPassword2 || newPassword1=='' || newPassword2=='' || passwordStrength < 80"
-                                >
-                                {{ $t('Change_Password') }}
+                                  :disabled="newPassword1 != newPassword2 || newPassword1 == '' || newPassword2 == '' || passwordStrength < 80">
+                                  {{ $t('Change_Password') }}
                                 </button>
                               </div>
                             </div>
@@ -2069,12 +1571,7 @@
                         </div>
 
                         <!--host-->
-                        <div
-                          class="tab-pane fade"
-                          id="pills-host"
-                          role="tabpanel"
-                          aria-labelledby="pills-host-tab"
-                        >
+                        <div class="tab-pane fade" id="pills-host" role="tabpanel" aria-labelledby="pills-host-tab">
                           <div class="tab-inner py-0 p-mb-0">
                             <h3 class="fs-15 mb-1">{{ $t('Change_Hostname') }}</h3>
 
@@ -2083,27 +1580,19 @@
                             <p class="fs-13-5">{{ $t('New_hostname') }}</p>
 
                             <div class="overview-input mb-4">
-                              <input
-                                type="text"
-                                placeholder="Write new hostname"
-                                id="hostname"
-                                v-model="hostname"
-                              />
+                              <input type="text" placeholder="Write new hostname" id="hostname" v-model="hostname" />
                               <div id="inputHostNameMsg"></div>
                             </div>
 
                             <div class="overview-button-wrapper pt-0 mb-4">
-                              <button
-                                class="btn-dark px-4 me-2 hover-dark-light"
-                                @click="changeHostName(vpsid)"
-                                :disabled = "hostname==''"
-                              >
-                              {{ $t('Change_Hostname') }}
+                              <button class="btn-dark px-4 me-2 hover-dark-light" @click="changeHostName(vpsid)"
+                                :disabled="hostname == ''">
+                                {{ $t('Change_Hostname') }}
                               </button>
                             </div>
                             <p class="fs-13-5 mb-0 inner-sub-title">
                               {{ $t('changed_hostname') }}
-                              
+
                             </p>
                           </div>
                         </div>
@@ -2118,13 +1607,9 @@
       </div>
 
       <!-- if status is not active -->
-      <div
-        class="alert alert-warning mt-2"
-        id="alertUnpaidInvoice"
-        v-if="status != 'Active'"
-      >
-      {{ $t('not_activated') }}
-        
+      <div class="alert alert-warning mt-2" id="alertUnpaidInvoice" v-if="status != 'Active'">
+        {{ $t('not_activated') }}
+
       </div>
 
       <div class="support-table" v-if="status != 'Active'">
@@ -2156,10 +1641,7 @@
                   {{ invoiceInfo.status }}
                 </span>
               </td>
-              <td
-                class="cancelled-cell"
-                v-else-if="invoiceInfo.status == 'Unpaid'"
-              >
+              <td class="cancelled-cell" v-else-if="invoiceInfo.status == 'Unpaid'">
                 <span>
                   {{ invoiceInfo.status }}
                 </span>
@@ -2170,14 +1652,8 @@
                 </span>
               </td>
               <td class="text-center">
-                <a
-                  @click="openInvoiceWindow(invoiceInfo.invoiceid)"
-                  target="_blank"
-                >
-                  <img
-                    src="/assets/img/eye-open.svg"
-                    class="icon-password view-invoice"
-                  />
+                <a @click="openInvoiceWindow(invoiceInfo.invoiceid)" target="_blank">
+                  <img src="/assets/img/eye-open.svg" class="icon-password view-invoice" />
                 </a>
               </td>
             </tr>
@@ -2203,42 +1679,26 @@
             <div class="amounts">
               <!-- <form id="openTicket" enctype="multipart/form-data" method="POST" action="{{route('ticket.open"> -->
               <h4>{{ $t('Subject') }}</h4>
-              <input
-                class="mb-3"
-                name="subject"
-                type="text"
-                placeholder="Write subject"
-                v-model="subject"
-              />
+              <input class="mb-3" name="subject" type="text" placeholder="Write subject" v-model="subject" />
 
               <h4>{{ $t('Describe_the_problem') }}</h4>
-              <textarea
-                class="mb-3"
-                name="message"
-                id=""
-                cols="30"
-                rows="8"
-                v-model="message"
-              ></textarea>
+              <textarea class="mb-3" name="message" id="" cols="30" rows="8" v-model="message"></textarea>
 
               <h4>{{ $t('Department') }}*</h4>
               <select name="department" id="department" v-model="selectedDepartment">
-                <option
-                  v-for="department in departments"
-                  :key="department.id"
-                  :value="department.id"
-                >
+                <option v-for="department in departments" :key="department.id" :value="department.id">
                   {{ department.name }}
                 </option>
               </select>
 
-                <h4>{{ $t('Service_related') }}</h4>
-                <select name="service" id="service" v-model="selectedService">
-                  <option value="0">- None -</option>
-                  <option :value="selectedService">{{ $t('Current_Vps_Service') }}</option>
-                </select>
+              <h4>{{ $t('Service_related') }}</h4>
+              <select name="service" id="service" v-model="selectedService">
+                <option value="0">- None -</option>
+                <option :value="selectedService">{{ $t('Current_Vps_Service') }}</option>
+              </select>
 
-              <button class="btn-dark d-block w-100 mt-5" id="create-ticket" :disabled="subject=='' || selectedDepartment==0" @click="createTicket()">
+              <button class="btn-dark d-block w-100 mt-5" id="create-ticket"
+                :disabled="subject == '' || selectedDepartment == 0" @click="createTicket()">
                 {{ $t('Create_Ticket') }}
               </button>
             </div>
@@ -2262,7 +1722,7 @@ import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
 
 import Highcharts from "highcharts";
-
+import NoPermission from '@/components/NoPermission.vue';
 import Chart from "./Chart.vue";
 const customLink = ref(null);
 const store = useStore();
@@ -2278,9 +1738,9 @@ const chart_color = ref(document.documentElement.getAttribute('data-theme') == '
 const componentKey = ref(1);
 
 watch(() => store.state.theme.theme, (newVal, oldVal) => {
-  if(newVal == 'dark') chart_color.value = '#1C1C1E';
+  if (newVal == 'dark') chart_color.value = '#1C1C1E';
   else chart_color.value = '#ffffff';
-  componentKey.value = componentKey.value +1;
+  componentKey.value = componentKey.value + 1;
 });
 
 const route = useRoute();
@@ -2346,8 +1806,8 @@ const params = ref({
 });
 
 const openInNewTab = (url) => {
-    const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
-    if (newWindow) newWindow.opener = null
+  const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+  if (newWindow) newWindow.opener = null
 }
 
 const openInvoiceWindow = (invoice_id) => {
@@ -2463,10 +1923,10 @@ function changeHostName(vpsid) {
       hostname: hostname.value
     })
     .then((res) => {
-      if(res.data== 'Already Exist.'){
+      if (res.data == 'Already Exist.') {
         showLoader(false);
         $toast.error('Inputed New hostname already exist');
-      } else{
+      } else {
         commonApi
           .runPostApi("/overview/changehostName", {
             vpsid: vpsid,
@@ -2596,7 +2056,7 @@ const createTicket = () => {
       showLoader(false);
       if (res.data.result == "success") {
         $toast.success("Successfully created ticket!");
-		openModal.value = false;
+        openModal.value = false;
       } else $toast.warning("Cannot connect to whmcs api.");
     })
     .catch((e) => {
@@ -2626,12 +2086,12 @@ const getOverviewData = () => {
       vpsid.value = res.data.vpsid;
       vps_info.value = res.data.vps_info;
       oslists.value = res.data.oslists;
-      if(oslists.value && oslists.value.length !=0) selected_os_id.value = res.data.oslists[0].osid;
+      if (oslists.value && oslists.value.length != 0) selected_os_id.value = res.data.oslists[0].osid;
       cpu.value = res.data.cpu;
 
       invoiceInfo.value = res.data.invoiceInfo;
       departments.value = res.data.departments;
-      if(departments.value && departments.value.length !=0) selectedDepartment.value = res.data.departments[0].id;
+      if (departments.value && departments.value.length != 0) selectedDepartment.value = res.data.departments[0].id;
       ip_list.value = res.data.ip_list;
       status.value = res.data.status;
       rdnslist.value = res.data.rdnslist;
@@ -2731,50 +2191,49 @@ function revertColor(color) {
 
 const passwordStrength = computed(() => {
   var pwStrengthErrorThreshold = 50;
-    var pwStrengthWarningThreshold = 75;
+  var pwStrengthWarningThreshold = 75;
 
-			var pw = newPassword1.value;
+  var pw = newPassword1.value;
 
-			// Check if the password contains any disallowed special symbols
+  // Check if the password contains any disallowed special symbols
   if (/[^A-Za-z0-9!@]/.test(pw)) {
     // Set password strength to 0 if disallowed special symbols are found
     return 10;
   }
 
-			// Update the previous password value
+  // Update the previous password value
 
-			var pwlength = (pw.length);
-			if (pwlength > 7) pwlength = 5;
-			else pwlength = 2;
+  var pwlength = (pw.length);
+  if (pwlength > 7) pwlength = 5;
+  else pwlength = 2;
 
-			var numnumeric = pw.replace(/[0-9]/g, "");
-			var numeric = (pw.length - numnumeric.length);
-			if (numeric > 3) numeric = 3;
+  var numnumeric = pw.replace(/[0-9]/g, "");
+  var numeric = (pw.length - numnumeric.length);
+  if (numeric > 3) numeric = 3;
 
-			// Update the regular expression to only match "!" and "@"
-			var symbols = pw.replace(/[!@]/g, "");
-			var numsymbols = (pw.length - symbols.length);
-			if (numsymbols > 3) numsymbols = 3;
+  // Update the regular expression to only match "!" and "@"
+  var symbols = pw.replace(/[!@]/g, "");
+  var numsymbols = (pw.length - symbols.length);
+  if (numsymbols > 3) numsymbols = 3;
 
-			var numupper = pw.replace(/[A-Z]/g, "");
-			var upper = (pw.length - numupper.length);
-			if (upper > 3) upper = 3;
-			var pwstrength = ((pwlength * 10) - 20) + (numeric * 10) + (numsymbols * 15) + (upper * 10);
-			if (pwstrength < 0) pwstrength = 0;
-			if (pwstrength > 100) pwstrength = 100;
-  
-        return pwstrength;
+  var numupper = pw.replace(/[A-Z]/g, "");
+  var upper = (pw.length - numupper.length);
+  if (upper > 3) upper = 3;
+  var pwstrength = ((pwlength * 10) - 20) + (numeric * 10) + (numsymbols * 15) + (upper * 10);
+  if (pwstrength < 0) pwstrength = 0;
+  if (pwstrength > 100) pwstrength = 100;
+
+  return pwstrength;
 });
 
-
+useAuth().getUser();
 </script>
 
 <style scoped>
-
 @media screen and (max-width: 767px) {
-    .reverseDNSContainer {
-      display: block !important;
-      /* Your styles here */
-    }
+  .reverseDNSContainer {
+    display: block !important;
+    /* Your styles here */
   }
+}
 </style>

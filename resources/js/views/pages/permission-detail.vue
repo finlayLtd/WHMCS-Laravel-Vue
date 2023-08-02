@@ -19,7 +19,7 @@
                   <label class="checkbox-inline">
                     <input type="checkbox" name="profile" v-model="profile" />
                     {{ $t('permission_detail_1') }}
-                    
+
                   </label>
                   <br />
                   <label class="checkbox-inline">
@@ -33,79 +33,63 @@
                   </label>
                   <br />
                   <label class="checkbox-inline">
-                    <input
-                      type="checkbox"
-                      name="manageproducts"
-                      v-model="manageproducts"
-                    />
+                    <input type="checkbox" name="manageproducts" v-model="manageproducts" />
                     {{ $t('permission_detail_4') }}
-                    
+
                   </label>
                   <br />
                   <label class="checkbox-inline">
-                    <input
-                      type="checkbox"
-                      name="productsso"
-                      v-model="productsso"
-                    />
+                    <input type="checkbox" name="productsso" v-model="productsso" />
                     {{ $t('permission_detail_5') }}
-                    
+
                   </label>
                   <br />
                   <label class="checkbox-inline">
                     <input type="checkbox" name="domains" v-model="domains" />
                     {{ $t('permission_detail_6') }}
-                    
+
                   </label>
                   <br />
                   <label class="checkbox-inline">
-                    <input
-                      type="checkbox"
-                      name="managedomains"
-                      v-model="managedomains"
-                    />
+                    <input type="checkbox" name="managedomains" v-model="managedomains" />
                     {{ $t('permission_detail_7') }}
-                    
+
                   </label>
                   <br />
                   <label class="checkbox-inline">
                     <input type="checkbox" name="invoices" v-model="invoices" />
                     {{ $t('permission_detail_8') }}
-                    
+
                   </label>
                   <br />
                   <label class="checkbox-inline">
                     <input type="checkbox" name="quotes" v-model="quotes" />
                     {{ $t('permission_detail_9') }}
-                    
+
                   </label>
                   <br />
                   <label class="checkbox-inline">
                     <input type="checkbox" name="tickets" v-model="tickets" />
                     {{ $t('permission_detail_10') }}
-                    
+
                   </label>
                   <br />
                   <label class="checkbox-inline">
-                    <input
-                      type="checkbox"
-                      name="affiliates"
-                      v-model="affiliates"
-                    />
+                    <input type="checkbox" name="affiliates" v-model="affiliates" />
                     {{ $t('permission_detail_11') }}
-                    
+
                   </label>
                   <br />
                   <label class="checkbox-inline">
                     <input type="checkbox" name="emails" v-model="emails" />
                     {{ $t('permission_detail_12') }}
-                    
+
                   </label>
                   <br />
                   <label class="checkbox-inline">
                     <input type="checkbox" name="orders" v-model="orders" />
                     {{ $t('permission_detail_13') }}
-                    
+
                   </label>
                   <br />
                 </div>
@@ -131,6 +115,7 @@ import { showLoader } from "@/plugins/loading.js";
 // toast
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
+import NoPermission from '@/components/NoPermission.vue';
 const $toast = useToast();
 
 const route = useRoute();
@@ -252,5 +237,4 @@ const saveChanges = () => {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

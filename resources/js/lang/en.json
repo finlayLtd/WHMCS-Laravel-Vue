@@ -53,7 +53,7 @@
     "Email_Address" : "Email Address",
     "tips_title" : "Tips for a good password",
     "tips_content1" : "Use both upper and lowercase characters",
-    "tips_content2" : "Include at least one symbol (only ! and @)",
+    "tips_content2" : "Include at least one symbol (only {'!'} and {'@'})",
     "tips_content3" : "Don't use dictionary words and special characters",
     "Password_Rating" : "Password Rating",
     "Agree_Policy":"I agree to the User Agreement, and I have read the Privacy Policy.",

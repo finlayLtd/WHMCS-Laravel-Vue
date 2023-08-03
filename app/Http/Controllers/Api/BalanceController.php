@@ -9,6 +9,7 @@ use Auth;
 use sburina\Whmcs;
 use App\Http\Controllers\Controller;
 use App\Virtualizor\Admin;
+use App\Models\User;
 
 class BalanceController extends Controller
 {
@@ -32,6 +33,22 @@ class BalanceController extends Controller
         $totalresults = 0;
         $startnumber = 0;
         $numreturned = 0;
+
+        // get credit
+        $latest_user_data = (new \Sburina\Whmcs\Client)->post([
+            'action' => 'GetClientsDetails',
+            'clientid' => Auth::user()->client_id,
+        ]);
+
+        if($latest_user_data['result'] == 'success'){
+            $user = User::where('whmcs_id' ,  Auth::user()->whmcsc_id)->first();
+            if($user){
+                if($user->credit != $latest_user_data['credit']){
+                    $user->credit = $latest_user_data['credit'];
+                    $user->save();
+                }
+            }
+        }
 
         if($request->order && $request->orderby)
         {

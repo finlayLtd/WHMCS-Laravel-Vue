@@ -10,6 +10,7 @@ use DOMXPath;
 use sburina\Whmcs;
 use App\Enduser;
 use App\Admin;
+use App\Models\User;
 
 class ServersController extends Controller
 {
@@ -27,6 +28,22 @@ class ServersController extends Controller
         $order_state_response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetOrderStatuses',
         ]);
+
+        // get credit
+        $latest_user_data = (new \Sburina\Whmcs\Client)->post([
+            'action' => 'GetClientsDetails',
+            'clientid' => Auth::user()->client_id,
+        ]);
+
+        if($latest_user_data['result'] == 'success'){
+            $user = User::where('whmcs_id' ,  Auth::user()->whmcsc_id)->first();
+            if($user){
+                if($user->credit != $latest_user_data['credit']){
+                    $user->credit = $latest_user_data['credit'];
+                    $user->save();
+                }
+            }
+        }
 
         if($order_state_response['result'] == 'success'){
             foreach ($order_state_response['statuses']['status'] as $state_info)

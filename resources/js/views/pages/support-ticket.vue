@@ -212,7 +212,7 @@
 								<template v-for="orderInfo in orders">
 									<template v-for="orderValue in orderInfo.lineitems.lineitem" :key="orderValue.relid">
 										<option :value="orderValue.relid">
-											{{ orderValue.product }} - {{ orderValue.status }}
+											{{ orderValue.product }} - {{ orderValue.status }} - {{orderValue.domain}}
 										</option>
 									</template>
 								</template>

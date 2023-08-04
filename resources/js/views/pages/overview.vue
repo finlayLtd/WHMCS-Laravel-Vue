@@ -267,8 +267,14 @@
                           </p>
                         </div>
                         <div class="server-list-options me-3 me-lg-4" v-if="order_product_info.status == 'Active'">
-                          <button class="active-badge">
-                            <span class="active-dot"></span>{{ $t('Active') }}
+                          <button class="active-badge" v-if="vps_info && vpsid && vps_info.vps_data">
+                            <template v-if="vps_info.vps_data[vpsid].status!=0">
+                              <span class="active-dot"></span>{{ $t('Active') }}
+                            </template>
+                            <template v-else>
+                              <span class="active-dot" style="background: red;"></span>
+                              <span style="color: red;">{{ $t('Offline') }}</span>
+                            </template>
                           </button>
                         </div>
                       </div>
@@ -315,7 +321,6 @@
                           <h4 class="title2">{{ $t('RAM') }}</h4>
                           <p class="description2">
                             <span v-if="vps_info && vpsid && vps_info.vps_data">
-                              <!-- {{number_format(($vps_info['vps_data'][$vpsid]['used_ram']/$vps_info['vps_data'][$vpsid]['ram'])*100, 2)}} -->
                               {{
                                 (
                                   (vps_info.vps_data[vpsid].used_ram /
@@ -339,7 +344,6 @@
                           <h4 class="title2">{{ $t('Storage') }}</h4>
                           <p class="description2" v-if="vps_info">
                             <span>
-                              <!-- {{number_format($vps_info['vps_data'][$vpsid]['used_disk'], 2)}}  -->
                               {{
                                 vps_info.vps_data[vpsid].used_disk.toFixed(2)
                               }}
@@ -1897,7 +1901,7 @@ function TurnOffVPS(vpsid) {
     .then((res) => {
       showLoader(false);
       if (res.status == 200) {
-        $toast.success("Shutdown signal has been sent to the VPS");
+        $toast.success("VPS has been stopped successfully");
       } else {
         $toast.error(res.data);
       }

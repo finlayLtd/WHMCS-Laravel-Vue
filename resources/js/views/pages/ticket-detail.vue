@@ -1,15 +1,14 @@
 <template>
   <section class="dashboard">
-    <!-- @auth -->
-    <!-- @if(in_array('tickets', Auth::user()->permissions)) -->
+
     <div class="container">
       <a ref="customLink" style="display: none;" target="_blank">Custom Link</a>
       <div class="title-button-wrapper ticket-detail">
         <router-link to="/support-ticket">
           <img class="status-arrow" src="/assets/img/status-arrow.svg" alt="" />
         </router-link>
-        <h3 class="ticket-status-title color-in-work">
-          {{ ticket_detail.status }}
+        <h3 class="ticket-status-title color-in-work" v-if="ticket_detail && ticket_detail.status">
+          {{  $t(ticket_detail.status)  }}
         </h3>
         <h2 class="title mb-0 mt-2">{{ $t('Ticket') }}#{{ route.params.id }}</h2>
       </div>
@@ -34,7 +33,7 @@
 
                         <div class="message-content-wrapper">
                           <div class="message-body" v-if="reply.message && reply.message != ' '">
-                            <div style="text-align: left;" v-html=reply.message>
+                            <div style="text-align: left;" v-html="formattedText(reply.message)">
                             </div>
                           </div>
                           <div class="message-body message-attachment-body" style="width: fit-content"
@@ -49,7 +48,7 @@
                           </div>
                         </div>
                       </div>
-                      <!-- receiver -->
+
                       <div class="message-item message-sent" v-else>
                         <div class="message-item-header">
                           <div class="message-sender">
@@ -61,7 +60,7 @@
 
                         <div class="message-content-wrapper">
                           <div class="message-body" v-if="reply.message && reply.message != ' '">
-                            <div v-html="reply.message" style="text-align: left;">
+                            <div  style="text-align: left;" v-html="formattedText(reply.message)">
                             </div>
                           </div>
 
@@ -81,8 +80,7 @@
                       </div>
                     </div>
                   </div>
-                  <!-- <form method="POST" action="/sendReply" enctype="multipart/form-data"> -->
-                  <!-- @csrf -->
+
                   <div class="message-send-area-wrapper mt-4">
                     <div class="upload-attachment">
                       <label class="file-label" for="file"></label>
@@ -106,7 +104,6 @@
                       {{ $t('Send') }}
                     </button>
                   </div>
-                  <!-- </form> -->
                 </div>
               </div>
             </div>
@@ -116,14 +113,9 @@
 
       <template v-else>
         <NoPermission />
-      </template>
+      </template> 
 
     </div>
-    <!-- @else -->
-    <!-- <NoPermission/> -->
-    <!-- @endif -->
-    <!-- @endauth -->
-
   </section>
 </template>
 
@@ -155,6 +147,10 @@ const params = ref({
   orderby: "",
   order: "",
 });
+
+const formattedText = (text) => {
+  return text.replace(/\n/g, "<br>");
+}
 
 const getTicketDetail = () => {
   showLoader(true);

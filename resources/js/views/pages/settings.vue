@@ -245,7 +245,7 @@
                     <div class="mb-4">
                       <div>
                         <input type="email" id="invite_email" name="invite_email"
-                          placeholder="Email address to send invite" required class="form-control"
+                          :placeholder="$t('invite_placeholder')" required class="form-control"
                           v-model="invite_email" />
                       </div>
                       <div class="form-group selectBoxes mt-4">

@@ -114,7 +114,7 @@
                         </td>
                         <td :class="getCellClass(invoice.status)">
                           <span>
-                            {{ invoice.status }}
+                            {{  $t(invoice.status)  }}
                           </span>
                         </td>
                         <td class="text-center">

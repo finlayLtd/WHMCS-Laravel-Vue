@@ -39,14 +39,14 @@
 									<li class="nav-item" role="presentation">
 										<button class="nav-link active" id="pills-all-tab" data-bs-toggle="pill"
 											data-bs-target="#pills-all" type="button" role="tab" aria-controls="pills-all"
-											aria-selected="true">All</button>
+											aria-selected="true">{{  $t('All')  }}</button>
 									</li>
 									<li v-for="statu in status" :key="statu.title" class="nav-item" role="presentation">
 										<button :id="getTabLabelId(statu.title)" class="nav-link" data-bs-toggle="pill"
 											:data-bs-target="'#' + getTabId(statu.title)" type="button" role="tab"
 											:aria-controls="getTabId(statu.title)" :aria-selected="false">
-
-											{{ statu.title }}
+											<template v-if="statu.title == 'Customer-Reply'">{{   $t('Customer_Reply')   }}</template>
+                        					<template v-else>{{ $t(statu.title) }}</template>
 										</button>
 									</li>
 								</ul>
@@ -90,18 +90,18 @@
 												</router-link>
 												<div class="support-item-status">
 													<div v-if="ticket.status === 'Answered'" class="successful-cell">
-														<span class="fs-15 color-in-work">{{ ticket.status }}</span>
+														<span class="fs-15 color-in-work">{{  $t(ticket.status)  }}</span>
 													</div>
 													<div v-else-if="ticket.status === 'Closed'" class="cancelled-cell">
-														<span class="fs-15 color-in-work">{{ ticket.status }}</span>
+														<span class="fs-15 color-in-work">{{  $t(ticket.status)  }}</span>
 													</div>
 													<div v-else class="in-progress-cell">
-														<span class="fs-15 color-in-work">{{ ticket.status }}</span>
+														<span class="fs-15 color-in-work">{{  $t(ticket.status)  }}</span>
 													</div>
 												</div>
 											</div>
 											<div class="support-item-detail">
-												<p class="fs-15 mb-0" v-html="ticket.subject"></p>
+												<p class="fs-15 mb-0" v-html="formattedText(ticket.subject)"></p>
 											</div>
 										</div>
 									</div>
@@ -275,6 +275,12 @@ const paginatedTickets = computed(() => {
 	const endIndex = startIndex + perPage;
 	return tickets.value.slice(startIndex, endIndex);
 });
+
+
+const formattedText = (text) => {
+  return text.replace(/\n/g, "<br>");
+}
+
 const getTicketsData = () => {
 	showLoader(true);
 	commonApi.runGetApi('/support-ticket', params.value).then((res) => {

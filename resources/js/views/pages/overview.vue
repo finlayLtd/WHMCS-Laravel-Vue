@@ -96,13 +96,13 @@
                 <table>
                   <tbody v-if="detail_info">
                     <tr>
-                      <td><img src="/assets/img/cpu.png" alt="" />CPU</td>
+                      <td><img src="/assets/img/cpu.png" alt="" />{{  $t('CPU')  }}</td>
                       <td>{{ detail_info[0] }}</td>
                       <td></td>
                     </tr>
 
                     <tr>
-                      <td><img src="/assets/img/ram.png" alt="" />Ram</td>
+                      <td><img src="/assets/img/ram.png" alt="" />{{  $t('Ram')  }}</td>
                       <td>{{ detail_info[1] }}</td>
                       <td></td>
                     </tr>
@@ -281,10 +281,10 @@
                           <img src="/assets/img/cpu.png" alt="" />
                         </div>
                         <div class="info">
-                          <h4 class="title2">CPU</h4>
+                          <h4 class="title2">{{  $t('CPU')  }}</h4>
                           <p class="description2">
-                            <span>{{ cpu.percent }}%</span> of
-                            {{ detail_info[0] }} CPU
+                            <span>{{ cpu.percent }}%</span> {{  $t('of')  }}
+                            {{ detail_info[0] }} 
                           </p>
                         </div>
                       </div>
@@ -295,7 +295,7 @@
                           <img src="/assets/img/ram.png" alt="" />
                         </div>
                         <div class="info">
-                          <h4 class="title2">RAM</h4>
+                          <h4 class="title2">{{  $t('RAM')  }}</h4>
                           <p class="description2">
                             <span v-if="vps_info && vpsid && vps_info.vps_data">
                               <!-- {{number_format(($vps_info['vps_data'][$vpsid]['used_ram']/$vps_info['vps_data'][$vpsid]['ram'])*100, 2)}} -->
@@ -365,7 +365,7 @@
                       backgroundColor: chart_color,
                     },
                     title: {
-                      text: 'CPU Usage',
+                      text: $t('CPU_Usage'),
                       align: 'left',
                       style: {
                         color: revertColor(chart_color),
@@ -378,7 +378,7 @@
                           'Time: ' +
                           Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
                           '<br/>' +
-                          'CPU Usage rate: ' +
+                          $t('CPU_Usage_rate') + ':' +
                           this.y +
                           '%'
                         );
@@ -394,7 +394,7 @@
                     },
                     yAxis: {
                       title: {
-                        text: 'CPU Usage rate',
+                        text: $t('CPU_Usage_rate'),
                       },
                       labels: {
                         style: {
@@ -441,7 +441,7 @@
 
                     series: [
                       {
-                        name: 'CPU',
+                        name: $t('CPU'),
                         data: cpu_data_state.map(([date, value]) => [
                           new Date(date).getTime(),
                           value,
@@ -458,7 +458,7 @@
                       backgroundColor: chart_color,
                     },
                     title: {
-                      text: 'RAM Usage',
+                      text: $t('RAM_Usage'),
                       align: 'left',
                       style: {
                         color: revertColor(chart_color),
@@ -471,7 +471,7 @@
                           'Time: ' +
                           Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
                           '<br/>' +
-                          'RAM Usage rate: ' +
+                          $t('RAM_Usage_rate')+': ' +
                           this.y +
                           'MB'
                         );
@@ -487,7 +487,7 @@
                     },
                     yAxis: {
                       title: {
-                        text: 'RAM Usage rate',
+                        text: $t('RAM_Usage_rate'),
                       },
                       labels: {
                         style: {
@@ -534,7 +534,7 @@
 
                     series: [
                       {
-                        name: 'RAM',
+                        name: $t('RAM'),
                         data: ram_data_state.map(([date, value]) => [
                           new Date(date).getTime(),
                           value,
@@ -553,7 +553,7 @@
                       backgroundColor: chart_color,
                     },
                     title: {
-                      text: 'Disk Usage',
+                      text: $t('Disk_Usage'),
                       align: 'left',
                       style: {
                         color: revertColor(chart_color),
@@ -566,7 +566,7 @@
                           'Time: ' +
                           Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
                           '<br/>' +
-                          'Disk Usage rate: ' +
+                          $t('Disk_Usage')+': ' +
                           this.y +
                           'MB'
                         );
@@ -582,7 +582,7 @@
                     },
                     yAxis: {
                       title: {
-                        text: 'Disk Usage rate',
+                        text: $t('Disk_Usage'),
                       },
                       labels: {
                         style: {
@@ -629,7 +629,7 @@
 
                     series: [
                       {
-                        name: 'Disk',
+                        name: $t('Disk'),
                         data: disk_data_state.map(([date, value]) => [
                           new Date(date).getTime(),
                           value,
@@ -647,7 +647,7 @@
                       backgroundColor: chart_color,
                     },
                     title: {
-                      text: 'Inode Information',
+                      text: $t('Inode_Information'),
                       align: 'left',
                       style: {
                         color: revertColor(chart_color),
@@ -660,7 +660,7 @@
                           'Time: ' +
                           Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
                           '<br/>' +
-                          'Innode Usage rate: ' +
+                          $t('Inode_Information')+': ' +
                           this.y +
                           'Blocks'
                         );
@@ -676,7 +676,7 @@
                     },
                     yAxis: {
                       title: {
-                        text: 'Inode Usage rate',
+                        text: $t('Inode_Information'),
                       },
                       labels: {
                         style: {
@@ -723,7 +723,7 @@
 
                     series: [
                       {
-                        name: 'Inode',
+                        name: $t('Inode'),
                         data: inode_data_state.map(([date, value]) => [
                           new Date(date).getTime(),
                           value,
@@ -742,7 +742,7 @@
                       backgroundColor: chart_color,
                     },
                     title: {
-                      text: 'Network Download Information',
+                      text: $t('Network_Download_Information'),
                       align: 'left',
                       style: {
                         color: revertColor(chart_color),
@@ -755,7 +755,7 @@
                           'Time: ' +
                           Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
                           '<br/>' +
-                          'Download rate: ' +
+                          $t('Download_rate')+': ' +
                           this.y +
                           'MB'
                         );
@@ -771,7 +771,7 @@
                     },
                     yAxis: {
                       title: {
-                        text: 'Network Download rate',
+                        text: $t('Download_rate'),
                       },
                       labels: {
                         style: {
@@ -818,7 +818,7 @@
 
                     series: [
                       {
-                        name: 'Network Download',
+                        name: $t('Network_Download'),
                         data: net_in_data_state.map(([date, value]) => [
                           new Date(date).getTime(),
                           value,
@@ -835,7 +835,7 @@
                       backgroundColor: chart_color,
                     },
                     title: {
-                      text: 'Network Upload Information',
+                      text: $t('Network_Upload_Information'),
                       align: 'left',
                       style: {
                         color: revertColor(chart_color),
@@ -848,7 +848,7 @@
                           'Time: ' +
                           Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
                           '<br/>' +
-                          'Upload rate: ' +
+                          $t('Upload_rate')+': ' +
                           this.y +
                           'MB'
                         );
@@ -864,7 +864,7 @@
                     },
                     yAxis: {
                       title: {
-                        text: 'Network Upload rate',
+                        text: $t('Upload_rate'),
                       },
                       labels: {
                         style: {
@@ -911,7 +911,7 @@
 
                     series: [
                       {
-                        name: 'Network Upload',
+                        name: $t('Network_Upload'),
                         data: net_out_data_state.map(([date, value]) => [
                           new Date(date).getTime(),
                           value,
@@ -930,7 +930,7 @@
                       backgroundColor: chart_color,
                     },
                     title: {
-                      text: 'Network Information',
+                      text: $t('Network_Information'),
                       align: 'left',
                       style: {
                         color: revertColor(chart_color),
@@ -943,7 +943,7 @@
                           'Time: ' +
                           Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
                           '<br/>' +
-                          'Network Usage rate: ' +
+                          $t('Network_Usage_rate')+': ' +
                           this.y +
                           'MB'
                         );
@@ -959,7 +959,7 @@
                     },
                     yAxis: {
                       title: {
-                        text: 'Network rate',
+                        text: $t('Network_Usage_rate'),
                       },
                       labels: {
                         style: {
@@ -1006,7 +1006,7 @@
 
                     series: [
                       {
-                        name: 'Network',
+                        name: $t('Network'),
                         data: net_total_data_state.map(([date, value]) => [
                           new Date(date).getTime(),
                           value,

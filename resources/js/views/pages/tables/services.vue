@@ -27,7 +27,7 @@
                 :class="['nav-link', state === 'Active' ? 'active' : '']" :id="'pills-' + state + '-tab'"
                 data-bs-toggle="pill" :data-bs-target="'#pills-' + state" type="button" role="tab"
                 :aria-controls="'pills-' + state" :aria-selected="state === 'Active'" @click="clickState(state)">
-                {{ state }}
+                {{  $t(state)  }}
               </button>
             </li>
           </ul>
@@ -83,12 +83,12 @@
                       </div>
                       <div class="list-item-detail">
                         <h2 class="list-name">{{ order.dedicatedip }}</h2>
-                        <h3 class="detail">{{ $t('Created_at') }} at {{ order.regdate }}</h3>
+                        <h3 class="detail">{{ $t('Created_at') }} {{ order.regdate }}</h3>
                         <h3 class="detail" style="margin-top:5px;">{{ $t('Due_date_at') }} &nbsp;{{ order.nextduedate }}
                         </h3>
                       </div>
                       <div v-if="state === 'Active'" class="server-list-options">
-                        <button class="active-badge"><span class="active-dot"></span>Active</button>
+                        <button class="active-badge"><span class="active-dot"></span>{{  $t('Active')  }}</button>
                       </div>
                     </div>
                   </div>

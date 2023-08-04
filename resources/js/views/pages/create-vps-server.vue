@@ -128,7 +128,7 @@
             <div class="mb-3">
               <label for="email" class="form-label">{{ $t('VPS_Hostname') }}</label>
               <div style="display: flex">
-                <input type="text" class="form-control" placeholder="hostname" id="hostname" name="hostname"
+                <input type="text" class="form-control" :placeholder="$t('hostname')" id="hostname" name="hostname"
                   v-model="hostname" />
                 <button type="button" class="btn btn-link" style="padding: 10px" id="randomizeButton"
                   @click="hostname = randomizehostname()">

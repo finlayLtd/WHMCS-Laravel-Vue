@@ -58,14 +58,15 @@
                       <button class="nav-link active" id="pills-all-tab" data-bs-toggle="pill" data-bs-target="#pills-all"
                         type="button" role="tab" aria-controls="pills-all" aria-selected="true"
                         @click="ticketStatus = 'All'">
-                        All
+                        {{  $t('All')  }}
                       </button>
                     </li>
                     <li v-for="statu in status" :key="statu.title" class="nav-item" role="presentation">
                       <button :id="getTabLabelId(statu.title)" class="nav-link" data-bs-toggle="pill"
                         :data-bs-target="'#' + getTabId(statu.title)" type="button" role="tab"
                         :aria-controls="getTabId(statu.title)" :aria-selected="false" @click="ticketStatus = statu.title">
-                        {{ statu.title }}
+                        <template v-if="statu.title == 'Customer-Reply'">{{   $t('Customer_Reply')   }}</template>
+                        <template v-else>{{ $t(statu.title) }}</template>
                       </button>
                     </li>
                   </ul>
@@ -97,12 +98,12 @@
                           #{{ ticket.tid }}
                         </router-link>
                       </td>
-                      <td v-html="ticket.subject"></td>
-                      <td class="refund-request">{{ ticket.priority }}</td>
+                      <td v-html="formattedText(ticket.subject)"></td>
+                      <td class="refund-request">{{  $t(ticket.priority)  }}</td>
                       <td class="date-cell">{{ ticket.date }}</td>
                       <td :class="getCellClass(ticket.status)">
                         <span>
-                          {{ ticket.status }}
+                          {{  $t(ticket.status)  }}
                         </span>
                       </td>
                     </tr>
@@ -199,6 +200,10 @@ function getTabLabelId(title) {
 
 function slugify(text) {
   return text.toLowerCase().replace(/ /g, '-');
+}
+
+const formattedText = (text) => {
+  return text.replace(/\n/g, "<br>");
 }
 
 

@@ -18,22 +18,22 @@ class SSOController extends Controller
 
     public function invoice_detail_sso(Request $request)
     {
-        $invoice_id  = $request['params'];
+        $invoice_id = $request['params'];
 
         $sso_url = (new \Sburina\Whmcs\Client)->post([
             'action' => 'CreateSsoToken',
             'user_id' => Auth::user()->whmcs_id,
             'destination' => 'sso:custom_redirect',
-            
-            'sso_redirect_path' => 'viewinvoice.php?id='.$invoice_id,
+
+            'sso_redirect_path' => 'viewinvoice.php?id=' . $invoice_id,
         ]);
 
-        if($sso_url['result'] == 'success'){
+        if ($sso_url['result'] == 'success') {
             return response()->json([
                 'result' => 'success',
                 'redirect_url' => $sso_url['redirect_url'],
             ]);
-        } else{
+        } else {
             return response()->json([
                 'result' => 'failed',
                 'redirect_url' => $sso_url['redirect_url'],
@@ -51,12 +51,12 @@ class SSOController extends Controller
             'sso_redirect_path' => 'clientarea.php?action=addfunds',
         ]);
 
-        if($sso_url['result'] == 'success'){
+        if ($sso_url['result'] == 'success') {
             return response()->json([
                 'result' => 'success',
                 'redirect_url' => $sso_url['redirect_url'],
             ]);
-        } else{
+        } else {
             return response()->json([
                 'result' => 'failed',
                 'redirect_url' => $sso_url['redirect_url'],
@@ -64,9 +64,9 @@ class SSOController extends Controller
         }
     }
 
-    
 
-    
+
+
 
     public function connect_vnc_sso(Request $request)
     {
@@ -74,15 +74,15 @@ class SSOController extends Controller
             'action' => 'CreateSsoToken',
             'user_id' => Auth::user()->originUserData['id'],
             'destination' => 'sso:custom_redirect',
-            'sso_redirect_path' => 'clientarea.php?action=productdetails&id='.$request->relid.'&act=vnc&novnc=1&jsnohf=1&svs='.$request->vpsid,
+            'sso_redirect_path' => 'clientarea.php?action=productdetails&id=' . $request->relid . '&act=vnc&novnc=1&jsnohf=1&svs=' . $request->vpsid,
         ]);
 
-        if($sso_url['result'] == 'success'){
+        if ($sso_url['result'] == 'success') {
             return response()->json([
                 'result' => 'success',
                 'redirect_url' => $sso_url['redirect_url'],
             ]);
-        } else{
+        } else {
             return response()->json([
                 'result' => 'failed',
                 'redirect_url' => $sso_url['redirect_url'],
@@ -90,21 +90,22 @@ class SSOController extends Controller
         }
     }
 
-    public function get_analysis_data_sso(Request $request){
+    public function get_analysis_data_sso(Request $request)
+    {
         $sso_url = (new \Sburina\Whmcs\Client)->post([
             'action' => 'CreateSsoToken',
             'user_id' => Auth::user()->originUserData['id'],
             'destination' => 'sso:custom_redirect',
-            'sso_redirect_path' => 'clientarea.php?action=productdetails&id='.$request->relid.'&api=json&act=monitor&svs='.$request->vpsid.'&show='.date("Ym"),
+            'sso_redirect_path' => 'clientarea.php?action=productdetails&id=' . $request->relid . '&api=json&act=monitor&svs=' . $request->vpsid . '&show=' . date("Ym"),
         ]);
-        
-        if($sso_url['result'] == 'success'){
+
+        if ($sso_url['result'] == 'success') {
             return response()->json([
                 'result' => 'success',
                 'token' => $sso_url['access_token'],
                 'redirect_url' => $sso_url['redirect_url'],
             ]);
-        } else{
+        } else {
             return response()->json([
                 'result' => 'failed',
                 'redirect_url' => $sso_url['redirect_url'],
@@ -112,7 +113,7 @@ class SSOController extends Controller
         }
     }
 
-    
 
-    
+
+
 }

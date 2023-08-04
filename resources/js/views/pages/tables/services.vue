@@ -27,7 +27,7 @@
                 :class="['nav-link', state === 'Active' ? 'active' : '']" :id="'pills-' + state + '-tab'"
                 data-bs-toggle="pill" :data-bs-target="'#pills-' + state" type="button" role="tab"
                 :aria-controls="'pills-' + state" :aria-selected="state === 'Active'" @click="clickState(state)">
-                {{  $t(state)  }}
+                {{ $t(state) }}
               </button>
             </li>
           </ul>
@@ -82,13 +82,34 @@
                         <img class="dark-img-filter" src="assets/img/cloud-connection.png" alt="">
                       </div>
                       <div class="list-item-detail">
-                        <h2 class="list-name">{{ order.dedicatedip }}</h2>
+                        <div style="display: flex; justify-content: space-between;">
+                          <!-- main ip address -->
+                          <h2 class="list-name">
+                            {{ order.dedicatedip }}
+                            <div class="server-list-options"
+                              style="z-index: 999; top: 0px !important; position: inherit; display: inline-block;"
+                              v-if="order.assignedips">
+                              <div class="options-toggle dropdown-toggle hideIcon" style="padding-right: 10px; padding-left: 10px; background: none;
+                                
+                            " data-bs-toggle="dropdown">
+                                <span class="badge bg-dark">
+                                  {{ count_ips(order.assignedips) }}
+                                </span>
+                              </div>
+                              <div class="options-toggle-dropdown dropdown-menu dropdown-menu-end" style="padding: 10px !important;
+                                box-shadow: 2px 3px 2px rgb(200,200,200)" v-html="formattedText(order.assignedips)">
+                              </div>
+                            </div>
+                          </h2>
+
+                        </div>
+
                         <h3 class="detail">{{ $t('Created_at') }} {{ order.regdate }}</h3>
                         <h3 class="detail" style="margin-top:5px;">{{ $t('Due_date_at') }} &nbsp;{{ order.nextduedate }}
                         </h3>
                       </div>
                       <div v-if="state === 'Active'" class="server-list-options">
-                        <button class="active-badge"><span class="active-dot"></span>{{  $t('Active')  }}</button>
+                        <button class="active-badge"><span class="active-dot"></span>{{ $t('Active') }}</button>
                       </div>
                     </div>
                   </div>
@@ -137,6 +158,7 @@ import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 import Pagination from '@/components/Pagination.vue';
 import NoPermission from '@/components/NoPermission.vue';
+
 const totalPages = ref(0);
 const perPage_servers = 9;
 
@@ -146,6 +168,15 @@ function paginatedServers(state) {
   const startIndex = (params.value.page - 1) * perPage_servers;
   const endIndex = startIndex + perPage_servers;
   return tempArray[state].slice(startIndex, endIndex);
+}
+
+const formattedText = (text) => {
+  return text.replace(/\n/g, "<br>");
+}
+
+const count_ips = (text) => {
+  if(text == null || text == '') return 0;
+  return text.split('\n').length;
 }
 
 const $toast = useToast();
@@ -202,6 +233,7 @@ function setOrder(orderBy, order) {
 }
 
 getServersData()
+
 </script>
 
 <style scoped>

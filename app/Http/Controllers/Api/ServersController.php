@@ -14,7 +14,7 @@ use App\Models\User;
 
 class ServersController extends Controller
 {
-   
+
     public function index(Request $request)
     {
         $products = [];
@@ -24,7 +24,7 @@ class ServersController extends Controller
             '2' => 'VPS-Netherlands',
             '3' => 'VPS-USA'
         ];
-        
+
         $order_state_response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetOrderStatuses',
         ]);
@@ -35,28 +35,28 @@ class ServersController extends Controller
             'clientid' => Auth::user()->client_id,
         ]);
 
-        if($latest_user_data['result'] == 'success'){
-            $user = User::where('whmcs_id' ,  Auth::user()->whmcsc_id)->first();
-            if($user){
-                if($user->credit != $latest_user_data['credit']){
+        if ($latest_user_data['result'] == 'success') {
+            $user = User::where('whmcs_id', Auth::user()->whmcsc_id)->first();
+            if ($user) {
+                if ($user->credit != $latest_user_data['credit']) {
                     $user->credit = $latest_user_data['credit'];
                     $user->save();
                 }
             }
         }
 
-        if($order_state_response['result'] == 'success'){
+        if ($order_state_response['result'] == 'success') {
             foreach ($order_state_response['statuses']['status'] as $state_info)
-            array_push($states, $state_info['title']);
-        asort($states);
+                array_push($states, $state_info['title']);
+            asort($states);
         }
 
         $temp = $states[1];
         $states[1] = $states[0];
         $states[0] = $temp;
 
-        
-        
+
+
 
         $orders_response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetClientsProducts',
@@ -70,8 +70,8 @@ class ServersController extends Controller
         $products = $products_response['products']['product'];
 
         // print_r($products);exit;
-        if(count($products)){
-            foreach($products as $key=>$product){
+        if (count($products)) {
+            foreach ($products as $key => $product) {
                 $products[$key]['server_info'] = array();
                 $doc = new DOMDocument();
                 $doc->loadHTML($product['description']);
@@ -84,57 +84,62 @@ class ServersController extends Controller
                     $span_value = $span->nodeValue;
                     $value = trim($item->firstChild->nextSibling->nodeValue);
 
-                    array_push($products[$key]['server_info'],$span_value." ".$value);
+                    array_push($products[$key]['server_info'], $span_value . " " . $value);
                 }
             }
         }
 
-        if($orders_response['result'] == 'success'){
+        if ($orders_response['result'] == 'success') {
             if ($orders_response['totalresults'] > 0) {
                 // $total_tickets = $orders_response['totalresults'];
                 $orders = $orders_response['products']['product'];
-                if($request->orderby && $request->orderby!='');
+                if ($request->orderby && $request->orderby != '')
+                    ;
                 $orders = collect($orders)->sortByDesc($request->orderby)->values()->all();
-                foreach ($states as $state)
-                    foreach ($orders as $order)
-                        $state_order[$state] = [];
-    
-                foreach ($states as $state)
-                    foreach ($orders as $order){
+                foreach ($states as $state) foreach ($orders as $order)
+                        $state_order[$state] = []; foreach ($states as $state) foreach ($orders as $order) {
                         if ($order['status'] == $state) {
                             array_push($state_order[$state], $order);
                             $last_index = count($state_order[$state]) - 1;
-                            if(strpos($order['configoptions']['configoption'][1]['value'],'Netherlands') !== false){
+                            if (strpos($order['configoptions']['configoption'][1]['value'], 'Netherlands') !== false) {
                                 $state_order[$state][$last_index]['flag'] = 'flag-en';
-                            }else{
+                            } else {
                                 $state_order[$state][$last_index]['flag'] = 'flag-nl';
                             }
-                            
-                            $system = explode('-',$order['configoptions']['configoption'][1]['value'])[0];
-                            switch($system){
+
+                            $system = explode('-', $order['configoptions']['configoption'][1]['value'])[0];
+                            switch ($system) {
                                 case 'windows':
-                                    $state_order[$state][$last_index]['sys_log'] = 'windows'; break;
+                                    $state_order[$state][$last_index]['sys_log'] = 'windows';
+                                    break;
                                 case 'ubuntu':
-                                    $state_order[$state][$last_index]['sys_log'] = 'ubuntu'; break;
+                                    $state_order[$state][$last_index]['sys_log'] = 'ubuntu';
+                                    break;
                                 case 'centos':
-                                    $state_order[$state][$last_index]['sys_log'] = 'centos'; break;
+                                    $state_order[$state][$last_index]['sys_log'] = 'centos';
+                                    break;
                                 case 'debian':
-                                    $state_order[$state][$last_index]['sys_log'] = 'debian'; break;
+                                    $state_order[$state][$last_index]['sys_log'] = 'debian';
+                                    break;
                                 case 'almalinux':
-                                    $state_order[$state][$last_index]['sys_log'] = 'almalinux'; break;
+                                    $state_order[$state][$last_index]['sys_log'] = 'almalinux';
+                                    break;
                                 case 'fedora':
-                                    $state_order[$state][$last_index]['sys_log'] = 'fedora'; break;
+                                    $state_order[$state][$last_index]['sys_log'] = 'fedora';
+                                    break;
                                 case 'rocky':
-                                    $state_order[$state][$last_index]['sys_log'] = 'rocky'; break;
+                                    $state_order[$state][$last_index]['sys_log'] = 'rocky';
+                                    break;
                                 default:
-                                    $state_order[$state][$last_index]['sys_log'] = 'windows'; break;
+                                    $state_order[$state][$last_index]['sys_log'] = 'windows';
+                                    break;
                             }
                         }
                     }
             }
         }
-        
-        
+
+
         // $vps = $this->getVPSList();
         // print_r($vps);exit;
 
@@ -144,13 +149,13 @@ class ServersController extends Controller
 
     private function getVPSList()
     {
-        $key =  'N8q5PHMfwvMQHMHYkytYtTydVWoLsWNC';
+        $key = 'N8q5PHMfwvMQHMHYkytYtTydVWoLsWNC';
         $pass = 'CcuJEN365CusfakK2NA8uVGSg0e8e36J';
         $ip = '37.59.33.165';
-               
+
         $v = new Admin($ip, $key, $pass);
         $vps = $v->listvs();
-        
+
         print_r($vps);
     }
 }

@@ -28,16 +28,16 @@ class PermissionController extends Controller
             $orderDirection = 'desc';
         }
         $permissions = Permission::
-        when(request('search_id'), function ($query) {
-            $query->where('id', request('search_id'));
-        })
+            when(request('search_id'), function ($query) {
+                $query->where('id', request('search_id'));
+            })
             ->when(request('search_title'), function ($query) {
-                $query->where('name', 'like', '%'.request('search_title').'%');
+                $query->where('name', 'like', '%' . request('search_title') . '%');
             })
             ->when(request('search_global'), function ($query) {
-                $query->where(function($q) {
+                $query->where(function ($q) {
                     $q->where('id', request('search_global'))
-                        ->orWhere('name', 'like', '%'.request('search_global').'%');
+                        ->orWhere('name', 'like', '%' . request('search_global') . '%');
 
                 });
             })
@@ -110,7 +110,8 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Permission $permission) {
+    public function destroy(Permission $permission)
+    {
         $this->authorize('permission-delete');
         $permission->delete();
 

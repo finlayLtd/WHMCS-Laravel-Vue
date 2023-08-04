@@ -296,6 +296,9 @@
     "Network_Upload" : "Network Upload",
     "Network_Usage_rate" : "Network Usage rate",
     "Network" : "Network",
-    "Network_Information":"Network Information"
+    "Network_Information":"Network Information",
+    "Disk_Usage":"Disk Usage",
+    "Configurable_Options":"Configurable Options",
+    "Additional_IPv4":"Additional IPv4"
 }
 

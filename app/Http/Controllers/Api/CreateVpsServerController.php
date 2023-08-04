@@ -40,11 +40,11 @@ class CreateVpsServerController extends Controller
             'clientid' => Auth::user()->client_id,
         ]);
 
-        if($check_balance['result'] == 'success'){
+        if ($check_balance['result'] == 'success') {
             //if credit is different
-            if($check_balance['credit'] != Auth::user()->credit){
-                $user = User::where('client_id',Auth::user()->client_id)->first();
-                if($user) {
+            if ($check_balance['credit'] != Auth::user()->credit) {
+                $user = User::where('client_id', Auth::user()->client_id)->first();
+                if ($user) {
                     $user->credit = $check_balance['credit'];
                     $user->save();
                 }
@@ -52,7 +52,7 @@ class CreateVpsServerController extends Controller
         }
 
         $os_kind = [];
-        
+
         $product_info = $this->getProductGroups();
         $product_group = $product_info[0];
         $system_info = $product_info[1];
@@ -62,15 +62,15 @@ class CreateVpsServerController extends Controller
         // $payment_user_token = $this->getuserPaymentToken();
         $products = $this->getProducts();
         $oslist = $this->getOSlist();
-        
-        foreach($oslist as $kind=>$os){
-            array_push($os_kind,$kind);
+
+        foreach ($oslist as $kind => $os) {
+            array_push($os_kind, $kind);
         }
-        
-        foreach($oslist as $kind=>$os){
-            foreach($os as $l=>$o){
-                foreach($system_info as $system){
-                    if($system['name'] == $o['name']){
+
+        foreach ($oslist as $kind => $os) {
+            foreach ($os as $l => $o) {
+                foreach ($system_info as $system) {
+                    if ($system['name'] == $o['name']) {
                         $oslist[$kind][$l]['config_id'] = $system['id'];
                     }
                 }
@@ -78,20 +78,20 @@ class CreateVpsServerController extends Controller
         }
         // windows 2012 have to be added to windows
         $temp_array = [];
-        foreach($oslist as $kind=>$os){
-            if($kind == 'others') {
-                
+        foreach ($oslist as $kind => $os) {
+            if ($kind == 'others') {
+
                 foreach ($oslist[$kind] as $id => $innerArray) {
-                    $temp_array = $innerArray; 
+                    $temp_array = $innerArray;
                     break;
                 }
             }
         }
 
-        foreach($oslist as $kind=>$os){
-            if($kind == 'windows') {
-                if(count($temp_array) != 0){
-                    array_push($oslist[$kind],$temp_array);
+        foreach ($oslist as $kind => $os) {
+            if ($kind == 'windows') {
+                if (count($temp_array) != 0) {
+                    array_push($oslist[$kind], $temp_array);
                 }
             }
         }
@@ -111,11 +111,11 @@ class CreateVpsServerController extends Controller
 
         $products = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetProducts',
-       ]);
-       
-       $productGroups = [];
-        foreach ($products['products']['product'] as $key=>$product) {
-            
+        ]);
+
+        $productGroups = [];
+        foreach ($products['products']['product'] as $key => $product) {
+
             $parts = explode('?', $product['product_url']);
             $group_names = explode('/', $parts[1]);
 
@@ -124,9 +124,9 @@ class CreateVpsServerController extends Controller
                 $productGroups[$groupId] = ucfirst($group_names[2]);
             }
 
-            if($key == 0){
+            if ($key == 0) {
                 $system_lists = $product['configoptions']['configoption'][1]['options']['option'];
-                foreach($system_lists as $system_info){
+                foreach ($system_lists as $system_info) {
                     array_push(
                         $system,
                         array(
@@ -138,7 +138,7 @@ class CreateVpsServerController extends Controller
             }
         }
 
-        return array($productGroups,$system);
+        return array($productGroups, $system);
     }
 
     private function getProducts()
@@ -150,9 +150,9 @@ class CreateVpsServerController extends Controller
         if ($products_response['totalresults'] > 0) {
             $products = $products_response['products']['product'];
         }
-        
-        if(count($products)){
-            foreach($products as $key=>$product){
+
+        if (count($products)) {
+            foreach ($products as $key => $product) {
                 $products[$key]['server_info'] = array();
                 $doc = new DOMDocument();
                 $doc->loadHTML($product['description']);
@@ -165,7 +165,7 @@ class CreateVpsServerController extends Controller
                     $span_value = $span->nodeValue;
                     $value = trim($item->firstChild->nextSibling->nodeValue);
 
-                    array_push($products[$key]['server_info'],$span_value." ".$value);
+                    array_push($products[$key]['server_info'], $span_value . " " . $value);
                 }
             }
         }
@@ -178,24 +178,25 @@ class CreateVpsServerController extends Controller
         $oslists = $this->virtualizorAdmin->ostemplates();
         return $oslists['oslist']['proxk'];
     }
-    
+
     private function getProductInfo()
     {
         $product_response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetProductsGroups'
         ]);
 
-        print_r($product_response);exit;
+        print_r($product_response);
+        exit;
     }
 
     private function getPaymentMethods()
     {
         $payment_methods = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetPaymentMethods'
-       ]);
+        ]);
 
-       return $payment_methods['paymentmethods']['paymentmethod'];
-    //    print_r($payment_methods);exit;
+        return $payment_methods['paymentmethods']['paymentmethod'];
+        //    print_r($payment_methods);exit;
     }
 
     private function getuserPaymentToken()
@@ -203,26 +204,43 @@ class CreateVpsServerController extends Controller
         $payment_methods = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetPayMethods',
             'clientid' => Auth::user()->client_id,
-       ]);
+        ]);
 
-       print_r($payment_methods);exit;
+        print_r($payment_methods);
+        exit;
     }
 
     public function create(Request $request)
     {
         $all_request = $request->input('params');
+        $number_of_ips = $all_request['number_of_ips'];
+        // 1 is 18, ... ignore 28-30. 11 is 31, ... ignore 41-44, 21 is 45 and 60 is 84
+        // this rule have to be applied for the configoptions parameter for the extra ips
+
+        if ($number_of_ips <= 10)
+            $number_of_ips += 17;
+        else {
+            if ($number_of_ips <= 20)
+                $number_of_ips += 20;
+            else
+                $number_of_ips += 24;
+        }
 
         $configoptionsFields = array(
+            base64_encode(serialize(array("1" => $number_of_ips))),
             base64_encode(
                 serialize(
-                    ["6" => $all_request['config_id']]
+                    [
+                        "6" => $all_request['config_id'],
+                    ]
                 )
-            )
+            ),
         );
 
         $payment_method = $all_request['paymentMethod'];
         //this case, just create vps with cryptocurrency
-        if($payment_method == 'credit') $payment_method = 'cryptomusgateway';
+        if ($payment_method == 'credit')
+            $payment_method = 'cryptomusgateway';
 
         $add_order_response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'AddOrder',
@@ -232,26 +250,27 @@ class CreateVpsServerController extends Controller
             'rootpw' => array($all_request['pwd']),
             'pid' => array($all_request['product_id']),
             'configoptions' => $configoptionsFields,
-       ]);
+        ]);
 
-       if($add_order_response['result'] == 'success'){
+        if ($add_order_response['result'] == 'success') {
             //apply the credit here
-            if($all_request['paymentMethod'] == 'credit'){
+            if ($all_request['paymentMethod'] == 'credit') {
                 // get the invoice id from the orderid
                 $invoiceInfo = $this->getinvoiceInfo($add_order_response['orderid']);
-                if(isset($invoiceInfo['invoiceid'])){
+                if (isset($invoiceInfo['invoiceid'])) {
                     $created_invoice_id = $invoiceInfo['invoiceid'];
                     //get the invoice data and total sum of price
                     $invoice_detail = (new \Sburina\Whmcs\Client)->post([
                         'action' => 'GetInvoice',
                         'clientid' => Auth::user()->client_id,
                         'invoiceid' => $created_invoice_id,
-                   ]);
-                   //if success, get the funds amount
-                   $credit_appling_amount = 0;
-                   if($invoice_detail['result'] == 'success')  $credit_appling_amount = $invoice_detail['total'];
+                    ]);
+                    //if success, get the funds amount
+                    $credit_appling_amount = 0;
+                    if ($invoice_detail['result'] == 'success')
+                        $credit_appling_amount = $invoice_detail['total'];
 
-                   $apply_credit = (new \Sburina\Whmcs\Client)->post([
+                    $apply_credit = (new \Sburina\Whmcs\Client)->post([
                         'action' => 'ApplyCredit',
                         'clientid' => Auth::user()->client_id,
                         'invoiceid' => $created_invoice_id,
@@ -268,28 +287,27 @@ class CreateVpsServerController extends Controller
                     'data' => $add_order_response,
                     'order_id' => $add_order_response['orderid'],
                 ]);
-            }
-            else {
+            } else {
                 return response()->json([
                     'result' => 'failed',
                     'data' => $add_order_response,
                 ]);
             }
-       } else{
-           return response()->json($add_order_response, 500);
-       }
+        } else {
+            return response()->json($add_order_response, 500);
+        }
     }
 
     private function getinvoiceInfo($order_id)
     {
         $invoice_info = array();
         $orders_response = $this->getOrderinfo($order_id);
-        
+
         $invoice_info = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetInvoice',
             'invoiceid' => $orders_response['orders']['order'][0]['invoiceid'],
         ]);
-        
+
         return $invoice_info;
     }
 
@@ -300,7 +318,7 @@ class CreateVpsServerController extends Controller
             'userid' => Auth::user()->client_id,
             'id' => $order_id,
         ]);
-        
+
         return $orders_response;
     }
 

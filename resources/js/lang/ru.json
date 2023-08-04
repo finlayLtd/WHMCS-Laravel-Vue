@@ -289,6 +289,9 @@
     "Network_Upload" : "Загрузка в сеть",
     "Network_Usage_rate" : "Уровень использования сети",
     "Network" : "Сеть",
-    "Network_Information":"Сетевая информация"
+    "Network_Information":"Сетевая информация",
+    "Disk_Usage":"Использование диска",
+    "Configurable_Options":"Настройки",
+    "Additional_IPv4":"Дополнительный IPv4"
 
 }

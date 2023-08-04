@@ -22,7 +22,7 @@ class BalanceController extends Controller
     // {
     //     $this->virtualizorAdmin = new Admin();
     // }
-    
+
     public function index(Request $request)
     {
         // $oslist = $this->getOSlist();
@@ -40,28 +40,28 @@ class BalanceController extends Controller
             'clientid' => Auth::user()->client_id,
         ]);
 
-        if($latest_user_data['result'] == 'success'){
-            $user = User::where('whmcs_id' ,  Auth::user()->whmcsc_id)->first();
-            if($user){
-                if($user->credit != $latest_user_data['credit']){
+        if ($latest_user_data['result'] == 'success') {
+            $user = User::where('whmcs_id', Auth::user()->whmcsc_id)->first();
+            if ($user) {
+                if ($user->credit != $latest_user_data['credit']) {
                     $user->credit = $latest_user_data['credit'];
                     $user->save();
                 }
             }
         }
 
-        if($request->order && $request->orderby)
-        {
+        if ($request->order && $request->orderby) {
             $orderby = $request->orderby;
             $order = $request->order;
-        } 
-        
+        }
+
         $response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetInvoices',
             'orderby' => $orderby,
             'order' => $order,
             'limitstart' => 0,
-            'limitnum' => $perPage, // Set number of tickets to retrieve per request
+            'limitnum' => $perPage,
+            // Set number of tickets to retrieve per request
             'userid' => Auth::user()->client_id, // Set number of tickets to retrieve per request
         ]);
 
@@ -71,7 +71,8 @@ class BalanceController extends Controller
             $totalresults = $response['totalresults'];
             $startnumber = $response['startnumber'];
             $numreturned = $response['numreturned'];
-        } else $invoices = [];
+        } else
+            $invoices = [];
 
         return response()->json([
             'invoices' => $invoices,
@@ -81,23 +82,17 @@ class BalanceController extends Controller
         ]);
     }
 
-    // private function getOSlist()
-    // {
-    //     $oslists = $this->virtualizorAdmin->ostemplates();
-    //     return $oslists['oslist']['proxk'];
-    // }
-
     public function invoiceDetail(Request $request)
     {
-        $invoice_id  = $request->id;
+        $invoice_id = $request->id;
 
         $invoice_detail = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetInvoice',
             'invoiceid' => $invoice_id,
         ]);
 
-        return view('pages/invoice-detail', compact('invoice_id','invoice_detail'));
+        return view('pages/invoice-detail', compact('invoice_id', 'invoice_detail'));
     }
 
-    
+
 }

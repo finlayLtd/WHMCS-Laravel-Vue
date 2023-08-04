@@ -285,5 +285,8 @@
     "Network_Upload" : "网络上传",
     "Network_Usage_rate" : "网络使用率",
     "Network" : "网络",
-    "Network_Information":"网络信息"
+    "Network_Information":"网络信息",
+    "Disk_Usage":"磁盘使用情况",
+    "Configurable_Options":"可配置选项",
+    "Additional_IPv4":"附加IPv4"
 }

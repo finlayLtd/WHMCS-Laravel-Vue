@@ -20,7 +20,8 @@ class ProfileController extends Controller
         $profile->email = $request->email;
 
         if ($profile->save()) {
-            return $this->successResponse($profile, 'User updated');;
+            return $this->successResponse($profile, 'User updated');
+            ;
         }
         return response()->json(['status' => 403, 'success' => false]);
     }

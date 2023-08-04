@@ -49,6 +49,7 @@
                       <td>{{ $t('Public_IPv4') }}</td>
                       <td class="clipboard-input">
                         {{ order_product_info.dedicatedip }}
+                        &nbsp;
                       </td>
                       <td>
                         <img src="/assets/img/copy.svg" class="icon-clipboard" @click="
@@ -56,6 +57,22 @@
                           " />
                       </td>
                     </tr>
+                    <template v-if="ip_list">
+                      <tr v-if="processIps(ip_list.ips) != ''">
+                        <td>{{ $t('Additional_IPv4') }}</td>
+                        <td class="clipboard-input">
+                          {{ processIps(ip_list.ips) }}
+                        </td>
+                        <td>
+                          <img src="/assets/img/copy.svg" class="icon-clipboard" @click="
+                            copyToClipboard(processIps(ip_list.ips))
+                            " />
+                        </td>
+                      </tr>
+                    </template>
+
+
+
 
                     <tr>
                       <td>{{ $t('Username') }}</td>
@@ -96,13 +113,13 @@
                 <table>
                   <tbody v-if="detail_info">
                     <tr>
-                      <td><img src="/assets/img/cpu.png" alt="" />{{  $t('CPU')  }}</td>
+                      <td><img src="/assets/img/cpu.png" alt="" />{{ $t('CPU') }}</td>
                       <td>{{ detail_info[0] }}</td>
                       <td></td>
                     </tr>
 
                     <tr>
-                      <td><img src="/assets/img/ram.png" alt="" />{{  $t('Ram')  }}</td>
+                      <td><img src="/assets/img/ram.png" alt="" />{{ $t('Ram') }}</td>
                       <td>{{ detail_info[1] }}</td>
                       <td></td>
                     </tr>
@@ -281,10 +298,10 @@
                           <img src="/assets/img/cpu.png" alt="" />
                         </div>
                         <div class="info">
-                          <h4 class="title2">{{  $t('CPU')  }}</h4>
+                          <h4 class="title2">{{ $t('CPU') }}</h4>
                           <p class="description2">
-                            <span>{{ cpu.percent }}%</span> {{  $t('of')  }}
-                            {{ detail_info[0] }} 
+                            <span>{{ cpu.percent }}%</span> {{ $t('of') }}
+                            {{ detail_info[0] }}
                           </p>
                         </div>
                       </div>
@@ -295,7 +312,7 @@
                           <img src="/assets/img/ram.png" alt="" />
                         </div>
                         <div class="info">
-                          <h4 class="title2">{{  $t('RAM')  }}</h4>
+                          <h4 class="title2">{{ $t('RAM') }}</h4>
                           <p class="description2">
                             <span v-if="vps_info && vpsid && vps_info.vps_data">
                               <!-- {{number_format(($vps_info['vps_data'][$vpsid]['used_ram']/$vps_info['vps_data'][$vpsid]['ram'])*100, 2)}} -->
@@ -471,7 +488,7 @@
                           'Time: ' +
                           Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
                           '<br/>' +
-                          $t('RAM_Usage_rate')+': ' +
+                          $t('RAM_Usage_rate') + ': ' +
                           this.y +
                           'MB'
                         );
@@ -566,7 +583,7 @@
                           'Time: ' +
                           Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
                           '<br/>' +
-                          $t('Disk_Usage')+': ' +
+                          $t('Disk_Usage') + ': ' +
                           this.y +
                           'MB'
                         );
@@ -660,7 +677,7 @@
                           'Time: ' +
                           Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
                           '<br/>' +
-                          $t('Inode_Information')+': ' +
+                          $t('Inode_Information') + ': ' +
                           this.y +
                           'Blocks'
                         );
@@ -755,7 +772,7 @@
                           'Time: ' +
                           Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
                           '<br/>' +
-                          $t('Download_rate')+': ' +
+                          $t('Download_rate') + ': ' +
                           this.y +
                           'MB'
                         );
@@ -848,7 +865,7 @@
                           'Time: ' +
                           Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
                           '<br/>' +
-                          $t('Upload_rate')+': ' +
+                          $t('Upload_rate') + ': ' +
                           this.y +
                           'MB'
                         );
@@ -943,7 +960,7 @@
                           'Time: ' +
                           Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
                           '<br/>' +
-                          $t('Network_Usage_rate')+': ' +
+                          $t('Network_Usage_rate') + ': ' +
                           this.y +
                           'MB'
                         );
@@ -1087,8 +1104,8 @@
                   <div id="newPassword1" class="form-group has-feedback has-success mt-3">
                     <label for="inputNewPassword1-os" class="col-sm-4 control-label">{{ $t('New_Password') }}</label>
                     <div class="col-sm-5" style="position: relative">
-                      <input :type="(show2) ? 'text' : 'password'" class="form-control" name="newpw" id="inputNewPassword1"
-                        v-model="newPassword1" autocomplete="off" />
+                      <input :type="(show2) ? 'text' : 'password'" class="form-control" name="newpw"
+                        id="inputNewPassword1" v-model="newPassword1" autocomplete="off" />
                       <img src="/assets/img/eye-open.svg" class="settings-password-img icon-password eye-open"
                         v-if="show2" />
                       <img src="/assets/img/eye.svg" class="settings-password-img icon-password eye-closed" v-else />
@@ -1173,9 +1190,9 @@
                               <tbody>
                                 <tr v-for="ip in ip_list.ips" :key="ip.ip">
                                   <td>{{ ip.ip }}</td>
-                                  <td v-if="ip.primary">{{ $t('Primary') }}</td>
+                                  <td v-if="ip.primary == 1">{{ $t('Primary') }}</td>
                                   <td v-else></td>
-                                  <td v-if="ip.primary">
+                                  <td v-if="ip.primary == 1">
                                     {{ $t('mainip_desc') }}
                                   </td>
                                   <td v-else></td>
@@ -1297,8 +1314,8 @@
 
             <!--billing-->
             <div :class="order_product_info.status != 'Active'
-                ? 'tab-pane fade  show active'
-                : 'tab-pane fade'
+              ? 'tab-pane fade  show active'
+              : 'tab-pane fade'
               " id="pills-billing" role="tabpanel" aria-labelledby="pills-billing-tab">
               <div class="tab-inner billing mb-3">
                 <div class="row">
@@ -1827,6 +1844,18 @@ const openInvoiceWindow = (invoice_id) => {
       console.log(e);
     });
 };
+
+const processIps = (lists) => {
+  // ip_list.ips
+  let string = '';
+  lists.forEach(element => {
+    if (element.primary != 1) {
+      if (string == '') string += element.ip;
+      else string += ', ' + element.ip;
+    }
+  });
+  return string;
+}
 
 function copyToClipboard(text) {
   // Copy the generated hostname to the clipboard

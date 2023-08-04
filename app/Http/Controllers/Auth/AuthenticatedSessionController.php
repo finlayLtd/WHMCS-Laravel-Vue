@@ -43,8 +43,6 @@ class AuthenticatedSessionController extends Controller
             $request->password
         );
 
-       
-
         if ($data['result'] == 'error') {
             return response()->json([
                 'errors' => ['email' => ['Email or Password is Invalid']]
@@ -79,7 +77,6 @@ class AuthenticatedSessionController extends Controller
         } else {
             if ($originUserData_reponse['result'] == 'success' && count($originUserData_reponse['users']) != 0) {
                 // this is case of invited user
-                // $res = (array) $this->client->sbGetClientsDetails(null, $originUserData_reponse['users'][0]['clients'][0]['id']);
                 $res = (array) (new \Sburina\Whmcs\Client)->post([
                     'action' => 'GetClientsDetails',
                     'clientid' => $originUserData_reponse['users'][0]['clients'][0]['id'],
@@ -97,7 +94,6 @@ class AuthenticatedSessionController extends Controller
         $permission_response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetUserPermissions',
             'client_id' => $userAttributes['client_id'],
-            //The ID of the client the invite is for
             'user_id' => $userAttributes['originUserData']['id'],
         ]);
 
@@ -108,11 +104,8 @@ class AuthenticatedSessionController extends Controller
         // give permissions
         $userAttributes['permissions'] = $permissions;
 
-        
         // end of permission system
-
         $user = User::where('whmcs_id', $data['userid'])->first();
-
 
         if (!$user) {
             $user = new User();
@@ -134,17 +127,14 @@ class AuthenticatedSessionController extends Controller
 
         $request->authenticate();
 
-        //print_r(Auth::user()); die;
         $token = $user->createToken('auth_token')->plainTextToken;
         return response()->json([
             'userAbilities' => $userAbilities,
             'accessToken' => $token,
             'userData' => [
                 'id' => $data['userid'],
-
             ]
         ]);
-
     }
 
     /**
@@ -192,7 +182,6 @@ class AuthenticatedSessionController extends Controller
         if ($register_result['result'] == 'success') {
             return response()->json(['message' => 'Registration Successfully', 'data' => 'success'], 200);
         } else {
-            // return response()->json(['error' => 'Failed to register user'], 400);
             return response()->json(['message' => $register_result['result'], 'data' => 'failed'], 200);
         }
     }
@@ -207,7 +196,6 @@ class AuthenticatedSessionController extends Controller
         if ($reset_response['result'] == 'success') {
             return response()->json(['message' => 'Successfully sent forgot password', 'data' => 'success'], 200);
         } else {
-            // return response()->json(['error' => 'Failed to register user'], 400);
             return response()->json(['message' => $reset_response['result'], 'data' => 'failed'], 200);
         }
     }

@@ -8,7 +8,7 @@
           <img class="status-arrow" src="/assets/img/status-arrow.svg" alt="" />
         </router-link>
         <h3 class="ticket-status-title color-in-work" v-if="ticket_detail && ticket_detail.status">
-          {{  $t(ticket_detail.status)  }}
+          {{ $t(ticket_detail.status) }}
         </h3>
         <h2 class="title mb-0 mt-2">{{ $t('Ticket') }}#{{ route.params.id }}</h2>
       </div>
@@ -60,7 +60,7 @@
 
                         <div class="message-content-wrapper">
                           <div class="message-body" v-if="reply.message && reply.message != ' '">
-                            <div  style="text-align: left;" v-html="formattedText(reply.message)">
+                            <div style="text-align: left;" v-html="formattedText(reply.message)">
                             </div>
                           </div>
 
@@ -113,7 +113,7 @@
 
       <template v-else>
         <NoPermission />
-      </template> 
+      </template>
 
     </div>
   </section>

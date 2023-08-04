@@ -33,7 +33,7 @@ class OverviewController extends Controller
     {
         $all_request = $request->input('params');
         // $all_request['id']
-        
+
 
         $order_product_info = [];
         $order_info = [];
@@ -45,39 +45,40 @@ class OverviewController extends Controller
         $vpsid = 0;
         $ip_list['ips'] = [];
         $analysis_data = [];
-        $order_id  = $all_request['id'];
+        $order_id = $all_request['id'];
         $order_info_response = $this->getOrderinfo($order_id);
         $order_info = $order_info_response['orders']['order'];
         $relid = $order_info[0]['lineitems']['lineitem'][0]['relid'];
-        
+
         $order_product_info = $this->getClientProductInfo($order_id);
-        
+
         $today = new DateTime(date("Y-m-d"));
         $start_day = new DateTime($order_info[0]['date']);
         $interval = $today->diff($start_day);
         $dayDiff = $interval->days;
-        
+
         $product_info = $this->getOrderProductInfo($order_product_info['pid']);
 
-        
+
         $detail_info = $this->getProductDetailInfo($product_info);
         $other_info = $this->getOtherinfo($order_product_info);
         $invoiceInfo = $this->getinvoiceInfo($order_id);
 
         $flag = $other_info['flag'];
-        if(isset($other_info['sys_logo'])){
+        if (isset($other_info['sys_logo'])) {
             $sys_logo = $other_info['sys_logo'];
         } else {
-            $sys_logo  = 'windows';
+            $sys_logo = 'windows';
         }
 
         $system = $other_info['system'];
-        
+
         $OSlist = $this->getOSlist();
         $status = $order_info[0]['status'];
-        if($status!='Active' && $order_product_info['status'] == 'Active') $status = 'Active';
+        if ($status != 'Active' && $order_product_info['status'] == 'Active')
+            $status = 'Active';
 
-        if($status == 'Active'){
+        if ($status == 'Active') {
             $vpsid = $other_info['vps_info']['vpsid'];
             $vps_info = $this->getVpsStatistics($vpsid);
             // $network_speed = $this->getNetworkSpeed($vpsid);
@@ -88,11 +89,12 @@ class OverviewController extends Controller
         }
 
 
-        foreach($OSlist['oslist']['proxk'] as $key=>$os_group){
-            foreach($os_group as $os_id=>$os){
+        foreach ($OSlist['oslist']['proxk'] as $key => $os_group) {
+            foreach ($os_group as $os_id => $os) {
                 $os['group_name'] = $key;
-                if(!isset($os['osid'])) $os['osid'] = $os_id;
-                array_push($oslists,$os);
+                if (!isset($os['osid']))
+                    $os['osid'] = $os_id;
+                array_push($oslists, $os);
             }
         }
 
@@ -108,58 +110,65 @@ class OverviewController extends Controller
         //     $orders = $orders_info['orders']['order'];
         // }
 
-        $departments_info =  (new \Sburina\Whmcs\Client)->post([
+        $departments_info = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetSupportDepartments'
         ]);
 
-        if($departments_info['result'] == 'success'){
+        if ($departments_info['result'] == 'success') {
             if ($departments_info['totalresults'] > 0) {
                 $departments = $departments_info['departments']['department'];
             }
         }
 
-        
 
-        
-        
 
-        if($invoiceInfo['status'] == 'Paid'){
+
+
+
+        if ($invoiceInfo['status'] == 'Paid') {
             // order_product_info.nextduedate
-        $invoice_lists = (new \Sburina\Whmcs\Client)->post([
-            'action' => 'GetInvoices',
-            'userid' => Auth::user()->client_id, // Set number of tickets to retrieve per request
-            'orderby' => 'date',
-            'order' => 'desc',
-            'limitstart' => 0,
-            'limitnum' => 300,
-        ]);
+            $invoice_lists = (new \Sburina\Whmcs\Client)->post([
+                'action' => 'GetInvoices',
+                'userid' => Auth::user()->client_id,
+                // Set number of tickets to retrieve per request
+                'orderby' => 'date',
+                'order' => 'desc',
+                'limitstart' => 0,
+                'limitnum' => 300,
+            ]);
 
 
-        if (count($invoice_lists['invoices']) != 0) {
-            $invoices = $invoice_lists['invoices']['invoice'];
-        } else $invoices = [];
+            if (count($invoice_lists['invoices']) != 0) {
+                $invoices = $invoice_lists['invoices']['invoice'];
+            } else
+                $invoices = [];
 
             $temp_date = $order_product_info['nextduedate'];
-            $filteredInvoices = array_filter($invoices, function($item) use($temp_date) {
-                return ($item['duedate'] == $temp_date && $item['status']=='Unpaid' );
+            $filteredInvoices = array_filter($invoices, function ($item) use ($temp_date) {
+                return ($item['duedate'] == $temp_date && $item['status'] == 'Unpaid');
             });
-    
+
             foreach ($filteredInvoices as $item) {
                 $temp = (new \Sburina\Whmcs\Client)->post([
                     'action' => 'GetInvoice',
-                    'userid' => Auth::user()->client_id, // Set number of tickets to retrieve per request
+                    'userid' => Auth::user()->client_id,
+                    // Set number of tickets to retrieve per request
                     'invoiceid' => $item['id'],
                 ]);
-    
-                if($temp['result'] != 'success') break;
-                foreach($temp['items']['item'] as $subitem){
-                    if($subitem['relid'] == $relid) {$invoiceInfo = $temp; break 2;}
-                    else break;
+
+                if ($temp['result'] != 'success')
+                    break;
+                foreach ($temp['items']['item'] as $subitem) {
+                    if ($subitem['relid'] == $relid) {
+                        $invoiceInfo = $temp;
+                        break 2;
+                    } else
+                        break;
                 }
             }
         }
 
-        
+
 
 
 
@@ -187,9 +196,9 @@ class OverviewController extends Controller
             'status' => $status,
             'rdnslist' => $rdnslist,
             // 'other_info' => $other_info,
-            
+
         ]);
-        
+
         // return view('pages/overview', compact('relid','order_id','order_product_info','dayDiff','detail_info','flag','sys_logo',
         // 'system','vpsid','vps_info','oslists','cpu','network_speed','invoiceInfo','orders','departments','ip_list','analysis_data','status','rdnslist'));
     }
@@ -201,9 +210,10 @@ class OverviewController extends Controller
             'clientid' => Auth::user()->client_id,
         ]);
         $orders = $orders_response['products']['product'];
-        foreach($orders as $order)
-            if($order['orderid'] == $order_id) $order_info = $order;
-        
+        foreach ($orders as $order)
+            if ($order['orderid'] == $order_id)
+                $order_info = $order;
+
         return $order_info;
     }
 
@@ -213,7 +223,7 @@ class OverviewController extends Controller
             'action' => 'GetProducts',
             'pid' => $pid,
         ]);
-        
+
         $product_info = $product_response['products']['product'][0];
 
         return $product_info;
@@ -233,7 +243,7 @@ class OverviewController extends Controller
             $span_value = $span->nodeValue;
             $value = trim($item->firstChild->nextSibling->nodeValue);
 
-            array_push($detail_info,$span_value." ".$value);
+            array_push($detail_info, $span_value . " " . $value);
         }
 
         return $detail_info;
@@ -241,44 +251,51 @@ class OverviewController extends Controller
 
     private function getOtherinfo($order_info)
     {
-        if(strpos($order_info['groupname'],'Netherlands') !== false){
+        if (strpos($order_info['groupname'], 'Netherlands') !== false) {
             $info['flag'] = 'flag-nl';
-        }else{
+        } else {
             $info['flag'] = 'flag-en';
         }
 
-        if($order_info['status'] == 'Active'){
+        if ($order_info['status'] == 'Active') {
             $page = 0;
             $reslen = 0;
             //For Searching
             $post = array();
             $post['vpsid'] = $order_info['customfields']['customfield'][1]['value'];
-            $vps_info = $this->virtualizorAdmin->listvs($page ,$reslen ,$post);
+            $vps_info = $this->virtualizorAdmin->listvs($page, $reslen, $post);
             $vps_info = $vps_info[$post['vpsid']];
             $info['vps_info'] = $vps_info;
-            $system_label = explode('-',$vps_info['os_name'])[0];
+            $system_label = explode('-', $vps_info['os_name'])[0];
             $info['system'] = $vps_info['os_name'];
 
-        }else{
-            $system_label = explode('-',$order_info['configoptions']['configoption'][1]['value'])[0];
+        } else {
+            $system_label = explode('-', $order_info['configoptions']['configoption'][1]['value'])[0];
             $info['system'] = $order_info['configoptions']['configoption'][1]['value'];
         }
 
-        switch($system_label){
+        switch ($system_label) {
             case 'windows':
-                $info['sys_logo'] = 'windows'; break;
+                $info['sys_logo'] = 'windows';
+                break;
             case 'ubuntu':
-                $info['sys_logo'] = 'ubuntu'; break;
+                $info['sys_logo'] = 'ubuntu';
+                break;
             case 'centos':
-                $info['sys_logo'] = 'centos'; break;
+                $info['sys_logo'] = 'centos';
+                break;
             case 'debian':
-                $info['sys_logo'] = 'debian'; break;
+                $info['sys_logo'] = 'debian';
+                break;
             case 'almalinux':
-                $info['sys_logo'] = 'almalinux'; break;
+                $info['sys_logo'] = 'almalinux';
+                break;
             case 'fedora':
-                $info['sys_logo'] = 'fedora'; break;
+                $info['sys_logo'] = 'fedora';
+                break;
             case 'rocky':
-                $info['sys_logo'] = 'rocky'; break;
+                $info['sys_logo'] = 'rocky';
+                break;
         }
 
         return $info;
@@ -307,7 +324,7 @@ class OverviewController extends Controller
 
     private function getNetworkSpeed($vpsid)
     {
-        $vps_info = $this->virtualizorAdmin->listvs(0,0,array('vpsid'=>$vpsid));
+        $vps_info = $this->virtualizorAdmin->listvs(0, 0, array('vpsid' => $vpsid));
         $network_speed = $vps_info[$vpsid]['network_speed'];
         return $network_speed;
     }
@@ -318,23 +335,23 @@ class OverviewController extends Controller
         // $all_request['id']
         $vpsid = $all_request['vpsid'];
         $output = $this->virtualizorAdmin->start($vpsid);
-        if($output['done_msg'] == 'VPS has been started successfully'){
+        if ($output['done_msg'] == 'VPS has been started successfully') {
             return response()->json($output['done_msg'], 200);
-        }else{
+        } else {
             $error = "Please try again!";
             return response()->json($error, 500);
         }
     }
-    
+
     public function turnoff(Request $request)
     {
         $all_request = $request->input('params');
         // $all_request['id']
         $vpsid = $all_request['vpsid'];
         $output = $this->virtualizorAdmin->stop($vpsid);
-        if($output['done_msg'] == 'Shutdown signal has been sent to the VPS'){
+        if ($output['done_msg'] == 'Shutdown signal has been sent to the VPS') {
             return response()->json($output['done_msg'], 200);
-        }else{
+        } else {
             $error = "Please try again!";
             return response()->json($error, 500);
         }
@@ -346,9 +363,9 @@ class OverviewController extends Controller
         // $all_request['id']
         $vpsid = $all_request['vpsid'];
         $output = $this->virtualizorAdmin->poweroff($vpsid);
-        if($output['done_msg'] == 'VPS has been powered off successfully'){
+        if ($output['done_msg'] == 'VPS has been powered off successfully') {
             return response()->json($output['done_msg'], 200);
-        }else{
+        } else {
             $error = "Please try again!";
             return response()->json($error, 500);
         }
@@ -360,9 +377,9 @@ class OverviewController extends Controller
         // $all_request['id']
         $vpsid = $all_request['vpsid'];
         $output = $this->virtualizorAdmin->restart($vpsid);
-        if($output['done_msg'] == 'Restart signal has been sent to the VPS'){
+        if ($output['done_msg'] == 'Restart signal has been sent to the VPS') {
             return response()->json($output['done_msg'], 200);
-        }else{
+        } else {
             $error = "Please try again!";
             return response()->json($error, 500);
         }
@@ -379,10 +396,10 @@ class OverviewController extends Controller
         $post['newpass'] = $all_request['root_pwd'];
         $post['conf'] = $all_request['root_pwd'];
         $output = $this->virtualizorAdmin->rebuild($post);
-        
-        if($output['done'] == 1){
+
+        if ($output['done'] == 1) {
             return response()->json('Success', 200);
-        }else{
+        } else {
             return response()->json($output['error'], 500);
         }
     }
@@ -407,8 +424,10 @@ class OverviewController extends Controller
             }
         }
 
-        if($exist_flag) return response()->json('Already Exist.', 200);
-        else return response()->json('No Exist.', 200);
+        if ($exist_flag)
+            return response()->json('Already Exist.', 200);
+        else
+            return response()->json('No Exist.', 200);
     }
 
     public function changehostNames(Request $request)
@@ -419,9 +438,9 @@ class OverviewController extends Controller
         $post['vpsid'] = $all_request['vpsid'];
         $post['hostname'] = $all_request['hostname'];
         $result = $this->virtualizorAdmin->managevps($post);
-        if($result['done']['done']){
+        if ($result['done']['done']) {
             return response()->json('Your hostname will be changed when the VPS is booted again', 200);
-        }else{
+        } else {
             return response()->json('Oops! We meet some error!.', 500);
         }
     }
@@ -434,9 +453,9 @@ class OverviewController extends Controller
         $post['vpsid'] = $all_request['vpsid'];
         $post['rootpass'] = $all_request['root_pwd'];
         $result = $this->virtualizorAdmin->managevps($post);
-        if($result['done']['change_pass_msg']){
+        if ($result['done']['change_pass_msg']) {
             return response()->json('VPS password will be changed after you SHUTDOWN and START the VPS from the panel.', 200);
-        }else{
+        } else {
             return response()->json('Oops! We meet some error!.', 500);
         }
 
@@ -445,7 +464,8 @@ class OverviewController extends Controller
     private function serverMonitering($vpsid)
     {
         $result = $this->virtualizorAdmin->performance($vpsid);
-        print_r($result);exit;
+        print_r($result);
+        exit;
     }
 
     private function getOrderinfo($order_id)
@@ -455,7 +475,7 @@ class OverviewController extends Controller
             'userid' => Auth::user()->client_id,
             'id' => $order_id,
         ]);
-        
+
         return $orders_response;
     }
 
@@ -463,12 +483,12 @@ class OverviewController extends Controller
     {
         $invoice_info = array();
         $orders_response = $this->getOrderinfo($order_id);
-        
+
         $invoice_info = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetInvoice',
             'invoiceid' => $orders_response['orders']['order'][0]['invoiceid'],
         ]);
-        
+
         return $invoice_info;
     }
 
@@ -477,9 +497,9 @@ class OverviewController extends Controller
         $post = array();
         $ip_list = array();
         $post['vps_search'] = $hostname;
-        
+
         $result = $this->virtualizorAdmin->ips(1, 50, $post);
-        usort($result['ips'], function($a, $b) {
+        usort($result['ips'], function ($a, $b) {
             return $b['primary'] - $a['primary'];
         });
         return $result;
@@ -491,13 +511,13 @@ class OverviewController extends Controller
         $datas = array();
         $date = array();
         $return_datas = array();
-        $post['show'] = date("Ym");           
-        $post['svs'] = $vpsid;           
+        $post['show'] = date("Ym");
+        $post['svs'] = $vpsid;
         $output = $this->virtualizorAdmin->vps_stats($post);
-        if(is_array($output['vps_stats'])){
-            foreach($output['vps_stats'] as $state){
+        if (is_array($output['vps_stats'])) {
+            foreach ($output['vps_stats'] as $state) {
                 $state[1] = date('Y-m-d H:i:s', $state[1]);
-                array_push($return_datas,$state);
+                array_push($return_datas, $state);
             }
         }
 
@@ -512,12 +532,12 @@ class OverviewController extends Controller
         $post = array();
         $post['vpsid'] = $all_request['vpsid'];
         $post['ips'] = $all_request['reorder_ips'];
-        
+
         $result = $this->virtualizorAdmin->managevps($post);
-        
-        if($result['done']['done']){
+
+        if ($result['done']['done']) {
             return response()->json('Success', 200);
-        }else{
+        } else {
             return response()->json('Error', 500);
         }
     }
@@ -532,18 +552,18 @@ class OverviewController extends Controller
         $result = $this->virtualizorAdmin->vnc($post);
 
         $info = $result['info'];
-        $base_url = public_path().'/novnc/';
+        $base_url = public_path() . '/novnc/';
         $noVNC_file_path = public_path('novnc/vnc_auto_virt.html');
         // $noVNC_file_path = public_path('novnc/vnc_lite.html');
         $noVNC_file_content = file_get_contents($noVNC_file_path);
-        
+
         $host_url = url('/');
         $ip = $this->virtualizorAdmin->ip;
 
         $proto = 'http';
         $port = 4081;
         $websockify = 'websockify';
-        if(!empty($_SERVER['HTTPS'])){
+        if (!empty($_SERVER['HTTPS'])) {
             $proto = 'https';
             // if($_SERVER['SERVER_PORT'] == '443'){
             //     $port = 443;
@@ -556,37 +576,40 @@ class OverviewController extends Controller
 
         $vnc_token = $all_request['id'];
 
-        $array = array('HOST' => 'vnc.fidelcastro.cc',
-                    'PORT' => $port,
-                    'PROTO' => $proto,
-                    'WEBSOCKET' => $websockify,
-                    'TOKEN' => $vnc_token,
-                    'PASSWORD' => $info['password'],
-                    'base_url' => $host_url.'/novnc/');
-        
-        foreach($array as $k => $v){
-            $noVNC_file_content = str_replace('{{'.$k.'}}', $v, $noVNC_file_content);
+        $array = array(
+            'HOST' => 'vnc.fidelcastro.cc',
+            'PORT' => $port,
+            'PROTO' => $proto,
+            'WEBSOCKET' => $websockify,
+            'TOKEN' => $vnc_token,
+            'PASSWORD' => $info['password'],
+            'base_url' => $host_url . '/novnc/'
+        );
+
+        foreach ($array as $k => $v) {
+            $noVNC_file_content = str_replace('{{' . $k . '}}', $v, $noVNC_file_content);
         }
 
         return response($noVNC_file_content);
     }
 
-    private function getDNSlist($ip){
+    private function getDNSlist($ip)
+    {
         $post = array();
         $result = $this->virtualizorAdmin->pdns(1, 50, $post);
         $pnds_server_info = reset($result['pdns']);
-        
-        $ip_array = array_reverse(explode(".",$ip));
-        
+
+        $ip_array = array_reverse(explode(".", $ip));
+
         $post['pdnsid'] = $pnds_server_info['id'];
-        $post['dns_name'] = $ip_array[0].".".$ip_array[1].".".$ip_array[2].".".$ip_array[3].".in-addr.arpa";
+        $post['dns_name'] = $ip_array[0] . "." . $ip_array[1] . "." . $ip_array[2] . "." . $ip_array[3] . ".in-addr.arpa";
         $post['domain_id'] = '';
         $post['dns_domain'] = '';
         $post['record_type'] = 'PTR';
         $result = $this->virtualizorAdmin->search_dnsrecords(1, 100000, $post);
 
         return $result['dns_records'];
-        
+
     }
 
     public function addRDNS(Request $request)
@@ -598,21 +621,21 @@ class OverviewController extends Controller
         $result = $this->virtualizorAdmin->pdns(1, 50, $post);
         $pnds_server_info = reset($result['pdns']);
 
-        $ip_array = array_reverse(explode(".",$all_request['ip']));
+        $ip_array = array_reverse(explode(".", $all_request['ip']));
 
         $post['pdnsid'] = $pnds_server_info['id'];
         $post['domain'] = $all_request['domain'];
         $post['dns_ip'] = $all_request['ip'];
         $post['dns_type'] = 'type_rdns';
-        $post['content'] = $ip_array[0].".".$ip_array[1].".".$ip_array[2].".".$ip_array[3].".in-addr.arpa";
+        $post['content'] = $ip_array[0] . "." . $ip_array[1] . "." . $ip_array[2] . "." . $ip_array[3] . ".in-addr.arpa";
         $result = $this->virtualizorAdmin->add_dnsrecord($post);
 
-        if($result['done'] == 1){
+        if ($result['done'] == 1) {
 
             $rdnslist = $this->getDNSlist($all_request['ip']);
             return response()->json([
                 'rdnslist' => $rdnslist,
-                
+
             ]);
         }
     }
@@ -626,20 +649,20 @@ class OverviewController extends Controller
         $result = $this->virtualizorAdmin->pdns(1, 50, $post);
         $pnds_server_info = reset($result['pdns']);
 
-        $ip_array = array_reverse(explode(".",$all_request['ip']));
+        $ip_array = array_reverse(explode(".", $all_request['ip']));
 
         $post['pdnsid'] = $pnds_server_info['id'];
         $post['del'] = $all_request['rdns_record_id'];
         $result = $this->virtualizorAdmin->delete_dnsrecords($post);
 
-        if($result['done']){
+        if ($result['done']) {
             $rdnslist = $this->getDNSlist($all_request['ip']);
             $ip = $all_request['ip'];
             $rdnslist = $this->getDNSlist($all_request['ip']);
             return response()->json([
                 'rdnslist' => $rdnslist,
                 'ip' => $ip,
-                
+
             ]);
         }
     }

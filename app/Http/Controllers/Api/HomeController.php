@@ -29,11 +29,12 @@ class HomeController extends Controller
         $state_order = [];
         $status = array(); //status of ticket 
         $product_group = $this->getProductGroups();
-        
+
         $tickets_response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetTickets',
             'limitstart' => 0,
-            'limitnum' => 10, // Set number of tickets to retrieve per request
+            'limitnum' => 10,
+            // Set number of tickets to retrieve per request
             'clientid' => Auth::user()->client_id, // Set number of tickets to retrieve per request
         ]);
 
@@ -50,7 +51,7 @@ class HomeController extends Controller
             'clientid' => Auth::user()->client_id,
         ]);
 
-        
+
         $products_response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetProducts',
         ]);
@@ -59,8 +60,8 @@ class HomeController extends Controller
             $products = $products_response['products']['product'];
         }
 
-        if(count($products)){
-            foreach($products as $key=>$product){
+        if (count($products)) {
+            foreach ($products as $key => $product) {
                 $products[$key]['server_info'] = array();
                 $doc = new DOMDocument();
                 $doc->loadHTML($product['description']);
@@ -73,66 +74,70 @@ class HomeController extends Controller
                     $span_value = $span->nodeValue;
                     $value = trim($item->firstChild->nextSibling->nodeValue);
 
-                    array_push($products[$key]['server_info'],$span_value." ".$value);
+                    array_push($products[$key]['server_info'], $span_value . " " . $value);
                 }
             }
         }
         if ($orders_response['totalresults'] > 0) {
             $total_tickets = $orders_response['totalresults'];
             $orders = $orders_response['products']['product'];
-            
-            foreach ($states as $state)
-                foreach ($orders as $order)
-                    $state_order[$state] = [];
 
-            foreach ($states as $state)
-                foreach ($orders as $order){
+            foreach ($states as $state) foreach ($orders as $order)
+                    $state_order[$state] = []; foreach ($states as $state) foreach ($orders as $order) {
                     if ($order['status'] == $state) {
                         array_push($state_order[$state], $order);
-                        
+
                         $last_index = count($state_order[$state]) - 1;
-                        if(strpos($order['groupname'],'Netherlands') !== false){
+                        if (strpos($order['groupname'], 'Netherlands') !== false) {
                             $state_order[$state][$last_index]['flag'] = 'flag-nl';
-                        }else{
+                        } else {
                             $state_order[$state][$last_index]['flag'] = 'flag-en';
                         }
-                        
-                        if($state == 'Active'){
+
+                        if ($state == 'Active') {
                             $page = 0;
                             $reslen = 0;
                             //For Searching
                             $post = array();
                             $post['vpsid'] = $order['customfields']['customfield'][1]['value'];
-                            $vps_info = $this->virtualizorAdmin->listvs($page ,$reslen ,$post);
+                            $vps_info = $this->virtualizorAdmin->listvs($page, $reslen, $post);
                             $vps_info = $vps_info[$post['vpsid']];
-                            $system = explode('-',$vps_info['os_name'])[0];
+                            $system = explode('-', $vps_info['os_name'])[0];
 
-                        }else{
-                            $system = explode('-',$order['configoptions']['configoption'][1]['value'])[0];
+                        } else {
+                            $system = explode('-', $order['configoptions']['configoption'][1]['value'])[0];
                         }
-                        
-                        switch($system){
+
+                        switch ($system) {
                             case 'windows':
-                                $state_order[$state][$last_index]['sys_log'] = 'windows'; break;
+                                $state_order[$state][$last_index]['sys_log'] = 'windows';
+                                break;
                             case 'ubuntu':
-                                $state_order[$state][$last_index]['sys_log'] = 'ubuntu'; break;
+                                $state_order[$state][$last_index]['sys_log'] = 'ubuntu';
+                                break;
                             case 'centos':
-                                $state_order[$state][$last_index]['sys_log'] = 'centos'; break;
+                                $state_order[$state][$last_index]['sys_log'] = 'centos';
+                                break;
                             case 'debian':
-                                $state_order[$state][$last_index]['sys_log'] = 'debian'; break;
+                                $state_order[$state][$last_index]['sys_log'] = 'debian';
+                                break;
                             case 'almalinux':
-                                $state_order[$state][$last_index]['sys_log'] = 'almalinux'; break;
+                                $state_order[$state][$last_index]['sys_log'] = 'almalinux';
+                                break;
                             case 'fedora':
-                                $state_order[$state][$last_index]['sys_log'] = 'fedora'; break;
+                                $state_order[$state][$last_index]['sys_log'] = 'fedora';
+                                break;
                             case 'rocky':
-                                $state_order[$state][$last_index]['sys_log'] = 'rocky'; break;
+                                $state_order[$state][$last_index]['sys_log'] = 'rocky';
+                                break;
                             default:
-                                $state_order[$state][$last_index]['sys_log'] = 'others'; break;
+                                $state_order[$state][$last_index]['sys_log'] = 'others';
+                                break;
                         }
                     }
                 }
         }
-        
+
         if ($tickets_response['totalresults'] > 0) {
             $total_tickets = $tickets_response['totalresults'];
             $tickets = $tickets_response['tickets']['ticket'];
@@ -143,7 +148,7 @@ class HomeController extends Controller
         ]);
 
         if ($tickets_status['totalresults'] > 0) {
-            $status = $tickets_status['statuses']['status'];//status of ticket 
+            $status = $tickets_status['statuses']['status']; //status of ticket 
         }
 
         return view('pages/dashboard', compact('tickets', 'total_tickets', 'states', 'state_order', 'products', 'product_group', 'status'));
@@ -151,23 +156,26 @@ class HomeController extends Controller
 
     public function gettickets(Request $request)
     {
-        $offset  = ($request->offset - 1) * 10;
-        
+        $offset = ($request->offset - 1) * 10;
+
         $tickets_response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetTickets',
             'limitstart' => $offset,
-            'limitnum' => 10, // Set number of tickets to retrieve per request
+            'limitnum' => 10,
+            // Set number of tickets to retrieve per request
             'clientid' => Auth::user()->client_id, // Set number of tickets to retrieve per request
         ]);
 
         if ($tickets_response['totalresults'] > 0) {
             $total_tickets = $tickets_response['totalresults'];
             $tickets = $tickets_response['tickets']['ticket'];
-            if($request->order && $request->orderby){//if not exist pass
-                if($request->order == 'desc') $tickets = collect($tickets)->sortByDesc($request->orderby)->values()->all();
-                else  $tickets = collect($tickets)->sortBy($request->orderby)->values()->all();
+            if ($request->order && $request->orderby) { //if not exist pass
+                if ($request->order == 'desc')
+                    $tickets = collect($tickets)->sortByDesc($request->orderby)->values()->all();
+                else
+                    $tickets = collect($tickets)->sortBy($request->orderby)->values()->all();
             }
-            
+
         }
 
         $tickets_status = (new \Sburina\Whmcs\Client)->post([
@@ -175,7 +183,7 @@ class HomeController extends Controller
         ]);
 
         if ($tickets_status['totalresults'] > 0) {
-            $status = $tickets_status['statuses']['status'];//status of ticket 
+            $status = $tickets_status['statuses']['status']; //status of ticket 
         }
 
         return view('tables/tickettable', compact('tickets', 'total_tickets', 'status'));
@@ -193,7 +201,8 @@ class HomeController extends Controller
         ]);
         if (count($response['invoices']) != 0) {
             $invoices = $response['invoices']['invoice'];
-        } else $invoices = [];
+        } else
+            $invoices = [];
 
         return view('tables/invoicetable', compact('invoices'));
     }
@@ -206,9 +215,9 @@ class HomeController extends Controller
         ]);
 
 
-        if($response['result'] == 'success'){
+        if ($response['result'] == 'success') {
             //if credit is different
-            if($response['credit'] != Auth::user()->credit){
+            if ($response['credit'] != Auth::user()->credit) {
                 // default system to set the session again!(switch account)
                 $userAttributes = [];
 
@@ -227,7 +236,7 @@ class HomeController extends Controller
                 'result' => 'success',
                 'latest_user_data' => $response,
             ]);
-        } else{
+        } else {
             return response()->json([
                 'result' => 'failed',
             ]);
@@ -247,64 +256,36 @@ class HomeController extends Controller
             'clientid' => Auth::user()->client_id, // Set number of tickets to retrieve per request
         ]);
 
-        if($response['result'] == 'success'){
-            $user = User::where('whmcs_id' ,  Auth::user()->whmcsc_id)->first();
-            if($user){
+        if ($response['result'] == 'success') {
+            $user = User::where('whmcs_id', Auth::user()->whmcsc_id)->first();
+            if ($user) {
                 $user->name = $firstname;
                 $user->save();
             }
-    
+
             return response()->json([
                 'result' => 'success',
             ]);
-        } else{
+        } else {
             return response()->json([
                 'result' => 'failed',
             ]);
         }
 
-        // $userAttributes = [];
-
-        // $userAttributes = (array) (new \Sburina\Whmcs\Client)->post([
-        //     'action' => 'getClientsDetails',
-        //     'email' => Auth::user()->email,
-        // ]);
-
-        // $userAttributes['originUserData'] = Auth::user()->originUserData;
-        // $userAttributes['permissions'] = Auth::user()->permissions;
-
-        // session()->put(config('whmcs.session_key'), $userAttributes);
-
-        // if ($response['result'] == 'success') $message = 'success';
-        // else $message = 'failed';
-
-        // return redirect()->route('settings', ['message' => $message]);
     }
 
     public function change_password(Request $request)
     {
-        // confirmpw, newpw, currentpw
         return view('pages/settings_password');
-        // $response = (new \Sburina\Whmcs\Client)->post([
-        //     'action' => 'UpdateClient',
-        //     'firstname' => $request->firstname,
-        //     'lastname' => $request->lastname,
-        //     'clientid' => Auth::user()->client_id, // Set number of tickets to retrieve per request
-        // ]);
-
-        // if ($response['result'] == 'success') $message = 'success';
-        // else $message = 'failed';
-
-        // return redirect()->route('settings', ['message' => $message]);
     }
 
     public function invite_user(Request $request)
     {
         $all_request = $request->input('params');
-        
+
         $permissions = '';
         foreach (['profile', 'contacts', 'products', 'manageproducts', 'productsso', 'domains', 'managedomains', 'invoices', 'quotes', 'tickets', 'affiliates', 'emails', 'orders'] as $permissionName) {
-            if (   $all_request[$permissionName]) {
+            if ($all_request[$permissionName]) {
                 if (strlen($permissions) > 0) {
                     $permissions .= ',';
                 }
@@ -316,7 +297,8 @@ class HomeController extends Controller
 
         $response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'CreateClientInvite',
-            'client_id' => Auth::user()->client_id, //The ID of the client the invite is for
+            'client_id' => Auth::user()->client_id,
+            //The ID of the client the invite is for
             'email' => $all_request['invite_email'],
             'permissions' => $permissions,
         ]);
@@ -325,22 +307,12 @@ class HomeController extends Controller
                 'result' => 'success',
                 'data' => $response,
             ]);
-        }
-        else {
+        } else {
             return response()->json([
                 'result' => 'failed',
                 'data' => $response,
             ]);
         }
-        // $users_list = [];
-        // $check_user_response = (new \Sburina\Whmcs\Client)->post([
-        //     'action' => 'GetClientsDetails',
-        //     'clientid' => Auth::user()->client_id, //The ID of the client the invite is for
-        // ]);
-        // if ($check_user_response['result'] == 'success') {
-        //     $users_list = $check_user_response['client']['users']['user'];
-        // }
-        // return view('pages/settings_userManage', compact('users_list', 'message'));
     }
 
     public function remove_access(Request $request)
@@ -348,7 +320,8 @@ class HomeController extends Controller
         $all_request = $request->input('params');
         $response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'DeleteUserClient',
-            'client_id' => Auth::user()->client_id, //The id of the client to remove the user from
+            'client_id' => Auth::user()->client_id,
+            //The id of the client to remove the user from
             'user_id' => $all_request['user_id'], //The id of the user to remove from the client
         ]);
 
@@ -367,8 +340,7 @@ class HomeController extends Controller
                 'data' => $response,
                 'users_list' => $users_list,
             ]);
-        }
-        else {
+        } else {
             return response()->json([
                 'result' => 'failed',
                 'data' => $response,
@@ -379,11 +351,12 @@ class HomeController extends Controller
     public function managePermissions(Request $request) // manage permission of invited users
     {
         $all_request = $request->input('params');
-        $user_id  = $all_request['user_id'];
+        $user_id = $all_request['user_id'];
 
         $response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetUserPermissions',
-            'client_id' => Auth::user()->client_id, //The ID of the client the invite is for
+            'client_id' => Auth::user()->client_id,
+            //The ID of the client the invite is for
             'user_id' => $user_id,
         ]);
 
@@ -401,10 +374,10 @@ class HomeController extends Controller
     public function edit_user_permissions(Request $request)
     {
         $all_request = $request->input('params');
-        
+
         $permissions = '';
         foreach (['profile', 'contacts', 'products', 'manageproducts', 'productsso', 'domains', 'managedomains', 'invoices', 'quotes', 'tickets', 'affiliates', 'emails', 'orders'] as $permissionName) {
-            if (   $all_request[$permissionName]) {
+            if ($all_request[$permissionName]) {
                 if (strlen($permissions) > 0) {
                     $permissions .= ',';
                 }
@@ -424,8 +397,7 @@ class HomeController extends Controller
                 'result' => 'success',
                 'data' => $response,
             ]);
-        }
-        else {
+        } else {
             return response()->json([
                 'result' => 'failed',
                 'data' => $response,
@@ -455,51 +427,54 @@ class HomeController extends Controller
             $total_tickets = $orders_response['totalresults'];
             $orders = $orders_response['products']['product'];
             $orders = collect($orders)->sortByDesc($request->orderby)->values()->all();
-            foreach ($states as $state)
-                foreach ($orders as $order)
-                    $state_order[$state] = [];
-
-            foreach ($states as $state)
-                foreach ($orders as $order){
+            foreach ($states as $state) foreach ($orders as $order)
+                    $state_order[$state] = []; foreach ($states as $state) foreach ($orders as $order) {
                     if ($order['status'] == $state) {
                         array_push($state_order[$state], $order);
-                        
+
                         $last_index = count($state_order[$state]) - 1;
-                        if(strpos($order['groupname'],'Netherlands') !== false){
+                        if (strpos($order['groupname'], 'Netherlands') !== false) {
                             $state_order[$state][$last_index]['flag'] = 'flag-nl';
-                        }else{
+                        } else {
                             $state_order[$state][$last_index]['flag'] = 'flag-en';
                         }
-                        
-                        if($state == 'Active'){
+
+                        if ($state == 'Active') {
                             $page = 0;
                             $reslen = 0;
                             //For Searching
                             $post = array();
                             $post['vpsid'] = $order['customfields']['customfield'][1]['value'];
-                            $vps_info = $this->virtualizorAdmin->listvs($page ,$reslen ,$post);
+                            $vps_info = $this->virtualizorAdmin->listvs($page, $reslen, $post);
                             $vps_info = $vps_info[$post['vpsid']];
-                            $system = explode('-',$vps_info['os_name'])[0];
+                            $system = explode('-', $vps_info['os_name'])[0];
 
-                        }else{
-                            $system = explode('-',$order['configoptions']['configoption'][1]['value'])[0];
+                        } else {
+                            $system = explode('-', $order['configoptions']['configoption'][1]['value'])[0];
                         }
 
-                        switch($system){
+                        switch ($system) {
                             case 'windows':
-                                $state_order[$state][$last_index]['sys_log'] = 'windows'; break;
+                                $state_order[$state][$last_index]['sys_log'] = 'windows';
+                                break;
                             case 'ubuntu':
-                                $state_order[$state][$last_index]['sys_log'] = 'ubuntu'; break;
+                                $state_order[$state][$last_index]['sys_log'] = 'ubuntu';
+                                break;
                             case 'centos':
-                                $state_order[$state][$last_index]['sys_log'] = 'centos'; break;
+                                $state_order[$state][$last_index]['sys_log'] = 'centos';
+                                break;
                             case 'debian':
-                                $state_order[$state][$last_index]['sys_log'] = 'debian'; break;
+                                $state_order[$state][$last_index]['sys_log'] = 'debian';
+                                break;
                             case 'almalinux':
-                                $state_order[$state][$last_index]['sys_log'] = 'almalinux'; break;
+                                $state_order[$state][$last_index]['sys_log'] = 'almalinux';
+                                break;
                             case 'fedora':
-                                $state_order[$state][$last_index]['sys_log'] = 'fedora'; break;
+                                $state_order[$state][$last_index]['sys_log'] = 'fedora';
+                                break;
                             case 'rocky':
-                                $state_order[$state][$last_index]['sys_log'] = 'rocky'; break;
+                                $state_order[$state][$last_index]['sys_log'] = 'rocky';
+                                break;
                         }
                     }
                 }
@@ -510,12 +485,12 @@ class HomeController extends Controller
 
     private function getProductGroups()
     {
-       
+
         $products = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetProducts',
         ]);
-       
-       $productGroups = [];
+
+        $productGroups = [];
         foreach ($products['products']['product'] as $product) {
             $parts = explode('?', $product['product_url']);
             $group_names = explode('/', $parts[1]);
@@ -527,6 +502,6 @@ class HomeController extends Controller
         }
 
         return $productGroups;
-        
+
     }
 }

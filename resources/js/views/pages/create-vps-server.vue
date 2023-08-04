@@ -8,7 +8,8 @@
         <div class="row server-item-wrapper">
           <div v-for="(os, key) in oslist"
             :class="selected_os == key ? 'server-item display-distributions selected-os' : 'server-item display-distributions'"
-            :data-dist="key" @click="selected_os = key, selected_osid = null" v-show="ucfirst(key) != 'Others'" :key="key">
+            :data-dist="key" @click="selected_os = key, selected_osid = null" v-show="ucfirst(key) != 'Others'"
+            :key="key">
             <img :src="'assets/img/' + key + '-logo.png'" />
             <span>{{ ucfirst(key) }}</span>
           </div>
@@ -41,8 +42,8 @@
             <div class="row" @click="selected_group_id = key">
               <div class="image-wrapper mb-2" style="font-size: 20px">
                 <img :src="key == 2
-                    ? 'assets/img/flag-nl.png'
-                    : 'assets/img/flag-en.png'
+                  ? 'assets/img/flag-nl.png'
+                  : 'assets/img/flag-en.png'
                   " style="width: 28px" alt="" />
                 <span v-if="key == 2">&nbsp;{{ $t('Netherlands') }}</span>
                 <span v-else>&nbsp;{{ $t('USA') }}</span>
@@ -121,6 +122,27 @@
         <!-- server list block end -->
       </div>
 
+      <!-- Configurable_Options -->
+      <div class="sub-section">
+        <h3 class="sub-title">{{ $t('Configurable_Options') }}</h3>
+        <div class="row">
+          <div class="configure-server-form">
+            <div class="mb-2">
+              <label for="number_of_ips" class="form-label">{{ $t('Number_of_IPs') }}</label>
+              <div style="display: flex">
+                <select name="number_of_ips" id="number_of_ips" class="form-select" v-model="selected_number_of_ips"
+                  style="margin-right: 10px; margin-bottom: 10px; width: auto;">
+                  <option v-for="number in 60" :key="number" :value="number">
+                    {{ number }} <span v-if="number > 1"> €{{ ((number - 1) * 2.5).toFixed(2) }}EUR</span>
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Configure Server -->
       <div class="sub-section">
         <h3 class="sub-title">{{ $t('Configure_Server') }}</h3>
         <div class="row">
@@ -161,6 +183,7 @@
                 <br />{{ $t('tips_content3') }}
               </div>
             </div>
+            <!-- Create Server button -->
             <div class="mb-3 text-end">
               <button id="create-btn" type="submit" class="btn btn-dark hover-dark-light" @click="clickCreate()">
                 {{ $t('Create_Server') }}
@@ -169,6 +192,10 @@
           </div>
         </div>
       </div>
+
+
+
+
     </div>
     <!-- modal -->
     <div class="modal modal-ticket" v-if="openModal">
@@ -199,8 +226,8 @@
                     <div class="row">
                       <div class="image-wrapper mb-2" style="font-size: 20px">
                         <img :src="key == 2
-                            ? 'assets/img/flag-nl.png'
-                            : 'assets/img/flag-en.png'
+                          ? 'assets/img/flag-nl.png'
+                          : 'assets/img/flag-en.png'
                           " style="width: 28px" alt="" />
                         <span v-if="key == 2">&nbsp;{{ $t('Netherlands') }}</span>
                         <span v-else>&nbsp;{{ $t('USA') }}</span>
@@ -212,7 +239,7 @@
                   {{ $t('Host_Name') }}: {{ hostname }}
                 </div>
                 <div class="vps-ipnum">
-                  {{ $t('Number_of_IPs') }}: 1
+                  {{ $t('Number_of_IPs') }}: {{ selected_number_of_ips }}
                 </div>
                 <div class="vps-os">
                   {{ selected_os_name ? selected_os_name : "" }}
@@ -297,6 +324,7 @@ const selected_configid = ref(null);
 const selected_product = ref(null);
 const selected_os_name = ref(null);
 const selected_group_id = ref(null);
+const selected_number_of_ips = ref(1);
 const hostname = ref("");
 const hostpassword = ref("");
 const paymentmethod = ref("cryptomusgateway")
@@ -319,6 +347,7 @@ function clickCheckout() {
       paymentMethod: paymentmethod.value,
       product_id: selected_product.value.pid,
       config_id: selected_configid.value,
+      number_of_ips: selected_number_of_ips.value,
     })
     .then((res) => {
       showLoader(false);

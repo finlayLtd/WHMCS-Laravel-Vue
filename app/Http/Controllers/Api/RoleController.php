@@ -32,12 +32,12 @@ class RoleController extends Controller
                 $query->where('id', request('search_id'));
             })
             ->when(request('search_title'), function ($query) {
-                $query->where('name', 'like', '%'.request('search_title').'%');
+                $query->where('name', 'like', '%' . request('search_title') . '%');
             })
             ->when(request('search_global'), function ($query) {
-                $query->where(function($q) {
+                $query->where(function ($q) {
                     $q->where('id', request('search_global'))
-                        ->orWhere('name', 'like', '%'.request('search_global').'%');
+                        ->orWhere('name', 'like', '%' . request('search_global') . '%');
 
                 });
             })
@@ -109,7 +109,8 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Role $role) {
+    public function destroy(Role $role)
+    {
         $this->authorize('role-delete');
         $role->delete();
 

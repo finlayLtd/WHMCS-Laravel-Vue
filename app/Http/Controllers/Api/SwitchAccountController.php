@@ -19,7 +19,7 @@ class SwitchAccountController extends Controller
      *
      * @return void
      */
-    
+
 
     /**
      * Show the application dashboard.
@@ -42,7 +42,7 @@ class SwitchAccountController extends Controller
                 'action' => 'GetClientsDetails',
                 'clientid' => $client['id'], //The ID of the client the invite is for
             ]);
-            if($temp_response['result'] == 'success'){
+            if ($temp_response['result'] == 'success') {
                 $user_instance = $temp_response['client'];
                 array_push($clients, $user_instance);
             }
@@ -53,7 +53,7 @@ class SwitchAccountController extends Controller
         ]);
     }
 
-    public function switch(Request $request)
+    public function switch (Request $request)
     {
         $all_request = $request->input('params');
         // $all_request['id']
@@ -69,20 +69,17 @@ class SwitchAccountController extends Controller
         $userAttributes = [];
         $permissions = ['profile', 'contacts', 'products', 'manageproducts', 'productsso', 'domains', 'managedomains', 'invoices', 'quotes', 'tickets', 'affiliates', 'emails', 'orders'];
 
-        
-
         $userAttributes = (array) (new \Sburina\Whmcs\Client)->post([
             'action' => 'getClientsDetails',
             'email' => $all_request['switching_email'],
         ]);
 
         $userAttributes['originUserData'] = $originUserData;
-        
-       
 
         $permission_response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetUserPermissions',
-            'client_id' => $userAttributes['client_id'], //The ID of the client the invite is for
+            'client_id' => $userAttributes['client_id'],
+            //The ID of the client the invite is for
             'user_id' => $userAttributes['originUserData']['id'],
         ]);
 
@@ -92,13 +89,8 @@ class SwitchAccountController extends Controller
 
         $userAttributes['permissions'] = $permissions;
 
-       
-
         $user = User::where('email', Auth::user()->email)->first();
 
-        
-
-        
         // update table
         if (!$user) {
             $user = new User();

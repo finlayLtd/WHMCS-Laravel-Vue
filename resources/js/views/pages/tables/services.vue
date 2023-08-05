@@ -131,7 +131,6 @@
               </div>
             </div>
           </div>
-
         </div>
       </template>
 
@@ -195,7 +194,6 @@ const totalFilterPages = ref(1);
 
 function onPageChanged(page) {
   params.value.page = page;
-  //getTicketsData(); // Fetch tickets for the new page
 }
 
 const clickState = (state) => {
@@ -213,7 +211,6 @@ const getServersData = () => {
     states.value = res.data.states;
     state_order.value = res.data.state_order;
     let tempArray = state_order.value;
-    // totalPages.value = Math.ceil(servers.value.length / perPage_servers);
     totalFilterPages.value = Math.ceil(tempArray['Active'].length / perPage_servers);
 
   }).catch((e) => {
@@ -222,10 +219,6 @@ const getServersData = () => {
 
   })
 }
-
-
-
-
 
 function setOrder(orderBy, order) {
   params.value.orderby = orderBy

@@ -45,14 +45,6 @@ const getVNCContent = () => {
     });
 };
 
-
-
-
-
-
-
-
-
 getVNCContent();
 </script>
 

@@ -169,7 +169,6 @@ class CreateVpsServerController extends Controller
                 }
             }
         }
-        // print_r($product);exit;
         return $products;
     }
 
@@ -184,7 +183,6 @@ class CreateVpsServerController extends Controller
         $product_response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetProductsGroups'
         ]);
-
         print_r($product_response);
         exit;
     }
@@ -196,7 +194,6 @@ class CreateVpsServerController extends Controller
         ]);
 
         return $payment_methods['paymentmethods']['paymentmethod'];
-        //    print_r($payment_methods);exit;
     }
 
     private function getuserPaymentToken()
@@ -280,7 +277,6 @@ class CreateVpsServerController extends Controller
                 // apply credit and get the result
             }
 
-            // $add_order_response['redirect_url'] = route('overview', ['order_id' => $add_order_response['orderid']]);
             if ($add_order_response['result'] == 'success') {
                 return response()->json([
                     'result' => 'success',

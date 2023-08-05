@@ -67,7 +67,6 @@ class AuthenticatedSessionController extends Controller
             'search' => $request->email,
         ]);
 
-        // $res = (array) $this->client->sbGetClientsDetails($request->email);
         $res  = (array) (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetClientsDetails',
             'email' => $request->email,

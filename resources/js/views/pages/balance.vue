@@ -226,8 +226,6 @@ const totalresults = ref(0);
 
 const perPage = 15;
 
-console.log(user.value.client_id);
-
 const params = ref({
   client_id: user.value.client_id,
   orderby: "",

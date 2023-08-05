@@ -55,9 +55,6 @@ class ServersController extends Controller
         $states[1] = $states[0];
         $states[0] = $temp;
 
-
-
-
         $orders_response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetClientsProducts',
             'clientid' => $request->client_id,
@@ -69,7 +66,6 @@ class ServersController extends Controller
 
         $products = $products_response['products']['product'];
 
-        // print_r($products);exit;
         if (count($products)) {
             foreach ($products as $key => $product) {
                 $products[$key]['server_info'] = array();
@@ -91,7 +87,6 @@ class ServersController extends Controller
 
         if ($orders_response['result'] == 'success') {
             if ($orders_response['totalresults'] > 0) {
-                // $total_tickets = $orders_response['totalresults'];
                 $orders = $orders_response['products']['product'];
                 if ($request->orderby && $request->orderby != '')
                     ;
@@ -138,10 +133,6 @@ class ServersController extends Controller
                     }
             }
         }
-
-
-        // $vps = $this->getVPSList();
-        // print_r($vps);exit;
 
         return response()->json(compact('states', 'state_order', 'products', 'product_group'));
 

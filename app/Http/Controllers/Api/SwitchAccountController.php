@@ -56,8 +56,6 @@ class SwitchAccountController extends Controller
     public function switch (Request $request)
     {
         $all_request = $request->input('params');
-        // $all_request['id']
-
         $originUserData_reponse = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetUsers',
             'search' => Auth::user()->email,

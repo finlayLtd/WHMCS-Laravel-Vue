@@ -1,17 +1,12 @@
 import Cookies from 'js-cookie'
 import store from "../store";
 
-// const AuthenticatedLayout = () => import('../layouts/Authenticated.vue')
 const GuestLayout = ()  => import('../layouts/Guest.vue');
 const AuthLayout = ()  => import('../layouts/AuthLayout.vue');
-// const PostsIndex  = ()  => import('../views/admin/posts/Index.vue');
-// const PostsCreate  = ()  => import('../views/admin/posts/Create.vue');
-// const PostsEdit  = ()  => import('../views/admin/posts/Edit.vue');
 
 function requireLogin(to, from, next) {
     let isLogin = false;
     isLogin = !!store.state.auth.authenticated;
-
     if (isLogin) {
         next()
     } else {
@@ -33,7 +28,6 @@ function guest(to, from, next) {
 export default [
     {
         path: '/',
-        // redirect: { name: 'auth.login' },
         component: GuestLayout,
         children: [
             {
@@ -49,12 +43,8 @@ export default [
     {
         path: '/',
         component: GuestLayout,
-        // redirect: {
-        //     name: 'admin.index'
-        // },
         beforeEnter: requireLogin,
         children: [
-           
             {
                 path: '/dashboard',
                 name: 'dashboard',
@@ -80,8 +70,6 @@ export default [
                 name: 'ticket-detail',
                 component: () => import('../views/pages/ticket-detail.vue'),
             },
-
-            
 
             {
                 path: 'manageUser-detail/:id/:email',
@@ -115,15 +103,9 @@ export default [
 
         ]
     },
-    // {
-    //     path: '/login',
-    //     name: 'auth.login',
-    //     component: () => import('../views/login/Login.vue'),
-    //     beforeEnter: guest,
-    // },
+
     {
         path: '/',
-        // redirect: { name: 'login' },
         component: AuthLayout,
         children: [
             {

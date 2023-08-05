@@ -2169,9 +2169,6 @@ function renderChat(data, color) {
       ntw_in_data.push([val[1], val[7] * 1]);
       ntw_out_data.push([val[1], val[8] * 1]);
       ntw_total_data.push([val[1], parseInt(val[7]) + parseInt(val[8])]);
-      // io_read_data.push([val[1], val[9] * 1]);
-      // io_write_data.push([val[1], val[10] * 1]);
-      // Display the average speed of available data
       avg_download += parseInt(val[7]);
       avg_upload += parseInt(val[8]);
       avg_io_read += parseInt(val[9]);

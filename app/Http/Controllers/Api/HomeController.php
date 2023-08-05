@@ -195,8 +195,6 @@ class HomeController extends Controller
             'action' => 'GetInvoices',
             'orderby' => $request->orderby,
             'order' => $request->order,
-            // 'limitstart' => $offset,
-            // 'limitnum' => 10, // Set number of tickets to retrieve per request
             'userid' => Auth::user()->client_id, // Set number of tickets to retrieve per request
         ]);
         if (count($response['invoices']) != 0) {

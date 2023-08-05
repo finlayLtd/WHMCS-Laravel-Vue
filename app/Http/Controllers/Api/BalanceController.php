@@ -82,17 +82,4 @@ class BalanceController extends Controller
         ]);
     }
 
-    public function invoiceDetail(Request $request)
-    {
-        $invoice_id = $request->id;
-
-        $invoice_detail = (new \Sburina\Whmcs\Client)->post([
-            'action' => 'GetInvoice',
-            'invoiceid' => $invoice_id,
-        ]);
-
-        return view('pages/invoice-detail', compact('invoice_id', 'invoice_detail'));
-    }
-
-
 }

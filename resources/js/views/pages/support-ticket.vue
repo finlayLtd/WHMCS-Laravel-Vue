@@ -162,15 +162,7 @@
 										@page-changed="onPageChanged" />
 								</div>
 							</div>
-
-
 						</div>
-
-
-
-
-
-
 					</div>
 				</div>
 			</template>
@@ -178,7 +170,6 @@
 			<template v-else>
 				<NoPermission />
 			</template>
-
 		</div>
 	</section>
 
@@ -190,7 +181,6 @@
 			<div class="modal-close" @click="openModal = false">
 				<img class="close-dark" src="assets/img/close.svg" alt="">
 				<img class="close-light" src="assets/img/close-light.svg" alt="">
-
 			</div>
 			<div class="modal-content">
 
@@ -297,13 +287,9 @@ const getTicketsData = () => {
 		departments.value = res.data.departments
 		orders.value = res.data.orders
 		const totalTickets = res.data.totalTickets;
-
 		totalPages.value = Math.ceil(totalTickets / perPage);
-
-
 	}).catch((e) => {
 		console.log(e)
-
 	})
 }
 
@@ -313,7 +299,6 @@ function formatDate(date) {
 }
 function onPageChanged(page) {
 	params.value.page = page;
-	//getTicketsData(); // Fetch tickets for the new page
 }
 
 function getTabId(title) {
@@ -372,6 +357,7 @@ const createTicket = () => {
 			console.log(e);
 		});
 };
+
 useAuth().getUser();
 </script>
 

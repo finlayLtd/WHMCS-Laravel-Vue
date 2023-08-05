@@ -37,12 +37,8 @@ export default {
                 if (data.success) {
                     commit('SET_USER', data.data)
                     commit('SET_AUTHENTICATED', true)
-                    // router.push({name: 'dashboard'})
                 }
-                // else {
-                //     commit('SET_USER', {})
-                //     commit('SET_AUTHENTICATED', false)
-                // }
+
             }).catch(({res}) => {
                 commit('SET_USER', {})
                 commit('SET_AUTHENTICATED', false)

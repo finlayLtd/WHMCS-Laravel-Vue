@@ -38,7 +38,6 @@ class TicketDetailController extends Controller
             'action' => 'CreateSsoToken',
             'user_id' => Auth::user()->whmcs_id,
             'destination' => 'sso:custom_redirect',
-
             'sso_redirect_path' => 'dl.php?type=ar&id=' . $reply_id . '&i=0',
         ]);
 

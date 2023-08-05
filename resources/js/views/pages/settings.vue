@@ -15,39 +15,31 @@
               <ul style="overflow-x: unset" class="nav nav-pills mb-3 mb-md-0 order-1 order-md-2 mb-lg-0 flex-nowrap"
                 id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
-                  <!-- <a href="{{ url('/settings') }}"> -->
                   <button class="nav-link active" id="pills-overview-tab" data-bs-toggle="pill"
                     data-bs-target="#pills-overview" type="button" role="tab" aria-controls="pills-overview"
                     aria-selected="true">
                     {{ $t('Your_Profile') }}
                   </button>
-                  <!-- </a> -->
                 </li>
                 <li class="nav-item" role="presentation">
-                  <!-- <a href="{{ url('/settings_password') }}"> -->
                   <button class="nav-link" id="pills-analytics-tab" data-bs-toggle="pill"
                     data-bs-target="#pills-analytics" type="button" role="tab" aria-controls="pills-analytics"
                     aria-selected="false">
                     {{ $t('Change_Password') }}
                   </button>
-                  <!-- </a> -->
                 </li>
                 <li class="nav-item" role="presentation">
-                  <!-- <a href="{{ url('/settings_userManage') }}"> -->
                   <button class="nav-link" id="pills-userManagement-tab" data-bs-toggle="pill"
                     data-bs-target="#pills-userManagement" type="button" role="tab" aria-controls="pills-userManagement"
                     aria-selected="false">
                     {{ $t('User_Management') }}
                   </button>
-                  <!-- </a> -->
                 </li>
                 <li class="nav-item" role="presentation">
-                  <!-- <a href="{{ url('/settings_emailHistory') }}"> -->
                   <button class="nav-link" id="pills-emails-tab" data-bs-toggle="pill" data-bs-target="#pills-emails"
                     type="button" role="tab" aria-controls="pills-emails" aria-selected="false">
                     {{ $t('Email_History') }}
                   </button>
-                  <!-- </a> -->
                 </li>
               </ul>
             </div>
@@ -84,7 +76,6 @@
                       <div class="overview-input mb-4">
                         <input type="text" id="lastname" name="lastname" placeholder="Last Name" required
                           v-model="clientDetails.lastname" />
-                        <!-- value="{{ Auth::user()->lastname }}" -->
                       </div>
                       <div class="overview-button-wrapper pt-0">
                         <button @click="
@@ -173,7 +164,6 @@
                   <NoPermission />
                 </template>
 
-                <!-- @else <NoPermission/> @endif -->
               </div>
             </div>
 
@@ -338,7 +328,6 @@
                 <NoPermission />
               </template>
 
-              <!-- @else <NoPermission/> @endif -->
             </div>
 
             <!-- email history -->
@@ -360,7 +349,6 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <!-- @foreach($emails as $email) -->
                           <tr v-if="!emailsList || emailsList.length === 0">
                             <td colspan="3" style="text-align: center">
                               <h5 style="margin-top: 20px">{{ $t('No_emails') }}</h5>
@@ -371,7 +359,6 @@
                             <td>{{ formatDate(email.date) }}</td>
                             <td class="date-cell">{{ email.subject }}</td>
                           </tr>
-                          <!-- @endforeach -->
                         </tbody>
                       </table>
                     </div>
@@ -435,7 +422,6 @@ const emails = ref(true);
 const orders = ref(true);
 const totalPages = ref(0);
 
-// const status = ref([]);
 const params = ref({
   client_id: user.value.client_id,
   orderby: "",

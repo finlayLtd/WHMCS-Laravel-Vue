@@ -75,8 +75,6 @@ export default function useAuth() {
 
         await axios.post('/register', registerForm)
             .then(async response => {
-                // await store.dispatch('auth/getUser')
-                // await loginUser()
                 $toast.success("Registration successfully!");
                 await router.push({ name: 'auth.login' })
             })
@@ -90,7 +88,6 @@ export default function useAuth() {
 
     const loginUser = () => {
         user = store.state.auth.user
-        // Cookies.set('loggedIn', true)
         getAbilities()
     }
 
@@ -114,15 +111,10 @@ export default function useAuth() {
                 router.push({ name: 'auth.login' })
             })
             .catch(error => {
-                // swal({
-                //     icon: 'error',
-                //     title: error.response.status,
-                //     text: error.response.statusText
-                // })
+                console.log(error);
             })
             .finally(() => {
                 processing.value = false
-                // Cookies.remove('loggedIn')
             })
     }
 

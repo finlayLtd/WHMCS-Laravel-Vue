@@ -81,7 +81,6 @@ class OverviewController extends Controller
         if ($status == 'Active') {
             $vpsid = $other_info['vps_info']['vpsid'];
             $vps_info = $this->getVpsStatistics($vpsid);
-            // $network_speed = $this->getNetworkSpeed($vpsid);
             $cpu = $this->getCpuStatistics($vpsid);
             $analysis_data = $this->getAnalysisData($vpsid);
             $ip_list = $this->getIpinfo($other_info['vps_info']['hostname']);
@@ -98,17 +97,7 @@ class OverviewController extends Controller
             }
         }
 
-        // $orders = array();
         $departments = array();
-
-        // $orders_info =  (new \Sburina\Whmcs\Client)->post([
-        //     'action' => 'GetOrders',
-        //     'userid' => Auth::user()->client_id,
-        // ]);
-
-        // if ($orders_info['totalresults'] > 0) {
-        //     $orders = $orders_info['orders']['order'];
-        // }
 
         $departments_info = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetSupportDepartments'
@@ -119,11 +108,6 @@ class OverviewController extends Controller
                 $departments = $departments_info['departments']['department'];
             }
         }
-
-
-
-
-
 
         if ($invoiceInfo['status'] == 'Paid') {
             // order_product_info.nextduedate
@@ -168,14 +152,8 @@ class OverviewController extends Controller
             }
         }
 
-
-
-
-
-
         return response()->json([
             'relid' => $relid,
-            // 'filteredInvoices' => $filteredInvoices,
             'order_id' => $order_id,
             'order_product_info' => $order_product_info,
             'dayDiff' => $dayDiff,
@@ -187,20 +165,14 @@ class OverviewController extends Controller
             'vps_info' => $vps_info,
             'oslists' => $oslists,
             'cpu' => $cpu,
-            // 'network_speed' => $network_speed,
             'invoiceInfo' => $invoiceInfo,
-            // 'orders' => $orders,
             'departments' => $departments,
             'ip_list' => $ip_list,
             'analysis_data' => $analysis_data,
             'status' => $status,
             'rdnslist' => $rdnslist,
-            // 'other_info' => $other_info,
-
         ]);
 
-        // return view('pages/overview', compact('relid','order_id','order_product_info','dayDiff','detail_info','flag','sys_logo',
-        // 'system','vpsid','vps_info','oslists','cpu','network_speed','invoiceInfo','orders','departments','ip_list','analysis_data','status','rdnslist'));
     }
 
     private function getClientProductInfo($order_id)
@@ -332,7 +304,6 @@ class OverviewController extends Controller
     public function turnon(Request $request)
     {
         $all_request = $request->input('params');
-        // $all_request['id']
         $vpsid = $all_request['vpsid'];
         $output = $this->virtualizorAdmin->start($vpsid);
         if ($output['done_msg'] == 'VPS has been started successfully') {
@@ -346,7 +317,6 @@ class OverviewController extends Controller
     public function turnoff(Request $request)
     {
         $all_request = $request->input('params');
-        // $all_request['id']
         $vpsid = $all_request['vpsid'];
         $output = $this->virtualizorAdmin->stop($vpsid);
         if ($output['done_msg'] == 'Shutdown signal has been sent to the VPS') {
@@ -360,7 +330,6 @@ class OverviewController extends Controller
     public function poweroff(Request $request)
     {
         $all_request = $request->input('params');
-        // $all_request['id']
         $vpsid = $all_request['vpsid'];
         $output = $this->virtualizorAdmin->poweroff($vpsid);
         if ($output['done_msg'] == 'VPS has been powered off successfully') {
@@ -374,7 +343,6 @@ class OverviewController extends Controller
     public function reboot(Request $request)
     {
         $all_request = $request->input('params');
-        // $all_request['id']
         $vpsid = $all_request['vpsid'];
         $output = $this->virtualizorAdmin->restart($vpsid);
         if ($output['done_msg'] == 'Restart signal has been sent to the VPS') {
@@ -388,7 +356,6 @@ class OverviewController extends Controller
     public function rebuild(Request $request)
     {
         $all_request = $request->input('params');
-        // $all_request['id']
         $post = array();
         $post['vpsid'] = $all_request['vpsid'];
         $post['format_primary'] = $all_request['format_disk_flag'];
@@ -407,7 +374,6 @@ class OverviewController extends Controller
     public function checkhostName(Request $request)
     {
         $all_request = $request->input('params');
-        // $all_request['id']
         $exist_flag = false;
         $page = 1;
         $reslen = 100;
@@ -433,7 +399,6 @@ class OverviewController extends Controller
     public function changehostNames(Request $request)
     {
         $all_request = $request->input('params');
-        // $all_request['id']
         $post = array();
         $post['vpsid'] = $all_request['vpsid'];
         $post['hostname'] = $all_request['hostname'];
@@ -448,7 +413,6 @@ class OverviewController extends Controller
     public function changeRootPwd(Request $request)
     {
         $all_request = $request->input('params');
-        // $all_request['id']
         $post = array();
         $post['vpsid'] = $all_request['vpsid'];
         $post['rootpass'] = $all_request['root_pwd'];
@@ -527,8 +491,6 @@ class OverviewController extends Controller
     public function changeip(Request $request)
     {
         $all_request = $request->input('params');
-        // $all_request['id']
-
         $post = array();
         $post['vpsid'] = $all_request['vpsid'];
         $post['ips'] = $all_request['reorder_ips'];
@@ -545,8 +507,6 @@ class OverviewController extends Controller
     public function connectvnc(Request $request)
     {
         $all_request = $request->input('params');
-        // $all_request['id']
-
         $post = array();
         $post['novnc'] = $all_request['id'];
         $result = $this->virtualizorAdmin->vnc($post);
@@ -554,7 +514,6 @@ class OverviewController extends Controller
         $info = $result['info'];
         $base_url = public_path() . '/novnc/';
         $noVNC_file_path = public_path('novnc/vnc_auto_virt.html');
-        // $noVNC_file_path = public_path('novnc/vnc_lite.html');
         $noVNC_file_content = file_get_contents($noVNC_file_path);
 
         $host_url = url('/');
@@ -565,11 +524,6 @@ class OverviewController extends Controller
         $websockify = 'websockify';
         if (!empty($_SERVER['HTTPS'])) {
             $proto = 'https';
-            // if($_SERVER['SERVER_PORT'] == '443'){
-            //     $port = 443;
-            // }else{
-            //     $port = 4083;
-            // }
             $port = 4083;
             $websockify = 'novnc/';
         }
@@ -615,8 +569,6 @@ class OverviewController extends Controller
     public function addRDNS(Request $request)
     {
         $all_request = $request->input('params');
-        // $all_request['id']
-
         $post = array();
         $result = $this->virtualizorAdmin->pdns(1, 50, $post);
         $pnds_server_info = reset($result['pdns']);
@@ -643,8 +595,6 @@ class OverviewController extends Controller
     public function deleteRDNS(Request $request)
     {
         $all_request = $request->input('params');
-        // $all_request['ip']
-
         $post = array();
         $result = $this->virtualizorAdmin->pdns(1, 50, $post);
         $pnds_server_info = reset($result['pdns']);

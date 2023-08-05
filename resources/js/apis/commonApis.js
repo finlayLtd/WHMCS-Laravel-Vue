@@ -8,7 +8,6 @@ export const commonApis = defineStore('commonApis', {
     runGetApi(url , params) { return axios.get(url, { params })},
     
     runPostApi(url , params) { return axios.post(url, { params })},
-
    
   },
 })

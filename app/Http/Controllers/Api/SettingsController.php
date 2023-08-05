@@ -17,7 +17,6 @@ class SettingsController extends Controller
      */
     public function index(Request $request)
     {
-        // return view('pages/settings');
         $emails = [];
         $clientDetails = null;
         $users_list = [];

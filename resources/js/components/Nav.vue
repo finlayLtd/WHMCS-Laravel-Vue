@@ -209,15 +209,7 @@ import { computed, onMounted, ref, onBeforeUnmount } from "vue";
 import { useI18n } from 'vue-i18n'
 import { loadMessages } from '@/plugins/i18n'
 
-
-
-
-
 const i18n = useI18n({useScope: "global"});
-
-
-
-
 
 const props = defineProps({
   isAuthLayout: {
@@ -241,8 +233,6 @@ function setLocale(locale) {
     }
 }
 
-
-
 const switchTheme = (event) => {
   if (event.target.checked) {
     document.documentElement.setAttribute("data-theme", "dark");
@@ -265,8 +255,6 @@ onMounted(() => {
 .lang-div::after {
   display: none; /* hide the ::after pseudo-element */
 }
-
-
 
 @media screen and (max-width: 767px) {
     .d-mobile-none {

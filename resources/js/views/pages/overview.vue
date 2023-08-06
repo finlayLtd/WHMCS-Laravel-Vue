@@ -21,8 +21,15 @@
         </div>
       </div>
 
+      <div v-if="status == 'Active' && rebuilding == true">
+        <div id="suspend_div">
+          <div class="notice">{{ $t('rebuilding_tip') }}&nbsp;</div>
+        </div>
+      </div>
+
       <!-- if status is ative -->
-      <div class="sub-section server-list-tab" v-if="status && status == 'Active'">
+      <div class="sub-section server-list-tab vl-parent" v-if="status && status == 'Active'">
+        <loading v-model:active="rebuilding" :is-full-page="false" />
         <div class="row justify-content-between align-items-center">
           <div class="row mb-5 pe-0 overview-cols">
             <div class="col-xl-4 col-lg-6 col-md-6 mb-4 mb-md-0">
@@ -140,6 +147,7 @@
       </div>
 
       <div class="sub-section overview-tab" v-if="status == 'Active' && rebuilding == false">
+        
         <div class="row justify-content-between align-items-center">
           <div class="row mb-2 mb-lg-5 pe-0">
             <div class="col-md-12 d-flex justify-content-start pe-0 flex-wrap">
@@ -1629,12 +1637,6 @@
         </div>
       </div>
 
-      <div v-if="status == 'Active' && rebuilding == true">
-        <div id="suspend_div">
-          <div class="notice">{{ $t('rebuilding_tip') }}&nbsp;</div>
-        </div>
-      </div>
-
       <!-- if status is not active -->
       <div class="alert alert-warning mt-2" id="alertUnpaidInvoice" v-if="status != 'Active'">
         {{ $t('not_activated') }}
@@ -1747,6 +1749,8 @@ import { showLoader } from "@/plugins/loading.js";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 import { useRouter } from "vue-router";
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/css/index.css';
 
 import { useRoute } from "vue-router";
 
@@ -1765,6 +1769,7 @@ const net_total_data_state = ref([]);
 const theme_state = computed(() => store.getters["theme/theme"]);
 const chart_color = ref(document.documentElement.getAttribute('data-theme') == 'dark' ? '#1C1C1E' : '#ffffff');
 const componentKey = ref(1);
+
 
 watch(() => store.state.theme.theme, (newVal, oldVal) => {
   if (newVal == 'dark') chart_color.value = '#1C1C1E';
@@ -2027,6 +2032,8 @@ function rebuildOS(vpsid) {
       showLoader(false);
       if (res.status == 200) {
         rebuilding.value = true;
+        // getOverviewData()
+        startGetOverviewDataTimer();
         $toast.success(
           "VPS is being rebuilt, hence no actions are allowed to be performed on this VPS"
         );
@@ -2038,6 +2045,16 @@ function rebuildOS(vpsid) {
       showLoader(false);
       $toast.error(e);
     });
+}
+
+function startGetOverviewDataTimer() {
+  const timer = setInterval(() => {
+    if (rebuilding.value == false) {
+      clearInterval(timer);
+    } else {
+      getOverviewData();
+    }
+  }, 30000); // 30 seconds interval
 }
 
 function changePWD(vpsid) {
@@ -2136,6 +2153,11 @@ const getOverviewData = () => {
     })
     .then((res) => {
       showLoader(false);
+      if(res.data.vps_info && res.data.vpsid){
+        if(res.data.vps_info.vps_data[res.data.vpsid].status == 1){
+          rebuilding.value = false;
+        }
+      }
       analysis_data.value = res.data.analysis_data;
       relid.value = res.data.relid;
       selectedService.value = res.data.relid;

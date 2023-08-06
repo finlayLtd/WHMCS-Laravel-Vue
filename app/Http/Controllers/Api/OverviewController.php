@@ -333,8 +333,8 @@ class OverviewController extends Controller
         $all_request = $request->input('params');
         $vpsid = $all_request['vpsid'];
         $output = $this->virtualizorAdmin->poweroff($vpsid);
-        if ($output['done_msg'] == 'VPS has been powered off successfully') {
-            return response()->json($output['done_msg'], 200);
+        if ($output['done'] == true) {
+            return response()->json('VPS has been powered off successfully', 200);
         } else {
             $error = "Please try again!";
             return response()->json($error, 500);

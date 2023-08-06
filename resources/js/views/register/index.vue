@@ -188,7 +188,7 @@ const passwordStrength = computed(() => {
   var pw = password.value;
 
   // Check if the password contains any disallowed special symbols
-  if (/[^A-Za-z0-9!@]/.test(pw)) {
+  if (/[^A-Za-z0-9!@#]/.test(pw)) {
     // Set password strength to 0 if disallowed special symbols are found
     return 10;
   }
@@ -202,7 +202,7 @@ const passwordStrength = computed(() => {
   if (numeric > 3) numeric = 3;
 
   // Update the regular expression to only match "!" and "@"
-  var symbols = pw.replace(/[!@]/g, "");
+  var symbols = pw.replace(/[!@#]/g, "");
   var numsymbols = (pw.length - symbols.length);
   if (numsymbols > 3) numsymbols = 3;
 

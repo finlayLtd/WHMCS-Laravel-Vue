@@ -47,7 +47,7 @@
     "Email_Address" : "电子邮件地址",
     "tips_title" : "一个好密码的提示",
     "tips_content1" : "使用大小写字母",
-    "tips_content2" : "包含至少一个符号（只有{'!'}和{'@'}）",
+    "tips_content2" : "包含至少一个符号（只有{'!'}和{'@'}和{'#'}）",
     "tips_content3" : "不要使用字典单词和特殊字符",
     "Password_Rating" : "密码评分",
     "Agree_Policy":"我同意用户协议，并已阅读隐私政策。",
@@ -288,5 +288,7 @@
     "Network_Information":"网络信息",
     "Disk_Usage":"磁盘使用情况",
     "Configurable_Options":"可配置选项",
-    "Additional_IPv4":"附加IPv4"
+    "Additional_IPv4":"附加IPv4",
+    "Offline":"离线",
+    "rebuilding_tip":"VPS正在重新构建，因此不允许对此VPS执行任何操作"
 }

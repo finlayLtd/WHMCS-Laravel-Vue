@@ -47,13 +47,13 @@
                   <tbody>
                     <tr>
                       <td>{{ $t('Public_IPv4') }}</td>
-                      <td class="clipboard-input">
-                        {{ order_product_info.dedicatedip }}
+                      <td class="clipboard-input" v-if="ip_list">
+                        {{ getMainIp(ip_list.ips) }}
                         &nbsp;
                       </td>
                       <td>
                         <img src="/assets/img/copy.svg" class="icon-clipboard" @click="
-                          copyToClipboard(order_product_info.dedicatedip)
+                          copyToClipboard(getMainIp(ip_list.ips))
                           " />
                       </td>
                     </tr>
@@ -139,7 +139,7 @@
         </div>
       </div>
 
-      <div class="sub-section overview-tab" v-if="status == 'Active'">
+      <div class="sub-section overview-tab" v-if="status == 'Active' && rebuilding == false">
         <div class="row justify-content-between align-items-center">
           <div class="row mb-2 mb-lg-5 pe-0">
             <div class="col-md-12 d-flex justify-content-start pe-0 flex-wrap">
@@ -268,10 +268,12 @@
                         </div>
                         <div class="server-list-options me-3 me-lg-4" v-if="order_product_info.status == 'Active'">
                           <button class="active-badge" v-if="vps_info && vpsid && vps_info.vps_data">
-                            <template v-if="vps_info.vps_data[vpsid].status!=0">
+                            <template
+                              v-if="((vps_info.vps_data[vpsid].status != 0) && topStatus == null) || (topStatus == 1)">
                               <span class="active-dot"></span>{{ $t('Active') }}
                             </template>
-                            <template v-else>
+                            <template
+                              v-if="((vps_info.vps_data[vpsid].status == 0) && topStatus == null) || (topStatus == 0)">
                               <span class="active-dot" style="background: red;"></span>
                               <span style="color: red;">{{ $t('Offline') }}</span>
                             </template>
@@ -286,7 +288,7 @@
                     <button class="btn img-btn me-0 me-lg-2" @click="TurnOnVPS(vpsid)">
                       <i class="fa fa-play" style="color: #3fbb27"></i>&nbsp;&nbsp;{{ $t('Start') }}
                     </button>
-                    <button class="btn img-btn me-0 me-lg-2" @click="TurnOffVPS(vpsid)">
+                    <button class="btn img-btn me-0 me-lg-2" @click="PowerOffVPS(vpsid)">
                       <img src="/assets/img/power.svg" alt="" />{{ $t('Shutdown') }}
                     </button>
                   </div>
@@ -1627,6 +1629,12 @@
         </div>
       </div>
 
+      <div v-if="status == 'Active' && rebuilding == true">
+        <div id="suspend_div">
+          <div class="notice">{{ $t('rebuilding_tip') }}&nbsp;</div>
+        </div>
+      </div>
+
       <!-- if status is not active -->
       <div class="alert alert-warning mt-2" id="alertUnpaidInvoice" v-if="status != 'Active'">
         {{ $t('not_activated') }}
@@ -1776,6 +1784,8 @@ const $toast = useToast({
 const commonApi = commonApis();
 const openModal = ref(false);
 
+const topStatus = ref(null);
+const rebuilding = ref(false);
 // eye show
 const show1 = ref(false);
 const show2 = ref(false);
@@ -1861,6 +1871,17 @@ const processIps = (lists) => {
   return string;
 }
 
+const getMainIp = (lists) => {
+  let string = '';
+  for (const element of lists) {
+    if (element.primary == 1) {
+      string = element.ip;
+      break;
+    }
+  }
+  return string;
+}
+
 function copyToClipboard(text) {
   // Copy the generated hostname to the clipboard
   var copyTextarea = document.createElement("textarea");
@@ -1881,6 +1902,7 @@ function TurnOnVPS(vpsid) {
     .then((res) => {
       showLoader(false);
       if (res.status == 200) {
+        topStatus.value = 1;
         $toast.success("VPS has been started successfully");
       } else {
         $toast.error(res.data);
@@ -1892,16 +1914,17 @@ function TurnOnVPS(vpsid) {
     });
 }
 
-function TurnOffVPS(vpsid) {
+function PowerOffVPS(vpsid) {
   showLoader(true);
   commonApi
-    .runPostApi("/overview/turnoff", {
+    .runPostApi("/overview/poweroff", {
       vpsid: vpsid,
     })
     .then((res) => {
       showLoader(false);
       if (res.status == 200) {
-        $toast.success("VPS has been stopped successfully");
+        topStatus.value = 0;
+        $toast.success("VPS has been shutdown successfully");
       } else {
         $toast.error(res.data);
       }
@@ -1939,6 +1962,12 @@ function assignPrimaryIp(vpsid) {
         $toast.success(
           "Your IP settings have been saved.Your IP settings will be changed when the VPS is booted again"
         );
+        let currentPrimaryIp = '';
+        let futurePrimaryIp = '';
+        ip_list.value.ips.forEach(element => {
+          if (element.ip == order_product_info.value.dedicatedip) element.primary = -10;
+          if (element.ipid == selected_ip.value) element.primary = 1;
+        });
       } else {
         $toast.error(res.data);
       }
@@ -1997,6 +2026,7 @@ function rebuildOS(vpsid) {
     .then((res) => {
       showLoader(false);
       if (res.status == 200) {
+        rebuilding.value = true;
         $toast.success(
           "VPS is being rebuilt, hence no actions are allowed to be performed on this VPS"
         );
@@ -2226,7 +2256,7 @@ const passwordStrength = computed(() => {
   var pw = newPassword1.value;
 
   // Check if the password contains any disallowed special symbols
-  if (/[^A-Za-z0-9!@]/.test(pw)) {
+  if (/[^A-Za-z0-9!@#]/.test(pw)) {
     // Set password strength to 0 if disallowed special symbols are found
     return 10;
   }
@@ -2241,8 +2271,8 @@ const passwordStrength = computed(() => {
   var numeric = (pw.length - numnumeric.length);
   if (numeric > 3) numeric = 3;
 
-  // Update the regular expression to only match "!" and "@"
-  var symbols = pw.replace(/[!@]/g, "");
+  // Update the regular expression to only match "!" and "@" and "#"
+  var symbols = pw.replace(/[!@#]/g, "");
   var numsymbols = (pw.length - symbols.length);
   if (numsymbols > 3) numsymbols = 3;
 
@@ -2265,5 +2295,14 @@ useAuth().getUser();
     display: block !important;
     /* Your styles here */
   }
+}
+.notice{
+  color: rgb(52, 157, 255);
+  background-color: rgba(0, 98, 202, 0.13);
+  border-radius: 4px;
+  font-size: 13px;
+  padding: 15px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 </style>

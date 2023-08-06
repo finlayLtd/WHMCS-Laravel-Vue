@@ -48,9 +48,11 @@ class OverviewController extends Controller
         $order_id = $all_request['id'];
         $order_info_response = $this->getOrderinfo($order_id);
         $order_info = $order_info_response['orders']['order'];
-        $relid = $order_info[0]['lineitems']['lineitem'][0]['relid'];
+        // $relid = $order_info[0]['lineitems']['lineitem'][0]['relid'];
 
         $order_product_info = $this->getClientProductInfo($order_id);
+        $relid = $order_product_info['id'];
+
 
         $today = new DateTime(date("Y-m-d"));
         $start_day = new DateTime($order_info[0]['date']);
@@ -143,11 +145,11 @@ class OverviewController extends Controller
                 if ($temp['result'] != 'success')
                     break;
                 foreach ($temp['items']['item'] as $subitem) {
-                    if ($subitem['relid'] == $relid) {
-                        $invoiceInfo = $temp;
-                        break 2;
-                    } else
-                        break;
+                        if ($subitem['relid'] == $relid) {
+                            $invoiceInfo = $temp;
+                            break 2;
+                        } else
+                            break;
                 }
             }
         }
@@ -181,6 +183,7 @@ class OverviewController extends Controller
             'action' => 'GetClientsProducts',
             'clientid' => Auth::user()->client_id,
         ]);
+
         $orders = $orders_response['products']['product'];
         foreach ($orders as $order)
             if ($order['orderid'] == $order_id)
@@ -508,8 +511,19 @@ class OverviewController extends Controller
     public function connectvnc(Request $request)
     {
         $all_request = $request->input('params');
+        $vpsid = 0;
+
+        $order_id = $all_request['id'];
+
+        $order_product_info = $this->getClientProductInfo($order_id);
+        $other_info = $this->getOtherinfo($order_product_info);
+
+        if ($order_product_info['status'] == 'Active') {
+            $vpsid = $other_info['vps_info']['vpsid'];
+        }
+
         $post = array();
-        $post['novnc'] = $all_request['id'];
+        $post['novnc'] = $vpsid;
         $result = $this->virtualizorAdmin->vnc($post);
 
         $info = $result['info'];
@@ -529,7 +543,7 @@ class OverviewController extends Controller
             $websockify = 'novnc/';
         }
 
-        $vnc_token = $all_request['id'];
+        $vnc_token = $vpsid;
 
         $array = array(
             'HOST' => 'vnc.fidelcastro.cc',

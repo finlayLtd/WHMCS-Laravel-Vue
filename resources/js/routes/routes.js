@@ -84,7 +84,7 @@ export default [
             },
 
             {
-                path: 'overview/:id',
+                path: 'overview/:id/:tab',
                 name: 'overview',
                 component: () => import('../views/pages/overview.vue'),
             },

@@ -146,7 +146,7 @@
         </div>
       </div>
 
-      <div class="sub-section overview-tab" v-if="status == 'Active' && rebuilding == false">
+      <div class="sub-section overview-tab" v-if="status == 'Active' && rebuilding == false && fetched!=0">
         
         <div class="row justify-content-between align-items-center">
           <div class="row mb-2 mb-lg-5 pe-0">
@@ -154,9 +154,9 @@
               <ul class="nav nav-pills mb-3 mb-md-0 order-1 order-md-2 mb-lg-0 flex-nowrap" id="pills-tab" role="tablist"
                 v-if="order_product_info">
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link active" id="pills-overview-tab" data-bs-toggle="pill"
+                  <button :class="(firstTab == 'overview')?'nav-link active':'nav-link'" id="pills-overview-tab" data-bs-toggle="pill"
                     data-bs-target="#pills-overview" type="button" role="tab" aria-controls="pills-overview"
-                    aria-selected="true">
+                    :aria-selected="(firstTab == 'overview')?true:false">
                     {{ $t('Overview') }}
                   </button>
                 </li>
@@ -205,8 +205,8 @@
                 </li>
 
                 <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
-                  <button class="nav-link" id="pills-billing-tab" data-bs-toggle="pill" data-bs-target="#pills-billing"
-                    type="button" role="tab" aria-controls="pills-billing" aria-selected="false">
+                  <button :class="(firstTab == 'billing')?'nav-link active':'nav-link'" id="pills-billing-tab" data-bs-toggle="pill" data-bs-target="#pills-billing"
+                    type="button" role="tab" aria-controls="pills-billing" :aria-selected="(firstTab == 'billing')?true:false">
                     {{ $t('Billing') }}
                   </button>
                 </li>
@@ -223,7 +223,10 @@
 
           <div class="tab-content" id="pills-tabContent">
             <!--overview-->
-            <div class="tab-pane fade show active" id="pills-overview" role="tabpanel"
+            <div :class="firstTab == 'overview'
+              ? 'tab-pane fade  show active'
+              : 'tab-pane fade'
+              " id="pills-overview" role="tabpanel"
               aria-labelledby="pills-overview-tab">
               <div class="tab-inner mb-3">
                 <div class="row">
@@ -1261,7 +1264,7 @@
                 <div class="row px-0 pt-4">
                   <div class="col-md-12 d-flex justify-content-center">
                     <div class="overview-button-wrapper pt-0">
-                      <router-link :to="{ name: 'noVNC', params: { id: vpsid } }" class="btn-dark px-4 hover-dark-light"
+                      <router-link :to="{ name: 'noVNC', params: { id: route.params.id } }" class="btn-dark px-4 hover-dark-light"
                         target="_blank">
                         {{ $t('Connect_VNC') }}
                       </router-link>
@@ -1327,7 +1330,7 @@
             </div>
 
             <!--billing-->
-            <div :class="order_product_info.status != 'Active'
+            <div :class="order_product_info.status != 'Active' || firstTab == 'billing'
               ? 'tab-pane fade  show active'
               : 'tab-pane fade'
               " id="pills-billing" role="tabpanel" aria-labelledby="pills-billing-tab">
@@ -1828,12 +1831,14 @@ const newDNS = ref("");
 const selected_rdns_ip = ref("");
 const selected_rdns_id = ref(null);
 
+const firstTab = ref('overview');
+
 // for creating tickets
 const selectedService = ref(0);
 const selectedDepartment = ref(0);
 const subject = ref('Refund request');
 const message = ref('I want to cancel this service.');
-
+const fetched = ref(0);
 // settings
 const hostname = ref('');
 
@@ -1845,6 +1850,14 @@ const openInNewTab = (url) => {
   const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
   if (newWindow) newWindow.opener = null
 }
+
+const moveTab = () => {
+  if(route.params.tab == 'invoice') {
+    firstTab.value = 'billing';
+  };
+}
+
+moveTab();
 
 const openInvoiceWindow = (invoice_id) => {
   showLoader(true);
@@ -2158,6 +2171,7 @@ const getOverviewData = () => {
           rebuilding.value = false;
         }
       }
+      fetched.value = 1;
       analysis_data.value = res.data.analysis_data;
       relid.value = res.data.relid;
       selectedService.value = res.data.relid;
@@ -2188,7 +2202,7 @@ const getOverviewData = () => {
     })
     .catch((e) => {
       showLoader(false);
-      console.log(e);
+      $toast.error(e);
     });
 };
 

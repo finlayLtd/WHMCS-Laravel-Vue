@@ -24,7 +24,14 @@ class TicketDetailController extends Controller
             'ticketid' => $ticket_id,
         ]);
 
+        if($ticket_detail['userid'] != Auth::user()->client_id){
+            return response()->json([
+                'result' => 'wrong_user',
+            ]);
+        }
+
         return response()->json([
+            'result' => 'success',
             'ticket_detail' => $ticket_detail,
         ]);
     }

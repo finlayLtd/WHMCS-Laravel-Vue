@@ -41,7 +41,7 @@ const getVNCContent = () => {
     })
     .catch((e) => {
       showLoader(false);
-      console.log(e);
+      $toast.error(e);
     });
 };
 

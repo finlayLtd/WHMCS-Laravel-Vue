@@ -126,12 +126,19 @@ import { useStore } from "vuex";
 import useAuth from "@/composables/auth";
 import { showLoader } from "@/plugins/loading.js";
 import { useRoute } from "vue-router";
-const route = useRoute();
+
 // toast
-import { useToast } from "vue-toast-notification";
 import NoPermission from '@/components/NoPermission.vue';
+import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
-const $toast = useToast();
+
+const $toast = useToast({
+    toastOptions: {
+        zIndex: 99999, // set a high z-index value
+    },
+});
+
+const route = useRoute();
 const customLink = ref(null);
 const commonApi = commonApis();
 const store = useStore();
@@ -160,11 +167,12 @@ const getTicketDetail = () => {
     })
     .then((res) => {
       showLoader(false);
-      ticket_detail.value = res.data.ticket_detail;
+      if(res.data.result == 'wrong_user') $toast.error("No permission on this ticket!");
+      else ticket_detail.value = res.data.ticket_detail;
     })
     .catch((e) => {
       showLoader(false);
-      console.log(e);
+      $toast.error(e);
     });
 };
 

@@ -290,5 +290,6 @@
     "Configurable_Options":"可配置选项",
     "Additional_IPv4":"附加IPv4",
     "Offline":"离线",
-    "rebuilding_tip":"VPS正在重新构建，因此不允许对此VPS执行任何操作"
+    "rebuilding_tip":"VPS正在重新构建，因此不允许对此VPS执行任何操作",
+    "building_tip":"VPS正在安装中，因此不允许对此VPS执行任何操作"
 }

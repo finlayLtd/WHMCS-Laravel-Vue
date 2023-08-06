@@ -212,6 +212,7 @@ import useAuth from "@/composables/auth";
 import { showLoader } from "@/plugins/loading.js";
 import Pagination from '@/components/Pagination.vue';
 import NoPermission from '@/components/NoPermission.vue';
+useAuth().getUser();
 const customLink = ref(null);
 const commonApi = commonApis();
 const sortBy = ref(false);
@@ -333,6 +334,7 @@ function setOrder(orderBy, order) {
   params.value.order = order;
   getInvoicesData();
 }
+
 
 useAuth().getUser();
 </script>

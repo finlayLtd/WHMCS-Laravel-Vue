@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 use sburina\Whmcs;
 use App\Http\Controllers\Controller;
-
+use App\Models\User;
 class SupportTicketController extends Controller
 {
     public function index(Request $request)
@@ -19,6 +19,23 @@ class SupportTicketController extends Controller
             'action' => 'GetTickets',
             'clientid' => $request->client_id, // Set number of tickets to retrieve per request
         ]);
+
+        // get credit
+        $latest_user_data = (new \Sburina\Whmcs\Client)->post([
+            'action' => 'GetClientsDetails',
+            'clientid' => Auth::user()->client_id,
+        ]);
+
+        if ($latest_user_data['result'] == 'success') {
+            $user = User::where('whmcs_id', Auth::user()->whmcs_id)->first();
+            if ($user) {
+                if ($user->credit != $latest_user_data['credit']) {
+                    $user->credit = $latest_user_data['credit'];
+                    $user->save();
+                }
+            }
+        }
+
 
         $tickets_status = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetSupportStatuses'

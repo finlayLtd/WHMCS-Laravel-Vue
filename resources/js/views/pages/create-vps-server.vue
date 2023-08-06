@@ -298,7 +298,7 @@ import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 import { useRouter } from 'vue-router';
 import NoPermission from '@/components/NoPermission.vue';
-
+useAuth().getUser();
 const router = useRouter();
 const $toast = useToast({
   toastOptions: {
@@ -355,7 +355,7 @@ function clickCheckout() {
         let id = res.data.order_id;
         openModal.value = false;
         $toast.success("Successfully created vps.");
-        router.push({ name: 'overview', params: { id: id } })
+        router.push({ name: 'overview', params: { id: id , tab : 'overview'} })
       }
       else {
         $toast.error(res.data.result);

@@ -394,7 +394,7 @@ import NoPermission from '@/components/NoPermission.vue';
 // toast
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
-
+useAuth().getUser();
 const $toast = useToast();
 
 const commonApi = commonApis();
@@ -551,6 +551,7 @@ getSettingsData();
 function formatDate(date) {
   return new Date(date).toISOString().slice(0, 10);
 }
+useAuth().getUser();
 </script>
 
 <style scoped></style>

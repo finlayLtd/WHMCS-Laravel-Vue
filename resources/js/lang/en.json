@@ -301,6 +301,7 @@
     "Configurable_Options":"Configurable Options",
     "Additional_IPv4":"Additional IPv4",
     "Offline":"Offline",
-    "rebuilding_tip":"VPS is being rebuilt, hence no actions are allowed to be performed on this VPS"
+    "rebuilding_tip":"VPS is being rebuilt, hence no actions are allowed to be performed on this VPS",
+    "building_tip":"VPS is being installed, hence no actions are allowed to be performed on this VPS"
 }
 

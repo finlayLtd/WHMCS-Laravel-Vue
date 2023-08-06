@@ -151,13 +151,14 @@ import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 import { useStore } from 'vuex';
 import { commonApis } from '@/apis/commonApis';
+import useAuth from "@/composables/auth";
 import { showLoader } from '@/plugins/loading.js';
 // toast
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 import Pagination from '@/components/Pagination.vue';
 import NoPermission from '@/components/NoPermission.vue';
-
+useAuth().getUser();
 const totalPages = ref(0);
 const perPage_servers = 9;
 
@@ -226,7 +227,7 @@ function setOrder(orderBy, order) {
 }
 
 getServersData()
-
+useAuth().getUser();
 </script>
 
 <style scoped>

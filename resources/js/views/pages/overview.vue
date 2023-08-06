@@ -21,15 +21,21 @@
         </div>
       </div>
 
-      <div v-if="status == 'Active' && rebuilding == true">
+      <div v-if="status == 'Active' && rebuilding == true && building == false">
         <div id="suspend_div">
           <div class="notice">{{ $t('rebuilding_tip') }}&nbsp;</div>
         </div>
       </div>
 
+      <div v-if="status == 'Active' && building == true">
+        <div id="suspend_div">
+          <div class="notice">{{ $t('building_tip') }}&nbsp;</div>
+        </div>
+      </div>
+
       <!-- if status is ative -->
       <div class="sub-section server-list-tab vl-parent" v-if="status && status == 'Active'">
-        <loading v-model:active="rebuilding" :is-full-page="false" />
+        <loading v-model:active="checkLoading" :is-full-page="false" />
         <div class="row justify-content-between align-items-center">
           <div class="row mb-5 pe-0 overview-cols">
             <div class="col-xl-4 col-lg-6 col-md-6 mb-4 mb-md-0">
@@ -146,7 +152,7 @@
         </div>
       </div>
 
-      <div class="sub-section overview-tab" v-if="status == 'Active' && rebuilding == false && fetched!=0">
+      <div class="sub-section overview-tab" v-if="status == 'Active' && rebuilding == false && fetched!=0 && building == false">
         
         <div class="row justify-content-between align-items-center">
           <div class="row mb-2 mb-lg-5 pe-0">
@@ -1794,6 +1800,8 @@ const openModal = ref(false);
 
 const topStatus = ref(null);
 const rebuilding = ref(false);
+const building = ref(false);
+
 // eye show
 const show1 = ref(false);
 const show2 = ref(false);
@@ -1858,6 +1866,14 @@ const moveTab = () => {
 }
 
 moveTab();
+
+const checkLoading = computed(() => {
+  if (rebuilding.value == true || building.value == true) {
+    return true;
+  } else {
+    return false;
+  }
+});
 
 const openInvoiceWindow = (invoice_id) => {
   showLoader(true);
@@ -2046,7 +2062,7 @@ function rebuildOS(vpsid) {
       if (res.status == 200) {
         rebuilding.value = true;
         // getOverviewData()
-        startGetOverviewDataTimer();
+        startGetOverviewDataTimer(30000);
         $toast.success(
           "VPS is being rebuilt, hence no actions are allowed to be performed on this VPS"
         );
@@ -2060,14 +2076,14 @@ function rebuildOS(vpsid) {
     });
 }
 
-function startGetOverviewDataTimer() {
+function startGetOverviewDataTimer(time) {
   const timer = setInterval(() => {
     if (rebuilding.value == false) {
       clearInterval(timer);
     } else {
       getOverviewData();
     }
-  }, 30000); // 30 seconds interval
+  }, time); // 30 seconds interval
 }
 
 function changePWD(vpsid) {
@@ -2167,8 +2183,19 @@ const getOverviewData = () => {
     .then((res) => {
       showLoader(false);
       if(res.data.vps_info && res.data.vpsid){
+        // check rebuilding status
+        
         if(res.data.vps_info.vps_data[res.data.vpsid].status == 1){
           rebuilding.value = false;
+        }
+
+        // check building status
+        if(res.data.vps_info.vps_data[res.data.vpsid].status == 0){
+          // io_read 0 means building vps
+          if(res.data.vps_info.vps_data[res.data.vpsid].io_read == 0){
+            building.value = true;
+            startGetOverviewDataTimer(60000);
+          }
         }
       }
       fetched.value = 1;

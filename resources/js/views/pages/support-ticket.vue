@@ -242,7 +242,7 @@ import "vue-toast-notification/dist/theme-sugar.css";
 import Pagination from '@/components/Pagination.vue';
 import NoPermission from '@/components/NoPermission.vue';
 const $toast = useToast();
-
+useAuth().getUser();
 const commonApi = commonApis()
 const sortBy = ref(false);
 const openModal = ref(false);

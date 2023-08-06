@@ -36,7 +36,7 @@ class ServersController extends Controller
         ]);
 
         if ($latest_user_data['result'] == 'success') {
-            $user = User::where('whmcs_id', Auth::user()->whmcsc_id)->first();
+            $user = User::where('whmcs_id', Auth::user()->whmcs_id)->first();
             if ($user) {
                 if ($user->credit != $latest_user_data['credit']) {
                     $user->credit = $latest_user_data['credit'];

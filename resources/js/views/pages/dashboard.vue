@@ -243,7 +243,7 @@ const filteredTickets = computed(() => {
 
 });
 
-useAuth().getUser();
+
 </script>
   
 <style scoped>

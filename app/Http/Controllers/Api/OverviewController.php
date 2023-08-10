@@ -32,39 +32,31 @@ class OverviewController extends Controller
     public function index(Request $request)
     {
         $all_request = $request->input('params');
-        // $all_request['id']
-
 
         $order_product_info = [];
         $order_info = [];
-        $oslists = [];
-        $network_speed = [];
         $vps_info = [];
-        $cpu = [];
-        $rdnslist = [];
         $vpsid = 0;
         $ip_list['ips'] = [];
-        $analysis_data = [];
+
         $order_id = $all_request['id'];
         $order_info_response = $this->getOrderinfo($order_id);
+
         $order_info = $order_info_response['orders']['order'];
-        // $relid = $order_info[0]['lineitems']['lineitem'][0]['relid'];
 
         $order_product_info = $this->getClientProductInfo($order_id);
         $relid = $order_product_info['id'];
 
-
         $today = new DateTime(date("Y-m-d"));
         $start_day = new DateTime($order_info[0]['date']);
+        
         $interval = $today->diff($start_day);
         $dayDiff = $interval->days;
 
         $product_info = $this->getOrderProductInfo($order_product_info['pid']);
-
-
         $detail_info = $this->getProductDetailInfo($product_info);
         $other_info = $this->getOtherinfo($order_product_info);
-        $invoiceInfo = $this->getinvoiceInfo($order_id);
+        $invoiceInfo = $this->getinvoiceInfo($order_info[0]['invoiceid']);
 
         $flag = $other_info['flag'];
         if (isset($other_info['sys_logo'])) {
@@ -72,87 +64,15 @@ class OverviewController extends Controller
         } else {
             $sys_logo = 'windows';
         }
-
         $system = $other_info['system'];
-
-        $OSlist = $this->getOSlist();
         $status = $order_info[0]['status'];
         if ($status != 'Active' && $order_product_info['status'] == 'Active')
             $status = 'Active';
-
         if ($status == 'Active') {
             $vpsid = $other_info['vps_info']['vpsid'];
             $vps_info = $this->getVpsStatistics($vpsid);
-            $cpu = $this->getCpuStatistics($vpsid);
-            $analysis_data = $this->getAnalysisData($vpsid);
             $ip_list = $this->getIpinfo($other_info['vps_info']['hostname']);
-            $rdnslist = $this->getDNSlist($order_product_info['dedicatedip']);
-        }
-
-
-        foreach ($OSlist['oslist']['proxk'] as $key => $os_group) {
-            foreach ($os_group as $os_id => $os) {
-                $os['group_name'] = $key;
-                if (!isset($os['osid']))
-                    $os['osid'] = $os_id;
-                array_push($oslists, $os);
-            }
-        }
-
-        $departments = array();
-
-        $departments_info = (new \Sburina\Whmcs\Client)->post([
-            'action' => 'GetSupportDepartments'
-        ]);
-
-        if ($departments_info['result'] == 'success') {
-            if ($departments_info['totalresults'] > 0) {
-                $departments = $departments_info['departments']['department'];
-            }
-        }
-
-        if ($invoiceInfo['status'] == 'Paid') {
-            // order_product_info.nextduedate
-            $invoice_lists = (new \Sburina\Whmcs\Client)->post([
-                'action' => 'GetInvoices',
-                'userid' => Auth::user()->client_id,
-                // Set number of tickets to retrieve per request
-                'orderby' => 'date',
-                'order' => 'desc',
-                'limitstart' => 0,
-                'limitnum' => 300,
-            ]);
-
-
-            if (count($invoice_lists['invoices']) != 0) {
-                $invoices = $invoice_lists['invoices']['invoice'];
-            } else
-                $invoices = [];
-
-            $temp_date = $order_product_info['nextduedate'];
-            $filteredInvoices = array_filter($invoices, function ($item) use ($temp_date) {
-                return ($item['duedate'] == $temp_date && $item['status'] == 'Unpaid');
-            });
-
-            foreach ($filteredInvoices as $item) {
-                $temp = (new \Sburina\Whmcs\Client)->post([
-                    'action' => 'GetInvoice',
-                    'userid' => Auth::user()->client_id,
-                    // Set number of tickets to retrieve per request
-                    'invoiceid' => $item['id'],
-                ]);
-
-                if ($temp['result'] != 'success')
-                    break;
-                foreach ($temp['items']['item'] as $subitem) {
-                        if ($subitem['relid'] == $relid) {
-                            $invoiceInfo = $temp;
-                            break 2;
-                        } else
-                            break;
-                }
-            }
-        }
+        }  
 
         return response()->json([
             'relid' => $relid,
@@ -165,18 +85,143 @@ class OverviewController extends Controller
             'system' => $system,
             'vpsid' => $vpsid,
             'vps_info' => $vps_info,
-            'oslists' => $oslists,
-            'cpu' => $cpu,
-            'invoiceInfo' => $invoiceInfo,
-            'departments' => $departments,
+            'invoiceInfo' => $invoiceInfo,     
             'ip_list' => $ip_list,
-            'analysis_data' => $analysis_data,
             'status' => $status,
-            'rdnslist' => $rdnslist,
         ]);
-
     }
 
+    public function analysis_data(Request $request)
+    {
+        $all_request = $request->input('params');
+        $analysis_data = [];
+        $analysis_data = $this->getAnalysisData($all_request['vpsid']);
+        return response()->json([
+            'analysis_data' => $analysis_data,
+        ]);
+    }
+
+    public function get_rdns_lists(Request $request)
+    {
+        $all_request = $request->input('params');
+        $rdnslist = [];
+        $rdnslist = $this->getDNSlist($all_request['dedicatedip']);
+        return response()->json([
+            'rdnslist' => $rdnslist,
+        ]);
+    }
+
+    public function get_tasks(Request $request)
+    {
+        $all_request = $request->input('params');
+        $tasks = [];
+
+        $page = 0;
+        $reslen = 0;
+        //For Searching
+        $post = array();
+        $post['vpsid'] = $all_request['vpsid'];
+        $response_info = $this->virtualizorAdmin->tasks($page, $reslen, $post);
+        $tasks = $response_info['tasks'];
+        return response()->json([
+            'tasks' => $tasks,
+        ]);
+    }
+    public function get_logs(Request $request)
+    {
+        $all_request = $request->input('params');
+        $logs = [];
+
+        $page = 0;
+        $reslen = 0;
+        //For Searching
+        $post = array();
+        $post['vpsid'] = $all_request['vpsid'];
+        $response_info = $this->virtualizorAdmin->userlogs($page, $reslen, $post);
+        $logs = $response_info['userlogs'];
+        return response()->json([
+            'logs' => $logs,
+        ]);
+    }
+    
+    public function departments_data(Request $request)
+    {
+        $all_request = $request->input('params');
+
+        $departments = array();
+        $departments_info = (new \Sburina\Whmcs\Client)->post([
+            'action' => 'GetSupportDepartments'
+        ]);
+
+        if ($departments_info['result'] == 'success') {
+            if ($departments_info['totalresults'] > 0) {
+                $departments = $departments_info['departments']['department'];
+            }
+        }
+
+        $invoiceInfo = $this->getinvoiceInfo($all_request['invoice_id']);
+
+        // invoice
+        if ($invoiceInfo['status'] == 'Paid') {
+            $invoice_lists = (new \Sburina\Whmcs\Client)->post([
+                'action' => 'GetInvoices',
+                'userid' => Auth::user()->client_id,
+                'orderby' => 'date',
+                'order' => 'desc',
+                'limitstart' => 0,
+                'limitnum' => 300,
+            ]);
+
+            if (count($invoice_lists['invoices']) != 0) {
+                $invoices = $invoice_lists['invoices']['invoice'];
+            } else
+                $invoices = [];
+
+            $temp_date = $all_request['nextduedate'];
+            $filteredInvoices = array_filter($invoices, function ($item) use ($temp_date) {
+                return ($item['duedate'] == $temp_date && $item['status'] == 'Unpaid');
+            });
+
+            foreach ($filteredInvoices as $item) {
+                $temp = (new \Sburina\Whmcs\Client)->post([
+                    'action' => 'GetInvoice',
+                    'userid' => Auth::user()->client_id,
+                    'invoiceid' => $item['id'],
+                ]);
+                if ($temp['result'] != 'success')
+                    break;
+                foreach ($temp['items']['item'] as $subitem) {
+                    if ($subitem['relid'] == $all_request['relid']) {
+                        $invoiceInfo = $temp;
+                        break 2;
+                    } else
+                        break;
+                }
+            }
+        }
+
+        return response()->json([
+            'departments' => $departments,
+            'invoiceInfo' => $invoiceInfo, 
+        ]);
+    }
+
+    public function oslists(Request $request)
+    {
+        $oslists = [];
+        $OSlist = $this->getOSlist();
+        foreach ($OSlist['oslist']['proxk'] as $key => $os_group) {
+            foreach ($os_group as $os_id => $os) {
+                $os['group_name'] = $key;
+                if (!isset($os['osid']))
+                    $os['osid'] = $os_id;
+                array_push($oslists, $os);
+            }
+        }
+        return response()->json([
+            'oslists' => $oslists,
+        ]);
+    }
     private function getClientProductInfo($order_id)
     {
         $orders_response = (new \Sburina\Whmcs\Client)->post([
@@ -188,7 +233,6 @@ class OverviewController extends Controller
         foreach ($orders as $order)
             if ($order['orderid'] == $order_id)
                 $order_info = $order;
-
         return $order_info;
     }
 
@@ -198,9 +242,7 @@ class OverviewController extends Controller
             'action' => 'GetProducts',
             'pid' => $pid,
         ]);
-
         $product_info = $product_response['products']['product'][0];
-
         return $product_info;
     }
 
@@ -447,14 +489,13 @@ class OverviewController extends Controller
         return $orders_response;
     }
 
-    private function getinvoiceInfo($order_id)
+    private function getinvoiceInfo($invoice_id)
     {
         $invoice_info = array();
-        $orders_response = $this->getOrderinfo($order_id);
 
         $invoice_info = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetInvoice',
-            'invoiceid' => $orders_response['orders']['order'][0]['invoiceid'],
+            'invoiceid' => $invoice_id,
         ]);
 
         return $invoice_info;
@@ -463,7 +504,6 @@ class OverviewController extends Controller
     private function getIpinfo($hostname)
     {
         $post = array();
-        $ip_list = array();
         $post['vps_search'] = $hostname;
 
         $result = $this->virtualizorAdmin->ips(1, 50, $post);

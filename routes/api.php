@@ -70,6 +70,13 @@ Route::group(['middleware' => 'auth:sanctum' ,  'namespace' => 'App\\Http\\Contr
     
      // overview apis
      Route::post('overview', 'OverviewController@index');
+     Route::post('overview/analysis_data', 'OverviewController@analysis_data');
+     Route::post('overview/oslists', 'OverviewController@oslists');
+     Route::post('overview/departments_data', 'OverviewController@departments_data');
+     Route::post('overview/get_rdns_lists', 'OverviewController@get_rdns_lists');
+     Route::post('overview/get_tasks', 'OverviewController@get_tasks');
+     Route::post('overview/get_logs', 'OverviewController@get_logs');
+     
     //  overview actions
      Route::post('overview/turnon', 'OverviewController@turnon');
      Route::post('overview/turnoff', 'OverviewController@turnoff');

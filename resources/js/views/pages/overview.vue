@@ -1,7 +1,8 @@
 <template>
   <section class="overview">
     <div class="container">
-      <div class="d-flex flex-column justify-content-start align-items-start title-button-wrapper">
+      <div class="d-flex flex-column justify-content-start align-items-start title-button-wrapper vl-parent">
+        <loading v-model:active="departments_loading" :is-full-page="false" />
         <a ref="customLink" style="display: none;" target="_blank">Custom Link</a>
         <div class="overview-header">
           <img class="not-filterable" :src="'/assets/img/' + sys_logo + '-logo.png'" alt="" v-if="sys_logo" />
@@ -10,6 +11,7 @@
           </h2>
         </div>
         <div class="overview-info">
+
           <span v-if="dayDiff > 0">{{ $t('Created') }} {{ dayDiff }} {{ $t('days_ago') }}</span>
           <span v-else>{{ $t('Created_today') }}</span>
           <div class="alert alert-warning mt-2" id="alertUnpaidInvoice"
@@ -84,9 +86,6 @@
                       </tr>
                     </template>
 
-
-
-
                     <tr>
                       <td>{{ $t('Username') }}</td>
                       <td class="clipboard-input" v-if="sys_logo == 'windows'">
@@ -152,24 +151,25 @@
         </div>
       </div>
 
-      <div class="sub-section overview-tab" v-if="status == 'Active' && rebuilding == false && fetched!=0 && building == false">
-        
+      <div class="sub-section overview-tab"
+        v-if="status == 'Active' && rebuilding == false && fetched != 0 && building == false">
+
         <div class="row justify-content-between align-items-center">
           <div class="row mb-2 mb-lg-5 pe-0">
             <div class="col-md-12 d-flex justify-content-start pe-0 flex-wrap">
               <ul class="nav nav-pills mb-3 mb-md-0 order-1 order-md-2 mb-lg-0 flex-nowrap" id="pills-tab" role="tablist"
                 v-if="order_product_info">
                 <li class="nav-item" role="presentation">
-                  <button :class="(firstTab == 'overview')?'nav-link active':'nav-link'" id="pills-overview-tab" data-bs-toggle="pill"
-                    data-bs-target="#pills-overview" type="button" role="tab" aria-controls="pills-overview"
-                    :aria-selected="(firstTab == 'overview')?true:false">
+                  <button :class="(firstTab == 'overview') ? 'nav-link active' : 'nav-link'" id="pills-overview-tab"
+                    data-bs-toggle="pill" data-bs-target="#pills-overview" type="button" role="tab"
+                    aria-controls="pills-overview" :aria-selected="(firstTab == 'overview') ? true : false">
                     {{ $t('Overview') }}
                   </button>
                 </li>
                 <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
                   <button class="nav-link" id="pills-analytics-tab" data-bs-toggle="pill"
                     data-bs-target="#pills-analytics" type="button" role="tab" aria-controls="pills-analytics"
-                    aria-selected="false">
+                    aria-selected="false" @click="get_analysis_data()">
                     {{ $t('Analytics') }}
                   </button>
                 </li>
@@ -183,10 +183,19 @@
                 <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
                   <button class="nav-link" id="pills-reinstall-tab" data-bs-toggle="pill"
                     data-bs-target="#pills-reinstall" type="button" role="tab" aria-controls="pills-reinstall"
-                    aria-selected="false">
+                    aria-selected="false" @click="get_oslists_data()">
                     {{ $t('Reinstall') }}
                   </button>
                 </li>
+
+                <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
+                  <button class="nav-link" id="pills-tasks-tab" data-bs-toggle="pill" data-bs-target="#pills-tasks"
+                    type="button" role="tab" aria-controls="pills-tasks" aria-selected="false" @click="get_tasks()">
+                    Tasks and Logs
+                  </button>
+                </li>
+
+
 
                 <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
                   <button class="nav-link" id="pills-management-tab" data-bs-toggle="pill"
@@ -205,14 +214,15 @@
 
                 <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
                   <button class="nav-link" id="pills-dns-tab" data-bs-toggle="pill" data-bs-target="#pills-dns"
-                    type="button" role="tab" aria-controls="pills-dns" aria-selected="false">
+                    type="button" role="tab" aria-controls="pills-dns" aria-selected="false" @click="get_rdns_lists()">
                     {{ $t('ReverseDNS') }}
                   </button>
                 </li>
 
                 <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
-                  <button :class="(firstTab == 'billing')?'nav-link active':'nav-link'" id="pills-billing-tab" data-bs-toggle="pill" data-bs-target="#pills-billing"
-                    type="button" role="tab" aria-controls="pills-billing" :aria-selected="(firstTab == 'billing')?true:false">
+                  <button :class="(firstTab == 'billing') ? 'nav-link active' : 'nav-link'" id="pills-billing-tab"
+                    data-bs-toggle="pill" data-bs-target="#pills-billing" type="button" role="tab"
+                    aria-controls="pills-billing" :aria-selected="(firstTab == 'billing') ? true : false">
                     {{ $t('Billing') }}
                   </button>
                 </li>
@@ -232,8 +242,7 @@
             <div :class="firstTab == 'overview'
               ? 'tab-pane fade  show active'
               : 'tab-pane fade'
-              " id="pills-overview" role="tabpanel"
-              aria-labelledby="pills-overview-tab">
+              " id="pills-overview" role="tabpanel" aria-labelledby="pills-overview-tab">
               <div class="tab-inner mb-3">
                 <div class="row">
                   <h3 class="title">{{ $t('Overview') }}</h3>
@@ -395,8 +404,9 @@
 
             <!-- display when only in active state -->
             <!--analytics-->
-            <div class="tab-pane fade" id="pills-analytics" role="tabpanel" aria-labelledby="pills-analytics-tab"
-              v-if="order_product_info.status == 'Active'">
+            <div class="tab-pane fade vl-parent" id="pills-analytics" role="tabpanel"
+              aria-labelledby="pills-analytics-tab" v-if="order_product_info.status == 'Active'">
+              <loading v-model:active="anlaytics_loading" :is-full-page="false" />
               <div class="row">
                 <div id="cpu-container" class="col-md-6 col-sm-12">
                   <Chart :key="componentKey" :data="{
@@ -1058,6 +1068,7 @@
                 </div>
               </div>
             </div>
+
             <!--connect-->
             <div class="tab-pane fade" id="pills-connect" role="tabpanel" aria-labelledby="pills-connect-tab"
               v-if="order_product_info.status == 'Active'">
@@ -1092,10 +1103,12 @@
                 </div>
               </div>
             </div>
+
             <!--reinstall-->
             <div class="tab-pane fade" id="pills-reinstall" role="tabpanel" aria-labelledby="pills-reinstall-tab"
               v-if="order_product_info.status == 'Active'">
-              <div class="tab-inner mb-3">
+              <div class="tab-inner mb-3 vl-parent">
+                <loading v-model:active="oslists_loading" :is-full-page="false" />
                 <div class="row">
                   <h3 class="title">{{ $t('Reinstall') }}</h3>
                   <p class="description mb-4">
@@ -1182,6 +1195,135 @@
                 </div>
               </div>
             </div>
+
+            <!--tasks and logs-->
+            <div class="tab-pane fade" id="pills-tasks" role="tabpanel" aria-labelledby="pills-tasks-tab"
+              v-if="order_product_info.status == 'Active'">
+              <loading v-model:active="tasks_loading" :is-full-page="false" />
+              <div class="tab-inner settings mb-3">
+                <div class="row">
+                  <h3 class="title mb-4">Tasks and Logs</h3>
+                  <p class="description mb-4">
+                  </p>
+                </div>
+                <div class="divider"></div>
+                <div class="row px-0 pt-4">
+                  <div class="col-md-12 d-flex flex-column flex-lg-row align-items-start">
+                    <ul class="nav nav-pills mb-3 mb-md-0 mb-lg-0 d-flex flex-column inner-tab-pills" id="pills-tab"
+                      role="tablist">
+                      <li class="nav-item mb-2" role="presentation">
+                        <button class="nav-link active" id="pills-subtasks-tab" data-bs-toggle="pill"
+                          data-bs-target="#pills-subtasks" type="button" role="tab" aria-controls="pills-subtasks"
+                          aria-selected="false">
+                          Tasks
+                        </button>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-sublogs-tab" data-bs-toggle="pill"
+                          data-bs-target="#pills-sublogs" type="button" role="tab" aria-controls="pills-sublogs"
+                          aria-selected="false"
+                          @click="get_logs()">
+                          Logs
+                        </button>
+                      </li>
+                    </ul>
+
+                    <div class="tab-content w-100" id="pills-tabContent">
+                      <!--Tasks-->
+                      <div class="tab-pane fade show active" id="pills-subtasks" role="tabpanel"
+                        aria-labelledby="pills-subtasks-tab">
+                        <div class="tab-inner py-0 p-mb-0">
+                          <div class="support-table">
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th scope="col">ACTID</th>
+                                  <th scope="col">VPSID</th>
+                                  <th scope="col">User</th>
+                                  <th scope="col">Started</th>
+                                  <th scope="col">Updated</th>
+                                  <th scope="col">Endeded</th>
+                                  <th scope="col">Action</th>
+                                  <th scope="col">Status</th>
+                                  <th scope="col">Progress</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <template v-for="task in tasks.reverse()" :key="task.actid">
+                                  <tr v-if="task.email!='root'">
+                                    <td>{{ task.actid }}</td>
+                                    <td>{{ task.vpsid }}</td>
+                                    <td>{{ task.email }}</td>
+                                    <td v-html="task.started"></td>
+                                    <td v-html="task.updated"></td>
+                                    <td v-html="task.ended"></td>
+                                    <td>{{ task.action }}</td>
+                                    <td>
+                                      <span v-if="task.status == 1">
+                                        Finished
+                                      </span>
+                                      <span v-else>
+                                        In progress
+                                      </span>
+                                    </td>
+                                    <td>
+                                      <div style="text-align:center;" id="pbar2006999" v-if="task.progress == 100">
+                                        <i class="fas fa-1x fa-check-circle text-primary">
+                                        </i>
+                                      </div>
+                                      <div v-else>
+                                        {{ task.progress }}%
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </template>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!--Logs-->
+                      <div class="tab-pane fade" id="pills-sublogs" role="tabpanel" aria-labelledby="pills-sublogs-tab">
+                        <div class="tab-inner py-0 p-mb-0 vl-parent">
+                          <loading v-model:active="logs_loading" :is-full-page="false" />
+                          <div class="support-table">
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Date</th>
+                                  <th scope="col">Task</th>
+                                  <th scope="col">Status</th>
+                                  <th scope="col">IP</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr v-for="log in logs" :key="log.actid">
+                                  <td>{{unixTime(log.time)}}</td>
+                                  <td>{{log.action}}</td>
+                                  <td>
+                                    <span v-if="log.status==1" style="color: rgb(6, 215, 156) !important;">
+                                      Successful
+                                    </span>
+                                    <span v-else style="color: red;">
+                                      Failed
+                                    </span>
+                                  </td>
+                                  <td>{{log.ip}}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
             <!--management-->
             <div class="tab-pane fade" id="pills-management" role="tabpanel" aria-labelledby="pills-management-tab"
               v-if="order_product_info.status == 'Active'">
@@ -1256,6 +1398,7 @@
                 </div>
               </div>
             </div>
+
             <!--vnc-->
             <div class="tab-pane fade" id="pills-vnc" role="tabpanel" aria-labelledby="pills-vnc-tab"
               v-if="order_product_info.status == 'Active'">
@@ -1270,8 +1413,8 @@
                 <div class="row px-0 pt-4">
                   <div class="col-md-12 d-flex justify-content-center">
                     <div class="overview-button-wrapper pt-0">
-                      <router-link :to="{ name: 'noVNC', params: { id: route.params.id } }" class="btn-dark px-4 hover-dark-light"
-                        target="_blank">
+                      <router-link :to="{ name: 'noVNC', params: { id: route.params.id } }"
+                        class="btn-dark px-4 hover-dark-light" target="_blank">
                         {{ $t('Connect_VNC') }}
                       </router-link>
                     </div>
@@ -1279,10 +1422,12 @@
                 </div>
               </div>
             </div>
+
             <!--DNS-->
             <div class="tab-pane fade" id="pills-dns" role="tabpanel" aria-labelledby="pills-dns-tab"
               v-if="order_product_info.status == 'Active'">
-              <div class="tab-inner mb-3">
+              <div class="tab-inner mb-3 vl-parent">
+                <loading v-model:active="rdnslists_loading" :is-full-page="false" />
                 <div class="row">
                   <h3 class="title mb-4">{{ $t('ReverseDNS_Management') }}</h3>
                 </div>
@@ -1340,7 +1485,8 @@
               ? 'tab-pane fade  show active'
               : 'tab-pane fade'
               " id="pills-billing" role="tabpanel" aria-labelledby="pills-billing-tab">
-              <div class="tab-inner billing mb-3">
+              <div class="tab-inner billing mb-3 vl-parent">
+                <loading v-model:active="departments_loading" :is-full-page="false" />
                 <div class="row">
                   <h3 class="title mb-4">{{ $t('Billing') }}</h3>
                   <p class="description mb-4">
@@ -1594,7 +1740,8 @@
 
                                 <div id="inputNewPassword2-os-Msg"
                                   v-if="newPassword1 != newPassword2 && newPassword1 != ''">
-                                  <p class="help-block" id="nonMatchingPasswordResult">{{ $t('password_not_match') }}</p>
+                                  <p class="help-block" id="nonMatchingPasswordResult">{{ $t('password_not_match') }}
+                                  </p>
                                 </div>
                               </div>
                             </div>
@@ -1827,7 +1974,7 @@ const invoiceInfo = ref(null);
 const departments = ref([]);
 const ip_list = ref(null);
 const status = ref("Active");
-const rdnslist = ref(null);
+const rdnslist = ref([]);
 
 // selected Values
 const format_disk = ref(false);
@@ -1850,6 +1997,23 @@ const fetched = ref(0);
 // settings
 const hostname = ref('');
 
+// loading states
+const anlaytics_loading = ref(false);
+
+const unixTime = (time) =>{
+  let date = new Date(time * 1000);
+  const options = {
+    weekday: 'short',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  };
+  return date.toLocaleString('en-US', options);
+}
+
 const params = ref({
   client_id: user.value.client_id,
 });
@@ -1860,7 +2024,7 @@ const openInNewTab = (url) => {
 }
 
 const moveTab = () => {
-  if(route.params.tab == 'invoice') {
+  if (route.params.tab == 'invoice') {
     firstTab.value = 'billing';
   };
 }
@@ -2061,7 +2225,6 @@ function rebuildOS(vpsid) {
       showLoader(false);
       if (res.status == 200) {
         rebuilding.value = true;
-        // getOverviewData()
         startGetOverviewDataTimer(30000);
         $toast.success(
           "VPS is being rebuilt, hence no actions are allowed to be performed on this VPS"
@@ -2078,7 +2241,7 @@ function rebuildOS(vpsid) {
 
 function startGetOverviewDataTimer(time) {
   const timer = setInterval(() => {
-    if (rebuilding.value == false) {
+    if (rebuilding.value == false && building.value == false) {
       clearInterval(timer);
     } else {
       getOverviewData();
@@ -2174,6 +2337,8 @@ const createTicket = () => {
     });
 };
 
+const countFetchingOverview = ref(0);
+
 const getOverviewData = () => {
   showLoader(true);
   commonApi
@@ -2182,24 +2347,23 @@ const getOverviewData = () => {
     })
     .then((res) => {
       showLoader(false);
-      if(res.data.vps_info && res.data.vpsid){
+      if (res.data.vps_info && res.data.vpsid) {
         // check rebuilding status
-        
-        if(res.data.vps_info.vps_data[res.data.vpsid].status == 1){
+        if (res.data.vps_info.vps_data[res.data.vpsid].status == 1) {
           rebuilding.value = false;
+          building.value = false;
         }
-
         // check building status
-        if(res.data.vps_info.vps_data[res.data.vpsid].status == 0){
+        if (res.data.vps_info.vps_data[res.data.vpsid].status == 0) {
           // io_read 0 means building vps
-          if(res.data.vps_info.vps_data[res.data.vpsid].io_read == 0){
+          if (res.data.vps_info.vps_data[res.data.vpsid].io_read == 0) {
             building.value = true;
             startGetOverviewDataTimer(60000);
           }
         }
       }
+      countFetchingOverview.value = countFetchingOverview.value + 1;
       fetched.value = 1;
-      analysis_data.value = res.data.analysis_data;
       relid.value = res.data.relid;
       selectedService.value = res.data.relid;
       order_id.value = res.data.order_id;
@@ -2211,21 +2375,21 @@ const getOverviewData = () => {
       system.value = res.data.system;
       vpsid.value = res.data.vpsid;
       vps_info.value = res.data.vps_info;
-      oslists.value = res.data.oslists;
-      if (oslists.value && oslists.value.length != 0) selected_os_id.value = res.data.oslists[0].osid;
-      cpu.value = res.data.cpu;
 
-      invoiceInfo.value = res.data.invoiceInfo;
-      departments.value = res.data.departments;
-      if (departments.value && departments.value.length != 0) selectedDepartment.value = res.data.departments[0].id;
+      cpu.value = res.data.vps_info.pie_data.server_cpu;
+
+      if (countFetchingOverview.value == 1) {
+        invoiceInfo.value = res.data.invoiceInfo;
+      }
+
       ip_list.value = res.data.ip_list;
       status.value = res.data.status;
-      rdnslist.value = res.data.rdnslist;
-
       selected_rdns_ip.value = order_product_info.value.dedicatedip;
-
-      // render
-      renderChat(analysis_data.value, "#1C1C1E");
+      if (countFetchingOverview.value == 1) {
+        if (res.data.invoiceInfo.status == 'Paid') {
+          get_departments_data();
+        }
+      }
     })
     .catch((e) => {
       showLoader(false);
@@ -2235,11 +2399,141 @@ const getOverviewData = () => {
 
 getOverviewData();
 
+const get_analysis_data = () => {
+  anlaytics_loading.value = true;
+  commonApi
+    .runPostApi("/overview/analysis_data", {
+      vpsid: vpsid.value,
+    })
+    .then((res) => {
+      anlaytics_loading.value = false;
+      if (res.data.analysis_data) {
+        analysis_data.value = res.data.analysis_data;
+        renderChart(analysis_data.value, "#1C1C1E");
+        componentKey.value = componentKey.value + 1;
+      }
+    })
+    .catch((e) => {
+      anlaytics_loading.value = false;
+      $toast.error(e);
+    });
+};
+
+const oslists_loading = ref(false);
+
+const get_oslists_data = () => {
+  oslists_loading.value = true;
+  commonApi
+    .runPostApi("/overview/oslists")
+    .then((res) => {
+      oslists_loading.value = false;
+      if (res.data.oslists) {
+        oslists.value = res.data.oslists;
+        if (oslists.value && oslists.value.length != 0) selected_os_id.value = res.data.oslists[0].osid;
+      }
+    })
+    .catch((e) => {
+      oslists_loading.value = false;
+      $toast.error(e);
+    });
+};
+
+const departments_loading = ref(false);
+
+const get_departments_data = () => {
+  departments_loading.value = true;
+  commonApi
+    .runPostApi("/overview/departments_data", {
+      order_id: order_id.value,
+      nextduedate: order_product_info.value.nextduedate,
+      relid: relid.value,
+      invoice_id: invoiceInfo.value.invoiceid
+    })
+    .then((res) => {
+      departments_loading.value = false;
+      if (res.data.departments) {
+        departments.value = res.data.departments;
+        if (departments.value && departments.value.length != 0) selectedDepartment.value = res.data.departments[0].id;
+        invoiceInfo.value = res.data.invoiceInfo;
+      }
+    })
+    .catch((e) => {
+      departments_loading.value = false;
+      $toast.error(e);
+    });
+};
+
+// rdnslists fetch function
+const rdnslists_loading = ref(false);
+
+const get_rdns_lists = () => {
+  rdnslists_loading.value = true;
+  commonApi
+    .runPostApi("/overview/get_rdns_lists", {
+      dedicatedip: getMainIp(ip_list.value.ips),
+    })
+    .then((res) => {
+      rdnslists_loading.value = false;
+      if (res.data.rdnslist) {
+        rdnslist.value = res.data.rdnslist;
+      }
+    })
+    .catch((e) => {
+      rdnslists_loading.value = false;
+      $toast.error(e);
+    });
+};
+
+// tasks fetching
+const tasks_loading = ref(false);
+const tasks = ref([]);
+const get_tasks = () => {
+  tasks_loading.value = true;
+  commonApi
+    .runPostApi("/overview/get_tasks", {
+      vpsid: vpsid.value,
+    })
+    .then((res) => {
+      tasks_loading.value = false;
+      if (res.data.tasks) {
+        tasks.value = Object.values(res.data.tasks);
+        console.log(tasks.value);
+      }
+    })
+    .catch((e) => {
+      tasks_loading.value = false;
+      $toast.error(e);
+    });
+};
+
+// logs fetching
+const logs_loading = ref(false);
+const logs = ref([]);
+const get_logs = () => {
+  logs_loading.value = true;
+  commonApi
+    .runPostApi("/overview/get_logs", {
+      vpsid: vpsid.value,
+    })
+    .then((res) => {
+      logs_loading.value = false;
+      if (res.data.logs) {
+        logs.value = Object.values(res.data.logs);
+        console.log(logs.value);
+      }
+    })
+    .catch((e) => {
+      logs_loading.value = false;
+      $toast.error(e);
+    });
+};
+
+
 function ucfirst(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function renderChat(data, color) {
+function renderChart(data, color) {
   //For showing up the average download and upload speed
   var avg_download = 0;
   var avg_upload = 0;
@@ -2359,7 +2653,8 @@ useAuth().getUser();
     /* Your styles here */
   }
 }
-.notice{
+
+.notice {
   color: rgb(52, 157, 255);
   background-color: rgba(0, 98, 202, 0.13);
   border-radius: 4px;

@@ -603,7 +603,8 @@ class Admin {
 			$path = 'index.php?act=tasks';
 			
 		}else{
-			$path = 'index.php?act=tasks&actid='.$post['actid'].'&vpsid='.$post['vpsid'].'&username='.$post['username'].'&action='.$post['action'].'&status='.$post['status'].'&order='.$post['order'].'&page='.$page.'&reslen='.$reslen;
+			// $path = 'index.php?act=tasks&actid='.$post['actid'].'&vpsid='.$post['vpsid'].'&username='.$post['username'].'&action='.$post['action'].'&status='.$post['status'].'&order='.$post['order'].'&page='.$page.'&reslen='.$reslen;
+			$path = 'index.php?act=tasks&vpsid='.$post['vpsid'];
 		}
 		$ret = $this->call($path,array(),$post);
 		return $ret;
@@ -1789,7 +1790,8 @@ class Admin {
 			$path = 'index.php?act=userlogs&page='.$page.'&reslen='.$reslen;
 			$res = $this->call($path);
 		}else{
-			$path = 'index.php?act=userlogs&vpsid='.$post['vpsid'].'&email='.$post['email'].'&page='.$page.'&reslen='.$reslen;
+			// $path = 'index.php?act=userlogs&vpsid='.$post['vpsid'].'&email='.$post['email'].'&page='.$page.'&reslen='.$reslen;
+			$path = 'index.php?act=userlogs&vpsid='.$post['vpsid'];
 			$res = $this->call($path, array(), $post);
 		}
 		return $res;

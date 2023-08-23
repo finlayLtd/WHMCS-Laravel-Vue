@@ -43,9 +43,8 @@ class OverviewController extends Controller
         $order_info_response = $this->getOrderinfo($order_id);
 
         $order_info = $order_info_response['orders']['order'];
-        
+
         $order_product_info = $this->getClientProductInfo($order_id);
-        // print_r($order_product_info);exit;
         $relid = $order_product_info['id'];
 
         $today = new DateTime(date("Y-m-d"));
@@ -54,9 +53,8 @@ class OverviewController extends Controller
         $interval = $today->diff($start_day);
         $dayDiff = $interval->days;
 
-        // $product_info = $this->getOrderProductInfo($order_product_info['pid']);
-        // $detail_info = $this->getProductDetailInfo($product_info);
-        
+        $product_info = $this->getOrderProductInfo($order_product_info['pid']);
+        $detail_info = $this->getProductDetailInfo($product_info);
         $other_info = $this->getOtherinfo($order_product_info);
         $invoiceInfo = $this->getinvoiceInfo($order_info[0]['invoiceid']);
 
@@ -71,10 +69,9 @@ class OverviewController extends Controller
         if ($status != 'Active' && $order_product_info['status'] == 'Active')
             $status = 'Active';
         if ($status == 'Active') {
-            $vpsid = $order_product_info['customfields']['customfield'][1]['value'];
-            // $vpsid = $other_info['vps_info']['vpsid'];
+            $vpsid = $other_info['vps_info']['vpsid'];
             $vps_info = $this->getVpsStatistics($vpsid);
-            $ip_list = $this->getIpinfo($order_product_info['domain']);
+            $ip_list = $this->getIpinfo($other_info['vps_info']['hostname']);
         }  
 
         return response()->json([
@@ -82,7 +79,7 @@ class OverviewController extends Controller
             'order_id' => $order_id,
             'order_product_info' => $order_product_info,
             'dayDiff' => $dayDiff,
-            // 'detail_info' => $detail_info,
+            'detail_info' => $detail_info,
             'flag' => $flag,
             'sys_logo' => $sys_logo,
             'system' => $system,
@@ -278,22 +275,22 @@ class OverviewController extends Controller
             $info['flag'] = 'flag-en';
         }
 
-        // if ($order_info['status'] == 'Active') {
-        //     $page = 0;
-        //     $reslen = 0;
-        //     //For Searching
-        //     $post = array();
-        //     $post['vpsid'] = $order_info['customfields']['customfield'][1]['value'];
-        //     $vps_info = $this->virtualizorAdmin->listvs($page, $reslen, $post);
-        //     $vps_info = $vps_info[$post['vpsid']];
-        //     $info['vps_info'] = $vps_info;
-        //     $system_label = explode('-', $vps_info['os_name'])[0];
-        //     $info['system'] = $vps_info['os_name'];
+        if ($order_info['status'] == 'Active') {
+            $page = 0;
+            $reslen = 0;
+            //For Searching
+            $post = array();
+            $post['vpsid'] = $order_info['customfields']['customfield'][1]['value'];
+            $vps_info = $this->virtualizorAdmin->listvs($page, $reslen, $post);
+            $vps_info = $vps_info[$post['vpsid']];
+            $info['vps_info'] = $vps_info;
+            $system_label = explode('-', $vps_info['os_name'])[0];
+            $info['system'] = $vps_info['os_name'];
 
-        // } else {
+        } else {
             $system_label = explode('-', $order_info['configoptions']['configoption'][1]['value'])[0];
             $info['system'] = $order_info['configoptions']['configoption'][1]['value'];
-        // }
+        }
 
         switch ($system_label) {
             case 'windows':

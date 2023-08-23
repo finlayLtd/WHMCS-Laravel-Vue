@@ -162,23 +162,20 @@
                 <li class="nav-item" role="presentation">
                   <button :class="(firstTab == 'overview') ? 'nav-link active' : 'nav-link'" id="pills-overview-tab"
                     data-bs-toggle="pill" data-bs-target="#pills-overview" type="button" role="tab"
-                    aria-controls="pills-overview" :aria-selected="(firstTab == 'overview') ? true : false"
-                    @click="selectedTab='overview'">
+                    aria-controls="pills-overview" :aria-selected="(firstTab == 'overview') ? true : false">
                     {{ $t('Overview') }}
                   </button>
                 </li>
                 <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
                   <button class="nav-link" id="pills-analytics-tab" data-bs-toggle="pill"
                     data-bs-target="#pills-analytics" type="button" role="tab" aria-controls="pills-analytics"
-                    aria-selected="false"
-                    @click="selectedTab='analytics'">
+                    aria-selected="false" @click="get_analysis_data()">
                     {{ $t('Analytics') }}
                   </button>
                 </li>
                 <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
                   <button class="nav-link" id="pills-connect-tab" data-bs-toggle="pill" data-bs-target="#pills-connect"
-                    type="button" role="tab" aria-controls="pills-connect" aria-selected="false"
-                    @click="selectedTab='connect'">
+                    type="button" role="tab" aria-controls="pills-connect" aria-selected="false">
                     {{ $t('Connect') }}
                   </button>
                 </li>
@@ -186,15 +183,14 @@
                 <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
                   <button class="nav-link" id="pills-reinstall-tab" data-bs-toggle="pill"
                     data-bs-target="#pills-reinstall" type="button" role="tab" aria-controls="pills-reinstall"
-                    aria-selected="false" @click="get_oslists_data(), selectedTab='reinstall'"
-                  >
+                    aria-selected="false" @click="get_oslists_data()">
                     {{ $t('Reinstall') }}
                   </button>
                 </li>
 
                 <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
                   <button class="nav-link" id="pills-tasks-tab" data-bs-toggle="pill" data-bs-target="#pills-tasks"
-                    type="button" role="tab" aria-controls="pills-tasks" aria-selected="false" @click="get_tasks(), selectedTab='tasks_and_logs'">
+                    type="button" role="tab" aria-controls="pills-tasks" aria-selected="false" @click="get_tasks()">
                     Tasks and Logs
                   </button>
                 </li>
@@ -204,23 +200,21 @@
                 <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
                   <button class="nav-link" id="pills-management-tab" data-bs-toggle="pill"
                     data-bs-target="#pills-management" type="button" role="tab" aria-controls="pills-management"
-                    aria-selected="false"
-                    @click="selectedTab='ip'">
+                    aria-selected="false">
                     {{ $t('IP_Address_Management') }}
                   </button>
                 </li>
 
                 <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
                   <button class="nav-link" id="pills-vnc-tab" data-bs-toggle="pill" data-bs-target="#pills-vnc"
-                    type="button" role="tab" aria-controls="pills-vnc" aria-selected="false"
-                    @click="selectedTab='vnc'">
+                    type="button" role="tab" aria-controls="pills-vnc" aria-selected="false">
                     {{ $t('VNC') }}
                   </button>
                 </li>
 
                 <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
                   <button class="nav-link" id="pills-dns-tab" data-bs-toggle="pill" data-bs-target="#pills-dns"
-                    type="button" role="tab" aria-controls="pills-dns" aria-selected="false" @click="get_rdns_lists(), selectedTab = 'rdns'">
+                    type="button" role="tab" aria-controls="pills-dns" aria-selected="false" @click="get_rdns_lists()">
                     {{ $t('ReverseDNS') }}
                   </button>
                 </li>
@@ -228,16 +222,14 @@
                 <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
                   <button :class="(firstTab == 'billing') ? 'nav-link active' : 'nav-link'" id="pills-billing-tab"
                     data-bs-toggle="pill" data-bs-target="#pills-billing" type="button" role="tab"
-                    aria-controls="pills-billing" :aria-selected="(firstTab == 'billing') ? true : false"
-                    @click="selectedTab='billing'">
+                    aria-controls="pills-billing" :aria-selected="(firstTab == 'billing') ? true : false">
                     {{ $t('Billing') }}
                   </button>
                 </li>
 
                 <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
                   <button class="nav-link" id="pills-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-settings"
-                    type="button" role="tab" aria-controls="pills-settings" aria-selected="false"
-                    @click="selectedTab='settings'">
+                    type="button" role="tab" aria-controls="pills-settings" aria-selected="false">
                     {{ $t('Settings') }}
                   </button>
                 </li>
@@ -343,7 +335,7 @@
                           <h4 class="title2">{{ $t('CPU') }}</h4>
                           <p class="description2">
                             <span>{{ cpu.percent }}%</span> {{ $t('of') }}
-                            {{ vps_info.vps_data[vpsid].cores }}  vCores
+                            {{ detail_info[0] }}
                           </p>
                         </div>
                       </div>
@@ -366,7 +358,7 @@
                               }}
                               %
                             </span>
-                            of {{ vps_info.vps_data[vpsid].ram/1024 }} GB RAM
+                            of {{ detail_info[1] }}
                           </p>
                         </div>
                       </div>
@@ -412,22 +404,711 @@
 
             <!-- display when only in active state -->
             <!--analytics-->
-            <div class="tab-pane fade" id="pills-analytics" role="tabpanel"
+            <div class="tab-pane fade vl-parent" id="pills-analytics" role="tabpanel"
               aria-labelledby="pills-analytics-tab" v-if="order_product_info.status == 'Active'">
-              <Analytics :vpsid="vpsid" v-if="selectedTab == 'analytics'"/>
+              <loading v-model:active="anlaytics_loading" :is-full-page="false" />
+              <!-- <Analytics/> -->
+              <div class="row">
+                <div id="cpu-container" class="col-md-6 col-sm-12">
+                  <Chart :key="componentKey" :data="{
+                    chart: {
+                      type: 'area',
+                      backgroundColor: chart_color,
+                    },
+                    title: {
+                      text: $t('CPU_Usage'),
+                      align: 'left',
+                      style: {
+                        color: revertColor(chart_color),
+                      },
+                    },
+                    // chart options
+                    tooltip: {
+                      formatter: function () {
+                        return (
+                          'Time: ' +
+                          Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+                          '<br/>' +
+                          $t('CPU_Usage_rate') + ':' +
+                          this.y +
+                          '%'
+                        );
+                      },
+                    },
+                    xAxis: {
+                      type: 'datetime',
+                      labels: {
+                        style: {
+                          color: revertColor(chart_color),
+                        },
+                      },
+                    },
+                    yAxis: {
+                      title: {
+                        text: $t('CPU_Usage_rate'),
+                      },
+                      labels: {
+                        style: {
+                          color: revertColor(chart_color),
+                        },
+                      },
+                    },
+                    legend: {
+                      enabled: false,
+                    },
+                    plotOptions: {
+                      area: {
+                        fillColor: {
+                          linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1,
+                          },
+                          stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [
+                              1,
+                              Highcharts.color(
+                                Highcharts.getOptions().colors[0]
+                              )
+                                .setOpacity(0)
+                                .get('rgba'),
+                            ],
+                          ],
+                        },
+                        marker: {
+                          radius: 2,
+                        },
+                        lineWidth: 1,
+                        states: {
+                          hover: {
+                            lineWidth: 1,
+                          },
+                        },
+                        threshold: null,
+                      },
+                    },
+
+                    series: [
+                      {
+                        name: $t('CPU'),
+                        data: cpu_data_state.map(([date, value]) => [
+                          new Date(date).getTime(),
+                          value,
+                        ]),
+                      },
+                    ],
+                  }" v-if="cpu_data_state">
+                  </Chart>
+                </div>
+                <div id="ram-container" class="col-md-6 col-sm-12">
+                  <Chart :key="componentKey" :data="{
+                    chart: {
+                      type: 'area',
+                      backgroundColor: chart_color,
+                    },
+                    title: {
+                      text: $t('RAM_Usage'),
+                      align: 'left',
+                      style: {
+                        color: revertColor(chart_color),
+                      },
+                    },
+                    // chart options
+                    tooltip: {
+                      formatter: function () {
+                        return (
+                          'Time: ' +
+                          Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+                          '<br/>' +
+                          $t('RAM_Usage_rate') + ': ' +
+                          this.y +
+                          'MB'
+                        );
+                      },
+                    },
+                    xAxis: {
+                      type: 'datetime',
+                      labels: {
+                        style: {
+                          color: revertColor(chart_color),
+                        },
+                      },
+                    },
+                    yAxis: {
+                      title: {
+                        text: $t('RAM_Usage_rate'),
+                      },
+                      labels: {
+                        style: {
+                          color: revertColor(chart_color),
+                        },
+                      },
+                    },
+                    legend: {
+                      enabled: false,
+                    },
+                    plotOptions: {
+                      area: {
+                        fillColor: {
+                          linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1,
+                          },
+                          stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [
+                              1,
+                              Highcharts.color(
+                                Highcharts.getOptions().colors[0]
+                              )
+                                .setOpacity(0)
+                                .get('rgba'),
+                            ],
+                          ],
+                        },
+                        marker: {
+                          radius: 2,
+                        },
+                        lineWidth: 1,
+                        states: {
+                          hover: {
+                            lineWidth: 1,
+                          },
+                        },
+                        threshold: null,
+                      },
+                    },
+
+                    series: [
+                      {
+                        name: $t('RAM'),
+                        data: ram_data_state.map(([date, value]) => [
+                          new Date(date).getTime(),
+                          value,
+                        ]),
+                      },
+                    ],
+                  }" v-if="ram_data_state">
+                  </Chart>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div id="disk-container" class="col-md-6 col-sm-12">
+                  <Chart :key="componentKey" :data="{
+                    chart: {
+                      type: 'area',
+                      backgroundColor: chart_color,
+                    },
+                    title: {
+                      text: $t('Disk_Usage'),
+                      align: 'left',
+                      style: {
+                        color: revertColor(chart_color),
+                      },
+                    },
+                    // chart options
+                    tooltip: {
+                      formatter: function () {
+                        return (
+                          'Time: ' +
+                          Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+                          '<br/>' +
+                          $t('Disk_Usage') + ': ' +
+                          this.y +
+                          'MB'
+                        );
+                      },
+                    },
+                    xAxis: {
+                      type: 'datetime',
+                      labels: {
+                        style: {
+                          color: revertColor(chart_color),
+                        },
+                      },
+                    },
+                    yAxis: {
+                      title: {
+                        text: $t('Disk_Usage'),
+                      },
+                      labels: {
+                        style: {
+                          color: revertColor(chart_color),
+                        },
+                      },
+                    },
+                    legend: {
+                      enabled: false,
+                    },
+                    plotOptions: {
+                      area: {
+                        fillColor: {
+                          linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1,
+                          },
+                          stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [
+                              1,
+                              Highcharts.color(
+                                Highcharts.getOptions().colors[0]
+                              )
+                                .setOpacity(0)
+                                .get('rgba'),
+                            ],
+                          ],
+                        },
+                        marker: {
+                          radius: 2,
+                        },
+                        lineWidth: 1,
+                        states: {
+                          hover: {
+                            lineWidth: 1,
+                          },
+                        },
+                        threshold: null,
+                      },
+                    },
+
+                    series: [
+                      {
+                        name: $t('Disk'),
+                        data: disk_data_state.map(([date, value]) => [
+                          new Date(date).getTime(),
+                          value,
+                        ]),
+                      },
+                    ],
+                  }" v-if="disk_data_state">
+                  </Chart>
+                </div>
+                <div id="inode-container" class="col-md-6 col-sm-12">
+
+                  <Chart :key="componentKey" :data="{
+                    chart: {
+                      type: 'area',
+                      backgroundColor: chart_color,
+                    },
+                    title: {
+                      text: $t('Inode_Information'),
+                      align: 'left',
+                      style: {
+                        color: revertColor(chart_color),
+                      },
+                    },
+                    // chart options
+                    tooltip: {
+                      formatter: function () {
+                        return (
+                          'Time: ' +
+                          Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+                          '<br/>' +
+                          $t('Inode_Information') + ': ' +
+                          this.y +
+                          'Blocks'
+                        );
+                      },
+                    },
+                    xAxis: {
+                      type: 'datetime',
+                      labels: {
+                        style: {
+                          color: revertColor(chart_color),
+                        },
+                      },
+                    },
+                    yAxis: {
+                      title: {
+                        text: $t('Inode_Information'),
+                      },
+                      labels: {
+                        style: {
+                          color: revertColor(chart_color),
+                        },
+                      },
+                    },
+                    legend: {
+                      enabled: false,
+                    },
+                    plotOptions: {
+                      area: {
+                        fillColor: {
+                          linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1,
+                          },
+                          stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [
+                              1,
+                              Highcharts.color(
+                                Highcharts.getOptions().colors[0]
+                              )
+                                .setOpacity(0)
+                                .get('rgba'),
+                            ],
+                          ],
+                        },
+                        marker: {
+                          radius: 2,
+                        },
+                        lineWidth: 1,
+                        states: {
+                          hover: {
+                            lineWidth: 1,
+                          },
+                        },
+                        threshold: null,
+                      },
+                    },
+
+                    series: [
+                      {
+                        name: $t('Inode'),
+                        data: inode_data_state.map(([date, value]) => [
+                          new Date(date).getTime(),
+                          value,
+                        ]),
+                      },
+                    ],
+                  }" v-if="inode_data_state">
+                  </Chart>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div id="net-in-container" class="col-md-6 col-sm-12">
+                  <Chart :key="componentKey" :data="{
+                    chart: {
+                      type: 'area',
+                      backgroundColor: chart_color,
+                    },
+                    title: {
+                      text: $t('Network_Download_Information'),
+                      align: 'left',
+                      style: {
+                        color: revertColor(chart_color),
+                      },
+                    },
+                    // chart options
+                    tooltip: {
+                      formatter: function () {
+                        return (
+                          'Time: ' +
+                          Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+                          '<br/>' +
+                          $t('Download_rate') + ': ' +
+                          this.y +
+                          'MB'
+                        );
+                      },
+                    },
+                    xAxis: {
+                      type: 'datetime',
+                      labels: {
+                        style: {
+                          color: revertColor(chart_color),
+                        },
+                      },
+                    },
+                    yAxis: {
+                      title: {
+                        text: $t('Download_rate'),
+                      },
+                      labels: {
+                        style: {
+                          color: revertColor(chart_color),
+                        },
+                      },
+                    },
+                    legend: {
+                      enabled: false,
+                    },
+                    plotOptions: {
+                      area: {
+                        fillColor: {
+                          linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1,
+                          },
+                          stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [
+                              1,
+                              Highcharts.color(
+                                Highcharts.getOptions().colors[0]
+                              )
+                                .setOpacity(0)
+                                .get('rgba'),
+                            ],
+                          ],
+                        },
+                        marker: {
+                          radius: 2,
+                        },
+                        lineWidth: 1,
+                        states: {
+                          hover: {
+                            lineWidth: 1,
+                          },
+                        },
+                        threshold: null,
+                      },
+                    },
+
+                    series: [
+                      {
+                        name: $t('Network_Download'),
+                        data: net_in_data_state.map(([date, value]) => [
+                          new Date(date).getTime(),
+                          value,
+                        ]),
+                      },
+                    ],
+                  }" v-if="net_in_data_state">
+                  </Chart>
+                </div>
+                <div id="net-out-container" class="col-md-6 col-sm-12">
+                  <Chart :key="componentKey" :data="{
+                    chart: {
+                      type: 'area',
+                      backgroundColor: chart_color,
+                    },
+                    title: {
+                      text: $t('Network_Upload_Information'),
+                      align: 'left',
+                      style: {
+                        color: revertColor(chart_color),
+                      },
+                    },
+                    // chart options
+                    tooltip: {
+                      formatter: function () {
+                        return (
+                          'Time: ' +
+                          Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+                          '<br/>' +
+                          $t('Upload_rate') + ': ' +
+                          this.y +
+                          'MB'
+                        );
+                      },
+                    },
+                    xAxis: {
+                      type: 'datetime',
+                      labels: {
+                        style: {
+                          color: revertColor(chart_color),
+                        },
+                      },
+                    },
+                    yAxis: {
+                      title: {
+                        text: $t('Upload_rate'),
+                      },
+                      labels: {
+                        style: {
+                          color: revertColor(chart_color),
+                        },
+                      },
+                    },
+                    legend: {
+                      enabled: false,
+                    },
+                    plotOptions: {
+                      area: {
+                        fillColor: {
+                          linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1,
+                          },
+                          stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [
+                              1,
+                              Highcharts.color(
+                                Highcharts.getOptions().colors[0]
+                              )
+                                .setOpacity(0)
+                                .get('rgba'),
+                            ],
+                          ],
+                        },
+                        marker: {
+                          radius: 2,
+                        },
+                        lineWidth: 1,
+                        states: {
+                          hover: {
+                            lineWidth: 1,
+                          },
+                        },
+                        threshold: null,
+                      },
+                    },
+
+                    series: [
+                      {
+                        name: $t('Network_Upload'),
+                        data: net_out_data_state.map(([date, value]) => [
+                          new Date(date).getTime(),
+                          value,
+                        ]),
+                      },
+                    ],
+                  }" v-if="net_out_data_state">
+                  </Chart>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div id="net-total-container" class="col-md-6 col-sm-12">
+                  <Chart :key="componentKey" :data="{
+                    chart: {
+                      type: 'area',
+                      backgroundColor: chart_color,
+                    },
+                    title: {
+                      text: $t('Network_Information'),
+                      align: 'left',
+                      style: {
+                        color: revertColor(chart_color),
+                      },
+                    },
+                    // chart options
+                    tooltip: {
+                      formatter: function () {
+                        return (
+                          'Time: ' +
+                          Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+                          '<br/>' +
+                          $t('Network_Usage_rate') + ': ' +
+                          this.y +
+                          'MB'
+                        );
+                      },
+                    },
+                    xAxis: {
+                      type: 'datetime',
+                      labels: {
+                        style: {
+                          color: revertColor(chart_color),
+                        },
+                      },
+                    },
+                    yAxis: {
+                      title: {
+                        text: $t('Network_Usage_rate'),
+                      },
+                      labels: {
+                        style: {
+                          color: revertColor(chart_color),
+                        },
+                      },
+                    },
+                    legend: {
+                      enabled: false,
+                    },
+                    plotOptions: {
+                      area: {
+                        fillColor: {
+                          linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1,
+                          },
+                          stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [
+                              1,
+                              Highcharts.color(
+                                Highcharts.getOptions().colors[0]
+                              )
+                                .setOpacity(0)
+                                .get('rgba'),
+                            ],
+                          ],
+                        },
+                        marker: {
+                          radius: 2,
+                        },
+                        lineWidth: 1,
+                        states: {
+                          hover: {
+                            lineWidth: 1,
+                          },
+                        },
+                        threshold: null,
+                      },
+                    },
+
+                    series: [
+                      {
+                        name: $t('Network'),
+                        data: net_total_data_state.map(([date, value]) => [
+                          new Date(date).getTime(),
+                          value,
+                        ]),
+                      },
+                    ],
+                  }" v-if="net_total_data_state">
+                  </Chart>
+                </div>
+              </div>
             </div>
 
             <!--connect-->
             <div class="tab-pane fade" id="pills-connect" role="tabpanel" aria-labelledby="pills-connect-tab"
               v-if="order_product_info.status == 'Active'">
-              <Connect :order_product_info="order_product_info" :system="system" v-if="selectedTab == 'connect'"/>
-              
+              <div class="tab-inner mb-3">
+                <div class="row">
+                  <h3 class="title">{{ $t('Connect') }}</h3>
+                  <p class="description mb-4">
+                    {{ $t('Connecting_to_your_virtual_machine') }}.
+                  </p>
+                </div>
+                <div class="divider"></div>
+                <div class="row px-0 px-lg-4 pt-4">
+                  <div class="col-md-12 d-flex flex-column align-items-center text-center">
+                    <template v-if="system.indexOf('windows') == -1">
+                      <p class="fs-15">
+                        {{ $t('cmd_title') }}
+                      </p>
+                      <p class="fs-16">
+                        ssh root@{{ order_product_info.dedicatedip }}
+                      </p>
+                    </template>
+                    <template v-else>
+                      <p class="fs-15">
+                        {{ $t('cmd_1') }}
+                      </p>
+                      <p class="fs-15">mstsc</p>
+                    </template>
+                    <p class="fs-14 mb-0 sub-detail" style="max-width: 500px">
+                      {{ $t('cmd_2') }}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!--reinstall-->
             <div class="tab-pane fade" id="pills-reinstall" role="tabpanel" aria-labelledby="pills-reinstall-tab"
               v-if="order_product_info.status == 'Active'">
-              <div class="tab-inner mb-3 vl-parent" v-if="selectedTab == 'reinstall'">
+              <div class="tab-inner mb-3 vl-parent">
                 <loading v-model:active="oslists_loading" :is-full-page="false" />
                 <div class="row">
                   <h3 class="title">{{ $t('Reinstall') }}</h3>
@@ -519,7 +1200,8 @@
             <!--tasks and logs-->
             <div class="tab-pane fade" id="pills-tasks" role="tabpanel" aria-labelledby="pills-tasks-tab"
               v-if="order_product_info.status == 'Active'">
-              <div class="tab-inner settings mb-3 vl-parent" v-if="selectedTab == 'tasks_and_logs'">
+              
+              <div class="tab-inner settings mb-3 vl-parent">
                 <loading v-model:active="tasks_loading" :is-full-page="false" />
                 <div class="row">
                   <h3 class="title mb-4">Tasks and Logs</h3>
@@ -644,10 +1326,10 @@
               </div>
             </div>
 
-            <!--ip address management-->
+            <!--management-->
             <div class="tab-pane fade" id="pills-management" role="tabpanel" aria-labelledby="pills-management-tab"
               v-if="order_product_info.status == 'Active'">
-              <div class="tab-inner management mb-3" v-if="selectedTab == 'ip'">
+              <div class="tab-inner management mb-3">
                 <div class="row">
                   <h3 class="title mb-4">{{ $t('IP_Address_Management') }}</h3>
                   <p class="description mb-4">
@@ -722,7 +1404,7 @@
             <!--vnc-->
             <div class="tab-pane fade" id="pills-vnc" role="tabpanel" aria-labelledby="pills-vnc-tab"
               v-if="order_product_info.status == 'Active'">
-              <div class="tab-inner mb-3" v-if="selectedTab == 'vnc'">
+              <div class="tab-inner mb-3">
                 <div class="row">
                   <h3 class="title mb-4">{{ $t('VNC') }}</h3>
                   <p class="description mb-4">
@@ -746,7 +1428,7 @@
             <!--DNS-->
             <div class="tab-pane fade" id="pills-dns" role="tabpanel" aria-labelledby="pills-dns-tab"
               v-if="order_product_info.status == 'Active'">
-              <div class="tab-inner mb-3 vl-parent" v-if="selectedTab == 'rdns'">
+              <div class="tab-inner mb-3 vl-parent">
                 <loading v-model:active="rdnslists_loading" :is-full-page="false" />
                 <div class="row">
                   <h3 class="title mb-4">{{ $t('ReverseDNS_Management') }}</h3>
@@ -984,7 +1666,7 @@
             <!--settings-->
             <div class="tab-pane fade" id="pills-settings" role="tabpanel" aria-labelledby="pills-settings-tab"
               v-if="order_product_info.status == 'Active'">
-              <div class="row mb-5 pe-0" v-if="selectedTab == 'settings'">
+              <div class="row mb-5 pe-0">
                 <div class="tab-inner settings mb-3">
                   <div class="row">
                     <h3 class="title mb-4">{{ $t('Settings') }}</h3>
@@ -1217,7 +1899,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, onBeforeUnmount, watch, watchEffect, defineAsyncComponent } from "vue";
+import { computed, onMounted, ref, onBeforeUnmount, watch, watchEffect } from "vue";
 import { commonApis } from "@/apis/commonApis";
 import { useStore } from "vuex";
 import useAuth from "@/composables/auth";
@@ -1230,21 +1912,34 @@ import 'vue-loading-overlay/dist/css/index.css';
 
 import { useRoute } from "vue-router";
 
-const Analytics = defineAsyncComponent(() =>
-  import('./components/analytics.vue')
-)
+import Highcharts from "highcharts";
+import Chart from "./Chart.vue";
 
-const Connect = defineAsyncComponent(() =>
-  import('./components/connect.vue')
-)
+import Analytics from "./components/analytics.vue";
 
 const customLink = ref(null);
 const store = useStore();
+const cpu_data_state = ref([]);
+const inode_data_state = ref([]);
+const ram_data_state = ref([]);
+const disk_data_state = ref([]);
+const net_in_data_state = ref([]);
+const net_out_data_state = ref([]);
+const net_total_data_state = ref([]);
+const theme_state = computed(() => store.getters["theme/theme"]);
+const chart_color = ref(document.documentElement.getAttribute('data-theme') == 'dark' ? '#1C1C1E' : '#ffffff');
+const componentKey = ref(1);
+
+
+watch(() => store.state.theme.theme, (newVal, oldVal) => {
+  if (newVal == 'dark') chart_color.value = '#1C1C1E';
+  else chart_color.value = '#ffffff';
+  componentKey.value = componentKey.value + 1;
+});
 
 const route = useRoute();
 
 const router = useRouter();
-
 const $toast = useToast({
   toastOptions: {
     zIndex: 99999, // set a high z-index value
@@ -1266,7 +1961,7 @@ const show3 = ref(false);
 
 const user = computed(() => store.state.auth.user);
 
-
+const analysis_data = ref([]);
 const relid = ref(null);
 const order_id = ref(null);
 const order_product_info = ref([]);
@@ -1296,7 +1991,7 @@ const selected_rdns_ip = ref("");
 const selected_rdns_id = ref(null);
 
 const firstTab = ref('overview');
-const selectedTab = ref('overview');
+
 // for creating tickets
 const selectedService = ref(0);
 const selectedDepartment = ref(0);
@@ -1305,6 +2000,9 @@ const message = ref('I want to cancel this service.');
 const fetched = ref(0);
 // settings
 const hostname = ref('');
+
+// loading states
+const anlaytics_loading = ref(false);
 
 const unixTime = (time) =>{
   let date = new Date(time * 1000);
@@ -1324,10 +2022,14 @@ const params = ref({
   client_id: user.value.client_id,
 });
 
+const openInNewTab = (url) => {
+  const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+  if (newWindow) newWindow.opener = null
+}
+
 const moveTab = () => {
   if (route.params.tab == 'invoice') {
     firstTab.value = 'billing';
-    selectedTab.value = 'billing';
   };
 }
 
@@ -1348,6 +2050,7 @@ const openInvoiceWindow = (invoice_id) => {
     .then((res) => {
       showLoader(false);
       if (res.data.result == "success") {
+        // openInNewTab(res.data.redirect_url);
         customLink.value.href = res.data.redirect_url;
         customLink.value.click();
       }
@@ -1702,7 +2405,25 @@ const getOverviewData = () => {
 
 getOverviewData();
 
-
+const get_analysis_data = () => {
+  anlaytics_loading.value = true;
+  commonApi
+    .runPostApi("/overview/analysis_data", {
+      vpsid: vpsid.value,
+    })
+    .then((res) => {
+      anlaytics_loading.value = false;
+      if (res.data.analysis_data) {
+        analysis_data.value = res.data.analysis_data;
+        renderChart(analysis_data.value, "#1C1C1E");
+        componentKey.value = componentKey.value + 1;
+      }
+    })
+    .catch((e) => {
+      anlaytics_loading.value = false;
+      $toast.error(e);
+    });
+};
 
 const oslists_loading = ref(false);
 
@@ -1782,6 +2503,7 @@ const get_tasks = () => {
       tasks_loading.value = false;
       if (res.data.tasks) {
         tasks.value = Object.values(res.data.tasks);
+        console.log(tasks.value);
       }
     })
     .catch((e) => {
@@ -1803,6 +2525,7 @@ const get_logs = () => {
       logs_loading.value = false;
       if (res.data.logs) {
         logs.value = Object.values(res.data.logs);
+        console.log(logs.value);
       }
     })
     .catch((e) => {
@@ -1814,6 +2537,79 @@ const get_logs = () => {
 
 function ucfirst(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function renderChart(data, color) {
+  //For showing up the average download and upload speed
+  var avg_download = 0;
+  var avg_upload = 0;
+  var avg_io_read = 0;
+  var avg_io_write = 0;
+  var count = 0;
+  var cpu_data = new Array();
+  var inode_data = new Array();
+  var ram_data = new Array();
+  var disk_data = new Array();
+  var ntw_in_data = new Array();
+  var ntw_out_data = new Array();
+  var ntw_total_data = new Array();
+  var io_read_data = new Array();
+  var io_write_data = new Array();
+
+  if (data) {
+    data.forEach(function (val, key) {
+      //Array is in format [vpsid, time, status, disk, inode, ram, cpu, net_in, net_out]
+      cpu_data.push([val[1], val[6] * 1]);
+      inode_data.push([val[1], val[4] * 1]);
+      ram_data.push([val[1], val[5] * 1]);
+      disk_data.push([val[1], val[3] * 1]);
+      ntw_in_data.push([val[1], val[7] * 1]);
+      ntw_out_data.push([val[1], val[8] * 1]);
+      ntw_total_data.push([val[1], parseInt(val[7]) + parseInt(val[8])]);
+      avg_download += parseInt(val[7]);
+      avg_upload += parseInt(val[8]);
+      avg_io_read += parseInt(val[9]);
+      avg_io_write += parseInt(val[10]);
+      count++;
+    });
+    // Calculating the average Downloading Speed per month
+    avg_download = (avg_download / count / 1024 / 1024).toFixed(5);
+    // Calculating the average Uploading Speed per month
+    avg_upload = (avg_upload / count / 1024 / 1024).toFixed(5);
+    // Calculating the average I/O read per month
+    avg_io_read = (avg_io_read / count / 1024 / 1024).toFixed(5);
+    // Calculating the average I/O write per month
+    avg_io_write = (avg_io_write / count / 1024 / 1024).toFixed(5);
+
+    cpu_data_state.value = cpu_data;
+    inode_data_state.value = inode_data;
+    ram_data_state.value = ram_data;
+    disk_data_state.value = disk_data;
+    net_in_data_state.value = ntw_in_data;
+    net_out_data_state.value = ntw_out_data;
+    net_total_data_state.value = ntw_total_data;
+  }
+}
+
+function revertColor(color) {
+  // Convert the color to RGB format
+  var r = parseInt(color.substring(1, 3), 16);
+  var g = parseInt(color.substring(3, 5), 16);
+  var b = parseInt(color.substring(5, 7), 16);
+
+  // Calculate the inverted color
+  var invertedR = 255 - r;
+  var invertedG = 255 - g;
+  var invertedB = 255 - b;
+
+  // Convert the inverted color back to hex format
+  var invertedColor =
+    "#" +
+    invertedR.toString(16).padStart(2, "0") +
+    invertedG.toString(16).padStart(2, "0") +
+    invertedB.toString(16).padStart(2, "0");
+
+  return invertedColor;
 }
 
 const passwordStrength = computed(() => {

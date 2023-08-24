@@ -75,6 +75,7 @@ Route::group(['middleware' => 'auth:sanctum' ,  'namespace' => 'App\\Http\\Contr
      Route::post('overview/departments_data', 'OverviewController@departments_data');
      Route::post('overview/get_rdns_lists', 'OverviewController@get_rdns_lists');
      Route::post('overview/get_tasks', 'OverviewController@get_tasks');
+     Route::post('overview/get_ips', 'OverviewController@get_ips');
      Route::post('overview/get_logs', 'OverviewController@get_logs');
      
     //  overview actions

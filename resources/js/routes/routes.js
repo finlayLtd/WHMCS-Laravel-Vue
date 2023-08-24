@@ -84,7 +84,7 @@ export default [
             },
 
             {
-                path: 'overview/:id/:tab',
+                path: 'overview/:id/:tab/:domain',
                 name: 'overview',
                 component: () => import('../views/pages/overview.vue'),
             },
@@ -127,7 +127,7 @@ export default [
                 beforeEnter: guest,
             },
             {
-                path: 'noVNC/:id',
+                path: 'noVNC/:id/:domain',
                 name: 'noVNC',
                 component: () => import('../views/pages/noVNC.vue'),
                 beforeEnter: requireLogin,

@@ -59,14 +59,14 @@
                               <li>
                                 <router-link
                                   class="logo-wrapper d-flex align-items-center col-md-2 text-dark text-decoration-none order-lg-1"
-                                  :to="{ name: 'overview', params: { id: order.orderid, tab : 'overview' } }">
+                                  :to="{ name: 'overview', params: { id: order.orderid, tab : 'overview', domain: order.domain } }">
                                   {{ $t('Launch_Control_Panel') }}
                                 </router-link>
                               </li>
                               <li>
                                 <router-link
                                   class="logo-wrapper d-flex align-items-center col-md-2 text-dark text-decoration-none order-lg-1"
-                                  :to="{ name: 'overview', params: { id: order.orderid, tab : 'invoice' } }">
+                                  :to="{ name: 'overview', params: { id: order.orderid, tab : 'invoice', domain: order.domain } }">
                                   {{ $t('View_Invoices') }}
                                 </router-link>
                               </li>

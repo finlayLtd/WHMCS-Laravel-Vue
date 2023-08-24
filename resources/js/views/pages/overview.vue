@@ -62,8 +62,12 @@
                   <tbody>
                     <tr>
                       <td>{{ $t('Public_IPv4') }}</td>
-                      <td class="clipboard-input" v-if="ip_list">
+                      <td class="clipboard-input" v-if="ip_list && ip_list.ips.length !=0 ">
                         {{ getMainIp(ip_list.ips) }}
+                        &nbsp;
+                      </td>
+                      <td class="clipboard-input" v-else>
+                        {{ order_product_info.dedicatedip }}
                         &nbsp;
                       </td>
                       <td>
@@ -205,7 +209,7 @@
                   <button class="nav-link" id="pills-management-tab" data-bs-toggle="pill"
                     data-bs-target="#pills-management" type="button" role="tab" aria-controls="pills-management"
                     aria-selected="false"
-                    @click="selectedTab='ip'">
+                    @click="get_ips(),selectedTab='ip'">
                     {{ $t('IP_Address_Management') }}
                   </button>
                 </li>
@@ -647,7 +651,8 @@
             <!--ip address management-->
             <div class="tab-pane fade" id="pills-management" role="tabpanel" aria-labelledby="pills-management-tab"
               v-if="order_product_info.status == 'Active'">
-              <div class="tab-inner management mb-3" v-if="selectedTab == 'ip'">
+              <div class="tab-inner management mb-3 vl-parent" v-if="selectedTab == 'ip'">
+                <loading v-model:active="ips_loading" :is-full-page="false" />
                 <div class="row">
                   <h3 class="title mb-4">{{ $t('IP_Address_Management') }}</h3>
                   <p class="description mb-4">
@@ -733,7 +738,7 @@
                 <div class="row px-0 pt-4">
                   <div class="col-md-12 d-flex justify-content-center">
                     <div class="overview-button-wrapper pt-0">
-                      <router-link :to="{ name: 'noVNC', params: { id: route.params.id } }"
+                      <router-link :to="{ name: 'noVNC', params: { id: route.params.id, domain: route.params.domain } }"
                         class="btn-dark px-4 hover-dark-light" target="_blank">
                         {{ $t('Connect_VNC') }}
                       </router-link>
@@ -1371,6 +1376,7 @@ const processIps = (lists) => {
 
 const getMainIp = (lists) => {
   let string = '';
+  if(lists.length == 0) return order_product_info.value.dedicatedip;
   for (const element of lists) {
     if (element.primary == 1) {
       string = element.ip;
@@ -1644,6 +1650,7 @@ const getOverviewData = () => {
   commonApi
     .runPostApi("/overview", {
       id: route.params.id,
+      domain: route.params.domain
     })
     .then((res) => {
       showLoader(false);
@@ -1683,7 +1690,6 @@ const getOverviewData = () => {
         invoiceInfo.value = res.data.invoiceInfo;
       }
 
-      ip_list.value = res.data.ip_list;
       status.value = res.data.status;
       selected_rdns_ip.value = order_product_info.value.dedicatedip;
       if (countFetchingOverview.value == 1) {
@@ -1731,7 +1737,10 @@ const get_departments_data = () => {
       order_id: order_id.value,
       nextduedate: order_product_info.value.nextduedate,
       relid: relid.value,
-      invoice_id: invoiceInfo.value.invoiceid
+      invoice_id: invoiceInfo.value.invoiceid,
+      domain: route.params.domain,
+      status: status.value,
+      assignedips: order_product_info.value.assignedips
     })
     .then((res) => {
       departments_loading.value = false;
@@ -1739,6 +1748,7 @@ const get_departments_data = () => {
         departments.value = res.data.departments;
         if (departments.value && departments.value.length != 0) selectedDepartment.value = res.data.departments[0].id;
         invoiceInfo.value = res.data.invoiceInfo;
+        ip_list.value = res.data.ip_list;
       }
     })
     .catch((e) => {
@@ -1785,6 +1795,26 @@ const get_tasks = () => {
     })
     .catch((e) => {
       tasks_loading.value = false;
+      $toast.error(e);
+    });
+};
+
+// ips fetching
+const ips_loading = ref(false);
+const get_ips = () => {
+  ips_loading.value = true;
+  commonApi
+    .runPostApi("/overview/get_ips", {
+      domain: route.params.domain,
+    })
+    .then((res) => {
+      ips_loading.value = false;
+      if (res.data.ip_list) {
+        ip_list.value = res.data.ip_list;
+      }
+    })
+    .catch((e) => {
+      ips_loading.value = false;
       $toast.error(e);
     });
 };

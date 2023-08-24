@@ -355,7 +355,7 @@ function clickCheckout() {
         let id = res.data.order_id;
         openModal.value = false;
         $toast.success("Successfully created vps.");
-        router.push({ name: 'overview', params: { id: id , tab : 'overview'} })
+        router.push({ name: 'overview', params: { id: id , tab : 'overview', domain: hostname.value } })
       }
       else {
         $toast.error(res.data.result);

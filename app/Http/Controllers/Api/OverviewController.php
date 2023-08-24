@@ -11,6 +11,8 @@ use Auth;
 use sburina\Whmcs;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Invoices;
+use App\Models\ClientProducts;
 
 class OverviewController extends Controller
 {
@@ -37,24 +39,21 @@ class OverviewController extends Controller
         $order_info = [];
         $vps_info = [];
         $vpsid = 0;
-        $ip_list['ips'] = [];
 
         $order_id = $all_request['id'];
-        $order_info_response = $this->getOrderinfo($order_id);   //GetOrders whmcs api
+        $order_info_response = $this->getOrderinfo($order_id); //GetOrders whmcs api
 
         $order_info = $order_info_response['orders']['order'];
 
-        
-        
-        $order_product_info = $this->getClientProductInfo($order_id); //GetClientsProducts whmcs api
+        $order_product_info = $this->getClientProductInfo($order_id, $all_request['domain']); //GetClientsProducts whmcs api
         $relid = $order_product_info['id'];
 
         $today = new DateTime(date("Y-m-d"));
         $start_day = new DateTime($order_info[0]['date']);
-        
+
         $interval = $today->diff($start_day);
         $dayDiff = $interval->days;
-        
+
         $other_info = $this->getOtherinfo($order_product_info);
         $invoiceInfo = $this->getinvoiceInfo($order_info[0]['invoiceid']); //GetInvoice whmcs api
 
@@ -70,13 +69,8 @@ class OverviewController extends Controller
             $status = 'Active';
         if ($status == 'Active') {
             $vpsid = $order_product_info['customfields']['customfield'][1]['value'];
-            $vps_info = $this->getVpsStatistics($vpsid);  // Virtualizor admin api
-            $ip_list = $this->getIpinfo($order_product_info['domain']);// Virtualizor admin api
-        }  
-
-        // return response()->json([
-        //     'relid' => '123',
-        // ]);
+            $vps_info = $this->getVpsStatistics($vpsid); // Virtualizor admin api
+        }
 
         return response()->json([
             'relid' => $relid,
@@ -88,8 +82,8 @@ class OverviewController extends Controller
             'system' => $system,
             'vpsid' => $vpsid,
             'vps_info' => $vps_info,
-            'invoiceInfo' => $invoiceInfo,     
-            'ip_list' => $ip_list,
+            'invoiceInfo' => $invoiceInfo,
+
             'status' => $status,
         ]);
 
@@ -131,6 +125,18 @@ class OverviewController extends Controller
             'tasks' => $tasks,
         ]);
     }
+
+    public function get_ips(Request $request)
+    {
+        $all_request = $request->input('params');
+        $ip_list['ips'] = [];
+        $ip_list = $this->getIpinfo($all_request['domain']); // Virtualizor admin api
+
+        return response()->json([
+            'ip_list' => $ip_list,
+        ]);
+    }
+
     public function get_logs(Request $request)
     {
         $all_request = $request->input('params');
@@ -147,10 +153,18 @@ class OverviewController extends Controller
             'logs' => $logs,
         ]);
     }
-    
+
     public function departments_data(Request $request)
     {
         $all_request = $request->input('params');
+        $ip_list['ips'] = [];
+
+        if ($all_request['assignedips'] != "") {
+            if ($all_request['status'] == 'Active') {
+                $ip_list = $this->getIpinfo($all_request['domain']); // Virtualizor admin api
+            }
+        }
+
 
         $departments = array();
         $departments_info = (new \Sburina\Whmcs\Client)->post([
@@ -206,7 +220,8 @@ class OverviewController extends Controller
 
         return response()->json([
             'departments' => $departments,
-            'invoiceInfo' => $invoiceInfo, 
+            'invoiceInfo' => $invoiceInfo,
+            'ip_list' => $ip_list,
         ]);
     }
 
@@ -226,15 +241,24 @@ class OverviewController extends Controller
             'oslists' => $oslists,
         ]);
     }
-    private function getClientProductInfo($order_id)
+    private function getClientProductInfo($order_id, $domain)
     {
         $orders_response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetClientsProducts',
             'clientid' => Auth::user()->client_id,
-            // 'domain' => 'pizaroaup1'
+            'domain' => $domain
         ]);
 
         $orders = $orders_response['products']['product'];
+
+        // if(count($orders) == 0) {
+        //     $orders_response = (new \Sburina\Whmcs\Client)->post([
+        //         'action' => 'GetClientsProducts',
+        //         'clientid' => Auth::user()->client_id,
+        //     ]);
+        //     $orders = $orders_response['products']['product'];
+        // }
+
         foreach ($orders as $order)
             if ($order['orderid'] == $order_id)
                 $order_info = $order;
@@ -281,6 +305,58 @@ class OverviewController extends Controller
 
         $system_label = explode('-', $order_info['configoptions']['configoption'][1]['value'])[0];
         $info['system'] = $order_info['configoptions']['configoption'][1]['value'];
+
+        switch ($system_label) {
+            case 'windows':
+                $info['sys_logo'] = 'windows';
+                break;
+            case 'ubuntu':
+                $info['sys_logo'] = 'ubuntu';
+                break;
+            case 'centos':
+                $info['sys_logo'] = 'centos';
+                break;
+            case 'debian':
+                $info['sys_logo'] = 'debian';
+                break;
+            case 'almalinux':
+                $info['sys_logo'] = 'almalinux';
+                break;
+            case 'fedora':
+                $info['sys_logo'] = 'fedora';
+                break;
+            case 'rocky':
+                $info['sys_logo'] = 'rocky';
+                break;
+        }
+
+        return $info;
+    }
+
+    private function getOtherinfo_VNC($order_info)
+    {
+        if (strpos($order_info['groupname'], 'Netherlands') !== false) {
+            $info['flag'] = 'flag-nl';
+        } else {
+            $info['flag'] = 'flag-en';
+        }
+
+        if ($order_info['status'] == 'Active') {
+            $page = 0;
+            $reslen = 0;
+            //For Searching
+            $post = array();
+            $post['vpsid'] = $order_info['customfields']['customfield'][1]['value'];
+            $vps_info = $this->virtualizorAdmin->listvs($page, $reslen, $post);
+            $vps_info = $vps_info[$post['vpsid']];
+            $info['vps_info'] = $vps_info;
+            $system_label = explode('-', $vps_info['os_name'])[0];
+            $info['system'] = $vps_info['os_name'];
+
+        } else {
+            $system_label = explode('-', $order_info['configoptions']['configoption'][1]['value'])[0];
+            $info['system'] = $order_info['configoptions']['configoption'][1]['value'];
+        }
 
         switch ($system_label) {
             case 'windows':
@@ -484,12 +560,27 @@ class OverviewController extends Controller
     {
         $invoice_info = array();
 
-        $invoice_info = (new \Sburina\Whmcs\Client)->post([
-            'action' => 'GetInvoice',
-            'invoiceid' => $invoice_id,
-        ]);
+        $invoice = Invoices::where('invoice_id', $invoice_id)->first();
+        if ($invoice)
+            return json_decode($invoice->Data, true);
+        else {
+            $invoice_info = (new \Sburina\Whmcs\Client)->post([
+                'action' => 'GetInvoice',
+                'invoiceid' => $invoice_id,
+            ]);
 
-        return $invoice_info;
+            if ($invoice_info['status'] == 'Paid') { //need to save to database
+                if (!$invoice) {
+                    $invoice = new Invoices();
+                    $invoice->Data = json_encode($invoice_info);
+                    $invoice->invoice_id = $invoice_id;
+                    $invoice->save();
+                }
+            }
+
+            return $invoice_info;
+        }
+
     }
 
     private function getIpinfo($hostname)
@@ -546,8 +637,9 @@ class OverviewController extends Controller
 
         $order_id = $all_request['id'];
 
-        $order_product_info = $this->getClientProductInfo($order_id);
-        $other_info = $this->getOtherinfo($order_product_info);
+        $order_product_info = $this->getClientProductInfo($order_id, $all_request['domain']);
+
+        $other_info = $this->getOtherinfo_VNC($order_product_info);
 
         if ($order_product_info['status'] == 'Active') {
             $vpsid = $other_info['vps_info']['vpsid'];

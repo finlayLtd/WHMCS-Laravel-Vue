@@ -34,6 +34,7 @@ const getVNCContent = () => {
   commonApi
     .runPostApi("/overview/noVNC-connect", {
       id: route.params.id,
+      domain: route.params.domain,
     })
     .then((res) => {
       showLoader(false);

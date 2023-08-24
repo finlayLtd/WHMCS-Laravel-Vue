@@ -40,12 +40,13 @@ class OverviewController extends Controller
         $ip_list['ips'] = [];
 
         $order_id = $all_request['id'];
-        $order_info_response = $this->getOrderinfo($order_id);
+        $order_info_response = $this->getOrderinfo($order_id);   //GetOrders whmcs api
 
         $order_info = $order_info_response['orders']['order'];
+
         
-        $order_product_info = $this->getClientProductInfo($order_id);
-        // print_r($order_product_info);exit;
+        
+        $order_product_info = $this->getClientProductInfo($order_id); //GetClientsProducts whmcs api
         $relid = $order_product_info['id'];
 
         $today = new DateTime(date("Y-m-d"));
@@ -53,12 +54,9 @@ class OverviewController extends Controller
         
         $interval = $today->diff($start_day);
         $dayDiff = $interval->days;
-
-        // $product_info = $this->getOrderProductInfo($order_product_info['pid']);
-        // $detail_info = $this->getProductDetailInfo($product_info);
         
         $other_info = $this->getOtherinfo($order_product_info);
-        $invoiceInfo = $this->getinvoiceInfo($order_info[0]['invoiceid']);
+        $invoiceInfo = $this->getinvoiceInfo($order_info[0]['invoiceid']); //GetInvoice whmcs api
 
         $flag = $other_info['flag'];
         if (isset($other_info['sys_logo'])) {
@@ -72,17 +70,19 @@ class OverviewController extends Controller
             $status = 'Active';
         if ($status == 'Active') {
             $vpsid = $order_product_info['customfields']['customfield'][1]['value'];
-            // $vpsid = $other_info['vps_info']['vpsid'];
-            $vps_info = $this->getVpsStatistics($vpsid);
-            $ip_list = $this->getIpinfo($order_product_info['domain']);
+            $vps_info = $this->getVpsStatistics($vpsid);  // Virtualizor admin api
+            $ip_list = $this->getIpinfo($order_product_info['domain']);// Virtualizor admin api
         }  
+
+        // return response()->json([
+        //     'relid' => '123',
+        // ]);
 
         return response()->json([
             'relid' => $relid,
             'order_id' => $order_id,
             'order_product_info' => $order_product_info,
             'dayDiff' => $dayDiff,
-            // 'detail_info' => $detail_info,
             'flag' => $flag,
             'sys_logo' => $sys_logo,
             'system' => $system,
@@ -231,6 +231,7 @@ class OverviewController extends Controller
         $orders_response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetClientsProducts',
             'clientid' => Auth::user()->client_id,
+            // 'domain' => 'pizaroaup1'
         ]);
 
         $orders = $orders_response['products']['product'];
@@ -278,22 +279,8 @@ class OverviewController extends Controller
             $info['flag'] = 'flag-en';
         }
 
-        // if ($order_info['status'] == 'Active') {
-        //     $page = 0;
-        //     $reslen = 0;
-        //     //For Searching
-        //     $post = array();
-        //     $post['vpsid'] = $order_info['customfields']['customfield'][1]['value'];
-        //     $vps_info = $this->virtualizorAdmin->listvs($page, $reslen, $post);
-        //     $vps_info = $vps_info[$post['vpsid']];
-        //     $info['vps_info'] = $vps_info;
-        //     $system_label = explode('-', $vps_info['os_name'])[0];
-        //     $info['system'] = $vps_info['os_name'];
-
-        // } else {
-            $system_label = explode('-', $order_info['configoptions']['configoption'][1]['value'])[0];
-            $info['system'] = $order_info['configoptions']['configoption'][1]['value'];
-        // }
+        $system_label = explode('-', $order_info['configoptions']['configoption'][1]['value'])[0];
+        $info['system'] = $order_info['configoptions']['configoption'][1]['value'];
 
         switch ($system_label) {
             case 'windows':

@@ -120,19 +120,19 @@
               </div>
             </div>
 
-            <div class="col-xl-4 col-lg-6 col-md-6 mb-4 mb-md-0">
+            <div class="col-xl-4 col-lg-6 col-md-6 mb-4 mb-md-0" v-if="order_product_info.status == 'Active'">
               <div class="card-item info-table">
                 <table>
-                  <tbody v-if="detail_info">
+                  <tbody>
                     <tr>
                       <td><img src="/assets/img/cpu.png" alt="" />{{ $t('CPU') }}</td>
-                      <td>{{ detail_info[0] }}</td>
+                      <td v-if="vps_info">{{ vps_info.vps_data[vpsid].cores }}  vCores</td>
                       <td></td>
                     </tr>
 
                     <tr>
                       <td><img src="/assets/img/ram.png" alt="" />{{ $t('Ram') }}</td>
-                      <td>{{ detail_info[1] }}</td>
+                      <td v-if="vps_info">{{ vps_info.vps_data[vpsid].ram/1024 }} GB RAM</td>
                       <td></td>
                     </tr>
 
@@ -140,7 +140,7 @@
                       <td>
                         <img src="/assets/img/hard-disk.png" alt="" />{{ $t('Storage') }}
                       </td>
-                      <td>{{ detail_info[2] }}</td>
+                      <td v-if="vps_info">{{ vps_info.vps_data[vpsid].disk }} GB Disk Storage</td>
                       <td></td>
                     </tr>
                   </tbody>
@@ -1271,7 +1271,6 @@ const relid = ref(null);
 const order_id = ref(null);
 const order_product_info = ref([]);
 const dayDiff = ref(null);
-const detail_info = ref([]);
 const flag = ref(null);
 const sys_logo = ref("windows");
 const system = ref(null);
@@ -1670,7 +1669,6 @@ const getOverviewData = () => {
       order_id.value = res.data.order_id;
       order_product_info.value = res.data.order_product_info;
       dayDiff.value = res.data.dayDiff;
-      detail_info.value = res.data.detail_info;
       flag.value = res.data.flag;
       sys_logo.value = res.data.sys_logo;
       system.value = res.data.system;
@@ -1693,6 +1691,7 @@ const getOverviewData = () => {
           get_departments_data();
         }
       }
+      useAuth().getUser();
     })
     .catch((e) => {
       showLoader(false);
@@ -1853,7 +1852,7 @@ const passwordStrength = computed(() => {
   return pwstrength;
 });
 
-useAuth().getUser();
+
 </script>
 
 <style scoped>

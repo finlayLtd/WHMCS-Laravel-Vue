@@ -1354,12 +1354,10 @@ section.dashboard .data-region-card .server-features li:last-child {
 } */
 
 section.dashboard .data-region-card:hover {
-	border: 1px solid rgb(71 54 159 / 65%) !important;
 }
 
 section.dashboard .data-region-card:hover .server-price {
-	background: rgba(54, 138, 255, 0.05);
-	border-bottom: 1px solid rgb(71 54 159 / 65%);
+	background: rgba(54, 138, 255, 0.05);;
 }
 
 .configure-server-form label {
@@ -2992,7 +2990,7 @@ border: none;
 #loading-bg {
 	width: 100%;
 	height: 100%;
-	background: rgba(0,0,0,0.2);
+	background: #fff;
 	display: flex;
 	position: absolute;
 }
@@ -3323,45 +3321,6 @@ border: none;
 }
 
 .selected-distribution{
-	box-shadow: 0px 0px 10px rgb(71 54 159 / 65%) !important;
-	border: 1px solid rgb(71 54 159 / 65%) !important;
-}
-
-.selected-os{
-	box-shadow: 0px 0px 10px rgb(71 54 159 / 65%) !important;
-	border: 1px solid rgb(71 54 159 / 65%) !important;
-}
-
-.selected-plan{
-	box-shadow: 0px 0px 10px rgb(71 54 159 / 65%);
-	border: 1px solid rgb(71 54 159 / 65%) !important;
-}
-
-.payment-info-review,
-.user-info-review,
-.vps-info-review{
-	padding: 25px;
-    border: none;
-    border-radius: 15px;
-	box-shadow: 1px 0px 5px rgb(71 54 159 / 65%) !important;
-}
-
-.stockTitle{
-	color: grey;
-}
-
-.stockUnavailable{
-	color: grey;
-}
-
-
-
-.message-item.message-received .message-content-wrapper {
-	padding-left: 0px;
-}
-
-.message-item.message-sent .message-content-wrapper {
-	padding-right: 0px;
 }
 
 @media (max-width: 768px) {

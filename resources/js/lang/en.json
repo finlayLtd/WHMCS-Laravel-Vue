@@ -113,6 +113,8 @@
     "VPS_Password": "VPS Password",
     "Review_and_Checkout": "Review and Checkout",
     "VPS_info": "VPS Information",
+    "DC": "Datacenter",
+    "OS": "Operating System",
     "Host_Name": "Host Name",
     "Number_of_IPs": "Number of IPs",
     "User_info": "User Information",

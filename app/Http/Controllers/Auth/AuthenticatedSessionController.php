@@ -43,6 +43,7 @@ class AuthenticatedSessionController extends Controller
             $request->password
         );
 
+
         if ($data['result'] == 'error') {
             return response()->json([
                 'errors' => ['email' => ['Email or Password is Invalid']]
@@ -181,7 +182,7 @@ class AuthenticatedSessionController extends Controller
         if ($register_result['result'] == 'success') {
             return response()->json(['message' => 'Registration Successfully', 'data' => 'success'], 200);
         } else {
-            return response()->json(['message' => $register_result['result'], 'data' => 'failed'], 200);
+            return response()->json(['message' => $register_result['message'], 'data' => 'failed'], 200);
         }
     }
 

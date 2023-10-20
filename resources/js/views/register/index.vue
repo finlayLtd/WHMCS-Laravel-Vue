@@ -163,11 +163,10 @@ const submitRegister = async () => {
       if (res) {
         if (res.status == 200) {
           if (res.data.data == "success") {
-            //
             $toast.success("Successfully registered!");
             router.push({ name: "auth.login" });
           } else {
-            $toast.warning("Email already exist!");
+            $toast.warning(res.data.message);
           }
         } else {
           console.log(res.data);

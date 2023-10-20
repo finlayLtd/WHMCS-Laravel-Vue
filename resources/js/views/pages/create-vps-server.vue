@@ -222,17 +222,10 @@
                   €{{ selected_product ? selected_product.pricing.EUR.monthly : "" }}/{{ $t('month') }}
                 </div>
                 <div class="vps-groupname">
+                    {{ $t('DC') }}:
                   <div v-for="(group, key) in product_group" :key="key" v-show="selected_group_id == key">
-                    <div class="row">
-                      <div class="image-wrapper mb-2" style="font-size: 20px">
-                        <img :src="key == 2
-                          ? 'assets/img/flag-nl.png'
-                          : 'assets/img/flag-en.png'
-                          " style="width: 28px" alt="" />
                         <span v-if="key == 2">&nbsp;{{ $t('Netherlands') }}</span>
                         <span v-else>&nbsp;{{ $t('USA') }}</span>
-                      </div>
-                    </div>
                   </div>
                 </div>
                 <div class="vps-hostname">
@@ -242,18 +235,8 @@
                   {{ $t('Number_of_IPs') }}: {{ selected_number_of_ips }}
                 </div>
                 <div class="vps-os">
-                  {{ selected_os_name ? selected_os_name : "" }}
+                  {{ $t('OS') }}: {{ selected_os_name ? selected_os_name : "" }}
                 </div>
-              </div>
-            </div>
-
-            <div class="user-info mt-2 mb-2">
-              <div class="user-info-review card">
-                <h6 class="sub-title">{{ $t('User_info') }}</h6>
-                <hr />
-                <div class="user-name">{{ $t('Name') }}: {{ user.name }}</div>
-                <div class="user-email">{{ $t('Email') }}: {{ user.email }}</div>
-                <div class="user-currency-code">{{ $t('Currency') }}: EUR</div>
               </div>
             </div>
 

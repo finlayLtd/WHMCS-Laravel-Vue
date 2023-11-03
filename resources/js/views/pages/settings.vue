@@ -21,13 +21,13 @@
                     {{ $t('Your_Profile') }}
                   </button>
                 </li>
-                <li class="nav-item" role="presentation">
+                <!-- <li class="nav-item" role="presentation">
                   <button class="nav-link" id="pills-analytics-tab" data-bs-toggle="pill"
                     data-bs-target="#pills-analytics" type="button" role="tab" aria-controls="pills-analytics"
                     aria-selected="false">
                     {{ $t('Change_Password') }}
                   </button>
-                </li>
+                </li> -->
                 <li class="nav-item" role="presentation">
                   <button class="nav-link" id="pills-userManagement-tab" data-bs-toggle="pill"
                     data-bs-target="#pills-userManagement" type="button" role="tab" aria-controls="pills-userManagement"

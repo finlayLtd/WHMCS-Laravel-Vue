@@ -660,3 +660,60 @@
 	  height: 12px
 
 	}
+/* create server css */
+@media screen and (max-width : 1099px) {
+	.choose-server-row {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+@media screen and (max-width : 777px) {
+	.choose-server-row {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media screen and (max-width : 499px) {
+	.choose-server-row {
+		grid-template-columns: repeat(1, 1fr);
+	}
+
+	.main-header-server {
+		font-size: 24px;
+	}
+
+	.choose-os-header {
+		font-size: 18px;
+	}
+
+	.os-name {
+		font-size: 15px;
+	}
+}
+
+@media screen and (max-width : 988px) {
+	.config-2 {
+		margin-top: 30px;
+	}
+}
+
+
+/* table checkout css */
+@media screen and (min-width: 1024px) {
+    .table-parrent {
+        display: block;
+    }
+
+    .mobile-head {
+        display: none;
+    }
+
+    .mobile-child {
+        display: flex;
+        padding: 1rem;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid rgba(23, 30, 38, 0.08);
+        border-bottom: 1px solid rgba(23, 30, 38, 0.08);
+    }
+}

@@ -29,7 +29,21 @@
               />
             </div>
 
-            <button type="submit" class="btn-dark w-100 mb-2" :class="{ 'opacity-25': processing }" :disabled="processing">
+            <div :class="(inputValue!='' && captcha_success== false)?'login-input-wrapper mb-4 redBorder':'login-input-wrapper mb-4'">
+              <label for="#captcha">Captcha code</label>
+              <input v-model="inputValue" id="captcha" type="text" required/>
+              <!-- Validation Errors -->
+            </div>
+
+            <div class="mb-4">
+              <VueClientRecaptcha
+                :value="inputValue"
+                @getCode="getCaptchaCode"
+                @isValid="checkValidCaptcha"
+              />
+            </div>
+
+            <button type="submit" class="btn-dark w-100 mb-2" :class="{ 'opacity-25': processing }" :disabled="processing || captcha_success == false">
               {{ $t('sent_reset') }}
             </button>
 
@@ -53,6 +67,7 @@ import { useRouter } from "vue-router";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 import { showLoader } from "@/plugins/loading.js";
+import VueClientRecaptcha from 'vue-client-recaptcha'
 const $toast = useToast();
 
 const processing = ref(false);
@@ -89,4 +104,24 @@ const submitForgot = async () => {
     })
     .finally(() => (processing.value = false));
 };
+
+const inputValue = ref('');
+const captcha_success = ref(false);
+const getCaptchaCode = (value) => {
+  /* you can access captcha code */
+  console.log(value);
+};
+const checkValidCaptcha = (value) => {
+  /* expected return boolean if your value and captcha code are same return True otherwise return False */
+  captcha_success.value = value;
+};
+
 </script>
+
+<style>
+.vue_client_recaptcha{display:flex;justify-content:center;flex-direction:row}.vue_client_recaptcha_icon{text-align:center;padding:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;background-color:#eee;transition:background-color .3s ease-in-out}.vue_client_recaptcha_icon:hover{background-color:#ccc}.vue_client_recaptcha .captcha_canvas{background:#eee;padding:10px 0}
+.redBorder{
+  border: 1px solid red;
+}
+</style>
+

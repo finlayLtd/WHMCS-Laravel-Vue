@@ -391,6 +391,7 @@ class OverviewController extends Controller
         $post['vpsid'] = $vpsid; //Set this only when you want vps_data
         // $post['show'] = date("Ym"); //Set this only when you want vps_data
         $vps_info = $this->virtualizorAdmin->vps_stats($post);
+
         return $vps_info;
     }
 
@@ -669,8 +670,8 @@ class OverviewController extends Controller
         $vnc_token = $vpsid;
 
         $array = array(
-            'HOST' => 'vnc.fidelcastro.cc',
-            'PORT' => $port,
+            'HOST' => 'vnc.akeimai.com',
+            // 'PORT' => $port,
             'PROTO' => $proto,
             'WEBSOCKET' => $websockify,
             'TOKEN' => $vnc_token,

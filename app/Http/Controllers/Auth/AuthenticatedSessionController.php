@@ -30,6 +30,11 @@ class AuthenticatedSessionController extends Controller
         return view('auth.login');
     }
 
+    public function getCaptcha()
+    {
+        return response()->json(['captcha'=> captcha_src()]);
+    }
+
     /**
      * Handle an incoming authentication request.
      *

@@ -24,7 +24,7 @@ class Admin {
 	
 	public $key = 'N8q5PHMfwvMQHMHYkytYtTydVWoLsWNC';
 	public $pass = 'CcuJEN365CusfakK2NA8uVGSg0e8e36J';
-	public $ip = '37.59.33.165';
+	public $ip = '94.156.70.70';
 	public $port = 4085;
 	public $protocol = 'https';
 	public $error = array();
@@ -42,7 +42,7 @@ class Admin {
 	function __construct(){
 		$this->key = 'N8q5PHMfwvMQHMHYkytYtTydVWoLsWNC';
 		$this->pass = 'CcuJEN365CusfakK2NA8uVGSg0e8e36J';
-		$this->ip = '37.59.33.165';
+		$this->ip = '94.156.70.70';
 		$this->port = 4085;
 	}
 	

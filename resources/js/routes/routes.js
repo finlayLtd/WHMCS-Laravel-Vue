@@ -101,6 +101,13 @@ export default [
                 component: () => import('../views/pages/create-vps-server.vue'),
             },
 
+            {
+                path: 'test',
+                name: 'test',
+                component: () => import('../views/pages/Vps.vue'),
+            },
+            
+
         ]
     },
 

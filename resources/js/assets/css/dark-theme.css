@@ -856,3 +856,146 @@ html[data-theme=dark] div.toast-body{
 html[data-theme=dark] .view-invoice{
 	filter: brightness(15) !important;
 }
+
+/* create server dark */
+html[data-theme=dark] .main-header-server,html[data-theme=dark] .choose-os-header,html[data-theme=dark] .os-name{
+	color: #FFF;
+}
+html[data-theme=dark] .choose-os-div{
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.04);
+}
+html[data-theme=dark] .os-drop-down-btn div>p {
+	color: #FFF;
+}
+html[data-theme=dark] .single-os-div,html[data-theme=dark] .single-region-div {
+    border: 1px solid rgba(235, 235, 236, 0.04);
+    background: rgba(255, 255, 255, 0.04);
+    position: relative;
+    border-radius: 10px;
+    /* overflow: hidden; */
+}
+html[data-theme=dark]  .active-os-div {
+    border: 1px solid #368AFF;
+    background: linear-gradient(180deg, rgba(0, 120, 212, 0.10) -10.83%, rgba(255, 255, 255, 0.00) 100%), rgba(255, 255, 255, 0.04);
+    box-shadow: 0px 0px 1px 0.5px rgba(224, 224, 224, 0.50) inset;
+}
+
+html[data-theme=dark]  .os-drop-down-btn {
+    border-top: 1px solid rgba(235, 235, 236, 0.04);
+}
+html[data-theme=dark]  .os-drop-down-btn svg{
+    filter: invert(1);
+}
+html[data-theme=dark]  .table-parrent{
+    background-color: unset;
+}
+html[data-theme=dark] .table-head>th {
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+html[data-theme=dark] .data-row>td {
+    color: #FFF !important;
+}
+
+html[data-theme=dark] .con-div {
+    background: rgba(255, 255, 255, 0.04);
+}
+html[data-theme=dark] .number-config {
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: 0px 0px 1px 0.5px rgba(150, 150, 150, 0.15);
+}
+html[data-theme=dark] .number-config input,html[data-theme=dark]  .form-label-vps {
+    color: #fff;
+}
+html[data-theme=dark]  .number-config button img{
+    filter: invert(1);
+}
+html[data-theme=dark]  .form-filds input {
+    color: white;
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: 0px 0px 1px 0.5px rgba(150, 150, 150, 0.15);
+}
+html[data-theme=dark]  .create-server-btn{
+    background: #FFF;
+    color: #000;
+}
+html[data-theme=dark] .create-server-btn:hover {
+    color: #000 !important;
+}
+html[data-theme=dark] .data-row {
+    border-top: 2px solid rgba(255, 255, 255, 0.08);
+}
+html[data-theme=dark] .mobile-head  {
+    color: rgba(255, 255, 255, 0.75);
+}
+html[data-theme=dark] .slot-text,html[data-theme=dark] .model-body-key ,html[data-theme=dark]  .model-body-value{
+    color: #FFF;
+}
+html[data-theme=dark] .div-mobile>div {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+html[data-theme=dark] .model-header{
+    background: #FFF;
+}
+html[data-theme=dark] .model-header-text {
+    color: #000;
+}
+html[data-theme=dark] .model-header svg,html[data-theme=dark] .model-child .cable-svg{
+    filter: invert(1);
+}
+html[data-theme=dark] .model-child {
+        background-color: #252527;
+        background: #252527;
+}
+html[data-theme=dark] .checkout-btn button{
+    background-color: #FFF;
+    color: #000;
+}
+html[data-theme=dark] .model-body-li{
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+html[data-theme=dark] .payment-head-div{
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    background: rgba(255, 255, 255, 0.04);
+}
+html[data-theme=dark] .paymet-head ,html[data-theme=dark] .method-text{
+    color: #FFF;
+}
+html[data-theme=dark] .paymet-head ,html[data-theme=dark] .model-child input[type='radio'] {
+    accent-color: #232323;
+}
+html[data-theme=dark] .checkout-btn {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+/* Track */
+html[data-theme=dark] .checkout-scroll-content::-webkit-scrollbar-track {
+background: #000; 
+}
+
+/* Handle */
+html[data-theme=dark] .checkout-scroll-content::-webkit-scrollbar-thumb {
+background: #fff; 
+}
+
+/* Handle on hover */
+html[data-theme=dark] .checkout-scroll-content::-webkit-scrollbar-thumb:hover {
+background: #fff; 
+}
+html[data-theme=dark] .dropdown-menu {
+background: rgb(28 28 30);
+border: 1px solid rgb(37, 37, 39) !important;
+}
+
+html[data-theme=dark] .dropdown-item {
+color: #ffffff;
+}
+
+html[data-theme=dark] .dropdown a:hover {
+background-color: rgb(46, 46, 47);
+}
+
+html[data-theme=dark] .dropdown-item:focus, html[data-theme=dark] .dropdown-item:hover {
+color: #ffffff;
+}
+  

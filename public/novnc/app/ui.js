@@ -1029,7 +1029,7 @@ const UI = {
 
         let url;
 
-        url = UI.getSetting('encrypt') ? 'wss' : 'ws';
+        url = UI.getSetting('encrypt') ? 'wss' : 'wss';
 
         url += '://' + host;
         
@@ -1039,7 +1039,7 @@ const UI = {
         } 
         url += '/' + path;
 
-        console.log(url);
+        console.log('234'+url);
         console.log(path);
 
         if(UI.rfb == undefined){

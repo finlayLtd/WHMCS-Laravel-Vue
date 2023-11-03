@@ -11,6 +11,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.0",
+        "mews/captcha": "^3.3",
         "sburina/laravel-whmcs-up": "^1.0",
         "spatie/laravel-permission": "^5.5",
         "tymon/jwt-auth": "^2.0"

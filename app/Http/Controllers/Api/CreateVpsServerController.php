@@ -70,7 +70,7 @@ class CreateVpsServerController extends Controller
         foreach ($oslist as $kind => $os) {
             foreach ($os as $l => $o) {
                 foreach ($system_info as $system) {
-                    if ($system['name'] == $o['name']) {
+                    if ($this->isSimilarSystemName($system['name'], $o['name'])) {
                         $oslist[$kind][$l]['config_id'] = $system['id'];
                     }
                 }
@@ -104,6 +104,50 @@ class CreateVpsServerController extends Controller
             'payment_methods' => $payment_methods,
         ]);
     }
+
+    private function isSimilarSystemName($systemName, $oName) {
+        $similarArray = array(
+            'windows2012r2|Windows Server 2012 R2',
+            'windows-Server-2019|Windows Server 2019',
+            'almalinux-8.6-x86_64|AlmaLinux 8.6',
+            'almalinux-8.8-x86_64|AlmaLinux 8.8',
+            'almalinux-9.0-x86_64|AlmaLinux 9.0',
+            'almalinux-9.1-x86_64|AlmaLinux 9.1',
+            'almalinux-9.2-x86_64|AlmaLinux 9.2',
+            'centos-6.10-x86_64|CentOS 6.10',
+            'centos-7.8-x86_64|CentOS 7.8',
+            'centos-8-x86_64|CentOS 8',
+            'centos-8.2-x86_64|CentOS 8.2',
+            'debian-8.7-x86_64|Debian 8.7',
+            'debian-9.4-x86_64|Debian 9.4',
+            'debian-10-x86_64|Debian 10',
+            'debian-11-x86_64|Debian 11',
+            'debian-12-x86_64|Debian 12',
+            'fedora-34-x86_64|Fedora 34',
+            'oracle-8.6-x86_64|Oracle Linux 8.6',
+            'oracle-8.8-x86_64|Oracle Linux 8.8',
+            'oracle-9.2-x86_64|Oracle Linux 9.2',
+            'rocky-8.4-x86_64|Rocky Linux 8.4',
+            'rocky-8.6-x86_64|Rocky Linux 8.6',
+            'rocky-9.1-x86_64|Rocky Linux 9.1',
+            'rocky-9.2-x86_64|Rocky Linux 9.2',
+            'scientific-7.4-x86_64|Scientific Linux 7.4',
+            'suse-15.1-x86_64|openSUSE 15.1',
+            'ubuntu-18.04-x86_64|Ubuntu 18.04',
+            'ubuntu-20.04-x86_64|Ubuntu 20.04',
+            'ubuntu-22.04-x86_64|Ubuntu 22.04',
+            'webuzo-almalinux-8.6-x86_64|Webuzo 8.6'
+        );
+    
+        foreach ($similarArray as $similar) {
+            $names = explode('|', $similar);
+            if (($names[1] == $systemName) && ($names[0] == $oName)) {
+                return true;
+            }
+        }
+
+        return false;
+    } 
 
     private function getProductGroups()
     {
@@ -243,6 +287,7 @@ class CreateVpsServerController extends Controller
             'action' => 'AddOrder',
             'clientid' => Auth::user()->client_id,
             'paymentmethod' => $payment_method,
+            'billingcycle' => array($all_request['current_plan']),
             'hostname' => array($all_request['hostname']),
             'rootpw' => array($all_request['pwd']),
             'pid' => array($all_request['product_id']),

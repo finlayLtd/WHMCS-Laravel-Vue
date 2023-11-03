@@ -222,12 +222,12 @@
                   </button>
                 </li>
 
-                <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
+                <!-- <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
                   <button class="nav-link" id="pills-dns-tab" data-bs-toggle="pill" data-bs-target="#pills-dns"
                     type="button" role="tab" aria-controls="pills-dns" aria-selected="false" @click="get_rdns_lists(), selectedTab = 'rdns'">
                     {{ $t('ReverseDNS') }}
                   </button>
-                </li>
+                </li> -->
 
                 <li class="nav-item" role="presentation" v-if="order_product_info.status == 'Active'">
                   <button :class="(firstTab == 'billing') ? 'nav-link active' : 'nav-link'" id="pills-billing-tab"
@@ -749,7 +749,7 @@
             </div>
 
             <!--DNS-->
-            <div class="tab-pane fade" id="pills-dns" role="tabpanel" aria-labelledby="pills-dns-tab"
+            <!-- <div class="tab-pane fade" id="pills-dns" role="tabpanel" aria-labelledby="pills-dns-tab"
               v-if="order_product_info.status == 'Active'">
               <div class="tab-inner mb-3 vl-parent" v-if="selectedTab == 'rdns'">
                 <loading v-model:active="rdnslists_loading" :is-full-page="false" />
@@ -803,7 +803,7 @@
                   </table>
                 </div>
               </div>
-            </div>
+            </div> -->
 
             <!--billing-->
             <div :class="order_product_info.status != 'Active' || firstTab == 'billing'
@@ -1553,6 +1553,11 @@ function startGetOverviewDataTimer(time) {
       getOverviewData();
     }
   }, time); // 30 seconds interval
+
+  // Stop the timer when the component is unmounted
+  onBeforeUnmount(() => {
+    clearInterval(timer);
+  });
 }
 
 function changePWD(vpsid) {

@@ -181,6 +181,7 @@ export default class Websock {
 
     open(uri, protocols) {
         this.init();
+        console.log('look here');
         this._websocket = new WebSocket(uri, protocols);
 
         this._websocket.binaryType = 'arraybuffer';

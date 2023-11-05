@@ -52,7 +52,7 @@
 
       <div style="margin: 30px 0;">
           <div class="px-4 choose-os-div">
-              <h2 class="choose-os-header">Choose a Datecenter region</h2>
+              <h2 class="choose-os-header">Choose a Datacenter Location</h2>
               <hr class="server-seprater">
               <div>
                   <div class="choose-server-row">
@@ -78,7 +78,7 @@
 
       <div v-show="selected_group_id">
           <div class="px-4 choose-os-div pb-0">
-              <h2 class="choose-os-header">Choose a Datecenter region</h2>
+              <h2 class="choose-os-header">Choose a Plan</h2>
               <div v-if="products.length > 0">
                 <div v-for="(group, key) in product_group" :key="key">
                   <div v-if="selected_group_id == key" class="mb-2">
@@ -136,15 +136,15 @@
         <div class="row">
             <div class="col-12 col-lg-3 ps-lg-0">
                 <div class="con-div mb-4" v-if="selected_product">
-                    <h2 class="choose-os-header">Choose Billing Cycle</h2>
+                    <h2 class="choose-os-header">Billing Cycle</h2>
                     <hr class="server-seprater">
                     <select name="number_of_ips" id="number_of_ips" class="form-select" v-model="current_plan"
                       style="margin-right: 10px; margin-bottom: 10px; width: auto;">
                       <option v-for="item in plan_expected" :key="item" :value="item">
-                          <template v-if="item == 'monthly'">€{{ selected_product.pricing.EUR.monthly }}&nbsp;EUR {{ item }}</template>
-                          <template v-if="item == 'quarterly'">€{{ selected_product.pricing.EUR.quarterly }}&nbsp;EUR {{ item }}</template>
-                          <template v-if="item == 'semiannually'">€{{ selected_product.pricing.EUR.semiannually }}&nbsp;EUR {{ item }}</template>
-                          <template v-if="item == 'annually'">€{{ selected_product.pricing.EUR.annually }}&nbsp;EUR {{ item }}</template>
+                          <template v-if="item == 'monthly'">€{{ selected_product.pricing.EUR.monthly }}{{ item }}</template>
+                          <template v-if="item == 'quarterly'">€{{ selected_product.pricing.EUR.quarterly }}{{ item }}</template>
+                          <template v-if="item == 'semiannually'">€{{ selected_product.pricing.EUR.semiannually }}{{ item }}</template>
+                          <template v-if="item == 'annually'">€{{ selected_product.pricing.EUR.annually }}{{ item }}</template>
                       </option>
                     </select>
                 </div>
@@ -163,7 +163,7 @@
 
             <div class="col-12 col-lg-9 pe-lg-0 config-2">
                 <div class="con-div">
-                    <h2 class="choose-os-header">Configure Server</h2>
+                    <h2 class="choose-os-header">Configure the Server</h2>
                     <hr class="server-seprater">
 
                     <div>
@@ -199,7 +199,7 @@
 
                     <div class="d-flex justify-content-end">
                         <button class="btn create-server-btn" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                            @click="clickCreate()">Create Server</button>
+                            @click="clickCreate()">Deploy Server</button>
 
                         <div class="modal modal-ticket" v-if="modelOpen">
                             <div class="model-child">
@@ -250,12 +250,12 @@
                                     <p class="model-body-value">{{ selected_number_of_ips }}</p>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between model-body-li">
-                                    <p class="model-body-key">Host Name</p>
+                                    <p class="model-body-key">Server Name</p>
                                     <p class="model-body-value">{{ hostname }}</p>
                                 </div>
                                 <div style="margin: 24px 0;">
                                     <div class="payment-head-div">
-                                        <p class="paymet-head">Payment method</p>
+                                        <p class="paymet-head">Payment Method</p>
                                     </div>
                                 </div>
 
@@ -306,26 +306,26 @@ useAuth().getUser();
 const modelOpen = ref(false);
 const current_plan = ref('monthly');
 const plan_expected = ref([
-  'monthly',
-  'quarterly',
-  'semiannually',
-  'annually',
+  'Monthly',
+  'Quarterly',
+  'Semi-Annually',
+  'Annually',
 ]);
 const tableHeader = ref([
     {
-        name: "Name",
+        name: "Plan",
         slotName: "name",
     },
     {
-        name: "vCPUs",
+        name: "vCores",
         slotName: "vcpus",
     },
     {
-        name: "Memory",
+        name: "RAM",
         slotName: "memory",
     },
     {
-      name: "Storage",
+      name: "Disk",
       slotName: "storage",
     },
     {
@@ -333,7 +333,7 @@ const tableHeader = ref([
         slotName: "bandwidth",
     },
     {
-        name: "Connection",
+        name: "Port",
         slotName: "con",
     },
     {

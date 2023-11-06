@@ -7,6 +7,21 @@
         <div class="d-flex justify-content-between align-items-center title-button-wrapper">
           <h2 class="title mb-0">{{ $t('Balance') }}</h2>
           <a ref="customLink" style="display: none;" target="_blank">Custom Link</a>
+                  <button type="submit"
+          class="btn btn-dark btn-chevron chevron-dark hover-dark-light options-toggle dropdown-toggle"
+          data-bs-toggle="dropdown">
+          {{ $t('Create_server') }}
+        </button>
+        <div class="options-toggle-dropdown create-server dropdown-menu dropdown-menu-end">
+          <ul>
+            <li>
+              <router-link to="/create-vps-server">{{ $t('Create_VPS_Server') }}</router-link>
+            </li>
+            <li>
+              <router-link to="/create-vps-server">{{ $t('Create_RDP_Server') }}</router-link>
+            </li>
+          </ul>
+        </div>
         </div>
 
         <div class="sub-section server-list-tab">
@@ -157,42 +172,39 @@
           </div>
         </div>
         <div class="modal-main">
-          <div class="main-title">
-            <p>{{ $t('Choose_Payment_method') }}</p>
-          </div>
           <div class="modal-buttons">
             <button class="modal-payment">
-              <img src="assets/img/bitcoin.png" alt="" /> Bitcoin
+              <img src="assets/img/bitcoin.png" alt="" /> BTC
             </button>
             <button class="modal-payment">
-              <img src="assets/img/litecoin.png" alt="" /> LiteCoin
+              <img src="assets/img/litecoin.png" alt="" /> LTC
             </button>
             <button class="modal-payment">
-              <img src="assets/img/ethereum.png" alt="" /> Ethereum
+              <img src="assets/img/ethereum.png" alt="" /> ETH
             </button>
             <button class="modal-payment">
-              <img src="assets/img/bitcoincash.png" alt="" /> Bitcoincash
+              <img src="assets/img/bitcoincash.png" alt="" /> BCH
             </button>
             <button class="modal-payment">
-              <img src="assets/img/tether.png" alt="" /> Tether USDT
+              <img src="assets/img/tether.png" alt="" /> USDT
             </button>
             <button class="modal-payment">
-              <img src="assets/img/zcash.png" alt="" /> ZCash
+              <img src="assets/img/zcash.png" alt="" /> ZEC
             </button>
             <button class="modal-payment">
-              <img src="assets/img/monero.png" alt="" /> Monero
+              <img src="assets/img/monero.png" alt="" /> XMR
             </button>
             <button class="modal-payment">
-              <img src="assets/img/bnb.png" alt="" /> BinanceCoin
+              <img src="assets/img/bnb.png" alt="" /> BNB
             </button>
             <button class="modal-payment">
-              <img src="assets/img/perfectmoney.png" alt="" /> Perfectmoney
+              <img src="assets/img/perfectmoney.png" alt="" /> PM EUR
             </button>
           </div>
           <div class="amounts">
             <div class="amount-footer">
               <span>{{ $t('Amount_of_one_deposit') }}</span>
-              <span>€10,00 - €1.000,00</span>
+              <span>€10,00 - €10.000,00</span>
             </div>
           </div>
           <button class="btn-dark d-block" @click="openAddFundsWindow()">

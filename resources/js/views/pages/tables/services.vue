@@ -45,12 +45,8 @@
                 <div class="card-item p-4 mb-4">
                   <div class="server-list-item">
                     <div class="server-list-item-wrapper">
-                      <div class="image-wrapper">
-                        <img :src="'assets/img/' + order.sys_log + '-logo.png'" alt="">
-                      </div>
                       <div class="list-item-detail">
-                        <h2 class="list-name">{{ order.name }}</h2>
-                        <h3 class="detail">{{ order.configoptions.configoption[1].value }}</h3>
+                        <h2 class="list-name">{{ order.domain }}</h2>
                         <div v-if="state !== 'Cancelled'" class="server-list-options">
                           <div class="options-toggle dropdown-toggle hideIcon"
                             style="padding-right: 10px; padding-left: 10px;" data-bs-toggle="dropdown"></div>
@@ -104,23 +100,12 @@
 
                         </div>
 
-                        <h3 class="detail">{{ $t('Created_at') }} {{ order.regdate }}</h3>
-                        <h3 class="detail" style="margin-top:5px;">{{ $t('Due_date_at') }} &nbsp;{{ order.nextduedate }}
+                        <h3 class="detail">{{ $t('Created_at') }}: {{ order.regdate }}</h3>
+                        <h3 class="detail" style="margin-top:5px;">{{ $t('Due_date_at') }}: {{ order.nextduedate }}
                         </h3>
                       </div>
                       <div v-if="state === 'Active'" class="server-list-options">
                         <button class="active-badge"><span class="active-dot"></span>{{ $t('Active') }}</button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="server-list-item">
-                    <div class="server-list-item-wrapper">
-                      <div class="image-wrapper">
-                        <img :src="'assets/img/' + order.flag + '.png'" alt="">
-                      </div>
-                      <div class="list-item-detail">
-                        <h2 class="list-name">{{ order.groupname }}</h2>
-                        <h3 class="detail">{{ $t('Hostname') }} : {{ order.domain }}</h3>
                       </div>
                     </div>
                   </div>

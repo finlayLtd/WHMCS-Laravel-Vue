@@ -15,6 +15,9 @@
             <li>
               <router-link to="/create-vps-server">{{ $t('Create_VPS_Server') }}</router-link>
             </li>
+            <li>
+              <router-link to="/create-vps-server">{{ $t('Create_RDP_Server') }}</router-link>
+            </li>
           </ul>
         </div>
       </div>

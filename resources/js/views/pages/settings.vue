@@ -4,7 +4,6 @@
       <div class="d-flex flex-column justify-content-start align-items-start title-button-wrapper">
         <div class="overview-header">
           <h2 class="title mb-0">{{ $t('Settings') }}</h2>
-          <span></span>
         </div>
       </div>
 

@@ -531,7 +531,7 @@ class OverviewController extends Controller
         $post['vpsid'] = $all_request['vpsid'];
         $post['rootpass'] = $all_request['root_pwd'];
         $result = $this->virtualizorAdmin->managevps($post);
-        if ($result['done']['change_pass_msg']) {
+        if ($result['done']['done']) {
             return response()->json('VPS password will be changed after you SHUTDOWN and START the VPS from the panel.', 200);
         } else {
             return response()->json('Oops! We meet some error!.', 500);

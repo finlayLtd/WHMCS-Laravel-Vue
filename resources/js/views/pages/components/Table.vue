@@ -4,10 +4,10 @@
             <tr class="table-head" v-if="isHeadDisplay">
                 <th v-for="(head, i) in headings" :key="i">
                     <template v-if="head.name == 'Price'">
-                        <div v-if="current_plan == 'monthly'">Monthly Price</div>
-                        <div v-if="current_plan == 'quarterly'">Quarterly Price</div>
-                        <div v-if="current_plan == 'semiannually'">Semiannually Price</div>
-                        <div v-if="current_plan == 'annually'">Annually Price</div>
+                        <div v-if="current_plan == 'monthly'">Monthly</div>
+                        <div v-if="current_plan == 'quarterly'">Quarterly</div>
+                        <div v-if="current_plan == 'semiannually'">Semiannually</div>
+                        <div v-if="current_plan == 'annually'">Annually</div>
                     </template>
                     <template v-else>
                         <div>{{ head.name }}</div>

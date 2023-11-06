@@ -5,10 +5,22 @@
         <loading v-model:active="departments_loading" :is-full-page="false" />
         <a ref="customLink" style="display: none;" target="_blank">Custom Link</a>
         <div class="overview-header">
-          <img class="not-filterable" :src="'/assets/img/' + sys_logo + '-logo.png'" alt="" v-if="sys_logo" />
           <h2 class="title mb-0" v-if="order_product_info">
-            {{ order_product_info.domain }}
+            {{ order_product_info.domain }} 
           </h2>
+          <div class="server-list-options me-3 me-lg-4" v-if="order_product_info.status == 'Active'">
+                          <button class="active-badge" v-if="vps_info && vpsid && vps_info.vps_data">
+                            <template
+                              v-if="((vps_info.vps_data[vpsid].status != 0) && topStatus == null) || (topStatus == 1)">
+                              <span class="active-dot"></span>{{ $t('Active') }}
+                            </template>
+                            <template
+                              v-if="((vps_info.vps_data[vpsid].status == 0) && topStatus == null) || (topStatus == 0)">
+                              <span class="active-dot" style="background: red;"></span>
+                              <span style="color: red;">{{ $t('Offline') }}</span>
+                            </template>
+                          </button>
+                        </div>
         </div>
         <div class="overview-info">
 
@@ -41,6 +53,15 @@
         <div class="row justify-content-between align-items-center">
           <div class="row mb-5 pe-0 overview-cols">
             <div class="col-xl-4 col-lg-6 col-md-6 mb-4 mb-md-0">
+                <div class="px-0 mb-4 server-btn-options"
+                    v-if="order_product_info.status == 'Active'">
+                    <button class="btn img-btn me-0 me-lg-2" @click="TurnOnVPS(vpsid)">
+                      <i class="fa fa-play" style="color: #3fbb27"></i>&nbsp;&nbsp;{{ $t('Start') }}
+                    </button>
+                    <button class="btn img-btn me-0 me-lg-2" @click="PowerOffVPS(vpsid)">
+                      <img src="/assets/img/power.svg" alt="" />{{ $t('Shutdown') }}
+                    </button>
+                  </div>
               <div class="card-item vm-actions">
                 <div class="due-date">
                   <div class="date-image-wrapper">
@@ -144,7 +165,7 @@
                       <td>
                         <img src="/assets/img/hard-disk.png" alt="" />{{ $t('Storage') }}
                       </td>
-                      <td v-if="vps_info">{{ vps_info.vps_data[vpsid].disk }} GB Disk Storage</td>
+                      <td v-if="vps_info">{{ vps_info.vps_data[vpsid].disk }} GB</td>
                       <td></td>
                     </tr>
                   </tbody>
@@ -255,83 +276,6 @@
               ? 'tab-pane fade  show active'
               : 'tab-pane fade'
               " id="pills-overview" role="tabpanel" aria-labelledby="pills-overview-tab">
-              <div class="tab-inner mb-3">
-                <div class="row">
-                  <h3 class="title">{{ $t('Overview') }}</h3>
-                  <p class="description mb-4">
-                    {{ $t('Information_on_virtual_machine_usage') }}
-                  </p>
-                </div>
-                <div class="divider"></div>
-                <div class="row px-2 pt-4 px-lg-4 pt-lg-4">
-                  <div class="general-info d-flex w-100 mb-3">
-                    <div class="col-12 col-lg-4 col-md-12">
-                      <div class="col-content-wrapper sm-border-bottom">
-                        <div class="img-wrapper">
-                          <img class="not-filterable" :src="'/assets/img/' + flag + '.png'" alt="" />
-                        </div>
-                        <div class="info">
-                          <h4 class="title2">
-                            {{ order_product_info.groupname }}
-                          </h4>
-                          <p class="description2">
-                            {{ order_product_info.domain }}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-12 col-lg-4 col-md-12">
-                      <div class="col-content-wrapper sm-border-bottom">
-                        <div class="img-wrapper">
-                          <img class="not-filterable" :src="'/assets/img/' + sys_logo + '-logo.png'" alt="" />
-                        </div>
-                        <div class="info">
-                          <h4 class="title2">{{ order_product_info.name }}</h4>
-                          <p class="description2">{{ system }}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-12 col-lg-4 col-md-12">
-                      <div class="col-content-wrapper">
-                        <div class="img-wrapper">
-                          <img class="dark-img-filter" src="/assets/img/cloud-connection.png" alt="" />
-                        </div>
-                        <div class="info">
-                          <h4 class="title2">
-                            {{ order_product_info.dedicatedip }}
-                          </h4>
-                          <p class="description2">
-                            {{ $t('Created_at') }} {{ order_product_info.regdate }}
-                          </p>
-                        </div>
-                        <div class="server-list-options me-3 me-lg-4" v-if="order_product_info.status == 'Active'">
-                          <button class="active-badge" v-if="vps_info && vpsid && vps_info.vps_data">
-                            <template
-                              v-if="((vps_info.vps_data[vpsid].status != 0) && topStatus == null) || (topStatus == 1)">
-                              <span class="active-dot"></span>{{ $t('Active') }}
-                            </template>
-                            <template
-                              v-if="((vps_info.vps_data[vpsid].status == 0) && topStatus == null) || (topStatus == 0)">
-                              <span class="active-dot" style="background: red;"></span>
-                              <span style="color: red;">{{ $t('Offline') }}</span>
-                            </template>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="d-flex justify-content-end px-0 server-btn-options"
-                    v-if="order_product_info.status == 'Active'">
-                    <button class="btn img-btn me-0 me-lg-2" @click="TurnOnVPS(vpsid)">
-                      <i class="fa fa-play" style="color: #3fbb27"></i>&nbsp;&nbsp;{{ $t('Start') }}
-                    </button>
-                    <button class="btn img-btn me-0 me-lg-2" @click="PowerOffVPS(vpsid)">
-                      <img src="/assets/img/power.svg" alt="" />{{ $t('Shutdown') }}
-                    </button>
-                  </div>
-                </div>
-              </div>
               <div class="tab-inner" v-if="order_product_info.status == 'Active'">
                 <div class="row">
                   <h3 class="title fs-17">{{ $t('Resource_Usage') }}</h3>
@@ -836,14 +780,6 @@
                           data-bs-target="#pills-invoices" type="button" role="tab" aria-controls="pills-invoices"
                           aria-selected="false">
                           {{ $t('Invoice') }}
-                        </button>
-                      </li>
-
-                      <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-refund-tab" data-bs-toggle="pill"
-                          data-bs-target="#pills-refund" type="button" role="tab" aria-controls="pills-refund"
-                          aria-selected="false">
-                          {{ $t('Refund') }}
                         </button>
                       </li>
                     </ul>

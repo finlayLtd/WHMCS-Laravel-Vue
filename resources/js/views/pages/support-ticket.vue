@@ -3,6 +3,21 @@
 		<div class="container">
 			<div class="d-flex justify-content-between align-items-center title-button-wrapper">
 				<h2 class="title mb-0">{{ $t('Support_Ticket') }}</h2>
+				        <button type="submit"
+          class="btn btn-dark btn-chevron chevron-dark hover-dark-light options-toggle dropdown-toggle"
+          data-bs-toggle="dropdown">
+          {{ $t('Create_server') }}
+        </button>
+        <div class="options-toggle-dropdown create-server dropdown-menu dropdown-menu-end">
+          <ul>
+            <li>
+              <router-link to="/create-vps-server">{{ $t('Create_VPS_Server') }}</router-link>
+            </li>
+            <li>
+              <router-link to="/create-vps-server">{{ $t('Create_RDP_Server') }}</router-link>
+            </li>
+          </ul>
+        </div>
 			</div>
 
 
@@ -79,14 +94,14 @@
 												}">
 													<div class="support-item-title">
 														<img class="me-2" src="assets/img/support.svg" alt="">
-														<span style="color:rgba(23, 30, 38, 0.5);"> {{ $t('Ticket') }}#{{
+														<span style="color:rgba(23, 30, 38, 0.5);">#{{
 															ticket.tid }}</span>
 													</div>
 													<h3 class="detail" style="margin-top: 10px;">
-														{{ $t('Opened_at') }} : {{ formatDate(ticket.date) }}
+														{{ $t('Opened_at') }}: {{ formatDate(ticket.date) }}
 													</h3>
 													<h3 class="detail" style="margin-top: 5px;">
-														{{ $t('Last_reply_at') }} : {{ formatDate(ticket.lastreply) }}
+														{{ $t('Last_reply_at') }}: {{ formatDate(ticket.lastreply) }}
 													</h3>
 												</router-link>
 												<div class="support-item-status">
@@ -129,14 +144,14 @@
 												<a :href="'/ticket-detail/' + ticket.id">
 													<div class="support-item-title">
 														<img class="me-2" src="assets/img/support.svg" alt="">
-														<span style="color: rgba(23, 30, 38, 0.5);">{{ $t('Ticket') }}#{{
+														<span style="color: rgba(23, 30, 38, 0.5);">#{{
 															ticket.tid }}</span>
 													</div>
 													<h3 class="detail" style="margin-top: 10px;">
-														{{ $t('Opened_at') }} : {{ formatDate(ticket.date) }}
+														{{ $t('Opened_at') }}: {{ formatDate(ticket.date) }}
 													</h3>
 													<h3 class="detail" style="margin-top: 5px;">
-														{{ $t('Last_reply_at') }} : {{ formatDate(ticket.lastreply) }}
+														{{ $t('Last_reply_at') }}: {{ formatDate(ticket.lastreply) }}
 													</h3>
 												</a>
 												<div class="support-item-status">
@@ -187,7 +202,6 @@
 				<div class="modal-header">
 					<div class="modal-title">
 						<h2>{{ $t('New_ticket') }}</h2>
-						<h3>{{ $t('Create_new_ticket_now') }}.</h3>
 					</div>
 				</div>
 				<div class="modal-main">

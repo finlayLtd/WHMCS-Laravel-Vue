@@ -10,7 +10,7 @@
         <h3 class="ticket-status-title color-in-work" v-if="ticket_detail && ticket_detail.status">
           {{ $t(ticket_detail.status) }}
         </h3>
-        <h2 class="title mb-0 mt-2">{{ $t('Ticket') }}#{{ route.params.id }}</h2>
+        <h2 class="title mb-0 mt-2">{{ $t('Ticket') }} #{{ route.params.id }}</h2>
       </div>
 
 

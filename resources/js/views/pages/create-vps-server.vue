@@ -52,7 +52,7 @@
 
       <div style="margin: 30px 0;">
           <div class="px-4 choose-os-div">
-              <h2 class="choose-os-header">Choose a Datacenter Location</h2>
+              <h2 class="choose-os-header">{{ $t('Choose_a_Datacenter_region') }}</h2>
               <hr class="server-seprater">
               <div>
                   <div class="choose-server-row">
@@ -78,7 +78,7 @@
 
       <div v-show="selected_group_id">
           <div class="px-4 choose-os-div pb-0">
-              <h2 class="choose-os-header">Choose a Plan</h2>
+              <h2 class="choose-os-header">{{ $t('Choose_specification') }}</h2>
               <div v-if="products.length > 0">
                 <div v-for="(group, key) in product_group" :key="key">
                   <div v-if="selected_group_id == key" class="mb-2">
@@ -136,15 +136,15 @@
         <div class="row">
             <div class="col-12 col-lg-3 ps-lg-0">
                 <div class="con-div mb-4" v-if="selected_product">
-                    <h2 class="choose-os-header">Billing Cycle</h2>
+                    <h2 class="choose-os-header">{{ $t('Billing_cycle') }}</h2>
                     <hr class="server-seprater">
                     <select name="number_of_ips" id="number_of_ips" class="form-select" v-model="current_plan"
                       style="margin-right: 10px; margin-bottom: 10px; width: auto;">
                       <option v-for="item in plan_expected" :key="item" :value="item">
-                          <template v-if="item == 'monthly'">€{{ selected_product.pricing.EUR.monthly }}{{ item }}</template>
-                          <template v-if="item == 'quarterly'">€{{ selected_product.pricing.EUR.quarterly }}{{ item }}</template>
-                          <template v-if="item == 'semiannually'">€{{ selected_product.pricing.EUR.semiannually }}{{ item }}</template>
-                          <template v-if="item == 'annually'">€{{ selected_product.pricing.EUR.annually }}{{ item }}</template>
+                          <template v-if="item == 'monthly'">€{{ selected_product.pricing.EUR.monthly }} {{ item }}</template>
+                          <template v-if="item == 'quarterly'">€{{ selected_product.pricing.EUR.quarterly }} {{ item }}</template>
+                          <template v-if="item == 'semiannually'">€{{ selected_product.pricing.EUR.semiannually }} {{ item }}</template>
+                          <template v-if="item == 'annually'">€{{ selected_product.pricing.EUR.annually }} {{ item }}</template>
                       </option>
                     </select>
                 </div>
@@ -163,7 +163,7 @@
 
             <div class="col-12 col-lg-9 pe-lg-0 config-2">
                 <div class="con-div">
-                    <h2 class="choose-os-header">Configure the Server</h2>
+                    <h2 class="choose-os-header">{{ $t('Configure_Server') }}</h2>
                     <hr class="server-seprater">
 
                     <div>
@@ -199,7 +199,7 @@
 
                     <div class="d-flex justify-content-end">
                         <button class="btn create-server-btn" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                            @click="clickCreate()">Deploy Server</button>
+                            @click="clickCreate()">{{ $t('launch') }}</button>
 
                         <div class="modal modal-ticket" v-if="modelOpen">
                             <div class="model-child">
@@ -223,7 +223,7 @@
                                     <p class="model-body-value" v-if="current_plan == 'annually'">€{{ selected_product ? selected_product.pricing.EUR.annually : "" }}</p>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between model-body-li">
-                                    <p class="model-body-key">Datacenter</p>
+                                    <p class="model-body-key">{{ $t('DC') }}</p>
                                     <p class="model-body-value">
                                       <div v-for="(group, key) in product_group" :key="key" v-show="selected_group_id == key">
                                             <span v-if="key == 2">&nbsp;{{ $t('Netherlands') }}</span>
@@ -231,31 +231,29 @@
                                       </div>
                                     </p>
                                 </div>
-                                <!-- <div class="d-flex align-items-center justify-content-between model-body-li">
+                                <div class="d-flex align-items-center justify-content-between model-body-li">
                                     <p class="model-body-key">Quantity</p>
-                                    <p class="model-body-value">1 VPS</p>
-                                </div> -->
+                                    <p class="model-body-value">{{ selected_number_of_ips }} <span v-if="selected_number_of_ips > 1"> (€{{ ((selected_number_of_ips - 1) * 2.5).toFixed(2) }}EUR)</span></p>
+                                </div>
                                 <div class="d-flex align-items-center justify-content-between model-body-li">
                                     <div class="d-flex align-items-center justify-content-start">
-                                        <img src="/assets/img/Ubuntu.svg" alt="os">
-                                        <p class="model-body-key ms-2">OS</p>
+                                        <p class="model-body-key">OS</p>
                                     </div>
                                     <p class="model-body-value">{{ selected_os_name ? selected_os_name : "" }}</p>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between model-body-li">
                                     <div class="d-flex align-items-center justify-content-start">
-                                        <img src="/assets/img/cable.svg" alt="os">
-                                        <p class="model-body-key ms-2">IPs</p>
+                                        <p class="model-body-key">{{ $t('ips') }}</p>
                                     </div>
                                     <p class="model-body-value">{{ selected_number_of_ips }}</p>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between model-body-li">
-                                    <p class="model-body-key">Server Name</p>
+                                    <p class="model-body-key">{{ $t('VPS_Hostname') }}</p>
                                     <p class="model-body-value">{{ hostname }}</p>
                                 </div>
                                 <div style="margin: 24px 0;">
                                     <div class="payment-head-div">
-                                        <p class="paymet-head">Payment Method</p>
+                                        <p class="paymet-head">{{ $t('Payment_Method') }}</p>
                                     </div>
                                 </div>
 
@@ -306,10 +304,10 @@ useAuth().getUser();
 const modelOpen = ref(false);
 const current_plan = ref('monthly');
 const plan_expected = ref([
-  'Monthly',
-  'Quarterly',
-  'Semi-Annually',
-  'Annually',
+  'monthly',
+  'quarterly',
+  'semiannually',
+  'annually',
 ]);
 const tableHeader = ref([
     {
@@ -337,7 +335,6 @@ const tableHeader = ref([
         slotName: "con",
     },
     {
-        name: "Price",
         slotName: "mprice",
     },
     {

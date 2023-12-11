@@ -176,11 +176,11 @@ class AuthenticatedSessionController extends Controller
             'lastname' => $request['lastname'],
             'email' => $request['email'],
             'password2' => $request['password'],
+            'country' => 'US',
             'address1' => ' ',
             'city' => ' ',
             'state' => ' ',
             'postcode' => ' ',
-            'country' => ' ',
             'phonenumber' => ' ',
         ]);
 

@@ -128,7 +128,7 @@ class CreateVpsServerController extends Controller
             'oracle-8.8-x86_64|Oracle Linux 8.8',
             'oracle-9.2-x86_64|Oracle Linux 9.2',
             'rocky-8.4-x86_64|Rocky Linux 8.4',
-            'rocky-8.6-x86_64|Rocky Linux 8.6',
+            'rocky-8.6-86_64|Rocky Linux 8.6',
             'rocky-9.1-x86_64|Rocky Linux 9.1',
             'rocky-9.2-x86_64|Rocky Linux 9.2',
             'scientific-7.4-x86_64|Scientific Linux 7.4',
@@ -136,7 +136,8 @@ class CreateVpsServerController extends Controller
             'ubuntu-18.04-x86_64|Ubuntu 18.04',
             'ubuntu-20.04-x86_64|Ubuntu 20.04',
             'ubuntu-22.04-x86_64|Ubuntu 22.04',
-            'webuzo-almalinux-8.6-x86_64|Webuzo 8.6'
+            'webuzo-almalinux-8.6-x86_64|Webuzo 8.6',
+            'kalilinux-2023.3-x86_64|Kali Linux 2023.3',
         );
     
         foreach ($similarArray as $similar) {
@@ -168,7 +169,7 @@ class CreateVpsServerController extends Controller
                 $productGroups[$groupId] = ucfirst($group_names[2]);
             }
 
-            if ($key == 0) {
+            if ($key == 1) {
                 $system_lists = $product['configoptions']['configoption'][1]['options']['option'];
                 foreach ($system_lists as $system_info) {
                     array_push(
@@ -255,9 +256,15 @@ class CreateVpsServerController extends Controller
     {
         $all_request = $request->input('params');
         $number_of_ips = $all_request['number_of_ips'];
+        $hostname_array = $all_request['hostname_array'];
+
+        $quantity = 1;
+        if (isset($all_request['quantity'])) {
+            $quantity = $all_request['quantity'];
+        }
+
         // 1 is 18, ... ignore 28-30. 11 is 31, ... ignore 41-44, 21 is 45 and 60 is 84
         // this rule have to be applied for the configoptions parameter for the extra ips
-
         if ($number_of_ips <= 10)
             $number_of_ips += 17;
         else {
@@ -267,31 +274,37 @@ class CreateVpsServerController extends Controller
                 $number_of_ips += 24;
         }
 
-        $configoptionsFields = array(
-            base64_encode(serialize(array("1" => $number_of_ips))),
-            base64_encode(
-                serialize(
-                    [
-                        "6" => $all_request['config_id'],
-                    ]
-                )
-            ),
-        );
+        $configoptionsFields = [
+            "1" => $number_of_ips,
+            "6"  => $all_request['config_id'],
+        ];
 
         $payment_method = $all_request['paymentMethod'];
         //this case, just create vps with cryptocurrency
         if ($payment_method == 'credit')
             $payment_method = 'cryptomusgateway';
 
+        $billingcycle = [];
+        $rootpw = [];
+        $pid = [];
+        $configoptions = [];
+
+        foreach ($hostname_array as $hostname) {
+            array_push($billingcycle, $all_request['current_plan']);
+            array_push($rootpw, $all_request['pwd']);
+            array_push($pid, $all_request['product_id']);
+            array_push($configoptions, base64_encode(serialize($configoptionsFields)));
+        }
+
         $add_order_response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'AddOrder',
             'clientid' => Auth::user()->client_id,
             'paymentmethod' => $payment_method,
-            'billingcycle' => array($all_request['current_plan']),
-            'hostname' => array($all_request['hostname']),
-            'rootpw' => array($all_request['pwd']),
-            'pid' => array($all_request['product_id']),
-            'configoptions' => $configoptionsFields,
+            'billingcycle' => $billingcycle,
+            'hostname' => $hostname_array,
+            'rootpw' => $rootpw,
+            'pid' => $pid,
+            'configoptions' => $configoptions,
         ]);
 
         if ($add_order_response['result'] == 'success') {

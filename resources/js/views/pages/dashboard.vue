@@ -1,28 +1,15 @@
 <template>
   <section class="dashboard">
 
-
-
     <div class="container">
       <div class="d-flex justify-content-between align-items-center title-button-wrapper position-relative">
         <h2 class="title mb-0">{{ $t('Dashboard') }}</h2>
-        <button type="submit"
-          class="btn btn-dark btn-chevron chevron-dark hover-dark-light options-toggle dropdown-toggle"
-          data-bs-toggle="dropdown">
-          {{ $t('Create_server') }}
-        </button>
-        <div class="options-toggle-dropdown create-server dropdown-menu dropdown-menu-end">
-          <ul>
-            <li>
-              <router-link to="/create-vps-server">{{ $t('Create_VPS_Server') }}</router-link>
-            </li>
-            <li>
-              <router-link to="/create-vps-server">{{ $t('Create_RDP_Server') }}</router-link>
-            </li>
-          </ul>
-        </div>
+        <router-link to="/create-vps-server"
+          class="btn btn-dark hover-dark-light">
+          <i class="fa fa-shopping-cart"></i> Order now
+          </router-link>
       </div>
-
+     
       <template v-if="user && user.permissions.split(',').includes('tickets')">
         <div class="sub-section server-list-tab vl-parent">
           <loading v-model:active="isLoading" :is-full-page="false" />

@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CreateVpsServerController;
+use App\Http\Controllers\Api\BlackholeController;
 use App\Http\Controllers\Api\OverviewController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\SwitchAccountController;
@@ -12,15 +13,9 @@ use App\Http\Controllers\Auth\SwitchAccountController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => 'auth:sanctum' ,  'namespace' => 'App\\Http\\Controllers\\Api'], function() {
-    Route::apiResource('users', UserController::class);
-    Route::apiResource('roles', RoleController::class);
-    Route::apiResource('permissions', PermissionController::class);
-    Route::get('category-list', [CategoryController::class, 'getList']);
+Route::group(['middleware' => ['auth:sanctum'] ,  'namespace' => 'App\\Http\\Controllers\\Api'], function() {
     Route::get('/user', [ProfileController::class, 'user']);
-    Route::put('/user', [ProfileController::class, 'update']);
-    
-    
+
     Route::get('abilities', function(Request $request) {
         return $request->user()->roles()->with('permissions')
             ->get()
@@ -31,6 +26,27 @@ Route::group(['middleware' => 'auth:sanctum' ,  'namespace' => 'App\\Http\\Contr
             ->values()
             ->toArray();
     });
+});
+
+Route::group(['middleware' => ['auth:sanctum', 'activity'] ,  'namespace' => 'App\\Http\\Controllers\\Api'], function() {
+    Route::apiResource('users', UserController::class);
+    Route::apiResource('roles', RoleController::class);
+    Route::apiResource('permissions', PermissionController::class);
+    Route::get('category-list', [CategoryController::class, 'getList']);
+    // Route::get('/user', [ProfileController::class, 'user']);
+    Route::put('/user', [ProfileController::class, 'update']);
+    
+    
+    // Route::get('abilities', function(Request $request) {
+    //     return $request->user()->roles()->with('permissions')
+    //         ->get()
+    //         ->pluck('permissions')
+    //         ->flatten()
+    //         ->pluck('name')
+    //         ->unique()
+    //         ->values()
+    //         ->toArray();
+    // });
 
     // support-ticket page fetch apis
     Route::get('support-ticket', 'SupportTicketController@index');
@@ -94,6 +110,9 @@ Route::group(['middleware' => 'auth:sanctum' ,  'namespace' => 'App\\Http\\Contr
      Route::post('overview/deleterdns', 'OverviewController@deleteRDNS');
      //  connect vnc api
      Route::post('overview/noVNC-connect', 'OverviewController@connectvnc');
+
+    //  Blackhole check
+     Route::post('blackhole/check', 'BlackholeController@index');
     
 });
 

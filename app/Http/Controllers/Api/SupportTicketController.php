@@ -17,7 +17,7 @@ class SupportTicketController extends Controller
         $status = array();
         $tickets_response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetTickets',
-            'clientid' => $request->client_id, // Set number of tickets to retrieve per request
+            'clientid' => Auth::user()->client_id, // Set number of tickets to retrieve per request
         ]);
 
         // get credit
@@ -43,7 +43,7 @@ class SupportTicketController extends Controller
 
         $order_info = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetOrders',
-            'userid' => $request->client_id,
+            'userid' => Auth::user()->client_id,
         ]);
 
         if ($order_info['result'] == 'success') {
@@ -112,7 +112,7 @@ class SupportTicketController extends Controller
         $tickets_response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetTickets',
 
-            'clientid' => $request->client_id, // Set number of tickets to retrieve per request
+            'clientid' => Auth::user()->client_id, // Set number of tickets to retrieve per request
         ]);
 
         $tickets_status = (new \Sburina\Whmcs\Client)->post([
@@ -121,7 +121,7 @@ class SupportTicketController extends Controller
 
         $order_info = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetOrders',
-            'userid' => $request->client_id,
+            'userid' => Auth::user()->client_id,
         ]);
 
         $departments_info = (new \Sburina\Whmcs\Client)->post([

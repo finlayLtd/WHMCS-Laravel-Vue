@@ -14,11 +14,20 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>.</title>
+    <title>CrazyRDP | Client Panel</title>
+  
+    <meta content="https://my.crazyrdp.com" property="og:url">
+    <meta content="en_US" property="og:locale">
+    <meta content="website" property="og:type">
+
+    <link rel="canonical" href="https://crazyrdp.com" />
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+
+    <link href="https://unpkg.com/nprogress@0.2.0/nprogress.css" rel="stylesheet" />
+    <script src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
 
     <link rel="shortcut icon" href="{{ asset('assets/img/logo-href.png') }}">
 
@@ -39,6 +48,7 @@
     </script>
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+  <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="6c020464-0335-4950-b12c-43e8efc609fc";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
 </head>
 <body class="font-sans antialiased" id="app">
     <router-view></router-view>

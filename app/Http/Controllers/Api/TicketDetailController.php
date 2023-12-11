@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 use sburina\Whmcs;
 use App\Http\Controllers\Controller;
+use App\Models\Ticketids;
 
 class TicketDetailController extends Controller
 {
@@ -29,6 +30,16 @@ class TicketDetailController extends Controller
                 'result' => 'wrong_user',
             ]);
         }
+
+        // add ticket id to the ticketids table
+        $ticket_id_item = Ticketids::where('client_id', Auth::user()->client_id)->where('ticket_id', $ticket_id)->first();
+        if (!$ticket_id_item) {
+            $ticket_id_item = new Ticketids();
+            $ticket_id_item->client_id = Auth::user()->client_id;
+            $ticket_id_item->ticket_id = $ticket_id;
+            $ticket_id_item->save();
+        }
+
 
         return response()->json([
             'result' => 'success',
@@ -68,6 +79,12 @@ class TicketDetailController extends Controller
             $message = $request->message;
         } else
             $message = ' ';
+
+        $ticket_id_item = Ticketids::where('client_id', Auth::user()->client_id)->where('ticket_id', $ticket_id)->first();
+        if (!$ticket_id_item) {
+            $error = "Invalid action. This ticket is not your ticket.";
+            return response()->json($error, 500);
+        }
 
         if ($request->file) {
             $addTicketReply = (new \Sburina\Whmcs\Client)->post([

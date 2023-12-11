@@ -27,7 +27,7 @@ export default defineConfig({
     // },
     server: {
         hmr: {
-            host: '94.156.69.29',
+            host: 'my.crazyrdp.com',
         },
     },
     resolve: {

@@ -536,7 +536,7 @@ const sendInvite = () => {
       showLoader(false);
       if (res.data.result == "success") {
         $toast.success("Successfully sent invite to the email address");
-      } else $toast.warning("Cannot connect to whmcs api.");
+      } else $toast.warning(res.data.data.message);
       //
     })
     .catch((e) => {

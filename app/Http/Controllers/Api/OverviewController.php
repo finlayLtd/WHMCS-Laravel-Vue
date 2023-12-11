@@ -12,7 +12,10 @@ use sburina\Whmcs;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Invoices;
+use App\Models\Vpsids;
 use App\Models\ClientProducts;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Crypt;
 
 class OverviewController extends Controller
 {
@@ -43,6 +46,11 @@ class OverviewController extends Controller
         $order_id = $all_request['id'];
         $order_info_response = $this->getOrderinfo($order_id); //GetOrders whmcs api
 
+        if (!isset($order_info_response['orders']['order'])) {
+            // Once more try
+            $order_info_response = $this->getOrderinfo($order_id); //GetOrders whmcs api
+        }
+
         $order_info = $order_info_response['orders']['order'];
 
         $order_product_info = $this->getClientProductInfo($order_id, $all_request['domain']); //GetClientsProducts whmcs api
@@ -55,6 +63,7 @@ class OverviewController extends Controller
         $dayDiff = $interval->days;
 
         $other_info = $this->getOtherinfo($order_product_info);
+
         $invoiceInfo = $this->getinvoiceInfo($order_info[0]['invoiceid']); //GetInvoice whmcs api
 
         $flag = $other_info['flag'];
@@ -69,8 +78,22 @@ class OverviewController extends Controller
             $status = 'Active';
         if ($status == 'Active') {
             $vpsid = $order_product_info['customfields']['customfield'][1]['value'];
+
+            // save vpsid into the table
+            $vps_id_item = Vpsids::where('client_id', Auth::user()->client_id)->where('vpsid', $vpsid)->first();
+            if (!$vps_id_item) {
+                $vps_id_item = new Vpsids();
+                $vps_id_item->client_id = Auth::user()->client_id;
+                $vps_id_item->vpsid = $vpsid;
+                $vps_id_item->order_id = $order_id;
+                $vps_id_item->save();
+            }
+
             $vps_info = $this->getVpsStatistics($vpsid); // Virtualizor admin api
         }
+
+        $randStr = Str::random(32);
+        $encryptedParameter = Crypt::encrypt($all_request['domain'], $randStr);
 
         return response()->json([
             'relid' => $relid,
@@ -83,7 +106,8 @@ class OverviewController extends Controller
             'vpsid' => $vpsid,
             'vps_info' => $vps_info,
             'invoiceInfo' => $invoiceInfo,
-
+            'invoice_id' => $randStr, // secret key of crypting
+            'encryptedParameter' => $encryptedParameter,
             'status' => $status,
         ]);
 
@@ -92,6 +116,13 @@ class OverviewController extends Controller
     public function analysis_data(Request $request)
     {
         $all_request = $request->input('params');
+        // reject if not vpsid exist
+        $vps_id_item = Vpsids::where('client_id', Auth::user()->client_id)->where('vpsid', $all_request['vpsid'])->first();
+        if (!$vps_id_item) {
+            $error = "No vpsid exist on your service.";
+            return response()->json($error, 500);
+        }
+        // end of rejecting
         $analysis_data = [];
         $analysis_data = $this->getAnalysisData($all_request['vpsid']);
         return response()->json([
@@ -112,6 +143,15 @@ class OverviewController extends Controller
     public function get_tasks(Request $request)
     {
         $all_request = $request->input('params');
+
+        // reject if not vpsid exist
+        $vps_id_item = Vpsids::where('client_id', Auth::user()->client_id)->where('vpsid', $all_request['vpsid'])->first();
+        if (!$vps_id_item) {
+            $error = "No vpsid exist on your service.";
+            return response()->json($error, 500);
+        }
+        // end of rejecting
+
         $tasks = [];
 
         $page = 0;
@@ -130,7 +170,16 @@ class OverviewController extends Controller
     {
         $all_request = $request->input('params');
         $ip_list['ips'] = [];
-        $ip_list = $this->getIpinfo($all_request['domain']); // Virtualizor admin api
+
+        $decrypt_domain = Crypt::decrypt($all_request['domain'], $all_request['domain_id']);
+
+        if((!isset($all_request['domain'])) || ($decrypt_domain == '*'))
+        {
+            $error = "Invalid action";
+            return response()->json($error, 500);
+        }
+
+        $ip_list = $this->getIpinfo($decrypt_domain); // Virtualizor admin api
 
         return response()->json([
             'ip_list' => $ip_list,
@@ -141,6 +190,14 @@ class OverviewController extends Controller
     {
         $all_request = $request->input('params');
         $logs = [];
+
+        // reject if not vpsid exist
+        $vps_id_item = Vpsids::where('client_id', Auth::user()->client_id)->where('vpsid', $all_request['vpsid'])->first();
+        if (!$vps_id_item) {
+            $error = "No vpsid exist on your service.";
+            return response()->json($error, 500);
+        }
+        // end of rejecting
 
         $page = 0;
         $reslen = 0;
@@ -159,9 +216,17 @@ class OverviewController extends Controller
         $all_request = $request->input('params');
         $ip_list['ips'] = [];
 
+        $decrypt_domain = Crypt::decrypt($all_request['domain'], $all_request['domain_id']);
+
+        if((!isset($all_request['domain'])) || ($decrypt_domain == '*'))
+        {
+            $error = "Invalid action";
+            return response()->json($error, 500);
+        }
+
         if ($all_request['assignedips'] != "") {
             if ($all_request['status'] == 'Active') {
-                $ip_list = $this->getIpinfo($all_request['domain']); // Virtualizor admin api
+                $ip_list = $this->getIpinfo($decrypt_domain); // Virtualizor admin api
             }
         }
 
@@ -303,8 +368,22 @@ class OverviewController extends Controller
             $info['flag'] = 'flag-en';
         }
 
-        $system_label = explode('-', $order_info['configoptions']['configoption'][1]['value'])[0];
-        $info['system'] = $order_info['configoptions']['configoption'][1]['value'];
+        if($order_info['status'] == 'Active'){
+            $page = 0;
+            $reslen = 0;
+            //For Searching
+            $post = array();
+            $post['vpsid'] = $order_info['customfields']['customfield'][1]['value'];
+            $vps_info = $this->virtualizorAdmin->listvs($page ,$reslen ,$post);
+            $vps_info = $vps_info[$post['vpsid']];
+            $info['vps_info'] = $vps_info;
+            $system_label = explode('-',$vps_info['os_name'])[0];
+            $info['system'] = $vps_info['os_name'];
+        } else{
+            $system_label = explode('-', $order_info['configoptions']['configoption'][1]['value'])[0];
+            $info['system'] = $order_info['configoptions']['configoption'][1]['value'];
+        }
+        
 
         switch ($system_label) {
             case 'windows':
@@ -417,6 +496,13 @@ class OverviewController extends Controller
     public function turnon(Request $request)
     {
         $all_request = $request->input('params');
+        // check vpsid is real client's id
+        $vps_id_item = Vpsids::where('client_id', Auth::user()->client_id)->where('vpsid', $all_request['vpsid'])->first();
+        if (!$vps_id_item) {
+            $error = "No vpsid exist on your service.";
+            return response()->json($error, 500);
+        }
+        // end of validating
         $vpsid = $all_request['vpsid'];
         $output = $this->virtualizorAdmin->start($vpsid);
         if ($output['done_msg'] == 'VPS has been started successfully') {
@@ -431,6 +517,13 @@ class OverviewController extends Controller
     {
         $all_request = $request->input('params');
         $vpsid = $all_request['vpsid'];
+        // check vpsid is real client's id
+        $vps_id_item = Vpsids::where('client_id', Auth::user()->client_id)->where('vpsid', $all_request['vpsid'])->first();
+        if (!$vps_id_item) {
+            $error = "No vpsid exist on your service.";
+            return response()->json($error, 500);
+        }
+        // end of validating
         $output = $this->virtualizorAdmin->stop($vpsid);
 
         if ($output['done'] == true) {
@@ -445,6 +538,13 @@ class OverviewController extends Controller
     {
         $all_request = $request->input('params');
         $vpsid = $all_request['vpsid'];
+        // check vpsid is real client's id
+        $vps_id_item = Vpsids::where('client_id', Auth::user()->client_id)->where('vpsid', $all_request['vpsid'])->first();
+        if (!$vps_id_item) {
+            $error = "No vpsid exist on your service.";
+            return response()->json($error, 500);
+        }
+        // end of validating
         $output = $this->virtualizorAdmin->poweroff($vpsid);
         if ($output['done'] == true) {
             return response()->json('VPS has been powered off successfully', 200);
@@ -457,6 +557,13 @@ class OverviewController extends Controller
     public function reboot(Request $request)
     {
         $all_request = $request->input('params');
+        // check vpsid is real client's id
+        $vps_id_item = Vpsids::where('client_id', Auth::user()->client_id)->where('vpsid', $all_request['vpsid'])->first();
+        if (!$vps_id_item) {
+            $error = "No vpsid exist on your service.";
+            return response()->json($error, 500);
+        }
+        // end of validating
         $vpsid = $all_request['vpsid'];
         $output = $this->virtualizorAdmin->restart($vpsid);
         if ($output['done_msg'] == 'Restart signal has been sent to the VPS') {
@@ -472,6 +579,13 @@ class OverviewController extends Controller
         $all_request = $request->input('params');
         $post = array();
         $post['vpsid'] = $all_request['vpsid'];
+        // check vpsid is real client's id
+        $vps_id_item = Vpsids::where('client_id', Auth::user()->client_id)->where('vpsid', $all_request['vpsid'])->first();
+        if (!$vps_id_item) {
+            $error = "No vpsid exist on your service.";
+            return response()->json($error, 500);
+        }
+        // end of validating
         $post['format_primary'] = $all_request['format_disk_flag'];
         $post['osid'] = $all_request['selected_osid'];
         $post['newpass'] = $all_request['root_pwd'];
@@ -529,6 +643,13 @@ class OverviewController extends Controller
         $all_request = $request->input('params');
         $post = array();
         $post['vpsid'] = $all_request['vpsid'];
+        // check vpsid is real client's id
+        $vps_id_item = Vpsids::where('client_id', Auth::user()->client_id)->where('vpsid', $all_request['vpsid'])->first();
+        if (!$vps_id_item) {
+            $error = "No vpsid exist on your service.";
+            return response()->json($error, 500);
+        }
+        // end of validating
         $post['rootpass'] = $all_request['root_pwd'];
         $result = $this->virtualizorAdmin->managevps($post);
         if ($result['done']['done']) {
@@ -561,26 +682,26 @@ class OverviewController extends Controller
     {
         $invoice_info = array();
 
-        $invoice = Invoices::where('invoice_id', $invoice_id)->first();
-        if ($invoice)
-            return json_decode($invoice->Data, true);
-        else {
+        // $invoice = Invoices::where('invoice_id', $invoice_id)->first();
+        // if ($invoice)
+            // return json_decode($invoice->Data, true);
+        // else {
             $invoice_info = (new \Sburina\Whmcs\Client)->post([
                 'action' => 'GetInvoice',
                 'invoiceid' => $invoice_id,
             ]);
 
             if ($invoice_info['status'] == 'Paid') { //need to save to database
-                if (!$invoice) {
+                // if (!$invoice) {
                     $invoice = new Invoices();
                     $invoice->Data = json_encode($invoice_info);
                     $invoice->invoice_id = $invoice_id;
                     $invoice->save();
-                }
+                // }
             }
 
             return $invoice_info;
-        }
+        // }
 
     }
 
@@ -620,6 +741,13 @@ class OverviewController extends Controller
         $all_request = $request->input('params');
         $post = array();
         $post['vpsid'] = $all_request['vpsid'];
+        // check vpsid is real client's id
+        $vps_id_item = Vpsids::where('client_id', Auth::user()->client_id)->where('vpsid', $all_request['vpsid'])->first();
+        if (!$vps_id_item) {
+            $error = "No vpsid exist on your service.";
+            return response()->json($error, 500);
+        }
+        // end of validating
         $post['ips'] = $all_request['reorder_ips'];
 
         $result = $this->virtualizorAdmin->managevps($post);
@@ -634,17 +762,21 @@ class OverviewController extends Controller
     public function connectvnc(Request $request)
     {
         $all_request = $request->input('params');
-        $vpsid = 0;
 
-        $order_id = $all_request['id'];
-
-        $order_product_info = $this->getClientProductInfo($order_id, $all_request['domain']);
-
-        $other_info = $this->getOtherinfo_VNC($order_product_info);
-
-        if ($order_product_info['status'] == 'Active') {
-            $vpsid = $other_info['vps_info']['vpsid'];
+        $vps_id_item = Vpsids::where('client_id', Auth::user()->client_id)->where('order_id', $all_request['id'])->first();
+        if (!$vps_id_item) {
+            $error = "No vpsid exist on your service.";
+            return response()->json($error, 500);
         }
+
+        $vpsid = $vps_id_item->vpsid;
+
+        // $order_id = $all_request['id'];
+        // $order_product_info = $this->getClientProductInfo($order_id, $all_request['domain']);
+        // $other_info = $this->getOtherinfo_VNC($order_product_info);
+        // if ($order_product_info['status'] == 'Active') {
+        //     $vpsid = $other_info['vps_info']['vpsid'];
+        // }
 
         $post = array();
         $post['novnc'] = $vpsid;

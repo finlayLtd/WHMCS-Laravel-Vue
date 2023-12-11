@@ -57,7 +57,7 @@ class ServersController extends Controller
 
         $orders_response = (new \Sburina\Whmcs\Client)->post([
             'action' => 'GetClientsProducts',
-            'clientid' => $request->client_id,
+            'clientid' => Auth::user()->client_id,
         ]);
 
         $products_response = (new \Sburina\Whmcs\Client)->post([

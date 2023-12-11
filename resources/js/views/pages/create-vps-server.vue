@@ -13,7 +13,17 @@
                         v-for="(singleOs, index) in oslist" :key="index" @click="clickOSGroup(index)" v-show="ucfirst(index) != 'Others'">
                         <div>
                             <img :src="'assets/img/' + index + '-logo.png'" class="" alt="Os">
-                            <p class="os-name">{{ ucfirst(index) }}</p>
+                            <p class="os-name">
+                            <template v-if="ucfirst(index) == 'Windows'">
+                              Windows Server
+                            </template>
+                            <template v-else-if="ucfirst(index) == 'Kalilinux'">
+                              Kali Linux
+                            </template>
+                            <template v-else>
+                              {{ ucfirst(index) }}
+                            </template>
+                            </p>
                         </div>
                         <div class="p-0 dropdown">
                             <button class="os-drop-down-btn dropdown-toggle" id="dropdownMenuLink"
@@ -39,7 +49,12 @@
                                 >
                                   <a class="dropdown-item rounded"
                                   >
+                                    <template v-if="formattedOsName(os.name) == 'Windows2012r2'">
+                                      Windows Server 2012 R2
+                                    </template>
+                                    <template v-else>
                                       {{ formattedOsName(os.name)  }}
+                                    </template>
                                   </a>
                                 </li>
                             </ul>
@@ -82,7 +97,7 @@
               <div v-if="products.length > 0">
                 <div v-for="(group, key) in product_group" :key="key">
                   <div v-if="selected_group_id == key" class="mb-2">
-                    <Table :data="products.filter((p) => p.gid == key)" :headings="tableHeader" :current_plan="current_plan">
+                    <Table :data="products.filter((p) => (p.gid == key && (!(selected_os == 'windows' && p.pid==34 ))))" :headings="tableHeader" :current_plan="current_plan">
                       <template #head()="scope">
                           123
                         </template>
@@ -149,6 +164,19 @@
                     </select>
                 </div>
 
+                <div class="con-div mb-4" v-if="selected_product">
+                  <h2 class="choose-os-header">Quantity</h2>
+                  <hr class="server-seprater">
+                  <input 
+                    type="number" 
+                    id="myInput" 
+                    min="1" 
+                    v-model="quantity" 
+                    class="form-select" 
+                    style="background-image: none; padding-right: 10px !important;"
+                  >
+              </div>
+
                 <div class="con-div">
                     <h2 class="choose-os-header">{{ $t('Number_of_IPs') }}</h2>
                     <hr class="server-seprater">
@@ -166,13 +194,13 @@
                     <h2 class="choose-os-header">{{ $t('Configure_Server') }}</h2>
                     <hr class="server-seprater">
 
-                    <div>
+                    <!-- <div v-show="false">
                         <label for="hname" class="form-label form-label-vps">{{ $t('VPS_Hostname') }}</label>
                         <div class="form-filds">
                             <input class="form-control" type="text" v-model="hostname" id="hostname" name="hostname">
                             <p class="randome-btn" @click="hostname = randomizehostname()">{{ $t('Random') }}</p>
                         </div>
-                    </div>
+                    </div> -->
                     <div style="margin-top: 20px;">
                         <label for="hname" class="form-label form-label-vps">{{ $t('VPS_Password') }}</label>
                         <div class="form-filds">
@@ -199,12 +227,26 @@
 
                     <div class="d-flex justify-content-end">
                         <button class="btn create-server-btn" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                          :disabled="creating_order"
                             @click="clickCreate()">{{ $t('launch') }}</button>
 
                         <div class="modal modal-ticket" v-if="modelOpen">
                             <div class="model-child">
                                 <div class="d-flex align-items-center justify-content-between model-header">
-                                    <p class="model-header-text">{{ selected_product ? selected_product.name : "" }}</p>
+                                    <p class="model-header-text" v-if="selected_product">
+                                      <template v-if="current_plan == 'monthly'">
+                                        Total: €{{ ((selected_product.pricing.EUR.monthly) * 1 + ((selected_number_of_ips - 1) * 2.5)) * quantity }}
+                                      </template>
+                                      <template v-if="current_plan == 'quarterly'">
+                                        Total: €{{ ((selected_product.pricing.EUR.quarterly) * 1 + ((selected_number_of_ips - 1) * 2.5)) * quantity }}
+                                      </template>
+                                      <template v-if="current_plan == 'semiannually'">
+                                        Total: €{{ ((selected_product.pricing.EUR.semiannually) * 1 + ((selected_number_of_ips - 1) * 2.5)) * quantity }}
+                                      </template>
+                                      <template v-if="current_plan == 'annually'">
+                                        Total: €{{ ((selected_product.pricing.EUR.annually) * 1 + ((selected_number_of_ips - 1) * 2.5)) * quantity }}
+                                      </template>
+                                    </p>
                                     <p @click="modelOpen = false">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                                             viewBox="0 0 14 14" fill="none">
@@ -232,10 +274,6 @@
                                     </p>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between model-body-li">
-                                    <p class="model-body-key">Quantity</p>
-                                    <p class="model-body-value">{{ selected_number_of_ips }} <span v-if="selected_number_of_ips > 1"> (€{{ ((selected_number_of_ips - 1) * 2.5).toFixed(2) }}EUR)</span></p>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-between model-body-li">
                                     <div class="d-flex align-items-center justify-content-start">
                                         <p class="model-body-key">OS</p>
                                     </div>
@@ -245,11 +283,34 @@
                                     <div class="d-flex align-items-center justify-content-start">
                                         <p class="model-body-key">{{ $t('ips') }}</p>
                                     </div>
-                                    <p class="model-body-value">{{ selected_number_of_ips }}</p>
+                                    <p class="model-body-value">{{ selected_number_of_ips }} <span v-if="selected_number_of_ips > 1"> (€{{ ((selected_number_of_ips - 1) * 2.5).toFixed(2) }}EUR)</span></p>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between model-body-li">
+                                    <div class="d-flex align-items-center justify-content-start">
+                                        <p class="model-body-key">Quantity</p>
+                                    </div>
+                                    <p class="model-body-value">{{ quantity }}</p>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between model-body-li">
                                     <p class="model-body-key">{{ $t('VPS_Hostname') }}</p>
-                                    <p class="model-body-value">{{ hostname }}</p>
+                                    <p class="model-body-value" v-if="hostname_array.length !=0 ">
+                                      {{ hostname_array[0] }}
+                                      <div class="server-list-options"
+                                        style="z-index: 999; top: 0px !important; position: inherit; display: inline-block;"
+                                        v-if="hostname_array">
+                                        <div class="options-toggle dropdown-toggle hideIcon" style="padding-right: 10px; padding-left: 10px; background: none;
+                                          
+                                      " data-bs-toggle="dropdown" v-if="hostname_array.length > 1">
+                                          <span class="badge bg-dark">
+                                            {{ hostname_array.length }}
+                                          </span>
+                                        </div>
+                                        <div class="options-toggle-dropdown dropdown-menu dropdown-menu-end" style="padding: 10px !important;
+                                          box-shadow: 2px 3px 2px rgb(200,200,200)" v-html="formattedText(hostname_array)">
+                                        </div>
+                                      </div>
+                                    </p>
+
                                 </div>
                                 <div style="margin: 24px 0;">
                                     <div class="payment-head-div">
@@ -274,7 +335,7 @@
                                 </div>
                       
                                 <div class="checkout-btn" id="continue-order">
-                                    <button class="btn w-100" @click="clickCheckout()" :disabled = 'creating_order'>{{ $t('CheckOut') }}</button>
+                                    <button class="btn w-100" @click="clickCheckout()" :disabled ="creating_order">{{ $t('CheckOut') }}</button>
                                 </div>
                                 
                             </div>
@@ -302,6 +363,7 @@ import Table from './components/Table.vue'
 useAuth().getUser();
 
 const modelOpen = ref(false);
+const quantity = ref(1);
 const current_plan = ref('monthly');
 const plan_expected = ref([
   'monthly',
@@ -356,13 +418,14 @@ const store = useStore();
 const user = computed(() => store.state.auth.user);
 
 const products = ref([]);
+const hostname_array  = ref([]);
 const product_group = ref(null);
 const oslist = ref(null);
 const os_kind = ref([]);
 const payment_methods = ref([]);
 
 // selected Values
-const selected_os = ref("windows");
+const selected_os = ref("ubuntu");
 const selected_osid = ref(null);
 const selected_configid = ref(null);
 const selected_product = ref(null);
@@ -380,7 +443,8 @@ const params = ref({
 
 function clickVersion(osid, os) {
   selected_osid.value = osid;
-  selected_os_name.value = os.name;
+  if(os.name == 'windows2012r2') selected_os_name.value = 'Windows Server 2012 R2';
+  else selected_os_name.value = os.name;
   selected_configid.value = os.config_id;
 }
 
@@ -390,6 +454,10 @@ function clickOSGroup(index) {
     selected_osid.value = null; 
     selected_os_name.value = null;
   }
+}
+
+function formattedText(array) {
+  return array.join('<br>');
 }
 
 function clickCheckout() {
@@ -403,7 +471,8 @@ function clickCheckout() {
   openModal.value = false;
   commonApi
     .runPostApi("/create-vps", {
-      hostname: hostname.value,
+      hostname_array: hostname_array.value,
+      quantity: quantity.value,
       pwd: hostpassword.value,
       paymentMethod: paymentmethod.value,
       current_plan: current_plan.value,
@@ -418,7 +487,9 @@ function clickCheckout() {
         let id = res.data.order_id;
         openModal.value = false;
         $toast.success("Successfully created vps.");
-        router.push({ name: 'overview', params: { id: id , tab : 'overview', domain: hostname.value } })
+        let domain_array = hostname_array.value;
+        let temp_domain = domain_array[0];
+        router.push({ name: 'overview', params: { id: id , tab : 'overview', domain: temp_domain } })
       }
       else {
         $toast.error(res.data.result);
@@ -427,12 +498,19 @@ function clickCheckout() {
     .catch((e) => {
       creating_order.value = false;
       showLoader(false);
+      $toast.error(e);
       console.log(e);
     });
   return;
 }
 
 function clickCreate() {
+  // generate array of randomized hostnames
+  hostname_array.value = [];
+  for (var i = 0; i < quantity.value; i++) {
+    hostname_array.value.push(randomizehostname());
+  }
+  // end of generating
   if (selected_osid.value == null) {
     $toast.error("Please choose the OS you want to use on your VPS.");
     return;
@@ -445,12 +523,12 @@ function clickCreate() {
     $toast.error("Please choose the VPS you want.");
     return;
   }
-  if (hostpassword.value == "") {
-    $toast.error("Password strength must be greater than 100");
+  if ((hostname_array.value).length == 0) {
+    $toast.error("Please input hostname.");
     return;
   }
   if (hostpassword.value == "") {
-    $toast.error("Please input hostname.");
+    $toast.error("Password strength must be greater than 100");
     return;
   }
   // openModal.value = true;
@@ -527,14 +605,14 @@ function randomizehostname() {
     hostname += possibleChars.charAt(Math.floor(Math.random() * possibleChars.length));
   }
   // Copy the generated hostname to the clipboard
-  var copyTextarea = document.createElement('textarea');
-  copyTextarea.value = hostname;
-  document.body.appendChild(copyTextarea);
-  copyTextarea.select();
-  document.execCommand('copy');
-  document.body.removeChild(copyTextarea);
+  // var copyTextarea = document.createElement('textarea');
+  // copyTextarea.value = hostname;
+  // document.body.appendChild(copyTextarea);
+  // copyTextarea.select();
+  // document.execCommand('copy');
+  // document.body.removeChild(copyTextarea);
 
-  $toast.success("Copied hostname to clipboard");
+  // $toast.success("Copied hostname to clipboard");
   return hostname;
 }
 

@@ -3,24 +3,24 @@
     <div class="container">
       <div class="d-flex flex-column justify-content-start align-items-start title-button-wrapper vl-parent">
         <loading v-model:active="departments_loading" :is-full-page="false" />
-        <a ref="customLink" style="display: none;" target="_blank">Custom Link</a>
+        <a ref="customLink" style="display: none;">Custom Link</a>
         <div class="overview-header">
           <h2 class="title mb-0" v-if="order_product_info">
             {{ order_product_info.domain }} 
           </h2>
           <div class="server-list-options me-3 me-lg-4" v-if="order_product_info.status == 'Active'">
-                          <button class="active-badge" v-if="vps_info && vpsid && vps_info.vps_data">
-                            <template
-                              v-if="((vps_info.vps_data[vpsid].status != 0) && topStatus == null) || (topStatus == 1)">
-                              <span class="active-dot"></span>{{ $t('Active') }}
-                            </template>
-                            <template
-                              v-if="((vps_info.vps_data[vpsid].status == 0) && topStatus == null) || (topStatus == 0)">
-                              <span class="active-dot" style="background: red;"></span>
-                              <span style="color: red;">{{ $t('Offline') }}</span>
-                            </template>
-                          </button>
-                        </div>
+            <button class="active-badge" v-if="vps_info && vpsid && vps_info.vps_data">
+              <template
+                v-if="((vps_info.vps_data[vpsid].status != 0) && topStatus == null) || (topStatus == 1)">
+                <span class="active-dot"></span>{{ $t('Active') }}
+              </template>
+              <template
+                v-if="((vps_info.vps_data[vpsid].status == 0) && topStatus == null) || (topStatus == 0)">
+                <span class="active-dot" style="background: red;"></span>
+                <span style="color: red;">{{ $t('Offline') }}</span>
+              </template>
+            </button>
+          </div>
         </div>
         <div class="overview-info">
 
@@ -29,7 +29,7 @@
           <div class="alert alert-warning mt-2" id="alertUnpaidInvoice"
             v-if="invoiceInfo && invoiceInfo.status == 'Unpaid'">
             {{ $t('interruption') }}
-            <a style="color: blue; cursor: pointer" @click="openInvoiceWindow(invoiceInfo.invoiceid)" target="_blank">{{
+            <a style="color: blue; cursor: pointer" @click="openInvoiceWindow(invoiceInfo.invoiceid)">{{
               $t('Pay_Invoice') }}</a>
           </div>
         </div>
@@ -55,10 +55,10 @@
             <div class="col-xl-4 col-lg-6 col-md-6 mb-4 mb-md-0">
                 <div class="px-0 mb-4 server-btn-options"
                     v-if="order_product_info.status == 'Active'">
-                    <button class="btn img-btn me-0 me-lg-2" @click="TurnOnVPS(vpsid)">
+                    <button class="btn img-btn me-0 me-lg-2" @click="TurnOnVPS(vpsid)" :disabled="((vps_info.vps_data[vpsid].status != 0) && topStatus == null) || (topStatus == 1)">
                       <i class="fa fa-play" style="color: #3fbb27"></i>&nbsp;&nbsp;{{ $t('Start') }}
                     </button>
-                    <button class="btn img-btn me-0 me-lg-2" @click="PowerOffVPS(vpsid)">
+                    <button class="btn img-btn me-0 me-lg-2" @click="PowerOffVPS(vpsid)" :disabled="((vps_info.vps_data[vpsid].status == 0) && topStatus == null) || (topStatus == 0)">
                       <img src="/assets/img/power.svg" alt="" />{{ $t('Shutdown') }}
                     </button>
                   </div>
@@ -290,7 +290,7 @@
                         <div class="info">
                           <h4 class="title2">{{ $t('CPU') }}</h4>
                           <p class="description2">
-                            <span>{{ cpu.percent }}%</span> {{ $t('of') }}
+                            <span v-if="cpu && cpu.percent">{{ cpu.percent }}%</span> {{ $t('of') }}
                             {{ vps_info.vps_data[vpsid].cores }}  vCores
                           </p>
                         </div>
@@ -394,15 +394,6 @@
                         {{ os.name }}
                       </option>
                     </select>
-
-                    <input id="format-disk" type="checkbox" class="format-disk" style="
-                        width: 20px;
-                        height: 20px;
-                        padding: 0;
-                        margin-top: 10px;
-                        margin-left: 20px;
-                      " v-model="format_disk" />
-                    <label for="format-disk" style="line-height: 40px">&nbsp;{{ $t('Format_Primary_Disk_Only') }}</label>
                   </div>
 
                   <div id="newPassword1" class="form-group has-feedback has-success mt-3">
@@ -873,7 +864,7 @@
                                   <td class="text-center">
                                     <a @click="
                                       openInvoiceWindow(invoiceInfo.invoiceid)
-                                      " target="_blank"><img src="/assets/img/eye-open.svg"
+                                      " ><img src="/assets/img/eye-open.svg"
                                         class="icon-password view-invoice" /></a>
                                   </td>
                                 </tr>
@@ -1100,7 +1091,7 @@
                 </span>
               </td>
               <td class="text-center">
-                <a @click="openInvoiceWindow(invoiceInfo.invoiceid)" target="_blank">
+                <a @click="openInvoiceWindow(invoiceInfo.invoiceid)">
                   <img src="/assets/img/eye-open.svg" class="icon-password view-invoice" />
                 </a>
               </td>
@@ -1170,6 +1161,7 @@ import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 
 import { useRoute } from "vue-router";
+import CryptoJS from 'crypto-js';
 
 const Analytics = defineAsyncComponent(() =>
   import('./components/analytics.vue')
@@ -1191,6 +1183,8 @@ const $toast = useToast({
     zIndex: 99999, // set a high z-index value
   },
 });
+
+const secret_key = ref('');
 
 const commonApi = commonApis();
 const openModal = ref(false);
@@ -1338,6 +1332,8 @@ function TurnOnVPS(vpsid) {
   commonApi
     .runPostApi("/overview/turnon", {
       vpsid: vpsid,
+      id: route.params.id,
+      domain: route.params.domain
     })
     .then((res) => {
       showLoader(false);
@@ -1359,6 +1355,8 @@ function PowerOffVPS(vpsid) {
   commonApi
     .runPostApi("/overview/poweroff", {
       vpsid: vpsid,
+      id: route.params.id,
+      domain: route.params.domain
     })
     .then((res) => {
       showLoader(false);
@@ -1395,6 +1393,8 @@ function assignPrimaryIp(vpsid) {
     .runPostApi("/overview/changeip", {
       vpsid: vpsid,
       reorder_ips: reorder_ips,
+      id: route.params.id,
+      domain: route.params.domain
     })
     .then((res) => {
       showLoader(false);
@@ -1459,9 +1459,11 @@ function rebuildOS(vpsid) {
   commonApi
     .runPostApi("/overview/rebuild", {
       vpsid: vpsid,
+      id: route.params.id,
       format_disk_flag: format_disk.value,
       selected_osid: selected_os_id.value,
       root_pwd: newPassword1.value,
+      domain: route.params.domain
     })
     .then((res) => {
       showLoader(false);
@@ -1482,18 +1484,20 @@ function rebuildOS(vpsid) {
 }
 
 function startGetOverviewDataTimer(time) {
-  const timer = setInterval(() => {
-    if (rebuilding.value == false && building.value == false) {
+  if(route.params.id && route.params.domain){
+    const timer = setInterval(() => {
+      if (rebuilding.value == false && building.value == false) {
+        clearInterval(timer);
+      } else {
+        getOverviewData();
+      }
+    }, time); // 30 seconds interval
+  
+    // Stop the timer when the component is unmounted
+    onBeforeUnmount(() => {
       clearInterval(timer);
-    } else {
-      getOverviewData();
-    }
-  }, time); // 30 seconds interval
-
-  // Stop the timer when the component is unmounted
-  onBeforeUnmount(() => {
-    clearInterval(timer);
-  });
+    });
+  }
 }
 
 function changePWD(vpsid) {
@@ -1501,6 +1505,8 @@ function changePWD(vpsid) {
   commonApi
     .runPostApi("/overview/changepwd", {
       vpsid: vpsid,
+      id: route.params.id,
+      domain: route.params.domain,
       root_pwd: newPassword1.value,
     })
     .then((res) => {
@@ -1585,65 +1591,80 @@ const createTicket = () => {
 };
 
 const countFetchingOverview = ref(0);
+const encryptedParameter = ref('');
 
 const getOverviewData = () => {
-  showLoader(true);
-  commonApi
-    .runPostApi("/overview", {
-      id: route.params.id,
-      domain: route.params.domain
-    })
-    .then((res) => {
-      showLoader(false);
-      if (res.data.vps_info && res.data.vpsid) {
-        // check rebuilding status
-        if (res.data.vps_info.vps_data[res.data.vpsid].status == 1) {
+  if(route.params.id){
+    showLoader(true);
+    commonApi
+      .runPostApi("/overview", {
+        id: route.params.id,
+        domain: route.params.domain
+      })
+      .then((res) => {
+        showLoader(false);
+        if(res.status != 200) {
           rebuilding.value = false;
           building.value = false;
-        }
-        // check building status
-        if (res.data.vps_info.vps_data[res.data.vpsid].status == 0) {
-          // io_read 0 means building vps
-          if (res.data.vps_info.vps_data[res.data.vpsid].io_read == 0) {
-            building.value = true;
-            startGetOverviewDataTimer(60000);
+          $toast.error(res.data);
+        } else{
+          if (res.data.vps_info && res.data.vpsid) {
+            // check rebuilding status
+            if (res.data.vps_info.vps_data[res.data.vpsid].status == 1) {
+              rebuilding.value = false;
+              building.value = false;
+            }
+            // check building status
+            if (res.data.vps_info.vps_data[res.data.vpsid].status == 0) {
+              // io_read 0 means building vps
+              if (res.data.vps_info.vps_data[res.data.vpsid].io_read == 0 && res.data.vps_info.vps_data[res.data.vpsid].inode == 0) {
+                building.value = true;
+                startGetOverviewDataTimer(60000);
+              }
+            }
           }
+          countFetchingOverview.value = countFetchingOverview.value + 1;
+          fetched.value = 1;
+          relid.value = res.data.relid;
+          selectedService.value = res.data.relid;
+          order_id.value = res.data.order_id;
+          order_product_info.value = res.data.order_product_info;
+          dayDiff.value = res.data.dayDiff;
+          flag.value = res.data.flag;
+          sys_logo.value = res.data.sys_logo;
+          system.value = res.data.system;
+          vpsid.value = res.data.vpsid;
+          vps_info.value = res.data.vps_info;
+  
+          if(res.data.vps_info && res.data.vps_info.pie_data) {
+            cpu.value = res.data.vps_info.pie_data.server_cpu;
+          }
+  
+          if (countFetchingOverview.value == 1) {
+            invoiceInfo.value = res.data.invoiceInfo;
+          }
+  
+          status.value = res.data.status;
+          selected_rdns_ip.value = order_product_info.value.dedicatedip;
+          secret_key.value = res.data.invoice_id;
+          encryptedParameter.value = res.data.encryptedParameter;
+
+          if (countFetchingOverview.value == 1) {
+            if (res.data.invoiceInfo.status == 'Paid') {
+              get_departments_data();
+            }
+          }
+          useAuth().getUser();
         }
-      }
-      countFetchingOverview.value = countFetchingOverview.value + 1;
-      fetched.value = 1;
-      relid.value = res.data.relid;
-      selectedService.value = res.data.relid;
-      order_id.value = res.data.order_id;
-      order_product_info.value = res.data.order_product_info;
-      dayDiff.value = res.data.dayDiff;
-      flag.value = res.data.flag;
-      sys_logo.value = res.data.sys_logo;
-      system.value = res.data.system;
-      vpsid.value = res.data.vpsid;
-      vps_info.value = res.data.vps_info;
-
-      if(res.data.vps_info && res.data.vps_info.pie_data) {
-        cpu.value = res.data.vps_info.pie_data.server_cpu;
-      }
-
-      if (countFetchingOverview.value == 1) {
-        invoiceInfo.value = res.data.invoiceInfo;
-      }
-
-      status.value = res.data.status;
-      selected_rdns_ip.value = order_product_info.value.dedicatedip;
-      if (countFetchingOverview.value == 1) {
-        if (res.data.invoiceInfo.status == 'Paid') {
-          get_departments_data();
-        }
-      }
-      useAuth().getUser();
-    })
-    .catch((e) => {
-      showLoader(false);
-      $toast.error(e);
-    });
+        
+      })
+      .catch((e) => {
+        showLoader(false);
+        rebuilding.value = false;
+        building.value = false;
+        $toast.error(e);
+      });
+  }
 };
 
 getOverviewData();
@@ -1679,9 +1700,10 @@ const get_departments_data = () => {
       nextduedate: order_product_info.value.nextduedate,
       relid: relid.value,
       invoice_id: invoiceInfo.value.invoiceid,
-      domain: route.params.domain,
+      domain: encryptedParameter.value,
+      domain_id: secret_key.value,
       status: status.value,
-      assignedips: order_product_info.value.assignedips
+      assignedips: order_product_info.value.assignedips,
     })
     .then((res) => {
       departments_loading.value = false;
@@ -1746,7 +1768,8 @@ const get_ips = () => {
   ips_loading.value = true;
   commonApi
     .runPostApi("/overview/get_ips", {
-      domain: route.params.domain,
+      domain: encryptedParameter.value,
+      domain_id: secret_key.value,
     })
     .then((res) => {
       ips_loading.value = false;

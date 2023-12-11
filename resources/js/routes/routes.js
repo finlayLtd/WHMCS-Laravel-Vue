@@ -96,6 +96,12 @@ export default [
             },
 
             {
+                path: 'blackhole',
+                name: 'blackhole',
+                component: () => import('../views/pages/blackhole.vue'),
+            },
+
+            {
                 path: 'create-vps-server',
                 name: 'create-vps-server',
                 component: () => import('../views/pages/create-vps-server.vue'),

@@ -22,8 +22,8 @@ namespace App\Virtualizor;
 
 class Admin {
 	
-	public $key = 'N8q5PHMfwvMQHMHYkytYtTydVWoLsWNC';
-	public $pass = 'CcuJEN365CusfakK2NA8uVGSg0e8e36J';
+	public $key = 'OwS8UFhdbsp8PTnMeOss5245jYoGGwW6';
+	public $pass = 'aBuw56bSVFmELB89RQw0e1uzYXFG3WqL';
 	public $ip = '94.156.70.70';
 	public $port = 4085;
 	public $protocol = 'https';
@@ -40,8 +40,8 @@ class Admin {
 	 * @return       NULL
 	 */
 	function __construct(){
-		$this->key = 'N8q5PHMfwvMQHMHYkytYtTydVWoLsWNC';
-		$this->pass = 'CcuJEN365CusfakK2NA8uVGSg0e8e36J';
+		$this->key = 'OwS8UFhdbsp8PTnMeOss5245jYoGGwW6';
+		$this->pass = 'aBuw56bSVFmELB89RQw0e1uzYXFG3WqL';
 		$this->ip = '94.156.70.70';
 		$this->port = 4085;
 	}

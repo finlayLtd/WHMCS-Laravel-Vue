@@ -4,53 +4,13 @@
 
     <template v-if="user && user.permissions.split(',').includes('invoices')">
       <div class="container">
+        <a ref="customLink" style="display: none;">Custom Link</a>
         <div class="d-flex justify-content-between align-items-center title-button-wrapper">
           <h2 class="title mb-0">{{ $t('Balance') }}</h2>
-          <a ref="customLink" style="display: none;" target="_blank">Custom Link</a>
-                  <button type="submit"
-          class="btn btn-dark btn-chevron chevron-dark hover-dark-light options-toggle dropdown-toggle"
-          data-bs-toggle="dropdown">
-          {{ $t('Create_server') }}
-        </button>
-        <div class="options-toggle-dropdown create-server dropdown-menu dropdown-menu-end">
-          <ul>
-            <li>
-              <router-link to="/create-vps-server">{{ $t('Create_VPS_Server') }}</router-link>
-            </li>
-            <li>
-              <router-link to="/create-vps-server">{{ $t('Create_RDP_Server') }}</router-link>
-            </li>
-          </ul>
-        </div>
-        </div>
-
-        <div class="sub-section server-list-tab">
-          <div class="row justify-content-between align-items-center">
-            <div class="row pe-0">
-              <div class="col-md-4 mb-4 mb-md-0">
-                <div class="card-item">
-                  <div class="balance-card-header main-balance-header">
-                    <div class="main-balance-wrapper">
-                      <div class="balance-icon">
-                        <img src="assets/img/wallet.svg" alt="" />
-                      </div>
-                      <div class="balance-title">
-                        <h3>{{ $t('Main_balance') }}</h3>
-                      </div>
-                    </div>
-                    <div class="balance">
-                      €<span class="creditTag">{{ user.credit.toFixed(2) }}</span>
-                    </div>
-                  </div>
-                  <div class="balance-card-footer d-flex justify-content-end">
-                    <button class="btn-dark add-funds hover-dark-light" id="addFunds" @click="openModal = true">
-                      {{ $t('Add_Funds') }}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <router-link to="/create-vps-server"
+          class="btn btn-dark hover-dark-light">
+          <i class="fa fa-shopping-cart"></i> Order now
+          </router-link>
         </div>
 
         <div class="sub-section server-list-tab">
@@ -121,7 +81,7 @@
                         </td>
                       </tr>
                       <tr v-else v-for="invoice in filteredInvoices" :key="invoice.id">
-                        <td>INV-{{ invoice.id }}</td>
+                        <td><a style="color: blue; cursor: pointer" @click="openInvoiceWindow(invoice.id)">#{{ invoice.id }}</a></td>
                         <td>{{ invoice.currencyprefix }}{{ invoice.total }}</td>
                         <td class="date-cell">{{ formatDate(invoice.date) }}</td>
                         <td class="date-cell">
@@ -133,7 +93,7 @@
                           </span>
                         </td>
                         <td class="text-center">
-                          <a target="_blank" @click="openInvoiceWindow(invoice.id)">
+                          <a style="color: blue; cursor: pointer" @click="openInvoiceWindow(invoice.id)">
                             <img src="assets/img/eye-open.svg" class="icon-password view-invoice" />
                           </a>
                         </td>

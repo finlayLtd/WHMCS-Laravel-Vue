@@ -8,6 +8,8 @@
           <img class="logo-light" src="/assets/img/logo-light.svg" alt="" />
         </router-link>
 
+        <a ref="customLink" style="display: none;" >Custom Link</a>
+
         <div class="col-md-4 d-flex align-items-center justify-content-end order-lg-3">
           <div class="profile-area position-relative d-mobile-none">
             <div class="options-toggle dropdown-toggle lang-div" style="margin-right: 24px; cursor: pointer"
@@ -75,10 +77,9 @@
                   </router-link>
                 </li>
                 <li style="border-bottom: unset !important">
-                  <router-link to="/switch-account">
-                    <img style="filter: brightness(2.5); width: 18px;" src="/assets/img/switch_account.png" alt="" />{{
-                      $t('Switch_Account') }}
-                  </router-link>
+                  <a class="subMenuItem" @click="openAddFundsWindow()">
+                    <img style="filter: brightness(2.5)" src="/assets/img/wallet.svg" alt="" />{{ $t('Add_Funds') }}
+                  </a>
                 </li>
                 <li>
                   <router-link to="/support-ticket">
@@ -106,7 +107,7 @@
 
 
             <li class="nav-item">
-              <router-link class="nav-link" to="/dashboard">{{ $t('dashboard_nav') }}</router-link>
+              <router-link class="nav-link" to="/dashboard">Home</router-link>
             </li>
             <li class="nav-item">
               <router-link class="nav-link" to="/support-ticket">
@@ -122,6 +123,11 @@
               <router-link class="nav-link" to="/balance">
                 {{ $t('invoices_nav') }}
               </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/blackhole">
+              Blackhole check
+            </router-link>
             </li>
             <li class="nav-item mobile-only" style="display: none;">
               <div class="profile-area position-relative">
@@ -174,7 +180,10 @@ import useAuth from "@/composables/auth";
 import { computed, onMounted, ref, onBeforeUnmount } from "vue";
 import { useI18n } from 'vue-i18n'
 import { loadMessages } from '@/plugins/i18n'
-
+import { showLoader } from "@/plugins/loading.js";
+import { commonApis } from "@/apis/commonApis";
+const commonApi = commonApis();
+const customLink = ref(null);
 const i18n = useI18n({ useScope: "global" });
 
 const props = defineProps({
@@ -211,6 +220,24 @@ const switchTheme = (event) => {
   }
 };
 
+const openAddFundsWindow = () => {
+  showLoader(true);
+  commonApi
+    .runPostApi("/add_funds_sso")
+    .then((res) => {
+      showLoader(false);
+      if (res.data.result == "success") {
+        // openInNewTab(res.data.redirect_url);
+        customLink.value.href = res.data.redirect_url;
+        customLink.value.click();
+      }
+    })
+    .catch((e) => {
+      showLoader(false);
+      console.log(e);
+    });
+};
+
 onMounted(() => {
   const toggleSwitch = document.querySelector("#modeSwitch");
   toggleSwitch.addEventListener("change", switchTheme, false);
@@ -232,6 +259,14 @@ onMounted(() => {
   .mobile-only {
     display: block !important;
   }
+}
+
+.subMenuItem{
+  color: #000;
+  padding: 5px 8px;
+  width: 100%;
+  display: inline-block;
+  cursor: pointer;
 }
 </style>
   

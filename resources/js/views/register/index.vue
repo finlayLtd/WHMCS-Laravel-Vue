@@ -60,17 +60,29 @@
               />
             </div>
 
-            <div class="login-input-wrapper mb-3">
+            <div class="login-input-wrapper mb-3" style="position: relative;">
               <label for="#password">{{ $t('Password') }}</label>
               <div class="col-md-6">
                 <input
                   id="password"
-                  type="password"
+                  :type="(show1) ? 'text' : 'password'"
                   name="password"
                   v-model="password"
                   required
                   autocomplete="new-password"
                 />
+
+                <p 
+                  style="position: absolute;
+                    top: 50%;
+                    right: 8px;
+                    cursor: pointer;
+                    transform: translate(-25%, -50%);"
+                >
+                    <img src="/assets/img/eye-open.svg" class="icon-password eye-open" v-if="show1"
+                      @click="show1 = !show1" />
+                    <img src="/assets/img/eye.svg" class="icon-password eye-closed" v-else @click="show1 = !show1" />
+                </p>
               </div>
             </div>
 
@@ -108,10 +120,9 @@
               >
             </div>
 
-            <div :class="(inputValue!='' && captcha_success== false)?'login-input-wrapper mb-4 redBorder':'login-input-wrapper mb-4'">
+            <!-- <div :class="(inputValue!='' && captcha_success== false)?'login-input-wrapper mb-4 redBorder':'login-input-wrapper mb-4'">
               <label for="#captcha">Captcha code</label>
               <input v-model="inputValue" id="captcha" type="text" required/>
-              <!-- Validation Errors -->
             </div>
 
             <div class="mb-4">
@@ -120,17 +131,31 @@
                 @getCode="getCaptchaCode"
                 @isValid="checkValidCaptcha"
               />
-            </div>
+            </div> -->
 
-            <button
-              id="register-btn"
-              type="submit"
-              class="btn-dark w-100 mb-2"
-              :class="{ 'opacity-25': processing }"
-              :disabled="processing || password == '' || passwordStrength < 80 | captcha_success == false"
-            >
-              {{ $t('Register_account') }}
-            </button>
+            <div class="vl-parent">
+              <loading v-model:active="gCaptchaLoaded" :is-full-page="false" />
+              <div class="mb-4" style="height: 78px;" v-show="gCaptchaLoaded">
+
+              </div>
+              <div class="mb-4">
+                <vue-hcaptcha 
+                  sitekey="8b633f54-60ab-4ca1-b34f-c329f9eb60b9"
+                  @verify = "verify"
+                  @rendered = "rendered"
+                >
+                </vue-hcaptcha>
+              </div>
+              <button
+                id="register-btn"
+                type="submit"
+                class="btn-dark w-100 mb-2"
+                :class="{ 'opacity-25': processing }"
+                :disabled="processing || password == '' || passwordStrength < 80 | captcha_success == false"
+              >
+                {{ $t('Register_account') }}
+              </button>
+            </div>
 
             <div class="text-center">
               <p class="mb-0 mt-3 fs-14">
@@ -152,7 +177,12 @@ import { useRouter } from "vue-router";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 import { showLoader } from "@/plugins/loading.js";
-import VueClientRecaptcha from 'vue-client-recaptcha'
+// import VueClientRecaptcha from 'vue-client-recaptcha'
+import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/css/index.css';
+const gCaptchaLoaded = ref(true);
+
 const $toast = useToast();
 
 const router = useRouter();
@@ -161,7 +191,7 @@ const lastname = ref("");
 const email = ref("");
 const password = ref("");
 const processing = ref(false);
-
+const show1 = ref(false);
 const submitRegister = async () => {
   if (processing.value) return;
   processing.value = true;
@@ -232,14 +262,23 @@ const passwordStrength = computed(() => {
 
 const inputValue = ref('');
 const captcha_success = ref(false);
-const getCaptchaCode = (value) => {
-  /* you can access captcha code */
-  console.log(value);
+
+const verify = (token, eKey) => {
+  captcha_success.value = true;
 };
-const checkValidCaptcha = (value) => {
-  /* expected return boolean if your value and captcha code are same return True otherwise return False */
-  captcha_success.value = value;
+
+const rendered = () => {
+  gCaptchaLoaded.value = false;
 };
+
+// const getCaptchaCode = (value) => {
+//   /* you can access captcha code */
+//   console.log(value);
+// };
+// const checkValidCaptcha = (value) => {
+//   /* expected return boolean if your value and captcha code are same return True otherwise return False */
+//   captcha_success.value = value;
+// };
 </script>
 <style>
 .vue_client_recaptcha{display:flex;justify-content:center;flex-direction:row}.vue_client_recaptcha_icon{text-align:center;padding:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;background-color:#eee;transition:background-color .3s ease-in-out}.vue_client_recaptcha_icon:hover{background-color:#ccc}.vue_client_recaptcha .captcha_canvas{background:#eee;padding:10px 0}

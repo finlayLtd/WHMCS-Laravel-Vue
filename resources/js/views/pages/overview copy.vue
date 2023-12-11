@@ -1614,7 +1614,7 @@
                                   <td class="text-center">
                                     <a @click="
                                       openInvoiceWindow(invoiceInfo.invoiceid)
-                                      " target="_blank"><img src="/assets/img/eye-open.svg"
+                                      "><img src="/assets/img/eye-open.svg"
                                         class="icon-password view-invoice" /></a>
                                   </td>
                                 </tr>
